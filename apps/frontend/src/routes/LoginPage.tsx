@@ -4,7 +4,7 @@ import "../styles/globals.css";
 import { Header } from "@/components/blocks/header.tsx";
 import { LoginBlock } from "@/components/blocks/loginBlock.tsx";
 
-export default function ExampleRoute() {
+export default function LoginPage() {
   return (
     <>
       <Header />
