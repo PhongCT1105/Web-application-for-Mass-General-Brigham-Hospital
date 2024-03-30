@@ -1,11 +1,16 @@
-import React from "react";
-import { ExampleComponent } from "../components/ExampleComponent.tsx";
+import "../styles/example.route.css";
+import "../styles/globals.css";
+// import { ExampleComponent } from "../components/ExampleComponent.tsx";
+import { Header } from "@/components/blocks/header.tsx";
+import { LoginBlock } from "@/components/blocks/loginBlock.tsx";
 
 export default function ExampleRoute() {
   return (
-    <div className="w-100">
-      <h1>This is an example page.</h1>
-      <ExampleComponent></ExampleComponent>
-    </div>
+    <>
+      <Header />
+      <div className={"login"}>
+        <LoginBlock />
+      </div>
+    </>
   );
 }
