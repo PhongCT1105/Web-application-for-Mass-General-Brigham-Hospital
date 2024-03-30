@@ -11,6 +11,7 @@ export default defineConfig({
   },
   test: {
     api: {
+        // eslint-disable-next-line turbo/no-undeclared-env-vars
       port:  parseInt(<string>process.env["FROUNTEND_PORT"]),
       host: "0.0.0.0",
     },
