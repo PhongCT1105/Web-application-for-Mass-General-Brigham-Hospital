@@ -37,7 +37,7 @@
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@vitest/ui": "^0.33.0",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-config-custom": "workspace:*",
     "happy-dom": "^10.6.3",
     "husky": "^8.0.0",
@@ -49,9 +49,11 @@
     "vitest": "^0.33.0"
   },
   "dependencies": {
+    "@types/pathfinding": "^0.0.9",
     "@yarnpkg/pnpify": "^4.0.0-rc.45",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.0",
+    "pathfinding": "^0.4.18",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.0",
     "react-dom": "^18.2.0"
