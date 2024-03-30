@@ -1,30 +1,16 @@
-import React, { useEffect } from "react";
-import L from "leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
+import "leaflet/dist/leaflet.css";
 import L1FloorMap from "../assets/lower-level-map.png";
+//import MarkerClusterGroup from "react-leaflet-cluster";
 
-const latitude = 51.505; // Example latitude
-const longitude = -0.09; // Example longitude
-const zoomLevel = 13; // Example zoom level
-
-const HomePage: React.FC = () => {
-  // Define the map container element
-  const mapContainer = document.getElementById("mapContainer");
-
-  useEffect(() => {
-    if (mapContainer) {
-      // Initialize map
-      const map = L.map(mapContainer).setView([latitude, longitude], zoomLevel);
-
-      // Add tile layer with your map image
-      L.tileLayer(L1FloorMap, {
-        maxZoom: 18,
-      }).addTo(map);
-    } else {
-      console.error("Map container not found");
-    }
-  }, [mapContainer]); // Include mapContainer in the dependency array
-
-  return <div id="mapContainer" style={{ height: "400px" }}></div>;
-};
-
-export default HomePage;
+export default function HomePage() {
+  return (
+    <MapContainer
+      center={[48.8566, 2.3522]}
+      zoom={13}
+      style={{ height: "400px" }}
+    >
+      <TileLayer url={L1FloorMap} maxZoom={18} />
+    </MapContainer>
+  );
+}
