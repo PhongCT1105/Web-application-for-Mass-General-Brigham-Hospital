@@ -1579,6 +1579,14 @@ const RAW_RUNTIME_STATE =
           ["undici-types", "npm:5.26.5"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:20.12.2", {\
+        "packageLocation": "./.yarn/cache/@types-node-npm-20.12.2-bd2dd1ab12-f1f0ebfe47.zip/node_modules/@types/node/",\
+        "packageDependencies": [\
+          ["@types/node", "npm:20.12.2"],\
+          ["undici-types", "npm:5.26.5"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@types/pg", [\
@@ -3334,8 +3342,10 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["database", "workspace:packages/database"],\
           ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:4.15.0"],\
+          ["@types/node", "npm:20.12.2"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
+          ["fs", "npm:0.0.1-security"],\
           ["prettier", "npm:3.2.4"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
           ["prisma", "npm:4.15.0"],\
@@ -4486,6 +4496,15 @@ const RAW_RUNTIME_STATE =
           ["vitest", "virtual:281b7ec5658d805f88196484313c874810ad4b28fdb3886a7f2b6292faec9bee3b9a92af4348cfaefb8b484dd7e409e815eac63879fbb0501eb0b5d3afa613d1#npm:0.34.6"]\
         ],\
         "linkType": "SOFT"\
+      }]\
+    ]],\
+    ["fs", [\
+      ["npm:0.0.1-security", {\
+        "packageLocation": "./.yarn/cache/fs-npm-0.0.1-security-5060b47e87-53c6230e1f.zip/node_modules/fs/",\
+        "packageDependencies": [\
+          ["fs", "npm:0.0.1-security"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["fs-minipass", [\
