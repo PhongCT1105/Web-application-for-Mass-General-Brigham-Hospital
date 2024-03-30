@@ -61,6 +61,7 @@ const RAW_RUNTIME_STATE =
       [null, {\
         "packageLocation": "./",\
         "packageDependencies": [\
+          ["@types/leaflet", "npm:1.9.8"],\
           ["@types/pathfinding", "npm:0.0.9"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
@@ -72,6 +73,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["happy-dom", "npm:10.11.2"],\
           ["husky", "npm:8.0.3"],\
+          ["leaflet", "npm:1.9.4"],\
           ["pathfinding", "npm:0.4.18"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
@@ -1505,6 +1507,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/geojson", [\
+      ["npm:7946.0.14", {\
+        "packageLocation": "./.yarn/cache/@types-geojson-npm-7946.0.14-cb659a9fdf-ae511bee64.zip/node_modules/@types/geojson/",\
+        "packageDependencies": [\
+          ["@types/geojson", "npm:7946.0.14"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/history", [\
       ["npm:4.7.11", {\
         "packageLocation": "./.yarn/cache/@types-history-npm-4.7.11-fe05d7b2e1-1da529a348.zip/node_modules/@types/history/",\
@@ -1547,6 +1558,16 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@types/keyv", "npm:3.1.4"],\
           ["@types/node", "npm:20.11.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/leaflet", [\
+      ["npm:1.9.8", {\
+        "packageLocation": "./.yarn/cache/@types-leaflet-npm-1.9.8-37444cf7c0-c0c68ae0d1.zip/node_modules/@types/leaflet/",\
+        "packageDependencies": [\
+          ["@types/leaflet", "npm:1.9.8"],\
+          ["@types/geojson", "npm:7946.0.14"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -4524,6 +4545,7 @@ const RAW_RUNTIME_STATE =
           ["@popperjs/core", "npm:2.11.8"],\
           ["@tanstack/react-table", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.11.6"],\
           ["@types/bootstrap", "npm:5.2.10"],\
+          ["@types/leaflet", "npm:1.9.8"],\
           ["@types/node", "npm:20.11.5"],\
           ["@types/prop-types", "npm:15.7.11"],\
           ["@types/react", "npm:18.2.48"],\
@@ -4541,6 +4563,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["eslint-plugin-react-hooks", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:4.6.0"],\
           ["eslint-plugin-react-refresh", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.4.5"],\
+          ["leaflet", "npm:1.9.4"],\
           ["localforage", "npm:1.10.0"],\
           ["match-sorter", "npm:6.3.3"],\
           ["postcss", "npm:8.4.35"],\
@@ -5343,6 +5366,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["keyv", "npm:4.5.4"],\
           ["json-buffer", "npm:3.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["leaflet", [\
+      ["npm:1.9.4", {\
+        "packageLocation": "./.yarn/cache/leaflet-npm-1.9.4-8d372b0fe6-7b6a74d503.zip/node_modules/leaflet/",\
+        "packageDependencies": [\
+          ["leaflet", "npm:1.9.4"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7702,6 +7734,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./",\
         "packageDependencies": [\
           ["softeng-starter-code", "workspace:."],\
+          ["@types/leaflet", "npm:1.9.8"],\
           ["@types/pathfinding", "npm:0.0.9"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
@@ -7713,6 +7746,7 @@ const RAW_RUNTIME_STATE =
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["happy-dom", "npm:10.11.2"],\
           ["husky", "npm:8.0.3"],\
+          ["leaflet", "npm:1.9.4"],\
           ["pathfinding", "npm:0.4.18"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\

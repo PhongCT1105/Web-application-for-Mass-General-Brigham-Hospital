@@ -1,40 +1,30 @@
 import React, { useEffect } from "react";
-import styles from "../styles/HomePage.module.css"; // Import CSS module with relative path
+import L from "leaflet";
+import L1FloorMap from "../assets/lower-level-map.png";
 
-import L1FloorMap from "../assets/lower-level-map.png"; // Import image with relative path
+const latitude = 51.505; // Example latitude
+const longitude = -0.09; // Example longitude
+const zoomLevel = 13; // Example zoom level
 
 const HomePage: React.FC = () => {
+  // Define the map container element
+  const mapContainer = document.getElementById("mapContainer");
+
   useEffect(() => {
-    const handleMarkerClick = (): void => {
-      console.log("Marker clicked!");
-    };
-
-    const mapContainer = document.getElementById("map-container");
-
     if (mapContainer) {
-      const mapImage = document.createElement("img");
-      mapImage.src = L1FloorMap;
-      mapImage.alt = "Floor Map";
-      mapImage.className = styles.mapImage; // Use styles.mapImage for CSS module class
-      mapContainer.appendChild(mapImage);
+      // Initialize map
+      const map = L.map(mapContainer).setView([latitude, longitude], zoomLevel);
 
-      const marker = document.createElement("div");
-      marker.className = styles.marker; // Use styles.marker for CSS module class
-      marker.addEventListener("click", handleMarkerClick);
-      mapContainer.appendChild(marker);
+      // Add tile layer with your map image
+      L.tileLayer(L1FloorMap, {
+        maxZoom: 18,
+      }).addTo(map);
+    } else {
+      console.error("Map container not found");
     }
+  }, [mapContainer]); // Include mapContainer in the dependency array
 
-    return () => {
-      // Clean up function when component unmounts
-      // Remove event listeners or any cleanup needed
-    };
-  }, []);
-
-  return (
-    <div id="map-container" className={styles.mapContainer}>
-      <img src={L1FloorMap} alt="Floor Map" className={styles.mapImage} />
-    </div>
-  );
+  return <div id="mapContainer" style={{ height: "400px" }}></div>;
 };
 
 export default HomePage;

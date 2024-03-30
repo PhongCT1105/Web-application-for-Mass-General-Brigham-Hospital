@@ -1120,6 +1120,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/geojson@npm:*":
+  version: 7946.0.14
+  resolution: "@types/geojson@npm:7946.0.14"
+  checksum: ae511bee6488ae3bd5a3a3347aedb0371e997b14225b8983679284e22fa4ebd88627c6e3ff8b08bf4cc35068cb29310c89427311ffc9322c255615821a922e71
+  languageName: node
+  linkType: hard
+
 "@types/history@npm:^4.7.11":
   version: 4.7.11
   resolution: "@types/history@npm:4.7.11"
@@ -1154,6 +1161,15 @@ __metadata:
   dependencies:
     "@types/node": "npm:*"
   checksum: e009a2bfb50e90ca9b7c6e8f648f8464067271fd99116f881073fa6fa76dc8d0133181dd65e6614d5fb1220d671d67b0124aef7d97dc02d7e342ab143a47779d
+  languageName: node
+  linkType: hard
+
+"@types/leaflet@npm:^1, @types/leaflet@npm:^1.9.8":
+  version: 1.9.8
+  resolution: "@types/leaflet@npm:1.9.8"
+  dependencies:
+    "@types/geojson": "npm:*"
+  checksum: c0c68ae0d1ccbed60e08ad82670df48f8bb6f19e3abaf84a9cd0a6cbc6d6efdd46852ee7be56744dfa7f3d8665adb56bb06ab02d09f979d3367c941a1fd90f2f
   languageName: node
   linkType: hard
 
@@ -3685,6 +3701,7 @@ __metadata:
     "@popperjs/core": "npm:^2.11.8"
     "@tanstack/react-table": "npm:^8.9.3"
     "@types/bootstrap": "npm:^5.2.6"
+    "@types/leaflet": "npm:^1"
     "@types/node": "npm:^20.2.5"
     "@types/prop-types": "npm:^15.7.5"
     "@types/react": "npm:^18.0.37"
@@ -3702,6 +3719,7 @@ __metadata:
     eslint-config-custom: "workspace:*"
     eslint-plugin-react-hooks: "npm:^4.6.0"
     eslint-plugin-react-refresh: "npm:^0.4.1"
+    leaflet: "npm:^1.9.4"
     localforage: "npm:^1.10.0"
     match-sorter: "npm:^6.3.1"
     postcss: "npm:^8.4.35"
@@ -4426,6 +4444,13 @@ __metadata:
   dependencies:
     json-buffer: "npm:3.0.1"
   checksum: 167eb6ef64cc84b6fa0780ee50c9de456b422a1e18802209234f7c2cf7eae648c7741f32e50d7e24ccb22b24c13154070b01563d642755b156c357431a191e75
+  languageName: node
+  linkType: hard
+
+"leaflet@npm:^1.9.4":
+  version: 1.9.4
+  resolution: "leaflet@npm:1.9.4"
+  checksum: 7b6a74d503980961a85bdabebf9d1162c26db0e88195800ceea311682b653d621718f2ada3c9aab903a735af9862c9ae278ba550d4429acbd954d43449cd0d77
   languageName: node
   linkType: hard
 
@@ -6452,6 +6477,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-starter-code@workspace:."
   dependencies:
+    "@types/leaflet": "npm:^1.9.8"
     "@types/pathfinding": "npm:^0.0.9"
     "@types/react": "npm:^18.0.37"
     "@types/react-dom": "npm:^18.0.11"
@@ -6463,6 +6489,7 @@ __metadata:
     eslint-config-custom: "workspace:*"
     happy-dom: "npm:^10.6.3"
     husky: "npm:^8.0.0"
+    leaflet: "npm:^1.9.4"
     pathfinding: "npm:^0.4.18"
     prettier: "npm:2.8.8"
     prettier-config-custom: "workspace:*"

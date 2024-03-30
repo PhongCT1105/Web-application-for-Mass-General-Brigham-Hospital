@@ -34,6 +34,7 @@
   },
   "packageManager": "yarn@4.0.2",
   "devDependencies": {
+    "@types/leaflet": "^1.9.8",
     "@types/react": "^18.0.37",
     "@types/react-dom": "^18.0.11",
     "@vitest/ui": "^0.33.0",
@@ -53,6 +54,7 @@
     "@yarnpkg/pnpify": "^4.0.0-rc.45",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.0",
+    "leaflet": "^1.9.4",
     "pathfinding": "^0.4.18",
     "react": "^18.2.0",
     "react-bootstrap": "^2.10.0",
