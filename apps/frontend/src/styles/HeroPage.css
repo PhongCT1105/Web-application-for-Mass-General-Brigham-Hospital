@@ -11,17 +11,17 @@
   justify-content: center;
   flex-direction: column;
   align-items: center;
-  height: 60vh; /* Ensure the container takes up the full viewport height */
+  height: 75vh;
 }
 
 p {
-  font-family: Lato, serif;
+  font-family: sans-serif;
   font-size: 24px; /* Adjust font size as needed */
   color: #ffffff;
 }
 
 .headerHero {
-  font-family: Lato, serif;
+  font-family: sans-serif;
   font-size: 120px;
   text-align: center;
   font-weight: 500;

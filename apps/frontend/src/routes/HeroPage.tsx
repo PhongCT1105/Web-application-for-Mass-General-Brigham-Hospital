@@ -18,6 +18,7 @@ const RedirectOnClick: React.FC = () => {
     <div className="page full-screen clickBox">
       <div className="header-container">
         <h1 className="headerHero">Need Directions?</h1>
+        <br />
         <p>Click Anywhere to Start!</p>
       </div>
     </div>
