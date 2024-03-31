@@ -1,29 +1,53 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import HomePage from "./routes/HomePage";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import LoginPage from "./routes/LoginPage.tsx";
+import HomePage from "@/routes/HomePage.tsx";
+import AboutUsPage from "@/routes/AboutUsPage.tsx";
+import ServiceRequestPage from "@/routes/ServiceRequestPage.tsx";
 
 function App() {
-  return (
-    <Router>
-      <div className="w-full flex flex-col px-20 gap-5">
-        <h1>Welcome to your starter code.</h1>
-        <Routes>
-          <Route path="/" element={<Root />} />
-          <Route path="/home-page" element={<HomePage />} />
-          {/* Other routes */}
-        </Routes>
-      </div>
-    </Router>
-  );
-}
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      errorElement: <div />,
+      element: <Root />,
+      children: [
+        {
+          path: "",
+          element: <LoginPage />,
+        },
+      ],
+    },
+    {
+      path: "/home",
+      errorElement: <h1>ERROR</h1>,
+      element: <HomePage />,
+    },
+    {
+      path: "/about-us",
+      errorElement: <h1>ERROR</h1>,
+      element: <AboutUsPage />,
+    },
+    {
+      path: "/login",
+      errorElement: <h1>ERROR</h1>,
+      element: <LoginPage />,
+    },
+    {
+      path: "/service-requests",
+      errorElement: <h1>ERROR</h1>,
+      element: <ServiceRequestPage />,
+    },
+  ]);
 
-function Root() {
-  return (
-    <div>
-      <h2>Root Component</h2>
-      <HomePage />
-    </div>
-  );
+  return <RouterProvider router={router} />;
+  function Root() {
+    return (
+      <div className="w-full flex flex-col px-20 gap-5">
+        <Outlet />
+      </div>
+    );
+  }
 }
 
 export default App;

@@ -50,6 +50,7 @@
     "vitest": "^0.33.0"
   },
   "dependencies": {
+    "@types/node": "^20.12.2",
     "@types/pathfinding": "^0.0.9",
     "@yarnpkg/pnpify": "^4.0.0-rc.45",
     "dotenv": "^16.4.5",
