@@ -1,25 +1,59 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import LoginPage from "./routes/LoginPage";
-import HomePage from "./routes/HomePage";
-import AboutUsPage from "./routes/AboutUsPage";
-import ServiceRequestPage from "./routes/ServiceRequestPage";
-import HeroPage from "./routes/HeroPage";
+import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+import LoginPage from "./routes/LoginPage.tsx";
+import HomePage from "@/routes/HomePage.tsx";
+import AboutUsPage from "@/routes/AboutUsPage.tsx";
+import ServiceRequestPage from "@/routes/ServiceRequestPage.tsx";
+import HeroPage from "@/routes/HeroPage.tsx";
 
 function App() {
-  return (
-    <Router>
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      errorElement: <div />,
+      element: <Root />,
+      children: [
+        {
+          path: "",
+          element: <HeroPage />,
+        },
+      ],
+    },
+    {
+      path: "/home",
+      errorElement: <h1>ERROR</h1>,
+      element: <HomePage />,
+    },
+    {
+      path: "/login",
+      errorElement: <h1>ERROR</h1>,
+      element: <LoginPage />,
+    },
+    {
+      path: "/about-us",
+      errorElement: <h1>ERROR</h1>,
+      element: <AboutUsPage />,
+    },
+    {
+      path: "/login",
+      errorElement: <h1>ERROR</h1>,
+      element: <LoginPage />,
+    },
+    {
+      path: "/service-requests",
+      errorElement: <h1>ERROR</h1>,
+      element: <ServiceRequestPage />,
+    },
+  ]);
+
+  return <RouterProvider router={router} />;
+  function Root() {
+    return (
       <div className="w-full flex flex-col px-20 gap-5">
-        <Routes>
-          <Route path="/" element={<HeroPage />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/about-us" element={<AboutUsPage />} />
-          <Route path="/service-requests" element={<ServiceRequestPage />} />
-        </Routes>
+        <Outlet />
       </div>
-    </Router>
-  );
+    );
+  }
 }
 
 export default App;
