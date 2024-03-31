@@ -1,0 +1,42 @@
+.page {
+  background-image: url("../assets/wongdesk.png");
+  background-size: cover;
+  background-position: center;
+  margin: 0;
+  padding: 0;
+}
+
+.header-container {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  height: 60vh; /* Ensure the container takes up the full viewport height */
+}
+
+p {
+  font-family: Lato, serif;
+  font-size: 24px; /* Adjust font size as needed */
+  color: #ffffff;
+}
+
+.headerHero {
+  font-family: Lato, serif;
+  font-size: 120px;
+  text-align: center;
+  font-weight: 500;
+  color: #ffffff;
+  font-style: normal;
+  line-height: 24px;
+  margin-bottom: 25px;
+}
+
+.clickBox {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: transparent; /* Make the background transparent */
+  z-index: 9999; /* Ensure it stays on top of other elements */
+}

@@ -10,6 +10,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // interface Props {
 //     setUser: (event: React.ChangeEvent<HTMLInputElement>) => void
@@ -19,6 +20,7 @@ import React, { useState } from "react";
 export function LoginBlock() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
@@ -62,8 +64,9 @@ export function LoginBlock() {
           onClick={() => {
             if (username === "admin" && password === "admin") {
               console.log("hi wong.");
-            }
-            console.log(username, password);
+              console.log(username, password);
+              navigate("/home");
+            } else alert("Please enter a valid username and password");
           }}
           className="w-full"
         >
