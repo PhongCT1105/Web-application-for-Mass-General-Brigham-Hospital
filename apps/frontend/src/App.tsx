@@ -43,9 +43,9 @@ function App() {
   return <RouterProvider router={router} />;
   function Root() {
     return (
-      <div className="w-full flex flex-col px-20 gap-5">
-        <Outlet />
-      </div>
+      // <div className="w-full flex flex-col px-20 gap-5">
+      <Outlet />
+      // </div>
     );
   }
 }
