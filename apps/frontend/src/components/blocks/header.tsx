@@ -1,6 +1,6 @@
 import { CircleUser, Package, Search } from "lucide-react";
 import "../../styles/globals.css";
-
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/brighamJlogo.png";
 
@@ -38,11 +38,13 @@ export function Header() {
             <Package className="h-6 w-6" />
             <span className="sr-only">Acme Inc</span>
           </a>
-          <a
-            href="https://en.wikipedia.org/wiki/Shrek"
-            className="text-muted-foreground transition-colors hover:text-foreground "
-          >
-            Home
+          <a>
+            <Link
+              to="/home"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Home
+            </Link>
           </a>
           <a
             href="https://en.wikipedia.org/wiki/Shrek"
