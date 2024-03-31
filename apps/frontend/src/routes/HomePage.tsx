@@ -3,6 +3,7 @@ import L, { CRS, LatLngBoundsExpression, LatLngTuple, Map } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap from "../assets/lower-level-map.png"; // Import the image file
 import { Header } from "@/components/blocks/header.tsx";
+import { NavBar } from "@/components/blocks/navSearchBlock.tsx";
 
 // Define hospital data with name and coordinates
 interface HospitalData {
@@ -58,7 +59,9 @@ const HomePage: React.FC = () => {
           flex: 1,
           backgroundColor: "lightcyan",
         }}
-      ></div>
+      >
+        <NavBar />
+      </div>
     </div>
   );
 };
