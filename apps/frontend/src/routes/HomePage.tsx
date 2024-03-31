@@ -35,7 +35,6 @@ const HomePage: React.FC = () => {
     // Add the image overlay to the map
     L.imageOverlay(lowerLevelMap, bounds).addTo(map);
 
-    // Set maximum bounds to prevent panning outside the image
     map.setMaxBounds(bounds);
 
     // Add markers for hospitals
@@ -51,19 +50,16 @@ const HomePage: React.FC = () => {
   }, []); // Run useEffect only once on component mount
 
   return (
-    <>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
       <Header /> {/* Add the Header component */}
       <div
         id="map-container"
         style={{
-          justifyContent: "center",
-          alignItems: "center",
-          width: "100vw",
-          height: "100vh",
+          flex: 1,
           backgroundColor: "lightcyan",
         }}
       ></div>
-    </>
+    </div>
   );
 };
 
