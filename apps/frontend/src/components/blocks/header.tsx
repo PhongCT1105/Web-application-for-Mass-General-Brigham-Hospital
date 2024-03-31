@@ -1,6 +1,6 @@
 import { CircleUser, Package, Search } from "lucide-react";
 import "../../styles/globals.css";
-
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/brighamJlogo.png";
 
@@ -31,18 +31,20 @@ export function Header() {
       <header className="sticky top-0 flex h-20 items-center gap-4 border-b bg-background px-4 md:px-6">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-md lg:gap-6 text-nowrap">
           <a
-            href="/home"
+            href="https://en.wikipedia.org/wiki/Shrek"
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
             <img src={Logo} alt={"brigham logo"} className={"w-10"} />
             <Package className="h-6 w-6" />
             <span className="sr-only">Acme Inc</span>
           </a>
-          <a
-            href="/home"
-            className="text-muted-foreground transition-colors hover:text-foreground "
-          >
-            Home
+          <a>
+            <Link
+              to="/home"
+              className="text-muted-foreground transition-colors hover:text-foreground"
+            >
+              Home
+            </Link>
           </a>
           <a
             href="https://en.wikipedia.org/wiki/Shrek"
@@ -51,13 +53,13 @@ export function Header() {
             Navigation
           </a>
           <a
-            href="/service-requests"
+            href="https://en.wikipedia.org/wiki/Shrek"
             className="text-muted-foreground transition-colors hover:text-foreground "
           >
             Service Request
           </a>
           <a
-            href="/about-us"
+            href="https://en.wikipedia.org/wiki/Shrek"
             className="text-muted-foreground transition-colors hover:text-foreground"
           >
             About Us
