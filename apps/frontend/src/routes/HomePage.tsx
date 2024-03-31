@@ -22,7 +22,8 @@ const HomePage: React.FC = () => {
     // Initialize Leaflet map
     const map: Map = L.map("map-container", {
       crs: CRS.Simple, // Use simple coordinates for the image overlay
-      minZoom: -2, // Set the minimum zoom level
+      minZoom: -1, // Set the minimum zoom level (max zoom out)
+      maxZoom: 2, // Set the max zoom level (max zoom in)
     }).setView([638, 938], -1); // Set the initial view to center of the image
 
     // Define the bounds for the image overlay
@@ -33,6 +34,9 @@ const HomePage: React.FC = () => {
 
     // Add the image overlay to the map
     L.imageOverlay(lowerLevelMap, bounds).addTo(map);
+
+    // Set maximum bounds to prevent panning outside the image
+    map.setMaxBounds(bounds);
 
     // Add markers for hospitals
     hospitalData.forEach((hospital) => {
