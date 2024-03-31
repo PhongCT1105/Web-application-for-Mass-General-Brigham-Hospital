@@ -23,12 +23,12 @@ const HomePage: React.FC = () => {
     const map: Map = L.map("map-container", {
       crs: CRS.Simple, // Use simple coordinates for the image overlay
       minZoom: -2, // Set the minimum zoom level
-    }).setView([550, 500], -1); // Set the initial view to center of the image
+    }).setView([638, 938], -1); // Set the initial view to center of the image
 
     // Define the bounds for the image overlay
     const bounds: LatLngBoundsExpression = [
       [0, 0],
-      [1000, 1000],
+      [1275, 1875],
     ]; // Adjust the bounds based on your image size
 
     // Add the image overlay to the map
@@ -49,7 +49,16 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Header /> {/* Add the Header component */}
-      <div id="map-container" style={{ width: "100%", height: "600px" }}></div>
+      <div
+        id="map-container"
+        style={{
+          justifyContent: "center",
+          alignItems: "center",
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "lightcyan",
+        }}
+      ></div>
     </>
   );
 };

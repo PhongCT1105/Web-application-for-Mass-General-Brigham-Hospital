@@ -31,7 +31,7 @@ export function Header() {
       <header className="sticky top-0 flex h-20 items-center gap-4 border-b bg-background px-4 md:px-6">
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-md lg:gap-6 text-nowrap">
           <a
-            href="/home"
+            href="/login"
             className="flex items-center gap-2 text-lg font-semibold md:text-base"
           >
             <img src={Logo} alt={"brigham logo"} className={"w-10"} />
@@ -44,17 +44,17 @@ export function Header() {
           >
             Home
           </a>
-          <a
-            href="https://en.wikipedia.org/wiki/Shrek"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            Navigation
-          </a>
+          {/*<a*/}
+          {/*  href="https://en.wikipedia.org/wiki/Shrek"*/}
+          {/*  className="text-muted-foreground transition-colors hover:text-foreground"*/}
+          {/*>*/}
+          {/*  Navigation*/}
+          {/*</a>*/}
           <a
             href="/service-requests"
             className="text-muted-foreground transition-colors hover:text-foreground "
           >
-            Service Request
+            Service Requests
           </a>
           <a
             href="/about-us"
