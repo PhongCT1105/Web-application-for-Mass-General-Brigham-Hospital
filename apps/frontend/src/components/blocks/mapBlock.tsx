@@ -19,11 +19,12 @@ const hospitalData: HospitalData[] = [
 // Define the map component
 export const MapBlock: React.FC = () => {
   useEffect(() => {
-    // Initialize Leaflet map
+    // Initialize Leaflet map without default zoom control
     const map: Map = L.map("map-container", {
       crs: CRS.Simple, // Use simple coordinates for the image overlay
       minZoom: -1, // Set the minimum zoom level (max zoom out)
       maxZoom: 2, // Set the max zoom level (max zoom in)
+      zoomControl: false, // Disable the default zoom control
     }).setView([638, 938], -1); // Set the initial view to center of the image
 
     // Define the bounds for the image overlay
@@ -43,6 +44,10 @@ export const MapBlock: React.FC = () => {
       marker.bindPopup(hospital.name).openPopup();
     });
 
+    // Add custom zoom control to the right side
+    const zoomControl = L.control.zoom({ position: "topright" });
+    map.addControl(zoomControl);
+
     // Clean up Leaflet map when component unmounts
     return () => {
       map.remove();
@@ -55,6 +60,7 @@ export const MapBlock: React.FC = () => {
       style={{
         flex: 1,
         backgroundColor: "lightcyan",
+        position: "relative", // Ensure position relative for the NavBar
       }}
     >
       <NavBar />
