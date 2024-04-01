@@ -4,7 +4,6 @@ import LoginPage from "./routes/LoginPage.tsx";
 import HomePage from "@/routes/HomePage.tsx";
 import AboutUsPage from "@/routes/AboutUsPage.tsx";
 import ServiceRequestPage from "@/routes/ServiceRequestPage.tsx";
-import HeroPage from "@/routes/HeroPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -15,7 +14,7 @@ function App() {
       children: [
         {
           path: "",
-          element: <HeroPage />,
+          element: <LoginPage />,
         },
       ],
     },
@@ -33,11 +32,6 @@ function App() {
       path: "/about-us",
       errorElement: <h1>ERROR</h1>,
       element: <AboutUsPage />,
-    },
-    {
-      path: "/login",
-      errorElement: <h1>ERROR</h1>,
-      element: <LoginPage />,
     },
     {
       path: "/service-requests",
