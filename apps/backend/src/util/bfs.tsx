@@ -2,6 +2,26 @@ import { Graph } from "./graph.tsx";
 import { Queue } from "queue-typescript";
 
 export class BFS {
+  /** We will be modifying this class to return an array of Nodes rather than
+   * string IDs. This way later on we can extract x and y coordinates, long name, and
+   * short name. So rather than having two functions (run and findShortPath) it will
+   * be one main method to return an array of Nodes. (Node[])
+   *
+   * export class BFS {
+   *   static run(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+   *     // Initialize data structures for BFS traversal
+   *
+   *     // Start BFS traversal from the start node
+   *
+   *     // Traverse nodes and find the shortest path
+   *
+   *     // Reconstruct and return the shortest path as an array of nodes
+   *
+   *     return []; // Placeholder for the array of nodes representing the shortest path
+   *   }
+   * }
+   */
+
   static run(graph: Graph, startNodeID: string, endNodeID: string) {
     //setting up visited, queue, priority, costs
     const visited: Array<string> = [];
