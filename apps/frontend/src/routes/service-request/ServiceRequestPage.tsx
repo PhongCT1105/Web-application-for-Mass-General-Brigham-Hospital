@@ -1,9 +1,9 @@
 // "use client";
- 
+
 import "../../styles/globals.css";
 import { Header } from "@/components/blocks/header.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
-import { Sidebar } from "@/components/blocks/sidebar.tsx";
+// import { Sidebar } from "@/components/blocks/sidebar.tsx";
 import {
   Tabs,
   TabsContent,
@@ -22,9 +22,9 @@ export default function ServiceRequestPage() {
         <div className="border-t">
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
-              <Sidebar className="hidden lg:block" />
+              {/*<Sidebar className="hidden lg:block" />*/}
               {/*<div className="col-span-4 lg:col-span-4 lg:border-l overflow-x-auto">*/}
-              <div className="col-span-4 lg:col-span-4 lg:border-l overflow-x-auto">
+              <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
                 <div className=" pl-4 py-6 lg:pl-6">
                   <Tabs
                     defaultValue="Flower Request"

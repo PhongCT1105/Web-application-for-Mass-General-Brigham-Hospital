@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card.tsx";
 import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
 
 interface cartItem {
   cost: number;
@@ -22,6 +23,17 @@ interface cartItem {
 export const FlowerContent = () => {
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
   const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
+
+  async function submit() {
+    const res = await axios.post("/api/flowerReq", totalCost, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    }
+  }
 
   return (
     <>
@@ -35,13 +47,7 @@ export const FlowerContent = () => {
           </p>
         </div>
         <div className="ml-auto mr-4">
-          <Button
-            onClick={() => {
-              console.log("Cart button clicked.");
-              console.log(cartItems);
-              console.log(totalCost);
-            }}
-          >
+          <Button onClick={submit}>
             <ShoppingCart className="mr-2 h-4 w-4" />
             Purchase
           </Button>
