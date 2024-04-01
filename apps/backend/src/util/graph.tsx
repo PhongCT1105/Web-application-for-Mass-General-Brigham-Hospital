@@ -79,7 +79,7 @@ export class Graph {
     });
   }
 
-  // Method to read edges from CSV
+  // Method to read edges from CSV, creating Edge objects based on source and target Nodes.
   readEdgesFromCSV(filePath: string) {
     const data = fs.readFileSync(filePath, "utf-8");
     const lines = data.split("\n").slice(1); // Assuming first line is header
@@ -87,8 +87,14 @@ export class Graph {
     lines.forEach((line) => {
       const [source, target] = line.split(",").map((id) => id.trim());
       this.addNeighbors(source, target);
-      const edge = new Edge(source, target);
-      this.addEdge(edge);
+      const sourceNode = this.nodes.get(source);
+      const targetNode = this.nodes.get(target);
+      if (sourceNode == undefined || targetNode == undefined) {
+        console.log("Error retrieving node");
+      } else {
+        const edge = new Edge(sourceNode, targetNode);
+        this.addEdge(edge);
+      }
     });
   }
 
