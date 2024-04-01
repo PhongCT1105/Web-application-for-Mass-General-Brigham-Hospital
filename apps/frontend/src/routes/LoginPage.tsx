@@ -25,7 +25,7 @@ export default function LoginPage() {
             <img src={wongDesk} alt="Wong Desk" />
           </AspectRatio>
         </div>
-        <div className={"login"} style={{ marginLeft: "180px" }}>
+        <div className={"login"} style={{ marginLeft: "145px" }}>
           <LoginBlock />
         </div>
       </div>
