@@ -8,7 +8,8 @@
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
     "docker:build": "cd $PROJECT_CWD && docker build --target prod-backend --tag irwright13/softeng-mqp:backend --platform linux/amd64 .",
-    "docker:upload": "docker push irwright13/softeng-mqp:backend"
+    "docker:upload": "docker push irwright13/softeng-mqp:backend",
+    "start": "ts-node src/util/index.ts"
   },
   "dependencies": {
     "@swc/core": "^1.3.60",
@@ -23,6 +24,7 @@
     "jose": "^4.14.4",
     "morgan": "~1.9.1",
     "pg": "^8.11.0",
+    "queue-typescript": "^1.0.1",
     "ts-node": "^10.9.1",
     "tsconfig-custom": "workspace:*",
     "typescript": "^5.0.4"

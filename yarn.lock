@@ -4219,6 +4219,7 @@ __metadata:
     pg: "npm:^8.11.0"
     prettier: "npm:latest"
     prettier-config-custom: "workspace:*"
+    queue-typescript: "npm:^1.0.1"
     supertest: "npm:^6.3.3"
     ts-node: "npm:^10.9.1"
     tsconfig-custom: "workspace:*"
@@ -7286,6 +7287,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"linked-list-typescript@npm:^1.0.11":
+  version: 1.0.15
+  resolution: "linked-list-typescript@npm:1.0.15"
+  checksum: 91c87ab00fe4bb9850f169adc62b811ae7e91a743bac1a9fc969a815f20ddd0fb285f84a4d31e98900512234f59297f7beef6b076dd382cf879a319c7a14c68b
+  languageName: node
+  linkType: hard
+
 "local-pkg@npm:^0.4.3":
   version: 0.4.3
   resolution: "local-pkg@npm:0.4.3"
@@ -8957,6 +8965,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"queue-typescript@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "queue-typescript@npm:1.0.1"
+  dependencies:
+    linked-list-typescript: "npm:^1.0.11"
+  checksum: 403e38579902af1ac533911876c31dd1fd62e94d352263b9ed9786db3677494b15236ad43182178e5103915605a8b07da5780d84b6cc075d7f54cfb056091489
+  languageName: node
+  linkType: hard
+
 "quick-lru@npm:^5.1.1":
   version: 5.1.1
   resolution: "quick-lru@npm:5.1.1"
@@ -10010,6 +10027,7 @@ __metadata:
     prettier: "npm:2.8.8"
     prettier-config-custom: "workspace:*"
     prisma: "npm:5.12.0-dev.46"
+    queue-typescript: "npm:^1.0.1"
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.10.0"
     react-dom: "npm:^18.2.0"
