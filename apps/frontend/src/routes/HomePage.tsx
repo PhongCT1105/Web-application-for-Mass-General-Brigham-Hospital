@@ -1,17 +1,16 @@
 import React from "react";
-import { MapContainer, TileLayer } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L1FloorMap from "../assets/lower-level-map.png";
-//import MarkerClusterGroup from "react-leaflet-cluster";
+import { Header } from "@/components/blocks/header.tsx";
+import { MapBlock } from "@/components/blocks/mapBlock.tsx";
 
-export default function HomePage() {
+// Define the map component
+const HomePage: React.FC = () => {
   return (
-    <MapContainer
-      center={[48.8566, 2.3522]}
-      zoom={13}
-      style={{ height: "400px" }}
-    >
-      <TileLayer url={L1FloorMap} maxZoom={18} />
-    </MapContainer>
+    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+      <Header /> {/* Add the Header component */}
+      <MapBlock />
+    </div>
   );
-}
+};
+
+export default HomePage;
