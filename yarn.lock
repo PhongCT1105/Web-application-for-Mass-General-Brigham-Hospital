@@ -272,7 +272,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.24.0":
+"@babel/runtime@npm:^7.1.2, @babel/runtime@npm:^7.12.13, @babel/runtime@npm:^7.13.10, @babel/runtime@npm:^7.24.0":
   version: 7.24.1
   resolution: "@babel/runtime@npm:7.24.1"
   dependencies:
@@ -2213,6 +2213,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-leaflet/core@npm:^1.0.2, @react-leaflet/core@npm:^1.1.1":
+  version: 1.1.1
+  resolution: "@react-leaflet/core@npm:1.1.1"
+  peerDependencies:
+    leaflet: ^1.7.1
+    react: ^17.0.1
+    react-dom: ^17.0.1
+  checksum: 5545d54ec182d84c847698049fe23640746c4faa940e45fe6e319d48291a0b0f36fe67f0216559e971892385ef3936aa5cd8bc0721639fc9c7ed88af55ba27ce
+  languageName: node
+  linkType: hard
+
 "@react-leaflet/core@npm:^2.1.0":
   version: 2.1.0
   resolution: "@react-leaflet/core@npm:2.1.0"
@@ -2784,7 +2795,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/leaflet@npm:^1, @types/leaflet@npm:^1.9.8":
+"@types/leaflet.markercluster@npm:*, @types/leaflet.markercluster@npm:^1":
+  version: 1.5.4
+  resolution: "@types/leaflet.markercluster@npm:1.5.4"
+  dependencies:
+    "@types/leaflet": "npm:*"
+  checksum: ecc9f1bff9719ac99bc2b7d293c34ff469448b2a9b1911335b45111847515437dc9c1c437d8785cbb670e7a65d564dce617fd4ae206b6b626228c356bf2cabf7
+  languageName: node
+  linkType: hard
+
+"@types/leaflet@npm:*, @types/leaflet@npm:^1, @types/leaflet@npm:^1.9.8":
   version: 1.9.8
   resolution: "@types/leaflet@npm:1.9.8"
   dependencies:
@@ -2907,6 +2927,37 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-dom@npm:^18.2.23":
+  version: 18.2.23
+  resolution: "@types/react-dom@npm:18.2.23"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: 8311c67767b0aafb5cd94176a90f801f0f5f6930731d57caaa04bb0d87fdef6bc6f723a116d9777d2082ec022682acaad7a62d04dc27e330e818cf34f2ef2703
+  languageName: node
+  linkType: hard
+
+"@types/react-leaflet-markercluster@npm:^3":
+  version: 3.0.4
+  resolution: "@types/react-leaflet-markercluster@npm:3.0.4"
+  dependencies:
+    "@types/leaflet": "npm:*"
+    "@types/leaflet.markercluster": "npm:*"
+    "@types/react": "npm:*"
+    "@types/react-leaflet": "npm:^2.8.3"
+  checksum: 6aa4a4b4444ae6ca9e0277c8b78d9246955aa562008e524815145edea18936c14a9878f8de140b5315a94301eaa9d4f2115521dcc210b73de40800754e7148d6
+  languageName: node
+  linkType: hard
+
+"@types/react-leaflet@npm:^2.8.3":
+  version: 2.8.3
+  resolution: "@types/react-leaflet@npm:2.8.3"
+  dependencies:
+    "@types/leaflet": "npm:*"
+    "@types/react": "npm:*"
+  checksum: 979ab163c8d448ae25b97534a1c850965191d6578035951250c47d990363a617bfe85372bf2d1cd2e9fd054d5411a0db6fb2f13757589b26ba75c97ffc0e006c
+  languageName: node
+  linkType: hard
+
 "@types/react-router-bootstrap@npm:^0.26.0":
   version: 0.26.6
   resolution: "@types/react-router-bootstrap@npm:0.26.6"
@@ -2954,6 +3005,16 @@ __metadata:
     "@types/scheduler": "npm:*"
     csstype: "npm:^3.0.2"
   checksum: 2e56ea6bd821ae96bd943f727a59d85384eaf5f8a3e6fce4fa1d34453e32d8eedda742432b3857fa0de7a4214bf84ce4239757eb52918e76452c00384731e585
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18.2.73":
+  version: 18.2.73
+  resolution: "@types/react@npm:18.2.73"
+  dependencies:
+    "@types/prop-types": "npm:*"
+    csstype: "npm:^3.0.2"
+  checksum: 799e30e73464dff40e04f4eb7499ebc31f99b1711a69263b9af340af738e35c9cdf53084e3dacc3b21c031aaa0cba1b51f4ba60490204b7abb75f115b841583f
   languageName: node
   linkType: hard
 
@@ -3743,6 +3804,7 @@ __metadata:
     pg: "npm:^8.11.0"
     prettier: "npm:latest"
     prettier-config-custom: "workspace:*"
+    queue-typescript: "npm:^1.0.1"
     supertest: "npm:^6.3.3"
     ts-node: "npm:^10.9.1"
     tsconfig-custom: "workspace:*"
@@ -5552,6 +5614,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-hook-form: "npm:^7.51.2"
     react-leaflet: "npm:^4.2.1"
+    react-leaflet-cluster: "npm:^2.1.0"
     react-resizable-panels: "npm:^2.0.16"
     react-router-bootstrap: "npm:^0.26.2"
     react-router-dom: "npm:^6.11.2"
@@ -5880,6 +5943,29 @@ __metadata:
   languageName: node
   linkType: hard
 
+"history@npm:^4.9.0":
+  version: 4.10.1
+  resolution: "history@npm:4.10.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.1.2"
+    loose-envify: "npm:^1.2.0"
+    resolve-pathname: "npm:^3.0.0"
+    tiny-invariant: "npm:^1.0.2"
+    tiny-warning: "npm:^1.0.0"
+    value-equal: "npm:^1.0.1"
+  checksum: 042373f69dad6419a4d551b995ef40f449a8854775a1157c4e9f077ee39aea6ca7ed8f45ec3e1762ef1891357a724d17dad11f2fe7d0edeebcbcf9f48ed3e4d4
+  languageName: node
+  linkType: hard
+
+"hoist-non-react-statics@npm:^3.1.0":
+  version: 3.3.2
+  resolution: "hoist-non-react-statics@npm:3.3.2"
+  dependencies:
+    react-is: "npm:^16.7.0"
+  checksum: 1acbe85f33e5a39f90c822ad4d28b24daeb60f71c545279431dc98c312cd28a54f8d64788e477fe21dc502b0e3cf58589ebe5c1ad22af27245370391c2d24ea6
+  languageName: node
+  linkType: hard
+
 "http-cache-semantics@npm:^4.0.0, http-cache-semantics@npm:^4.1.1":
   version: 4.1.1
   resolution: "http-cache-semantics@npm:4.1.1"
@@ -6198,6 +6284,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"isarray@npm:0.0.1":
+  version: 0.0.1
+  resolution: "isarray@npm:0.0.1"
+  checksum: 49191f1425681df4a18c2f0f93db3adb85573bcdd6a4482539d98eac9e705d8961317b01175627e860516a2fc45f8f9302db26e5a380a97a520e272e2a40a8d4
+  languageName: node
+  linkType: hard
+
 "isexe@npm:^2.0.0":
   version: 2.0.0
   resolution: "isexe@npm:2.0.0"
@@ -6333,7 +6426,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"leaflet@npm:^1.9.4":
+"leaflet.markercluster@npm:^1.4.1, leaflet.markercluster@npm:^1.5.3":
+  version: 1.5.3
+  resolution: "leaflet.markercluster@npm:1.5.3"
+  peerDependencies:
+    leaflet: ^1.3.1
+  checksum: 28dc441de7012b19628144407bde89576f758dbea31ecb86e3412d1fb3a46723fb47d2ba45d9b858c2e65592479a127474fb1cbf7ff33b3023c4d14f851e5fe4
+  languageName: node
+  linkType: hard
+
+"leaflet@npm:^1.6.0, leaflet@npm:^1.9.4":
   version: 1.9.4
   resolution: "leaflet@npm:1.9.4"
   checksum: 7b6a74d503980961a85bdabebf9d1162c26db0e88195800ceea311682b653d621718f2ada3c9aab903a735af9862c9ae278ba550d4429acbd954d43449cd0d77
@@ -6380,6 +6482,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"linked-list-typescript@npm:^1.0.11":
+  version: 1.0.15
+  resolution: "linked-list-typescript@npm:1.0.15"
+  checksum: 91c87ab00fe4bb9850f169adc62b811ae7e91a743bac1a9fc969a815f20ddd0fb285f84a4d31e98900512234f59297f7beef6b076dd382cf879a319c7a14c68b
+  languageName: node
+  linkType: hard
+
 "local-pkg@npm:^0.4.3":
   version: 0.4.3
   resolution: "local-pkg@npm:0.4.3"
@@ -6419,7 +6528,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.4.0":
+"loose-envify@npm:^1.0.0, loose-envify@npm:^1.1.0, loose-envify@npm:^1.2.0, loose-envify@npm:^1.3.1, loose-envify@npm:^1.4.0":
   version: 1.4.0
   resolution: "loose-envify@npm:1.4.0"
   dependencies:
@@ -7195,6 +7304,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"path-to-regexp@npm:^1.7.0":
+  version: 1.8.0
+  resolution: "path-to-regexp@npm:1.8.0"
+  dependencies:
+    isarray: "npm:0.0.1"
+  checksum: 45a01690f72919163cf89714e31a285937b14ad54c53734c826363fcf7beba9d9d0f2de802b4986b1264374562d6a3398a2e5289753a764e3a256494f1e52add
+  languageName: node
+  linkType: hard
+
 "path-type@npm:^4.0.0":
   version: 4.0.0
   resolution: "path-type@npm:4.0.0"
@@ -7695,6 +7813,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"queue-typescript@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "queue-typescript@npm:1.0.1"
+  dependencies:
+    linked-list-typescript: "npm:^1.0.11"
+  checksum: 403e38579902af1ac533911876c31dd1fd62e94d352263b9ed9786db3677494b15236ad43182178e5103915605a8b07da5780d84b6cc075d7f54cfb056091489
+  languageName: node
+  linkType: hard
+
 "quick-lru@npm:^5.1.1":
   version: 5.1.1
   resolution: "quick-lru@npm:5.1.1"
@@ -7842,7 +7969,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1, react-is@npm:^16.3.2":
+"react-is@npm:^16.13.1, react-is@npm:^16.3.2, react-is@npm:^16.6.0, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 5aa564a1cde7d391ac980bedee21202fc90bdea3b399952117f54fb71a932af1e5902020144fb354b4690b2414a0c7aafe798eb617b76a3d441d956db7726fdf
@@ -7853,6 +7980,49 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: 200cd65bf2e0be7ba6055f647091b725a45dd2a6abef03bf2380ce701fd5edccee40b49b9d15edab7ac08a762bf83cb4081e31ec2673a5bfb549a36ba21570df
+  languageName: node
+  linkType: hard
+
+"react-leaflet-cluster@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "react-leaflet-cluster@npm:2.1.0"
+  dependencies:
+    leaflet.markercluster: "npm:^1.5.3"
+  peerDependencies:
+    leaflet: ^1.8.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+    react-leaflet: ^4.0.0
+  checksum: 14e802fba65c29ab7607466178f4948a27d515ddcbfd48d54cb2c37051772fa71ab0f1d3da55862c345ccae86eae040333eb4f392c60405d1a1c3d83f1368501
+  languageName: node
+  linkType: hard
+
+"react-leaflet-markercluster@npm:^3.0.0-rc1":
+  version: 3.0.0-rc1
+  resolution: "react-leaflet-markercluster@npm:3.0.0-rc1"
+  dependencies:
+    "@react-leaflet/core": "npm:^1.0.2"
+    leaflet: "npm:^1.6.0"
+    leaflet.markercluster: "npm:^1.4.1"
+    react-leaflet: "npm:^3.0.0"
+  peerDependencies:
+    leaflet: ^1.6.0
+    leaflet.markercluster: ^1.4.1
+    react-leaflet: ^3.0.0
+  checksum: cc42d4b380f128e81873e4ad6a7160c9a6efb2953af32e65580463e4fcfa038b6977587bc691e65bfafa7249c921b75b411ad8fdbf5beb0cca20ac48042f7bae
+  languageName: node
+  linkType: hard
+
+"react-leaflet@npm:^3.0.0":
+  version: 3.2.5
+  resolution: "react-leaflet@npm:3.2.5"
+  dependencies:
+    "@react-leaflet/core": "npm:^1.1.1"
+  peerDependencies:
+    leaflet: ^1.7.1
+    react: ^17.0.1
+    react-dom: ^17.0.1
+  checksum: a5695833f5a5286d1406b22f4b260de8163577cdbf97fa121860c9124933121bf8b482ebe4be47c949aaf37c04cf9875a6eddb33c130fa3431e8ac9ecf0421b7
   languageName: node
   linkType: hard
 
@@ -7940,6 +8110,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-router-dom@npm:5":
+  version: 5.3.4
+  resolution: "react-router-dom@npm:5.3.4"
+  dependencies:
+    "@babel/runtime": "npm:^7.12.13"
+    history: "npm:^4.9.0"
+    loose-envify: "npm:^1.3.1"
+    prop-types: "npm:^15.6.2"
+    react-router: "npm:5.3.4"
+    tiny-invariant: "npm:^1.0.2"
+    tiny-warning: "npm:^1.0.0"
+  peerDependencies:
+    react: ">=15"
+  checksum: 5e0696ae2d86f466ff700944758a227e1dcd79b48797d567776506e4e3b4a08b81336155feb86a33be9f38c17c4d3d94212b5c60c8ee9a086022e4fd3961db29
+  languageName: node
+  linkType: hard
+
 "react-router-dom@npm:^6.11.2":
   version: 6.21.3
   resolution: "react-router-dom@npm:6.21.3"
@@ -7950,6 +8137,25 @@ __metadata:
     react: ">=16.8"
     react-dom: ">=16.8"
   checksum: 6e23e35d02e5c83847c8e47d7912d1f6c2c42a35f2317802031bdd993a8205468138a045ff34f67fe807fe9f7dc9d0995ee05bab25aedc0bf978e620ac132815
+  languageName: node
+  linkType: hard
+
+"react-router@npm:5.3.4":
+  version: 5.3.4
+  resolution: "react-router@npm:5.3.4"
+  dependencies:
+    "@babel/runtime": "npm:^7.12.13"
+    history: "npm:^4.9.0"
+    hoist-non-react-statics: "npm:^3.1.0"
+    loose-envify: "npm:^1.3.1"
+    path-to-regexp: "npm:^1.7.0"
+    prop-types: "npm:^15.6.2"
+    react-is: "npm:^16.6.0"
+    tiny-invariant: "npm:^1.0.2"
+    tiny-warning: "npm:^1.0.0"
+  peerDependencies:
+    react: ">=15"
+  checksum: 99d54a99af6bc6d7cad2e5ea7eee9485b62a8b8e16a1182b18daa7fad7dafa5e526850eaeebff629848b297ae055a9cb5b4aba8760e81af8b903efc049d48f5c
   languageName: node
   linkType: hard
 
@@ -8084,6 +8290,13 @@ __metadata:
   version: 4.0.0
   resolution: "resolve-from@npm:4.0.0"
   checksum: 91eb76ce83621eea7bbdd9b55121a5c1c4a39e54a9ce04a9ad4517f102f8b5131c2cf07622c738a6683991bf54f2ce178f5a42803ecbd527ddc5105f362cc9e3
+  languageName: node
+  linkType: hard
+
+"resolve-pathname@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "resolve-pathname@npm:3.0.0"
+  checksum: 6147241ba42c423dbe83cb067a2b4af4f60908c3af57e1ea567729cc71416c089737fe2a73e9e79e7a60f00f66c91e4b45ad0d37cd4be2d43fec44963ef14368
   languageName: node
   linkType: hard
 
@@ -8543,11 +8756,14 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "softeng-starter-code@workspace:."
   dependencies:
+    "@react-leaflet/core": "npm:^2.1.0"
     "@types/leaflet": "npm:^1.9.8"
+    "@types/leaflet.markercluster": "npm:^1"
     "@types/node": "npm:^20.12.2"
     "@types/pathfinding": "npm:^0.0.9"
-    "@types/react": "npm:^18.0.37"
-    "@types/react-dom": "npm:^18.0.11"
+    "@types/react": "npm:^18.2.73"
+    "@types/react-dom": "npm:^18.2.23"
+    "@types/react-leaflet-markercluster": "npm:^3"
     "@vitest/ui": "npm:^0.33.0"
     "@yarnpkg/pnpify": "npm:^4.0.0-rc.45"
     dotenv: "npm:^16.4.5"
@@ -8557,13 +8773,18 @@ __metadata:
     happy-dom: "npm:^10.6.3"
     husky: "npm:^8.0.0"
     leaflet: "npm:^1.9.4"
+    leaflet.markercluster: "npm:^1.5.3"
     pathfinding: "npm:^0.4.18"
     prettier: "npm:2.8.8"
     prettier-config-custom: "workspace:*"
+    queue-typescript: "npm:^1.0.1"
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.10.0"
     react-dom: "npm:^18.2.0"
     react-leaflet: "npm:^4.2.1"
+    react-leaflet-cluster: "npm:^2.1.0"
+    react-leaflet-markercluster: "npm:^3.0.0-rc1"
+    react-router-dom: "npm:5"
     tsconfig-custom: "workspace:*"
     turbo: "npm:latest"
     typescript: "npm:^5.0.4"
@@ -8869,6 +9090,20 @@ __metadata:
   dependencies:
     any-promise: "npm:^1.0.0"
   checksum: 486e1283a867440a904e36741ff1a177faa827cf94d69506f7e3ae4187b9afdf9ec368b3d8da225c192bfe2eb943f3f0080594156bf39f21b57cd1411e2e7f6d
+  languageName: node
+  linkType: hard
+
+"tiny-invariant@npm:^1.0.2":
+  version: 1.3.3
+  resolution: "tiny-invariant@npm:1.3.3"
+  checksum: 5e185c8cc2266967984ce3b352a4e57cb89dad5a8abb0dea21468a6ecaa67cd5bb47a3b7a85d08041008644af4f667fb8b6575ba38ba5fb00b3b5068306e59fe
+  languageName: node
+  linkType: hard
+
+"tiny-warning@npm:^1.0.0":
+  version: 1.0.3
+  resolution: "tiny-warning@npm:1.0.3"
+  checksum: da62c4acac565902f0624b123eed6dd3509bc9a8d30c06e017104bedcf5d35810da8ff72864400ad19c5c7806fc0a8323c68baf3e326af7cb7d969f846100d71
   languageName: node
   linkType: hard
 
@@ -9320,6 +9555,13 @@ __metadata:
   version: 3.0.1
   resolution: "v8-compile-cache-lib@npm:3.0.1"
   checksum: 88d3423a52b6aaf1836be779cab12f7016d47ad8430dffba6edf766695e6d90ad4adaa3d8eeb512cc05924f3e246c4a4ca51e089dccf4402caa536b5e5be8961
+  languageName: node
+  linkType: hard
+
+"value-equal@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "value-equal@npm:1.0.1"
+  checksum: bb7ae1facc76b5cf8071aeb6c13d284d023fdb370478d10a5d64508e0e6e53bb459c4bbe34258df29d82e6f561f874f0105eba38de0e61fe9edd0bdce07a77a2
   languageName: node
   linkType: hard
 
