@@ -66,6 +66,7 @@ const RAW_RUNTIME_STATE =
           ["@fortawesome/free-solid-svg-icons", "npm:6.5.1"],\
           ["@fortawesome/react-fontawesome", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.2.0"],\
           ["@iconify/icons-lucide", "npm:1.2.135"],\
+          ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0-dev.46"],\
           ["@react-leaflet/core", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["@types/leaflet", "npm:1.9.8"],\
           ["@types/leaflet.markercluster", "npm:1.5.4"],\
@@ -90,6 +91,7 @@ const RAW_RUNTIME_STATE =
           ["pathfinding", "npm:0.4.18"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["prisma", "npm:5.12.0-dev.46"],\
           ["react", "npm:18.2.0"],\
           ["react-bootstrap", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.10.0"],\
           ["react-dom", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:18.2.0"],\
@@ -1080,6 +1082,24 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
+      ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.2.0", {\
+        "packageLocation": "./.yarn/__virtual__/@fortawesome-react-fontawesome-virtual-bfd7676fd8/0/cache/@fortawesome-react-fontawesome-npm-0.2.0-a36215138f-9b574daaf4.zip/node_modules/@fortawesome/react-fontawesome/",\
+        "packageDependencies": [\
+          ["@fortawesome/react-fontawesome", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.2.0"],\
+          ["@fortawesome/fontawesome-svg-core", null],\
+          ["@types/fortawesome__fontawesome-svg-core", null],\
+          ["@types/react", "npm:18.2.48"],\
+          ["prop-types", "npm:15.8.1"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@fortawesome/fontawesome-svg-core",\
+          "@types/fortawesome__fontawesome-svg-core",\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.2.0", {\
         "packageLocation": "./.yarn/__virtual__/@fortawesome-react-fontawesome-virtual-6c9fb6fe4a/0/cache/@fortawesome-react-fontawesome-npm-0.2.0-a36215138f-9b574daaf4.zip/node_modules/@fortawesome/react-fontawesome/",\
         "packageDependencies": [\
@@ -1560,6 +1580,26 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
+      ["npm:5.12.0-dev.46", {\
+        "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-cef4314188/node_modules/@prisma/client/",\
+        "packageDependencies": [\
+          ["@prisma/client", "npm:5.12.0-dev.46"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0-dev.46", {\
+        "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-cef4314188/node_modules/@prisma/client/",\
+        "packageDependencies": [\
+          ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0-dev.46"],\
+          ["@types/prisma", null],\
+          ["prisma", "npm:5.12.0-dev.46"]\
+        ],\
+        "packagePeers": [\
+          "@types/prisma",\
+          "prisma"\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:4.15.0", {\
         "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-1fb12a8bef/node_modules/@prisma/client/",\
         "packageDependencies": [\
@@ -1575,11 +1615,31 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@prisma/debug", [\
+      ["npm:5.12.0-dev.46", {\
+        "packageLocation": "./.yarn/cache/@prisma-debug-npm-5.12.0-dev.46-e10a522486-f352fefbe2.zip/node_modules/@prisma/debug/",\
+        "packageDependencies": [\
+          ["@prisma/debug", "npm:5.12.0-dev.46"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@prisma/engines", [\
       ["npm:4.15.0", {\
         "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-4.15.0-9024b482d4/node_modules/@prisma/engines/",\
         "packageDependencies": [\
           ["@prisma/engines", "npm:4.15.0"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:5.12.0-dev.46", {\
+        "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-5.12.0-dev.46-7a73cb6f1e/node_modules/@prisma/engines/",\
+        "packageDependencies": [\
+          ["@prisma/engines", "npm:5.12.0-dev.46"],\
+          ["@prisma/debug", "npm:5.12.0-dev.46"],\
+          ["@prisma/engines-version", "npm:5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9"],\
+          ["@prisma/fetch-engine", "npm:5.12.0-dev.46"],\
+          ["@prisma/get-platform", "npm:5.12.0-dev.46"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1589,6 +1649,35 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944-45ae46b86e-693ebe6c19.zip/node_modules/@prisma/engines-version/",\
         "packageDependencies": [\
           ["@prisma/engines-version", "npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9", {\
+        "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9-9d36734c5f-5e54531754.zip/node_modules/@prisma/engines-version/",\
+        "packageDependencies": [\
+          ["@prisma/engines-version", "npm:5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@prisma/fetch-engine", [\
+      ["npm:5.12.0-dev.46", {\
+        "packageLocation": "./.yarn/cache/@prisma-fetch-engine-npm-5.12.0-dev.46-dc96260e0c-d39234c061.zip/node_modules/@prisma/fetch-engine/",\
+        "packageDependencies": [\
+          ["@prisma/fetch-engine", "npm:5.12.0-dev.46"],\
+          ["@prisma/debug", "npm:5.12.0-dev.46"],\
+          ["@prisma/engines-version", "npm:5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9"],\
+          ["@prisma/get-platform", "npm:5.12.0-dev.46"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@prisma/get-platform", [\
+      ["npm:5.12.0-dev.46", {\
+        "packageLocation": "./.yarn/cache/@prisma-get-platform-npm-5.12.0-dev.46-edf956e5aa-76f2ba09fe.zip/node_modules/@prisma/get-platform/",\
+        "packageDependencies": [\
+          ["@prisma/get-platform", "npm:5.12.0-dev.46"],\
+          ["@prisma/debug", "npm:5.12.0-dev.46"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -7653,6 +7742,7 @@ const RAW_RUNTIME_STATE =
           ["frontend", "workspace:apps/frontend"],\
           ["@auth0/auth0-react", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:2.2.4"],\
           ["@fortawesome/free-solid-svg-icons", "npm:6.5.1"],\
+          ["@fortawesome/react-fontawesome", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.2.0"],\
           ["@hookform/resolvers", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:3.3.4"],\
           ["@iconify/icons-lucide", "npm:1.2.135"],\
           ["@popperjs/core", "npm:2.11.8"],\
@@ -10754,6 +10844,14 @@ const RAW_RUNTIME_STATE =
           ["@prisma/engines", "npm:4.15.0"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:5.12.0-dev.46", {\
+        "packageLocation": "./.yarn/unplugged/prisma-npm-5.12.0-dev.46-fb95a5afdb/node_modules/prisma/",\
+        "packageDependencies": [\
+          ["prisma", "npm:5.12.0-dev.46"],\
+          ["@prisma/engines", "npm:5.12.0-dev.46"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["proc-log", [\
@@ -12397,6 +12495,7 @@ const RAW_RUNTIME_STATE =
           ["@fortawesome/free-solid-svg-icons", "npm:6.5.1"],\
           ["@fortawesome/react-fontawesome", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.2.0"],\
           ["@iconify/icons-lucide", "npm:1.2.135"],\
+          ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0-dev.46"],\
           ["@react-leaflet/core", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["@types/leaflet", "npm:1.9.8"],\
           ["@types/leaflet.markercluster", "npm:1.5.4"],\
@@ -12421,6 +12520,7 @@ const RAW_RUNTIME_STATE =
           ["pathfinding", "npm:0.4.18"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["prisma", "npm:5.12.0-dev.46"],\
           ["react", "npm:18.2.0"],\
           ["react-bootstrap", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.10.0"],\
           ["react-dom", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:18.2.0"],\
