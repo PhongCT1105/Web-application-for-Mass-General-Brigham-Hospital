@@ -1,7 +1,13 @@
-import React, { useEffect } from "react";
-import L, { CRS, LatLngBoundsExpression, LatLngTuple, Map } from "leaflet";
+import React, { useEffect, useRef, useState } from "react";
+import L, {
+  CRS,
+  LatLngBoundsExpression,
+  LatLngTuple,
+  Map,
+  Polyline,
+} from "leaflet";
 import "leaflet/dist/leaflet.css";
-import lowerLevelMap from "@/assets/lower-level-map.png"; // Import the image file
+import lowerLevelMap from "@/assets/lower-level-map.png";
 import { NavBar } from "@/components/blocks/navSearchBlock.tsx";
 
 // Define hospital data with name and coordinates
@@ -18,41 +24,71 @@ const hospitalData: HospitalData[] = [
 
 // Define the map component
 export const MapBlock: React.FC = () => {
-  useEffect(() => {
-    // Initialize Leaflet map without default zoom control
-    const map: Map = L.map("map-container", {
-      crs: CRS.Simple, // Use simple coordinates for the image overlay
-      minZoom: -1, // Set the minimum zoom level (max zoom out)
-      maxZoom: 2, // Set the max zoom level (max zoom in)
-      zoomControl: false, // Disable the default zoom control
-    }).setView([638, 938], -1); // Set the initial view to center of the image
+  const mapRef = useRef<Map | null>(null);
+  const [path, setPath] = useState<Polyline | null>(null);
 
-    // Define the bounds for the image overlay
+  useEffect(() => {
+    const map: Map = L.map("map-container", {
+      crs: CRS.Simple,
+      minZoom: -1,
+      maxZoom: 2,
+      zoomControl: false,
+    }).setView([638, 938], -1);
+
+    mapRef.current = map;
+
     const bounds: LatLngBoundsExpression = [
       [0, 0],
       [1275, 1875],
-    ]; // Adjust the bounds based on your image size
+    ];
 
-    // Add the image overlay to the map
     L.imageOverlay(lowerLevelMap, bounds).addTo(map);
 
     map.setMaxBounds(bounds);
 
-    // Add markers for hospitals
     hospitalData.forEach((hospital) => {
       const marker = L.marker(hospital.latlng).addTo(map);
       marker.bindPopup(hospital.name).openPopup();
     });
 
-    // Add custom zoom control to the right side
     const zoomControl = L.control.zoom({ position: "topright" });
     map.addControl(zoomControl);
 
-    // Clean up Leaflet map when component unmounts
     return () => {
       map.remove();
     };
-  }, []); // Run useEffect only once on component mount
+  }, []);
+
+  const handlePathfinding = () => {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const startCoordinates: LatLngTuple = [600, 800];
+    const endCoordinates: LatLngTuple = [700, 900];
+
+    const shortestPath = calculateShortestPath(
+      startCoordinates,
+      endCoordinates,
+    );
+
+    if (shortestPath.length > 0) {
+      if (path) {
+        path.removeFrom(map);
+      }
+
+      const newPath = L.polyline(shortestPath, { color: "blue" }).addTo(map);
+      setPath(newPath);
+    } else {
+      console.error("No path found!");
+    }
+  };
+
+  const calculateShortestPath = (
+    start: LatLngTuple,
+    end: LatLngTuple,
+  ): LatLngTuple[] => {
+    return [start, [650, 850], [670, 870], end];
+  };
 
   return (
     <div
@@ -60,10 +96,13 @@ export const MapBlock: React.FC = () => {
       style={{
         flex: 1,
         backgroundColor: "lightcyan",
-        position: "relative", // Ensure position relative for the NavBar
+        position: "relative",
       }}
     >
-      <NavBar />
+      <NavBar handlePathfinding={handlePathfinding} />
+      <button onClick={() => handlePathfinding()}>Find Path</button>
     </div>
   );
 };
+
+export default MapBlock;
