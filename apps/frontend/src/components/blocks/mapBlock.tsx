@@ -21,7 +21,7 @@ interface HospitalData {
 }
 
 const hospitalData: HospitalData[] = [
-  { name: "Anesthesia Conf Floor L1", geocode: "225,849" },
+  { name: "Test Point", geocode: "0,0" },
   { name: "Anesthesia Conf Floor L1", geocode: "2255,849" },
   { name: "Medical Records Conference Room Floor L1", geocode: "2665,1043" },
   { name: "Abrams Conference Room", geocode: "2445,1245" },
@@ -87,7 +87,7 @@ export const MapBlock: React.FC = () => {
 
     const bounds: LatLngBoundsExpression = [
       [0, 0],
-      [1275, 1875], // change to resolution of the image
+      [3400, 5000], // change to resolution of the image
     ];
 
     L.imageOverlay(lowerLevelMap, bounds).addTo(map);
@@ -101,7 +101,12 @@ export const MapBlock: React.FC = () => {
         iconAnchor: [16, 16], // Adjust icon anchor point
       });
       const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
-      const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+      // modify to meet bounds dimensions
+      const newLat = 3400 - lng;
+      const newLng = lat;
+      const marker = L.marker([newLat, newLng], { icon: customIcon }).addTo(
+        map,
+      );
       marker.bindPopup(hospital.name).openPopup();
     });
 
