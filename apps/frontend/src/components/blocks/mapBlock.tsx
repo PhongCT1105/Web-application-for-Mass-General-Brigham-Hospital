@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import L, {
   CRS,
-  LatLngBoundsExpression,
   LatLngTuple,
+  LatLngBounds,
   Map,
   Polyline,
   Icon,
@@ -10,10 +10,7 @@ import L, {
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap from "@/assets/lower-level-map.png";
 import { NavBar } from "@/components/blocks/navSearchBlock.tsx";
-import node_dot from "@/assets/node_dot.jpg";
-// import {HospitalIcon} from "lucide-react";
-// import {faHospital} from "@fortawesome/free-solid-svg-icons";
-// Define hospital data with name, coordinates, and icon URL
+import RedDot from "@/assets/red_dot.png";
 
 interface HospitalData {
   name: string;
@@ -81,22 +78,19 @@ export const MapBlock: React.FC = () => {
       minZoom: -1,
       maxZoom: 2,
       zoomControl: false,
-    }).setView([638, 938], -1);
+    }).setView([2000, 1800], -1);
 
-    mapRef.current = map;
-
-    const bounds: LatLngBoundsExpression = [
-      [0, 0],
-      [1275, 1875], // change to resolution of the image
-    ];
+    const bounds: LatLngBounds = new LatLngBounds(
+      map.unproject([0, 0], map.getMaxZoom() - 1),
+      map.unproject([5000, 3400], map.getMaxZoom() - 1),
+    );
 
     L.imageOverlay(lowerLevelMap, bounds).addTo(map);
-
-    map.setMaxBounds(bounds); // maybe get rid of this
+    map.setMaxBounds(bounds);
 
     hospitalData.forEach((hospital) => {
       const customIcon = new Icon({
-        iconUrl: node_dot,
+        iconUrl: RedDot,
         iconSize: [12, 12], // Adjust icon size as needed
         iconAnchor: [16, 16], // Adjust icon anchor point
       });
@@ -143,7 +137,16 @@ export const MapBlock: React.FC = () => {
     );
     const endLocation = hospitalData.find((hospital) => hospital.name === end);
     if (startLocation && endLocation) {
-      // Perform the drawLine operation here using startLocation.latlng and endLocation.latlng
+      const startLatLng: LatLngTuple = startLocation.geocode
+        .split(",")
+        .map(parseFloat) as LatLngTuple;
+      const endLatLng: LatLngTuple = endLocation.geocode
+        .split(",")
+        .map(parseFloat) as LatLngTuple;
+
+      L.polyline([startLatLng, endLatLng], { color: "red" }).addTo(
+        mapRef.current!,
+      );
     }
   };
 
