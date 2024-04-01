@@ -43,15 +43,16 @@ model Edges {
 }
 
 model User {
-  userID    Int             @id @default(autoincrement())
-  username  String
-  password  String
-  flowerReq flowerRequest[] @relation("reqUser")
+  userID   Int    @id @default(autoincrement())
+  username String
+  password String
+  // flowerReq flowerRequest[] @relation("reqUser")
 }
 
 model flowerRequest {
-  reqID   Int    @id @default(autoincrement())
-  reqUser User   @relation("reqUser", fields: [userID], references: [userID], onDelete: Cascade)
-  userID  Int
-  type    String
+  reqID Int    @id @default(autoincrement())
+  // reqUser User     @relation("reqUser", fields: [userID], references: [userID], onDelete: Cascade)
+  // userID  Int
+  type  String
+  cost  Int
 }
