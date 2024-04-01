@@ -1,9 +1,8 @@
-// import "../styles/example.route.css";
+// "use client";
+ 
 import "../styles/globals.css";
 import { Header } from "@/components/blocks/header.tsx";
-// import {FlowerCard} from "@/components/blocks/flowerCard.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
-// import { FlowerCard } from "@/components/blocks/flowerCard.tsx";
 import { Sidebar } from "@/components/blocks/sidebar.tsx";
 import {
   Tabs,
@@ -11,7 +10,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
- 
+
 import { Car, Church, FlowerIcon, ShoppingCart } from "lucide-react";
 import { Button } from "@/components/ui/button.tsx";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area.tsx";
@@ -22,8 +21,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import {
+  chocolateCards,
+  flowerCards,
+} from "@/routes/service-request/scroll-area-card.ts";
+import { useToast } from "@/components/ui/use-toast.ts";
+import { ToastAction } from "@/components/ui/toast.tsx";
+
 export default function ServiceRequestPage() {
-  const sequence: number[] = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 1, 1, 1, 1, 1];
+  const { toast } = useToast();
 
   return (
     <>
@@ -33,8 +39,9 @@ export default function ServiceRequestPage() {
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
               <Sidebar className="hidden lg:block" />
+              {/*<div className="col-span-4 lg:col-span-4 lg:border-l overflow-x-auto">*/}
               <div className="col-span-4 lg:col-span-4 lg:border-l overflow-x-auto">
-                <div className="h-full px-4 py-6 lg:px-6">
+                <div className="h-full pl-4 py-6 lg:pl-6">
                   <Tabs
                     defaultValue="Flower Request"
                     className="h-full space-y-6"
@@ -57,8 +64,9 @@ export default function ServiceRequestPage() {
                     </div>
                     <TabsContent
                       value="Flower Request"
-                      className="border-none p-0 h-full flex-col data-[state=active]:flex "
+                      className="border-none p-0 flex-col data-[state=active]:flex "
                     >
+                      {/*  h-full  ^^^^^ */}
                       <div className="flex items-center justify-between">
                         <div className="space-y-1">
                           <h2 className="text-2xl font-semibold tracking-tight">
@@ -69,7 +77,21 @@ export default function ServiceRequestPage() {
                           </p>
                         </div>
                         <div className="ml-auto mr-4">
-                          <Button>
+                          {/*  TODO: toast not working */}
+                          <Button
+                            onClick={() => {
+                              toast({
+                                title: "You added roses",
+                                description:
+                                  "Click on the cart to see the rest of your order",
+                                action: (
+                                  <ToastAction altText="Goto schedule to undo">
+                                    Undo
+                                  </ToastAction>
+                                ),
+                              });
+                            }}
+                          >
                             <ShoppingCart className="mr-2 h-4 w-4" />
                             Cart
                           </Button>
@@ -77,50 +99,58 @@ export default function ServiceRequestPage() {
                       </div>
                       <Separator className="my-4" />
                       <div className="relative">
-                        <div className="flex space-x-4 pb-4">
-                          <ScrollArea>
-                            <div className="flex space-x-3 pb-4 my-3">
-                              {sequence.map(() => (
-                                <Card
-                                  className={
-                                    "lg-card justify-center shadow-none object-cover transition-all hover:scale-105 hover:shadow"
-                                  }
-                                >
-                                  <CardContent className={"w-[300px] mt-2"}>
-                                    <img
-                                      src={"src/assets/rose-bouquet.jpg"}
-                                      alt={"picture of a rose"}
-                                      width={"300px"}
-                                    />
-                                    <CardTitle className={"text-center pt-2"}>
-                                      Red Roses
-                                    </CardTitle>
-                                    <CardDescription
-                                      className={
-                                        "text-center text-lg text-muted-foreground"
-                                      }
+                        {/*<div className="flex space-x-4 pb-4 ">*/}
+                        <ScrollArea>
+                          <div className="flex space-x-4 pb-4 my-3 ml-2">
+                            {flowerCards.map((flower) => (
+                              <Card
+                                className={
+                                  "lg-card justify-center shadow-none object-cover transition-all hover:scale-105 hover:shadow"
+                                }
+                              >
+                                <CardContent className={"w-[300px] mt-2"}>
+                                  <img
+                                    src={flower.image}
+                                    alt={flower.name}
+                                    width={"300px"}
+                                  />
+                                  <CardTitle className={"text-center pt-2"}>
+                                    {flower.name}
+                                  </CardTitle>
+                                  <CardDescription
+                                    className={
+                                      "text-center text-lg text-muted-foreground"
+                                    }
+                                  >
+                                    ${flower.cost}
+                                  </CardDescription>
+                                  <CardDescription
+                                    className={
+                                      "text-center text-lg text-muted-foreground flex flex-col pt-2 items-center "
+                                    }
+                                  >
+                                    {/* TODO: toast not working */}
+                                    <Button
+                                      variant={"default"}
+                                      type={"button"}
+                                      onClick={() => {
+                                        toast({
+                                          title: "You added roses",
+                                          description:
+                                            "Click on the cart to see the rest of your order",
+                                        });
+                                      }}
                                     >
-                                      $999.99
-                                    </CardDescription>
-                                    <CardDescription
-                                      className={
-                                        "text-center text-lg text-muted-foreground flex flex-col pt-2 items-center "
-                                      }
-                                    >
-                                      <Button
-                                        variant={"default"}
-                                        type={"button"}
-                                      >
-                                        Add to cart
-                                      </Button>
-                                    </CardDescription>
-                                  </CardContent>
-                                </Card>
-                              ))}
-                            </div>
-                            <ScrollBar orientation="horizontal" />
-                          </ScrollArea>
-                        </div>
+                                      Add to cart
+                                    </Button>
+                                  </CardDescription>
+                                </CardContent>
+                              </Card>
+                            ))}
+                          </div>
+                          <ScrollBar orientation="horizontal" />
+                        </ScrollArea>
+                        {/*</div>*/}
                       </div>
                       <div className="mt-6 space-y-1">
                         <h2 className="text-2xl font-semibold tracking-tight">
@@ -133,30 +163,30 @@ export default function ServiceRequestPage() {
                       <Separator className="my-4" />
                       <div className="relative">
                         <ScrollArea>
-                          <div className="flex  my-2 pb-4 ms-2">
-                            {sequence.map(() => (
+                          <div className="flex space-x-4 my-3 pb-4 ml-1">
+                            {chocolateCards.map((chocolate) => (
                               <Card
                                 className={
                                   "lg-card justify-center shadow-none object-cover transition-all hover:scale-105 hover:shadow"
                                 }
                               >
-                                <CardContent className={"w-[175px] mt-2"}>
+                                <CardContent className={"w-[150px] mt-2"}>
                                   <img
-                                    src={"src/assets/box-of-choc.jpg"}
-                                    alt={"picture of a rose"}
+                                    src={chocolate.image}
+                                    alt={chocolate.name}
                                     width={"150px"}
                                   />
                                   <CardTitle
                                     className={"text-center pt-2 font-normal"}
                                   >
-                                    Chocolate
+                                    {chocolate.name}
                                   </CardTitle>
                                   <CardDescription
                                     className={
                                       "text-center text-lg text-muted-foreground"
                                     }
                                   >
-                                    $999.99
+                                    ${chocolate.cost}
                                   </CardDescription>
                                   <CardDescription
                                     className={

@@ -4,7 +4,7 @@ import React from "react";
 import { Car, Church, FlowerIcon } from "lucide-react";
 // import { Requests } from "../data/requests"
 
-type SidebarProps = React.HTMLAttributes<HTMLDivElement>
+type SidebarProps = React.HTMLAttributes<HTMLDivElement>;
 
 export function Sidebar({ className }: SidebarProps) {
   return (
@@ -15,7 +15,7 @@ export function Sidebar({ className }: SidebarProps) {
             Service Requests
           </h2>
           <div className="space-y-1">
-            <Button variant="secondary" className="w-full justify-start">
+            <Button variant="ghost" className="w-full justify-start">
               <FlowerIcon className="mr-2 h-4 w-4" />
               Flower Request
             </Button>
