@@ -54,6 +54,10 @@ export class Graph {
     const lines = data.split("\n").slice(1); // Assuming first line is header
 
     lines.forEach((line) => {
+      // Skip empty or whitespace-only lines
+      if (line.trim() === "") {
+        return;
+      }
       const [
         nodeID,
         xcoord,
@@ -63,7 +67,7 @@ export class Graph {
         nodeType,
         longName,
         shortName /* other properties */,
-      ] = line.split(",");
+      ] = line.split(",").map((value) => value.trim());
       const node: Node = {
         nodeID,
         xcoord: parseFloat(xcoord),
@@ -71,8 +75,8 @@ export class Graph {
         floor,
         building,
         nodeType,
-        longName: longName.trim(),
-        shortName: shortName.trim(),
+        longName: longName,
+        shortName: shortName,
         neighbors: new Set(),
       };
       this.addNode(node);
@@ -85,6 +89,10 @@ export class Graph {
     const lines = data.split("\n").slice(1); // Assuming first line is header
 
     lines.forEach((line) => {
+      // Skip empty or whitespace-only lines
+      if (line.trim() === "") {
+        return;
+      }
       const [source, target] = line.split(",").map((id) => id.trim());
       this.addNeighbors(source, target);
       const sourceNode = this.nodes.get(source);
@@ -102,17 +110,21 @@ export class Graph {
   printNodesWithNeighbors(
     property: "nodeID" | "longName" | "shortName" = "nodeID",
   ) {
+    let index = 0;
     this.nodes.forEach((node) => {
-      const nodeName = node[property];
-      console.log(`${nodeName} Neighbors:`);
-      node.neighbors.forEach((neighborId) => {
-        const neighbor = this.nodes.get(neighborId);
-        if (neighbor) {
-          console.log(neighbor[property]);
-        } else {
-          console.log(`Neighbor with ID '${neighborId}' not found.`);
-        }
-      });
+      console.log("Neighbor: " + index++);
+      if (node.neighbors.size > 0) {
+        const nodeName = node[property];
+        console.log(`${nodeName} Neighbors:`);
+        node.neighbors.forEach((neighborId) => {
+          const neighbor = this.nodes.get(neighborId);
+          if (neighbor) {
+            console.log(neighbor[property]);
+          } else {
+            console.log(`Neighbor with ID '${neighborId}' not found.`);
+          }
+        });
+      }
       console.log(); // Add a blank line for separation
     });
   }

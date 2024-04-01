@@ -10,11 +10,11 @@ graph.readEdgesFromCSV("./resources/L1Edges.csv");
 // console.log(graph.nodes);
 
 // print out all edges in graph
-// console.log(graph.edges);
+console.log(graph.edges);
 
 // print out all nodes and their neighbors
 // choose: nodeID, shortName, longName
-// graph.printNodesWithNeighbors('nodeID');
+graph.printNodesWithNeighbors("nodeID");
 
 // print out all nodes and their neighbors using x and y Coordinates.
 // graph.printNeighborsXandY();
