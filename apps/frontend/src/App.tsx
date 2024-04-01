@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import LoginPage from "./routes/LoginPage.tsx";
 import HomePage from "@/routes/HomePage.tsx";
 import AboutUsPage from "@/routes/AboutUsPage.tsx";
-import ServiceRequestPage from "@/routes/ServiceRequestPage.tsx";
+import ServiceRequestPage from "@/routes/service-request/ServiceRequestPage.tsx";
 import HeroPage from "@/routes/HeroPage.tsx";
 
 function App() {

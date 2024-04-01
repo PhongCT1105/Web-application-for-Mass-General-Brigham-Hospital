@@ -70,7 +70,7 @@ export const FlowerCard = () => {
 //     {sequence.map((x: number) =>
 //         // <Button className={"default"}> x </Button>
 //
-//         /*}justify-content-center border-0 sm-card shadow-none*/
+//         /*}justify-FlowerRequestPage-center border-0 sm-card shadow-none*/
 //     <div className={"flex flex-wrap grid-10 "}>
 //         {/*<Separator className="my-3" />*/}
 //         <Card className={"sm-card scale-75 justify-center"}>
