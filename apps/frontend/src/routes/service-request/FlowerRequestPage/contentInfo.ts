@@ -7,7 +7,7 @@ export interface CardInfo {
 export const flowerCards: CardInfo[] = [
   {
     image: "src/assets/rose-bouquet.jpg",
-    name: "Red Rose",
+    name: "Tulips",
     cost: 999.99,
   },
   {

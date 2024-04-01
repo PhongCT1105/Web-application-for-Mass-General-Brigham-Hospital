@@ -12,8 +12,17 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { ShoppingCart } from "lucide-react";
+import { useState } from "react";
+
+interface cartItem {
+  cost: number;
+  name: string;
+}
 
 export const FlowerContent = () => {
+  const [cartItems, setCartItems] = useState<cartItem[]>([]);
+  const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -26,20 +35,20 @@ export const FlowerContent = () => {
           </p>
         </div>
         <div className="ml-auto mr-4">
-          {/*  TODO: toast not working */}
           <Button
             onClick={() => {
               console.log("Cart button clicked.");
+              console.log(cartItems);
+              console.log(totalCost);
             }}
           >
             <ShoppingCart className="mr-2 h-4 w-4" />
-            Cart
+            Purchase
           </Button>
         </div>
       </div>
       <Separator className="my-4" />
       <div className="relative">
-        {/*<div className="flex space-x-4 pb-4 ">*/}
         <ScrollArea>
           <div className="flex space-x-4 pb-4 my-3 ml-2">
             {flowerCards.map((flower) => (
@@ -63,12 +72,18 @@ export const FlowerContent = () => {
                       "text-center text-lg text-muted-foreground flex flex-col pt-2 items-center "
                     }
                   >
-                    {/* TODO: toast not working */}
                     <Button
                       variant={"default"}
                       type={"button"}
                       onClick={() => {
-                        console.log("added flower to cart");
+                        setCartItems((prev) => [
+                          ...prev,
+                          {
+                            name: flower.name,
+                            cost: flower.cost,
+                          },
+                        ]);
+                        console.log(flower.name);
                       }}
                     >
                       Add to cart
@@ -80,7 +95,6 @@ export const FlowerContent = () => {
           </div>
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
-        {/*</div>*/}
       </div>
       <div className="mt-6 space-y-1">
         <h2 className="text-2xl font-semibold tracking-tight">Add-ons</h2>
@@ -121,7 +135,14 @@ export const FlowerContent = () => {
                       variant={"default"}
                       type={"button"}
                       onClick={() => {
-                        console.log("added chocolate to cart");
+                        setCartItems((prev) => [
+                          ...prev,
+                          {
+                            name: chocolate.name,
+                            cost: chocolate.cost,
+                          },
+                        ]);
+                        console.log(chocolate.name);
                       }}
                     >
                       Add to cart
