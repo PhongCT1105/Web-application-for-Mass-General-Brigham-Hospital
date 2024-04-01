@@ -98,7 +98,7 @@ export const MapBlock: React.FC = () => {
       const customIcon = new Icon({
         iconUrl: node_dot,
         iconSize: [12, 12], // Adjust icon size as needed
-        iconAnchor: [16, 16], // Adjust icon anchor point
+        iconAnchor: [6, 6], // Adjust icon anchor point
       });
       const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
       // modify to meet bounds dimensions
