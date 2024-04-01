@@ -9,7 +9,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      errorElement: <div />,
+      errorElement: <h1>ERROR</h1>,
       element: <Root />,
       children: [
         {
@@ -41,9 +41,10 @@ function App() {
   ]);
 
   return <RouterProvider router={router} />;
+
   function Root() {
     return (
-      <div className="w-full flex flex-col px-20 gap-5">
+      <div className="w-full flex flex-col gap-5">
         <Outlet />
       </div>
     );
