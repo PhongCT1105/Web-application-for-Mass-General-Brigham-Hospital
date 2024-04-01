@@ -21,13 +21,13 @@ export const FlowerCard = () => {
     <>
       <Card className={"border-0 shadow-none mt-5 ms-5"}>
         <CardTitle className={"text-4xl font-semibold"}>Roses</CardTitle>
-        <CardDescription>For Alexander Kreamling</CardDescription>
+        <CardDescription></CardDescription>
         <ScrollArea>
           <div className="flex space-x-3 pb-4 mt-5 ms-5">
             {sequence.map(() => (
               <Card
                 className={
-                  "sm-card justify-center border-0 shadow-none object-cover transition-all hover:scale-105"
+                  "sm-card justify-center border-0 shadow-none object-cover transition-all hover:scale-105 hover:shadow"
                 }
               >
                 <CardContent className={"w-[250px] pt-4"}>
@@ -46,7 +46,7 @@ export const FlowerCard = () => {
                   </CardDescription>
                   <CardDescription
                     className={
-                      "text-center text-lg text-muted-foreground flex flex-col pt-2 "
+                      "text-center text-lg text-muted-foreground flex flex-col pt-2 items-center"
                     }
                   >
                     <Button variant={"default"} type={"button"}>
