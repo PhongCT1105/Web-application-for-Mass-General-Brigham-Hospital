@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import L, {
   CRS,
+  LatLngBoundsExpression,
   LatLngTuple,
-  LatLngBounds,
   Map,
   Polyline,
   Icon,
@@ -18,7 +18,7 @@ interface HospitalData {
 }
 
 const hospitalData: HospitalData[] = [
-  { name: "Anesthesia Conf Floor L1", geocode: "225,849" },
+  { name: "Test Point", geocode: "0,0" },
   { name: "Anesthesia Conf Floor L1", geocode: "2255,849" },
   { name: "Medical Records Conference Room Floor L1", geocode: "2665,1043" },
   { name: "Abrams Conference Room", geocode: "2445,1245" },
@@ -78,24 +78,32 @@ export const MapBlock: React.FC = () => {
       minZoom: -1,
       maxZoom: 2,
       zoomControl: false,
-    }).setView([2000, 1800], -1);
+    }).setView([638, 938], -1);
 
-    const bounds: LatLngBounds = new LatLngBounds(
-      map.unproject([0, 0], map.getMaxZoom() - 1),
-      map.unproject([5000, 3400], map.getMaxZoom() - 1),
-    );
+    mapRef.current = map;
+
+    const bounds: LatLngBoundsExpression = [
+      [0, 0],
+      [3400, 5000], // change to resolution of the image
+    ];
 
     L.imageOverlay(lowerLevelMap, bounds).addTo(map);
-    map.setMaxBounds(bounds);
+
+    map.setMaxBounds(bounds); // maybe get rid of this
 
     hospitalData.forEach((hospital) => {
       const customIcon = new Icon({
         iconUrl: RedDot,
         iconSize: [12, 12], // Adjust icon size as needed
-        iconAnchor: [16, 16], // Adjust icon anchor point
+        iconAnchor: [6, 6], // Adjust icon anchor point
       });
       const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
-      const marker = L.marker([lat, lng], { icon: customIcon }).addTo(map);
+      // modify to meet bounds dimensions
+      const newLat = 3400 - lng;
+      const newLng = lat;
+      const marker = L.marker([newLat, newLng], { icon: customIcon }).addTo(
+        map,
+      );
       marker.bindPopup(hospital.name).openPopup();
     });
 
@@ -137,16 +145,7 @@ export const MapBlock: React.FC = () => {
     );
     const endLocation = hospitalData.find((hospital) => hospital.name === end);
     if (startLocation && endLocation) {
-      const startLatLng: LatLngTuple = startLocation.geocode
-        .split(",")
-        .map(parseFloat) as LatLngTuple;
-      const endLatLng: LatLngTuple = endLocation.geocode
-        .split(",")
-        .map(parseFloat) as LatLngTuple;
-
-      L.polyline([startLatLng, endLatLng], { color: "red" }).addTo(
-        mapRef.current!,
-      );
+      // Perform the drawLine operation here using startLocation.latlng and endLocation.latlng
     }
   };
 
