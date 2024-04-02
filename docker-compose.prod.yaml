@@ -91,7 +91,7 @@ services:
 
       # Despite the "loadbalancer" naming, this just describes what port this container exposes
       - "traefik.http.services.frontend-https.loadbalancer.server.port=80"
-    image: your_team_docker_repo:frountend
+    image: your_team_docker_repo:frontend
     restart: always
     healthcheck:
       *health-check
