@@ -3,6 +3,7 @@ import L, { CRS, LatLngBoundsExpression, Map, Polyline, Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap from "@/assets/lower-level-map.png";
 import RedDot from "@/assets/red_dot.png";
+import "@/styles/mapBlock.css";
 
 interface HospitalData {
   name: string;
@@ -62,6 +63,8 @@ const hospitalData: HospitalData[] = [
 export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   const [path, setPath] = useState<Polyline | null>(null);
+  const [startPoint, setStartPoint] = useState<string>("");
+  const [endPoint, setEndPoint] = useState<string>("");
 
   useEffect(() => {
     const map: Map = L.map("map-container", {
@@ -89,8 +92,7 @@ export const MapBlock: React.FC = () => {
         iconAnchor: [6, 6], // Adjust icon anchor point
       });
       const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
-      const nLat = 3400 - lng; //lng-1700;
-      // const nLng = lat; //-1*(lat-2500);
+      const nLat = 3400 - lng;
       const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
       marker.bindPopup(hospital.name).openPopup();
     });
@@ -103,38 +105,44 @@ export const MapBlock: React.FC = () => {
     };
   }, []);
 
-  function drawPaths(paths: { x: number; y: number }[]) {
-    let lastCoord: { x: number; y: number } = paths[0];
-    for (let i = 0; i < paths.length; i++) {
-      drawLine(lastCoord, paths[i]);
-      lastCoord = paths[i];
+  function drawPath(start: string, end: string) {
+    const startHospital = hospitalData.find((h) => h.name === start);
+    const endHospital = hospitalData.find((h) => h.name === end);
+    if (!startHospital || !endHospital) {
+      console.error("Start or end location not found in hospital data.");
+      return;
     }
+
+    const [startLat, startLng] = startHospital.geocode
+      .split(",")
+      .map(parseFloat);
+    const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
+
+    const startCoords: [number, number] = [3400 - startLng, startLat];
+    const endCoords: [number, number] = [3400 - endLng, endLat];
+
+    drawLine(startCoords, endCoords);
   }
 
   function drawLine(
-    startCoordinates: { x: number; y: number },
-    endCoordinates: { x: number; y: number },
+    startCoordinates: [number, number],
+    endCoordinates: [number, number],
   ) {
-    // Sets the map to the mapRef,
     const map = mapRef.current;
     if (!map) return;
 
-    if ([startCoordinates, endCoordinates].length > 0) {
-      if (path) {
-        path.removeFrom(map);
-      }
-
-      const newPath = L.polyline(
-        [
-          [startCoordinates.x, startCoordinates.y],
-          [endCoordinates.x, endCoordinates.y],
-        ],
-        { color: "blue" },
-      ).addTo(map);
-      setPath(newPath);
-    } else {
-      console.error("No path found!");
+    if (path) {
+      path.removeFrom(map);
     }
+
+    const newPath = L.polyline([startCoordinates, endCoordinates], {
+      color: "blue",
+    }).addTo(map);
+    setPath(newPath);
+  }
+
+  function handleFindPath() {
+    drawPath(startPoint, endPoint);
   }
 
   return (
@@ -146,15 +154,22 @@ export const MapBlock: React.FC = () => {
         position: "relative",
       }}
     >
-      <button
-        onClick={() =>
-          drawPaths([
-            { x: 0, y: 0 },
-            { x: 2000, y: 2000 },
-            { x: 3000, y: 2000 },
-          ])
-        }
-      >
+      {/* Input fields for start and end locations */}
+      <input
+        type="text"
+        value={startPoint}
+        onChange={(e) => setStartPoint(e.target.value)}
+        style={{ color: "black" }}
+        placeholder="Enter start location"
+      />
+      <input
+        type="text"
+        value={endPoint}
+        onChange={(e) => setEndPoint(e.target.value)}
+        style={{ color: "black" }}
+        placeholder="Enter end location"
+      />
+      <button onClick={handleFindPath} style={{ color: "black" }}>
         Find Path
       </button>
     </div>
