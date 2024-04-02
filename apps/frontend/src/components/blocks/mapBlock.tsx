@@ -145,7 +145,7 @@ export const MapBlock: React.FC = () => {
   }
 
   return (
-    <div style={{ display: "flex", height: "100%" }}>
+    <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       {/* SearchBar component */}
       <div style={{ flex: 1, padding: "10px" }}>
         <SearchBar
