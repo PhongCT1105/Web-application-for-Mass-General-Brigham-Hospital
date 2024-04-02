@@ -38,12 +38,8 @@ export default function LoginPage() {
         <div className="lg:p-8">
           <div className="mx-auto flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2">
-              Create an account
               <LoginBlock />
             </div>
-            <p className="px-8 text-center text-sm text-muted-foreground">
-              By clicking continue, you agree to our terms and policies.
-            </p>
           </div>
         </div>
       </div>
