@@ -69,10 +69,10 @@ module.exports = {
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "var(--radix-accordion-FlowerRequestPage-height)" },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
+          from: { height: "var(--radix-accordion-FlowerRequestPage-height)" },
           to: { height: "0" },
         },
       },

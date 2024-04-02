@@ -274,7 +274,7 @@ export function Header() {
       {/*                    <form className="flex flex-col gap-4">*/}
       {/*                        <Input*/}
       {/*                            placeholder="Project Name"*/}
-      {/*                            defaultValue="/content/plugins"*/}
+      {/*                            defaultValue="/FlowerRequestPage/plugins"*/}
       {/*                        />*/}
       {/*                        <div className="flex items-center space-x-2">*/}
       {/*                            <Checkbox id="include" defaultChecked />*/}
