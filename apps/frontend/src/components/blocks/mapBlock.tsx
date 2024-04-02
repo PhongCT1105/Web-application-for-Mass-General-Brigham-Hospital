@@ -3,7 +3,8 @@ import L, { CRS, LatLngBoundsExpression, Map, Polyline, Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap from "@/assets/lower-level-map.png";
 import RedDot from "@/assets/red_dot.png";
-import "@/styles/mapBlock.css";
+import "@/styles/mapBlock.modules.css";
+import { SearchBar } from "@/components/blocks/locationSearchBar";
 
 interface HospitalData {
   name: string;
@@ -63,8 +64,6 @@ const hospitalData: HospitalData[] = [
 export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   const [path, setPath] = useState<Polyline | null>(null);
-  const [startPoint, setStartPoint] = useState<string>("");
-  const [endPoint, setEndPoint] = useState<string>("");
 
   useEffect(() => {
     const map: Map = L.map("map-container", {
@@ -72,7 +71,7 @@ export const MapBlock: React.FC = () => {
       minZoom: -3,
       maxZoom: 2,
       zoomControl: false,
-    }).setView([3400, 5000], -2);
+    }).setView([3400, 5000], -3);
 
     mapRef.current = map;
 
@@ -83,13 +82,13 @@ export const MapBlock: React.FC = () => {
 
     L.imageOverlay(lowerLevelMap, bounds).addTo(map);
 
-    map.setMaxBounds(bounds); // maybe get rid of this
+    map.setMaxBounds(bounds);
 
     hospitalData.forEach((hospital) => {
       const customIcon = new Icon({
         iconUrl: RedDot,
-        iconSize: [12, 12], // Adjust icon size as needed
-        iconAnchor: [6, 6], // Adjust icon anchor point
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
       });
       const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
       const nLat = 3400 - lng;
@@ -141,8 +140,8 @@ export const MapBlock: React.FC = () => {
     setPath(newPath);
   }
 
-  function handleFindPath() {
-    drawPath(startPoint, endPoint);
+  function handleSearch(start: string, end: string) {
+    drawPath(start, end);
   }
 
   return (
@@ -154,24 +153,11 @@ export const MapBlock: React.FC = () => {
         position: "relative",
       }}
     >
-      {/* Input fields for start and end locations */}
-      <input
-        type="text"
-        value={startPoint}
-        onChange={(e) => setStartPoint(e.target.value)}
-        style={{ color: "black" }}
-        placeholder="Enter start location"
+      {/* SearchBar component */}
+      <SearchBar
+        locations={hospitalData.map((hospital) => hospital.name)}
+        onSearch={handleSearch}
       />
-      <input
-        type="text"
-        value={endPoint}
-        onChange={(e) => setEndPoint(e.target.value)}
-        style={{ color: "black" }}
-        placeholder="Enter end location"
-      />
-      <button onClick={handleFindPath} style={{ color: "black" }}>
-        Find Path
-      </button>
     </div>
   );
 };
