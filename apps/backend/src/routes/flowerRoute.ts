@@ -1,12 +1,17 @@
 import express, { Router, Request, Response } from "express";
-import { Prisma } from "database";
+//import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
 //import {flowerReq} from "common/scr/flowerReq.ts";
 
 const router: Router = express.Router();
 
+interface cartItem {
+  cost: number;
+  name: string;
+}
+
 router.post("/", async function (req: Request, res: Response) {
-  const flowerReq: Prisma.flowerRequestCreateManyInput = req.body;
+  const flowerReq: cartItem = req.body;
   // Attempt to save the high score
   try {
     // Attempt to create in the database
@@ -22,6 +27,7 @@ router.post("/", async function (req: Request, res: Response) {
   res.sendStatus(200); // Otherwise say it's fine
 });
 
+/*
 // Whenever a get request is made, return the high score
 router.get("/", async function (req: Request, res: Response) {
   // Fetch the high score from Prisma
@@ -41,5 +47,5 @@ router.get("/", async function (req: Request, res: Response) {
     res.send(highScore);
   }
 });
-
+*/
 export default router;
