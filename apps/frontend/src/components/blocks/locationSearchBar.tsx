@@ -41,7 +41,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               {startPoint ? startPoint : "Select start location"}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 max-h-48 overflow-y-auto">
+          <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
             {locations.map((location, index) => (
               <DropdownMenuRadioItem
                 key={index}
@@ -59,7 +59,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               {endPoint ? endPoint : "Select end location"}
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56 max-h-48 overflow-y-auto">
+          <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
             {locations.map((location, index) => (
               <DropdownMenuRadioItem
                 key={index}
