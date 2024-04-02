@@ -19,12 +19,12 @@ module.exports = {
     },
     extend: {
       fontSize: {
-        wong: "5rem",
-        wong2: "1.5rem",
+        wong: "5vw",
+        wong2: "1.5vw",
       },
       spacing: {
-        wongoffset: "7rem",
-        wongoffset2: "15rem",
+        wongoffset: "7vw",
+        wongoffset2: "15vw",
       },
       colors: {
         border: "hsl(var(--border))",
