@@ -145,19 +145,23 @@ export const MapBlock: React.FC = () => {
   }
 
   return (
-    <div
-      id="map-container"
-      style={{
-        flex: 1,
-        backgroundColor: "lightcyan",
-        position: "relative",
-      }}
-    >
+    <div style={{ display: "flex", height: "100%" }}>
       {/* SearchBar component */}
-      <SearchBar
-        locations={hospitalData.map((hospital) => hospital.name)}
-        onSearch={handleSearch}
-      />
+      <div style={{ flex: 1, padding: "10px" }}>
+        <SearchBar
+          locations={hospitalData.map((hospital) => hospital.name)}
+          onSearch={handleSearch}
+        />
+      </div>
+      {/* Map container */}
+      <div
+        id="map-container"
+        style={{
+          flex: 2.5,
+          backgroundColor: "lightcyan",
+          position: "relative",
+        }}
+      ></div>
     </div>
   );
 };
