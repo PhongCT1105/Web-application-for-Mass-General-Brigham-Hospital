@@ -1,4 +1,14 @@
-import { CircleUser, Package, Search } from "lucide-react";
+import {
+  CircleUser,
+  CreditCard,
+  Key,
+  LogOut,
+  Package,
+  Search,
+  Settings,
+  User,
+  Users,
+} from "lucide-react";
 import "../../styles/globals.css";
 
 import { Button } from "@/components/ui/button";
@@ -16,9 +26,15 @@ import Logo from "@/assets/brighamJlogo.png";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
+  DropdownMenuPortal,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -129,6 +145,22 @@ export function Header() {
             </div>
           </form>
           <ModeToggle />
+          {/*<DropdownMenu>*/}
+          {/*  <DropdownMenuTrigger asChild>*/}
+          {/*    <Button variant="secondary" size="icon" className="rounded-full">*/}
+          {/*      <CircleUser className="h-5 w-5" />*/}
+          {/*      <span className="sr-only">Toggle user menu</span>*/}
+          {/*    </Button>*/}
+          {/*  </DropdownMenuTrigger>*/}
+          {/*  <DropdownMenuContent align="end">*/}
+          {/*    <DropdownMenuLabel>Home</DropdownMenuLabel>*/}
+          {/*    <DropdownMenuSeparator />*/}
+          {/*    <DropdownMenuItem>Navigation</DropdownMenuItem>*/}
+          {/*    <DropdownMenuItem>Service Request</DropdownMenuItem>*/}
+          {/*    <DropdownMenuSeparator />*/}
+          {/*    <DropdownMenuItem>About Us</DropdownMenuItem>*/}
+          {/*  </DropdownMenuContent>*/}
+          {/*</DropdownMenu>*/}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="secondary" size="icon" className="rounded-full">
@@ -136,13 +168,61 @@ export function Header() {
                 <span className="sr-only">Toggle user menu</span>
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuLabel>Home</DropdownMenuLabel>
+            <DropdownMenuContent className="w-56">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Navigation</DropdownMenuItem>
-              <DropdownMenuItem>Service Request</DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuItem>
+                  <User className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <CreditCard className="mr-2 h-4 w-4" />
+                  <span>Billing</span>
+                  <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <Settings className="mr-2 h-4 w-4" />
+                  <span>Settings</span>
+                  <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                </DropdownMenuItem>
+              </DropdownMenuGroup>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>About Us</DropdownMenuItem>
+              <DropdownMenuGroup>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>
+                    <Users className="mr-2 h-4 w-4" />
+                    <span>Switch Account</span>
+                  </DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          window.location.href = "/login";
+                        }}
+                      >
+                        <Key className="mr-2 h-4 w-4" />
+                        <span>Admin</span>
+                      </DropdownMenuItem>
+                      <DropdownMenuItem
+                        onClick={() => {
+                          window.location.href = "/login";
+                        }}
+                      >
+                        <User className="mr-2 h-4 w-4" />
+                        <span>Patient</span>
+                      </DropdownMenuItem>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem>
+                <LogOut className="mr-2 h-4 w-4" />
+                <span>Log out</span>
+                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
