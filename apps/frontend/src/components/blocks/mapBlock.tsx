@@ -68,10 +68,10 @@ export const MapBlock: React.FC = () => {
   useEffect(() => {
     const map: Map = L.map("map-container", {
       crs: CRS.Simple,
-      minZoom: -3,
+      minZoom: -2,
       maxZoom: 2,
       zoomControl: false,
-    }).setView([3400, 5000], -3);
+    }).setView([3400, 5000], -2);
 
     mapRef.current = map;
 

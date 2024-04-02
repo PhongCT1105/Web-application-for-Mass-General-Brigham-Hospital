@@ -25,6 +25,7 @@ module.exports = {
       spacing: {
         wongoffset: "7vw",
         wongoffset2: "15vw",
+        mapoffset1: "20vh",
       },
       colors: {
         border: "hsl(var(--border))",
