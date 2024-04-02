@@ -10,7 +10,7 @@ export default function LoginPage() {
     <div className="page">
       <Header />
       <div className="flex">
-        <div className="w-[960px] h-[750px]">
+        <div className="w-[50vw] h-[750px]">
           <AspectRatio ratio={16 / 9}>
             <div className="absolute inset-0 flex items-center justify-center">
               <p className="text-white text-wong mt-wongoffset">
@@ -25,7 +25,7 @@ export default function LoginPage() {
             <img src={wongDesk} alt="Wong Desk" />
           </AspectRatio>
         </div>
-        <div className={"login"} style={{ marginLeft: "275px" }}>
+        <div className={"login"} style={{ marginLeft: "14vw" }}>
           <LoginBlock />
         </div>
       </div>
