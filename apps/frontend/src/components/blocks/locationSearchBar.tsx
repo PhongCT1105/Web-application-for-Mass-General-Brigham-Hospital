@@ -1,4 +1,11 @@
 import React, { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 interface SearchBarProps {
   locations: string[];
@@ -17,40 +24,51 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div
-      style={{
-        width: "20%",
-        backgroundColor: "lightgray",
-        padding: "10px",
-        color: "black",
-      }}
-    >
-      <h3>Path Search</h3>
-      <select
-        value={startPoint}
-        onChange={(e) => setStartPoint(e.target.value)}
-        style={{ color: "black", marginBottom: "10px" }}
+    <div className="flex flex-col items-center">
+      <h3 className="mb-3 mt-0 text-center">Path Search</h3>
+      <div className="flex mb-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              {startPoint ? startPoint : "Select start location"}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56 max-h-48 overflow-y-auto">
+            {locations.map((location, index) => (
+              <DropdownMenuRadioItem
+                key={index}
+                value={location}
+                onClick={() => setStartPoint(location)}
+              >
+                {location}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline">
+              {endPoint ? endPoint : "Select end location"}
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="w-56 max-h-48 overflow-y-auto">
+            {locations.map((location, index) => (
+              <DropdownMenuRadioItem
+                key={index}
+                value={location}
+                onClick={() => setEndPoint(location)}
+              >
+                {location}
+              </DropdownMenuRadioItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      <button
+        onClick={handleSearch}
+        className="px-8 py-2 bg-blue-500 text-white rounded cursor-pointer"
       >
-        <option value="">Select start location</option>
-        {locations.map((location, index) => (
-          <option key={index} value={location}>
-            {location}
-          </option>
-        ))}
-      </select>
-      <select
-        value={endPoint}
-        onChange={(e) => setEndPoint(e.target.value)}
-        style={{ color: "black", marginBottom: "10px" }}
-      >
-        <option value="">Select end location</option>
-        {locations.map((location, index) => (
-          <option key={index} value={location}>
-            {location}
-          </option>
-        ))}
-      </select>
-      <button onClick={handleSearch} style={{ color: "black" }}>
         Find Path
       </button>
     </div>
