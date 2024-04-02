@@ -22,10 +22,12 @@ interface cartItem {
 
 export const FlowerContent = () => {
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
-  const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
+  //const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
+
+  console.log("this is cartItems: " + cartItems);
 
   async function submit() {
-    const res = await axios.post("/api/flowerReq", totalCost, {
+    const res = await axios.post("/api/flowerReq", cartItems, {
       headers: {
         "content-type": "Application/json",
       },
