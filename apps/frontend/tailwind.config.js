@@ -18,6 +18,14 @@ module.exports = {
       },
     },
     extend: {
+      fontSize: {
+        wong: "5vw",
+        wong2: "1.5vw",
+      },
+      spacing: {
+        wongoffset: "7vw",
+        wongoffset2: "15vw",
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -61,10 +69,10 @@ module.exports = {
       keyframes: {
         "accordion-down": {
           from: { height: "0" },
-          to: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "var(--radix-accordion-FlowerRequestPage-height)" },
         },
         "accordion-up": {
-          from: { height: "var(--radix-accordion-content-height)" },
+          from: { height: "var(--radix-accordion-FlowerRequestPage-height)" },
           to: { height: "0" },
         },
       },
