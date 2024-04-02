@@ -1,15 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import L, {
-  CRS,
-  LatLngBoundsExpression,
-  LatLngTuple,
-  Map,
-  Polyline,
-  Icon,
-} from "leaflet";
+import L, { CRS, LatLngBoundsExpression, Map, Polyline, Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap from "@/assets/lower-level-map.png";
-import { NavBar } from "@/components/blocks/navSearchBlock.tsx";
 import RedDot from "@/assets/red_dot.png";
 
 interface HospitalData {
@@ -18,7 +10,6 @@ interface HospitalData {
 }
 
 const hospitalData: HospitalData[] = [
-  { name: "Test Point", geocode: "0,0" },
   { name: "Anesthesia Conf Floor L1", geocode: "2255,849" },
   { name: "Medical Records Conference Room Floor L1", geocode: "2665,1043" },
   { name: "Abrams Conference Room", geocode: "2445,1245" },
@@ -75,10 +66,10 @@ export const MapBlock: React.FC = () => {
   useEffect(() => {
     const map: Map = L.map("map-container", {
       crs: CRS.Simple,
-      minZoom: -1,
+      minZoom: -3,
       maxZoom: 2,
       zoomControl: false,
-    }).setView([638, 938], -1);
+    }).setView([3400, 5000], -2);
 
     mapRef.current = map;
 
@@ -98,12 +89,9 @@ export const MapBlock: React.FC = () => {
         iconAnchor: [6, 6], // Adjust icon anchor point
       });
       const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
-      // modify to meet bounds dimensions
-      const newLat = 3400 - lng;
-      const newLng = lat;
-      const marker = L.marker([newLat, newLng], { icon: customIcon }).addTo(
-        map,
-      );
+      const nLat = 3400 - lng; //lng-1700;
+      // const nLng = lat; //-1*(lat-2500);
+      const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
       marker.bindPopup(hospital.name).openPopup();
     });
 
@@ -115,46 +103,39 @@ export const MapBlock: React.FC = () => {
     };
   }, []);
 
-  const handlePathfinding = () => {
+  function drawPaths(paths: { x: number; y: number }[]) {
+    let lastCoord: { x: number; y: number } = paths[0];
+    for (let i = 0; i < paths.length; i++) {
+      drawLine(lastCoord, paths[i]);
+      lastCoord = paths[i];
+    }
+  }
+
+  function drawLine(
+    startCoordinates: { x: number; y: number },
+    endCoordinates: { x: number; y: number },
+  ) {
+    // Sets the map to the mapRef,
     const map = mapRef.current;
     if (!map) return;
 
-    const startCoordinates: LatLngTuple = [600, 800];
-    const endCoordinates: LatLngTuple = [700, 900];
-
-    const shortestPath = calculateShortestPath(
-      startCoordinates,
-      endCoordinates,
-    );
-
-    if (shortestPath.length > 0) {
+    if ([startCoordinates, endCoordinates].length > 0) {
       if (path) {
         path.removeFrom(map);
       }
 
-      const newPath = L.polyline(shortestPath, { color: "blue" }).addTo(map);
+      const newPath = L.polyline(
+        [
+          [startCoordinates.x, startCoordinates.y],
+          [endCoordinates.x, endCoordinates.y],
+        ],
+        { color: "blue" },
+      ).addTo(map);
       setPath(newPath);
     } else {
       console.error("No path found!");
     }
-  };
-
-  const drawLine = (start: string, end: string) => {
-    const startLocation = hospitalData.find(
-      (hospital) => hospital.name === start,
-    );
-    const endLocation = hospitalData.find((hospital) => hospital.name === end);
-    if (startLocation && endLocation) {
-      // Perform the drawLine operation here using startLocation.latlng and endLocation.latlng
-    }
-  };
-
-  const calculateShortestPath = (
-    start: LatLngTuple,
-    end: LatLngTuple,
-  ): LatLngTuple[] => {
-    return [start, [650, 850], [670, 870], end];
-  };
+  }
 
   return (
     <div
@@ -165,8 +146,17 @@ export const MapBlock: React.FC = () => {
         position: "relative",
       }}
     >
-      <NavBar handlePathfinding={handlePathfinding} drawLine={drawLine} />
-      <button onClick={() => handlePathfinding()}>Find Path</button>
+      <button
+        onClick={() =>
+          drawPaths([
+            { x: 0, y: 0 },
+            { x: 2000, y: 2000 },
+            { x: 3000, y: 2000 },
+          ])
+        }
+      >
+        Find Path
+      </button>
     </div>
   );
 };
