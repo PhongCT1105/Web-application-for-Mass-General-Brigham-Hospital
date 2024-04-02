@@ -6172,6 +6172,7 @@ __metadata:
     sonner: "npm:^1.4.41"
     sort-by: "npm:^1.2.0"
     tailwind-merge: "npm:^2.2.2"
+    tailwind-scrollbar-hide: "npm:^1.1.7"
     tailwindcss: "npm:^3.4.1"
     tailwindcss-animate: "npm:^1.0.7"
     tsconfig-custom: "workspace:*"
@@ -10300,6 +10301,13 @@ __metadata:
   dependencies:
     "@babel/runtime": "npm:^7.24.0"
   checksum: f7ec370e58d1d8f12ed6509d93333f2dacfcb43110334c5424db50ae456d14939ad32cff1ef7e31d1d10a6fff9d2e80be11560ef1ebb3fe5c83de6d465a7f7b8
+  languageName: node
+  linkType: hard
+
+"tailwind-scrollbar-hide@npm:^1.1.7":
+  version: 1.1.7
+  resolution: "tailwind-scrollbar-hide@npm:1.1.7"
+  checksum: 2434a1db7a92fa91952ce4fbef7f80b83f121fa2fae27453cefc6030c06d368768e3172d3640ae6836fe4f813ed89b40c2f44b1f17756593ab4625259ef22a75
   languageName: node
   linkType: hard
 

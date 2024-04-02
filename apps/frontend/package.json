@@ -10,8 +10,8 @@
     "preview": "vite preview",
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
-    "docker:build": "cd $PROJECT_CWD && docker build --target prod-frontend --tag irwright13/softeng-mqp:frontend --platform linux/amd64 .",
-    "docker:upload": "docker push irwright13/softeng-mqp:frontend"
+    "docker:build": "cd $PROJECT_CWD && docker build --target prod-frontend --tag phongthanhcao/softeng-teamc:frontend --platform linux/amd64 .",
+    "docker:upload": "docker push phongthanhcao/softeng-teamc:frontend"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.1.1",
@@ -82,6 +82,7 @@
     "sonner": "^1.4.41",
     "sort-by": "^1.2.0",
     "tailwind-merge": "^2.2.2",
+    "tailwind-scrollbar-hide": "^1.1.7",
     "tailwindcss": "^3.4.1",
     "tailwindcss-animate": "^1.0.7",
     "vaul": "^0.9.0",

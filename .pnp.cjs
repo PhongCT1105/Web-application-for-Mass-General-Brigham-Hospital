@@ -7827,6 +7827,7 @@ const RAW_RUNTIME_STATE =
           ["sonner", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.4.41"],\
           ["sort-by", "npm:1.2.0"],\
           ["tailwind-merge", "npm:2.2.2"],\
+          ["tailwind-scrollbar-hide", "npm:1.1.7"],\
           ["tailwindcss", "npm:3.4.1"],\
           ["tailwindcss-animate", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.0.7"],\
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
@@ -12859,6 +12860,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["tailwind-merge", "npm:2.2.2"],\
           ["@babel/runtime", "npm:7.24.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["tailwind-scrollbar-hide", [\
+      ["npm:1.1.7", {\
+        "packageLocation": "./.yarn/cache/tailwind-scrollbar-hide-npm-1.1.7-537baa5b75-2434a1db7a.zip/node_modules/tailwind-scrollbar-hide/",\
+        "packageDependencies": [\
+          ["tailwind-scrollbar-hide", "npm:1.1.7"]\
         ],\
         "linkType": "HARD"\
       }]\
