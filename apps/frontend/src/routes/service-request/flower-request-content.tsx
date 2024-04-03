@@ -11,7 +11,7 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import { Mail, ShoppingCart } from "lucide-react";
+import { ShoppingCart, X } from "lucide-react";
 import React, { useState } from "react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast.ts";
@@ -20,6 +20,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogHeader,
@@ -97,6 +98,10 @@ export const FlowerContent = () => {
     }
   }
 
+  // const removeItem = (item: cartItem) => {
+  //
+  // }
+
   const onAddItem = (item: cartItem): void => {
     const prevItems = [...cartItems];
     setCartItems((prev) => [
@@ -144,15 +149,19 @@ export const FlowerContent = () => {
                 Cart
               </Button>
             </PopoverTrigger>
-            <PopoverContent>
+            <PopoverContent className={"w-100"}>
               <Table>
                 <TableCaption>
                   <Dialog>
-                    <DialogTrigger asChild>
-                      <Button variant="default">
-                        <Mail className={"mr-2 h-4 w-4"} />
-                        Submit Gift
-                      </Button>
+                    <Button
+                      variant={"destructive"}
+                      onClick={() => setCartItems([])}
+                      className={"px-5 "}
+                    >
+                      Empty cart
+                    </Button>
+                    <DialogTrigger asChild className={"ml-3"}>
+                      <Button variant="default">Submit Gift</Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-[425px]">
                       <DialogHeader>
@@ -180,7 +189,7 @@ export const FlowerContent = () => {
                           <Input
                             id="recipient"
                             onChange={handleForm}
-                            placeholder="recipient"
+                            placeholder="Recipient"
                             className="col-span-3"
                           />
                           <Label htmlFor="location" className="text-right">
@@ -210,39 +219,75 @@ export const FlowerContent = () => {
                             {totalCost % 1 ? totalCost.toFixed(2) : totalCost}
                           </h1>
                         </div>
-                        <Button
-                          type="submit"
-                          onClick={submit}
-                          className={"px-5"}
-                        >
-                          Send!
-                        </Button>
+
+                        <DialogClose className={"w-full"}>
+                          <Button
+                            type="submit"
+                            onClick={() => {
+                              submit();
+                              setCartItems([]);
+                            }}
+                            className={"px-5 w-full"}
+                          >
+                            Send!
+                          </Button>
+                          {/*<span className="sr-only">Close</span>*/}
+                        </DialogClose>
                       </div>
                     </DialogContent>
                   </Dialog>
                 </TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[100px]">Name</TableHead>
+                    <TableHead className="w-[50px]"></TableHead>
+                    <TableHead> Name</TableHead>
                     <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
                 </TableHeader>
+
                 <TableBody>
-                  {cartItems.map((item: cartItem) => (
+                  {cartItems.map((item: cartItem, index: number) => (
                     <TableRow key={item.name}>
-                      <TableCell className="font-medium">{item.name}</TableCell>
-                      <TableCell className="text-right">${item.cost}</TableCell>
+                      <TableCell className="font-medium ">
+                        <Button
+                          variant={"invisible"}
+                          onClick={() => {
+                            setCartItems(
+                              cartItems.filter((item, i) => i !== index),
+                            );
+                          }}
+                          className={
+                            "text-center flex flex-col font-bold text-lg"
+                          }
+                        >
+                          <X />
+                        </Button>
+                      </TableCell>
+                      {/*x*/}
+                      {/*x*/}
+                      <TableCell className={" text-nowrap"}>
+                        {item.name}
+                      </TableCell>
+                      <TableCell className="text-center items-end">
+                        {/*<div className={"items-center justify-end"}>*/}$
+                        {item.cost}
+                        {/*</div>*/}
+                      </TableCell>
+                      {/*  <TableCell className="w">*/}
+
+                      {/*</TableCell>*/}
                     </TableRow>
                   ))}
                 </TableBody>
                 <TableFooter>
                   <TableRow>
-                    <TableCell>Total</TableCell>
-                    <TableCell className="text-right">${totalCost}</TableCell>
+                    <TableCell colSpan={2}>Total</TableCell>
+                    <TableCell className="text-center">
+                      ${totalCost % 1 ? totalCost.toFixed(2) : totalCost}
+                    </TableCell>
                   </TableRow>
                 </TableFooter>
               </Table>
-              {/*<CartTable form={cartItems} total={totalCost}/>*/}
             </PopoverContent>
           </Popover>
           {/*<Dialog>*/}
