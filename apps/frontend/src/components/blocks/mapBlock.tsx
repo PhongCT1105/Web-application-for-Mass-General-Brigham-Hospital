@@ -146,7 +146,7 @@ export const MapBlock: React.FC = () => {
     }
 
     const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: "gray-300",
+      color: "blue",
     }).addTo(map);
     setPath(newPath);
   }
