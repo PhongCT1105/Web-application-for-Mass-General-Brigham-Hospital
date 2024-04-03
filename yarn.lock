@@ -6154,6 +6154,7 @@ __metadata:
     postcss: "npm:^8.4.35"
     prettier: "npm:latest"
     prettier-config-custom: "workspace:*"
+    queue-typescript: "npm:^1.0.1"
     radix-ui: "npm:^1.0.1"
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.7.4"
