@@ -1181,29 +1181,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:4.15.0":
-  version: 4.15.0
-  resolution: "@prisma/client@npm:4.15.0"
-  dependencies:
-    "@prisma/engines-version": "npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944"
+"@prisma/client@npm:^5.12.0":
+  version: 5.12.0
+  resolution: "@prisma/client@npm:5.12.0"
   peerDependencies:
     prisma: "*"
   peerDependenciesMeta:
     prisma:
       optional: true
-  checksum: 14d6609dbb41c9689731d5da06237138bc51da07aa8506bdfb3789324964f68c70ef451590a1d4c041acb1eca6227c332c3791a7f55f3ea86e16e8431a307518
-  languageName: node
-  linkType: hard
-
-"@prisma/client@npm:5.12.0-dev.46":
-  version: 5.12.0-dev.46
-  resolution: "@prisma/client@npm:5.12.0-dev.46"
-  peerDependencies:
-    prisma: "*"
-  peerDependenciesMeta:
-    prisma:
-      optional: true
-  checksum: 9e2e4926769eaf8c113148fa99270217e97764d12130f0a831d0c011ea9da17ef1518ea2c036d5ac8bd62100cb499ac9f599c850930b695cb044c35d013e3b0c
+  checksum: cf89933b62fab7ea8c3e7a1161a6c6ef62c3965b1ea59d65e5151c2bb48358464819d1abebd07e6bb3c797bf0615c8182bf8788b07b76755fbd5d459baf334d5
   languageName: node
   linkType: hard
 
@@ -1211,13 +1197,6 @@ __metadata:
   version: 5.12.0-dev.46
   resolution: "@prisma/debug@npm:5.12.0-dev.46"
   checksum: f352fefbe29fa846226252cf874ea364010e7673c668034f5abd618fb98c2bc2026f73549138bb9c0b310ab6c2f444c5de4748737790a606f3177c4102fe181b
-  languageName: node
-  linkType: hard
-
-"@prisma/engines-version@npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944":
-  version: 4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944
-  resolution: "@prisma/engines-version@npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944"
-  checksum: 693ebe6c19b44a829c60adb2b461ac6799150aff1b8e0446bbbbf9888021f3890880d640c2320afd81afda2af8caf4ca3937ef5ad43325e6863730c16bf510f0
   languageName: node
   linkType: hard
 
@@ -5184,7 +5163,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "database@workspace:packages/database"
   dependencies:
-    "@prisma/client": "npm:4.15.0"
+    "@prisma/client": "npm:^5.12.0"
     "@types/node": "npm:^20.11.30"
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"
@@ -10553,7 +10532,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^6.5.1"
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
     "@iconify/icons-lucide": "npm:^1.2.135"
-    "@prisma/client": "npm:5.12.0-dev.46"
+    "@prisma/client": "npm:^5.12.0"
     "@react-leaflet/core": "npm:^2.1.0"
     "@types/csv-parse": "npm:^1.2.2"
     "@types/leaflet": "npm:^1.9.8"
