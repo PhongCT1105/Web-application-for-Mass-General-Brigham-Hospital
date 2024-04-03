@@ -63,7 +63,7 @@ export default function ServiceRequestPage() {
                               Prayer Request
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                              Sent a prayer to a loved one
+                              Send a prayer to a loved one
                             </p>
                           </div>
                         </div>
