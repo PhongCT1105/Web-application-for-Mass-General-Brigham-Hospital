@@ -1,0 +1,19 @@
+/* Custom styles for the table */
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.custom-table th,
+.custom-table td {
+  border: 1px solid #ddd; /* Add borders to cells */
+  padding: 8px;
+}
+
+.custom-table th {
+  background-color: #f2f2f2; /* Add background color to header cells */
+}
+
+.custom-table tbody tr:nth-child(even) {
+  background-color: #f9f9f9; /* Alternate row background color */
+}
