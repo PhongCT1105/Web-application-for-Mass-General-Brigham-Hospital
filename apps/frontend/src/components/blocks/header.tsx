@@ -71,13 +71,13 @@ export function Header() {
                     {/*</a>*/}
                     <a
                         href="/service-requests"
-                        className="text-muted-foreground transition-colors hover:text-yellow-500 text-gray-300"
+                        className=" transition-colors hover:text-yellow-500 text-gray-300"
                     >
                         Service Requests
                     </a>
                     <a
                         href="/about-us"
-                        className="text-muted-foreground transition-colors hover:text-yellow-500 text-gray-300"
+                        className=" transition-colors hover:text-yellow-500 text-gray-300"
                     >
                         About Us
                     </a>
