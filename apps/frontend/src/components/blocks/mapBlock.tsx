@@ -5,6 +5,8 @@ import lowerLevelMap from "@/assets/lower-level-map.png";
 import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/locationSearchBar";
+// import axios from "axios";
+// import {mapReq} from "common/src/mapReq.ts";
 
 interface HospitalData {
   name: string;
@@ -159,7 +161,9 @@ export const MapBlock: React.FC = () => {
     setPath(null);
   }
 
-  function handleSearch(start: string, end: string) {
+  async function handleSearch(start: string, end: string) {
+    console.log(start);
+    console.log(end);
     drawPath(start, end);
   }
 

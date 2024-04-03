@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 //import exampleRouter from "./routes/example.ts";
 import flowerRouter from "./routes/flowerRoute.ts";
+import mapRoute from "./routes/mapRoute.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -24,6 +25,8 @@ app.use(cookieParser()); // Cookie parser
 // won't be reached by the default proxy and prod setup
 //app.use("/api/high-score", exampleRouter);
 app.use("/api/flowerReq", flowerRouter);
+app.use("/api/mapReq", mapRoute);
+
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });
