@@ -177,7 +177,8 @@ export const FlowerContent = () => {
                 </div>
                 <div className={"flex text-center text-bold item-center"}>
                   <h1 className={"text-right font-semibold text-xl"}>
-                    Total Cost: ${totalCost}
+                    Total Cost: $
+                    {totalCost % 1 ? totalCost.toFixed(2) : totalCost}
                   </h1>
                 </div>
                 <Button type="submit" onClick={submit}>
@@ -271,16 +272,7 @@ export const FlowerContent = () => {
                     <Button
                       variant={"default"}
                       type={"button"}
-                      onClick={() => {
-                        setCartItems((prev) => [
-                          ...prev,
-                          {
-                            name: addon.name,
-                            cost: addon.cost,
-                          },
-                        ]);
-                        console.log(addon.name);
-                      }}
+                      onClick={() => onAddItem(addon)}
                     >
                       Add to cart
                     </Button>
