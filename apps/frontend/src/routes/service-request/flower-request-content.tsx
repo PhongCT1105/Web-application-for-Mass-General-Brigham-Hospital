@@ -98,10 +98,6 @@ export const FlowerContent = () => {
     }
   }
 
-  // const removeItem = (item: cartItem) => {
-  //
-  // }
-
   const onAddItem = (item: cartItem): void => {
     const prevItems = [...cartItems];
     setCartItems((prev) => [
