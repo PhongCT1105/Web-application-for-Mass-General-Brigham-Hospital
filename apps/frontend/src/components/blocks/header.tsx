@@ -75,6 +75,12 @@ export function Header() {
               Service Requests
             </a>
             <a
+              href="csv-table"
+              className="text-muted-foreground transition-colors hover:text-yellow-500 text-gray-300"
+            >
+              CSV Table
+            </a>
+            <a
               href="/about-us"
               className="text-muted-foreground transition-colors hover:text-yellow-500 text-gray-300"
             >
