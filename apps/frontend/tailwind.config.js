@@ -26,6 +26,7 @@ module.exports = {
         wongoffset: "7vw",
         wongoffset2: "15vw",
         mapoffset1: "20vh",
+        dropdownheight: "60vh",
       },
       colors: {
         border: "hsl(var(--border))",
