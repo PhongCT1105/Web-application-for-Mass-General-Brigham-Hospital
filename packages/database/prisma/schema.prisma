@@ -18,3 +18,41 @@ model HighScore {
   time  DateTime
   score Int
 }
+
+model Nodes {
+  nodeID     String  @id
+  xcoord     Int
+  ycoord     Int
+  floor      String
+  building   String
+  nodeType   String
+  longName   String
+  shortName  String
+  startEdges Edges[] @relation("StartNode")
+  endEdges   Edges[] @relation("EndNode")
+
+  @@unique([xcoord, ycoord, floor])
+}
+
+model Edges {
+  eID         Int    @id @default(autoincrement())
+  startNode   Nodes  @relation("StartNode", fields: [startNodeID], references: [nodeID], onDelete: Cascade)
+  startNodeID String
+  endNode     Nodes  @relation("EndNode", fields: [endNodeID], references: [nodeID], onDelete: Cascade)
+  endNodeID   String
+}
+
+model User {
+  userID   Int    @id @default(autoincrement())
+  username String
+  password String
+  // flowerReq flowerRequest[] @relation("reqUser")
+}
+
+model flowerRequest {
+  reqID Int    @id @default(autoincrement())
+  // reqUser User     @relation("reqUser", fields: [userID], references: [userID], onDelete: Cascade)
+  // userID  Int
+  name  String
+  cost  Float
+}
