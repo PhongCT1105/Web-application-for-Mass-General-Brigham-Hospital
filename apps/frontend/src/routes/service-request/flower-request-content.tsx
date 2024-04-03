@@ -11,7 +11,7 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card.tsx";
-// import { ShoppingCart } from "lucide-react";
+import { Mail, ShoppingCart } from "lucide-react";
 import React, { useState } from "react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast.ts";
@@ -22,14 +22,31 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  // DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
-import { Textarea } from "@/components/ui/textarea.tsx";
 
-interface cartItem {
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import { Textarea } from "@/components/ui/textarea.tsx";
+// import {CartTable} from "@/routes/service-request/CartTable.tsx";
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableFooter,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table.tsx";
+
+export interface cartItem {
   cost: number;
   name: string;
 }
@@ -54,11 +71,6 @@ export const FlowerContent = () => {
     total: totalCost,
   });
 
-  // const [sender, setSender] = useState('');
-  // const [recipient, setRecipient] = useState('');
-  // const [location, setLocation] = useState('');
-  // const [message, setMessage] = useState('');
-
   const handleForm = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -68,7 +80,6 @@ export const FlowerContent = () => {
       ...prev,
       cartItems: cartItems,
       total: totalCost,
-
       [event.target.id]: event.target.value,
     }));
   };
@@ -76,7 +87,7 @@ export const FlowerContent = () => {
   const { toast } = useToast();
   async function submit() {
     console.log(form);
-    const res = await axios.post("/api/flowerReq", totalCost, {
+    const res = await axios.post("/api/flowerReq", form, {
       headers: {
         "content-type": "Application/json",
       },
@@ -126,73 +137,185 @@ export const FlowerContent = () => {
           </p>
         </div>
         <div className="ml-auto mr-4">
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button variant="outline">Submit Gift</Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Submission form</DialogTitle>
-                <DialogDescription>
-                  Enter recipient's information below, then click submit when
-                  done.
-                </DialogDescription>
-              </DialogHeader>
-              <div className="grid gap-4 pt-4">
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="sender" className="text-right">
-                    Sender's Name
-                  </Label>
-                  <Input
-                    onChange={handleForm}
-                    id="sender"
-                    placeholder="Sender"
-                    className="col-span-3"
-                  />
+          <Popover>
+            <PopoverTrigger>
+              <Button className={"px-5 mr-3"} variant={"outline"}>
+                <ShoppingCart className={"mr-2 h-4 w-4"} />
+                Cart
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <Table>
+                <TableCaption>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="default">
+                        <Mail className={"mr-2 h-4 w-4"} />
+                        Submit Gift
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Submission form</DialogTitle>
+                        <DialogDescription>
+                          Enter recipient's information below, then click submit
+                          when done.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="grid gap-4 pt-4">
+                        <div className="grid grid-cols-4 items-center gap-4">
+                          <Label htmlFor="sender" className="text-right">
+                            Sender's Name
+                          </Label>
+                          <Input
+                            onChange={handleForm}
+                            id="sender"
+                            placeholder="Sender"
+                            className="col-span-3"
+                          />
 
-                  <Label htmlFor="recipient" className="text-right">
-                    Recipient's Name
-                  </Label>
-                  <Input
-                    id="recipient"
-                    onChange={handleForm}
-                    placeholder="recipient"
-                    className="col-span-3"
-                  />
-                  <Label htmlFor="location" className="text-right">
-                    Recipient's Location
-                  </Label>
-                  <Input
-                    onChange={handleForm}
-                    id="location"
-                    placeholder="Location"
-                    className="col-span-3"
-                  />
-                  <Label htmlFor="message" className="text-right">
-                    Message to Recipient's (Optional)
-                  </Label>
-                  <Textarea
-                    onChange={handleForm}
-                    id="message"
-                    placeholder="Message"
-                    className="col-span-3"
-                  />
-                </div>
-                <div className={"flex text-center text-bold item-center"}>
-                  <h1 className={"text-right font-semibold text-xl"}>
-                    Total Cost: $
-                    {totalCost % 1 ? totalCost.toFixed(2) : totalCost}
-                  </h1>
-                </div>
-                <Button type="submit" onClick={submit}>
-                  Send!
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+                          <Label htmlFor="recipient" className="text-right">
+                            Recipient's Name
+                          </Label>
+                          <Input
+                            id="recipient"
+                            onChange={handleForm}
+                            placeholder="recipient"
+                            className="col-span-3"
+                          />
+                          <Label htmlFor="location" className="text-right">
+                            Recipient's Location
+                          </Label>
+                          <Input
+                            onChange={handleForm}
+                            id="location"
+                            placeholder="Location"
+                            className="col-span-3"
+                          />
+                          <Label htmlFor="message" className="text-right">
+                            Message to Recipient's (Optional)
+                          </Label>
+                          <Textarea
+                            onChange={handleForm}
+                            id="message"
+                            placeholder="Message"
+                            className="col-span-3"
+                          />
+                        </div>
+                        <div
+                          className={"flex text-center text-bold item-center"}
+                        >
+                          <h1 className={"text-right font-semibold text-xl"}>
+                            Total Cost: $
+                            {totalCost % 1 ? totalCost.toFixed(2) : totalCost}
+                          </h1>
+                        </div>
+                        <Button
+                          type="submit"
+                          onClick={submit}
+                          className={"px-5"}
+                        >
+                          Send!
+                        </Button>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                </TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[100px]">Name</TableHead>
+                    <TableHead className="text-right">Amount</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {cartItems.map((item: cartItem) => (
+                    <TableRow key={item.name}>
+                      <TableCell className="font-medium">{item.name}</TableCell>
+                      <TableCell className="text-right">${item.cost}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+                <TableFooter>
+                  <TableRow>
+                    <TableCell>Total</TableCell>
+                    <TableCell className="text-right">${totalCost}</TableCell>
+                  </TableRow>
+                </TableFooter>
+              </Table>
+              {/*<CartTable form={cartItems} total={totalCost}/>*/}
+            </PopoverContent>
+          </Popover>
+          {/*<Dialog>*/}
+          {/*    <DialogTrigger asChild>*/}
+          {/*        <Button variant="default">*/}
+          {/*            <Mail className={"mr-2 h-4 w-4"}/>*/}
+          {/*            Submit Gift*/}
+          {/*        </Button>*/}
+          {/*    </DialogTrigger>*/}
+          {/*    <DialogContent className="sm:max-w-[425px]">*/}
+          {/*        <DialogHeader>*/}
+          {/*            <DialogTitle>Submission form</DialogTitle>*/}
+          {/*            <DialogDescription>*/}
+          {/*                Enter recipient's information below, then click submit when*/}
+          {/*                done.*/}
+          {/*            </DialogDescription>*/}
+          {/*        </DialogHeader>*/}
+          {/*        <div className="grid gap-4 pt-4">*/}
+          {/*            <div className="grid grid-cols-4 items-center gap-4">*/}
+          {/*                <Label htmlFor="sender" className="text-right">*/}
+          {/*                    Sender's Name*/}
+          {/*                </Label>*/}
+          {/*                <Input*/}
+          {/*                    onChange={handleForm}*/}
+          {/*                    id="sender"*/}
+          {/*                    placeholder="Sender"*/}
+          {/*                    className="col-span-3"*/}
+          {/*                />*/}
+
+          {/*                <Label htmlFor="recipient" className="text-right">*/}
+          {/*                    Recipient's Name*/}
+          {/*                </Label>*/}
+          {/*                <Input*/}
+          {/*                    id="recipient"*/}
+          {/*                    onChange={handleForm}*/}
+          {/*                    placeholder="recipient"*/}
+          {/*                    className="col-span-3"*/}
+          {/*                />*/}
+          {/*                <Label htmlFor="location" className="text-right">*/}
+          {/*                    Recipient's Location*/}
+          {/*                </Label>*/}
+          {/*                <Input*/}
+          {/*                    onChange={handleForm}*/}
+          {/*                    id="location"*/}
+          {/*                    placeholder="Location"*/}
+          {/*                    className="col-span-3"*/}
+          {/*                />*/}
+          {/*                <Label htmlFor="message" className="text-right">*/}
+          {/*                    Message to Recipient's (Optional)*/}
+          {/*                </Label>*/}
+          {/*                <Textarea*/}
+          {/*                    onChange={handleForm}*/}
+          {/*                    id="message"*/}
+          {/*                    placeholder="Message"*/}
+          {/*                    className="col-span-3"*/}
+          {/*                />*/}
+          {/*            </div>*/}
+          {/*            <div className={"flex text-center text-bold item-center"}>*/}
+          {/*                <h1 className={"text-right font-semibold text-xl"}>*/}
+          {/*                    Total Cost: $*/}
+          {/*                    {totalCost % 1 ? totalCost.toFixed(2) : totalCost}*/}
+          {/*                </h1>*/}
+          {/*            </div>*/}
+          {/*            <Button type="submit" onClick={submit} className={"px-5"}>*/}
+          {/*                Send!*/}
+          {/*            </Button>*/}
+          {/*        </div>*/}
+          {/*    </DialogContent>*/}
+          {/*</Dialog>*/}
         </div>
       </div>
       <Separator className="my-4" />
+
       <div className="relative">
         <ScrollArea>
           <div className="flex space-x-4 pb-4 my-3 ml-2">
@@ -252,11 +375,11 @@ export const FlowerContent = () => {
                   "lg-card justify-center shadow-none object-cover transition-all hover:scale-105 hover:shadow"
                 }
               >
-                <CardContent className={"w-[150px] mt-2"}>
+                <CardContent className={"w-[200px] mt-2"}>
                   <img
                     src={addon.image}
                     alt={addon.name}
-                    width={"150px"}
+                    width={"200px"}
                     className="h-32 mx-auto"
                   />
                   <CardTitle className={"text-center pt-2 font-normal"}>
