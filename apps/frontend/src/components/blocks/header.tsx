@@ -1,6 +1,7 @@
 import {
   CircleUser,
   CreditCard,
+  FolderArchive,
   Key,
   LogOut,
   Package,
@@ -135,7 +136,7 @@ export function Header() {
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
-                  placeholder="Search products..."
+                  placeholder="Search ..."
                   className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
                 />
               </div>
@@ -186,6 +187,15 @@ export function Header() {
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Settings</span>
                     <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => {
+                      window.location.href = "/request-log-Page";
+                    }}
+                  >
+                    <FolderArchive className="mr-2 h-4 w-4" />
+                    <span>Request Logs</span>
+                    <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />

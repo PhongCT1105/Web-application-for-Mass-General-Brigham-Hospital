@@ -3981,18 +3981,18 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@tanstack/react-table", [\
-      ["npm:8.11.6", {\
-        "packageLocation": "./.yarn/cache/@tanstack-react-table-npm-8.11.6-8d6eca8e43-b8b73d987d.zip/node_modules/@tanstack/react-table/",\
+      ["npm:8.15.3", {\
+        "packageLocation": "./.yarn/cache/@tanstack-react-table-npm-8.15.3-316dc551a6-cc0f871f2e.zip/node_modules/@tanstack/react-table/",\
         "packageDependencies": [\
-          ["@tanstack/react-table", "npm:8.11.6"]\
+          ["@tanstack/react-table", "npm:8.15.3"]\
         ],\
         "linkType": "SOFT"\
       }],\
-      ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.11.6", {\
-        "packageLocation": "./.yarn/__virtual__/@tanstack-react-table-virtual-b613f09ee9/0/cache/@tanstack-react-table-npm-8.11.6-8d6eca8e43-b8b73d987d.zip/node_modules/@tanstack/react-table/",\
+      ["virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.15.3", {\
+        "packageLocation": "./.yarn/__virtual__/@tanstack-react-table-virtual-55b46b37cd/0/cache/@tanstack-react-table-npm-8.15.3-316dc551a6-cc0f871f2e.zip/node_modules/@tanstack/react-table/",\
         "packageDependencies": [\
-          ["@tanstack/react-table", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.11.6"],\
-          ["@tanstack/table-core", "npm:8.11.6"],\
+          ["@tanstack/react-table", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.15.3"],\
+          ["@tanstack/table-core", "npm:8.15.3"],\
           ["@types/react", "npm:18.2.48"],\
           ["@types/react-dom", "npm:18.2.18"],\
           ["react", "npm:18.2.0"],\
@@ -4008,10 +4008,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@tanstack/table-core", [\
-      ["npm:8.11.6", {\
-        "packageLocation": "./.yarn/cache/@tanstack-table-core-npm-8.11.6-d935b9c313-f3a286f2f6.zip/node_modules/@tanstack/table-core/",\
+      ["npm:8.15.3", {\
+        "packageLocation": "./.yarn/cache/@tanstack-table-core-npm-8.15.3-1180b79a46-6712209185.zip/node_modules/@tanstack/table-core/",\
         "packageDependencies": [\
-          ["@tanstack/table-core", "npm:8.11.6"]\
+          ["@tanstack/table-core", "npm:8.15.3"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8076,7 +8076,7 @@ const RAW_RUNTIME_STATE =
           ["@radix-ui/react-toggle", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.0.3"],\
           ["@radix-ui/react-toggle-group", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.0.4"],\
           ["@radix-ui/react-tooltip", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.0.7"],\
-          ["@tanstack/react-table", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.11.6"],\
+          ["@tanstack/react-table", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.15.3"],\
           ["@types/bootstrap", "npm:5.2.10"],\
           ["@types/csv-parse", "npm:1.2.2"],\
           ["@types/express", "npm:4.17.21"],\

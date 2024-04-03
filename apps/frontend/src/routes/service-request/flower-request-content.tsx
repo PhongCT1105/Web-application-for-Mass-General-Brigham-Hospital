@@ -52,7 +52,7 @@ export interface cartItem {
   name: string;
 }
 
-interface requestForm {
+export interface requestForm {
   cartItems: cartItem[];
   sender: string;
   recipient: string;
