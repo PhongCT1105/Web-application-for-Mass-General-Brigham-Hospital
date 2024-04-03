@@ -1,5 +1,4 @@
 nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName
-
 CCONF001L1,2255,849,L1,45 Francis,CONF,Anesthesia Conf Floor L1,Conf C001L1
 CCONF002L1,2665,1043,L1,45 Francis,CONF,Medical Records Conference Room Floor L1,Conf C002L1
 CCONF003L1,2445,1245,L1,45 Francis,CONF,Abrams Conference Room,Conf C003L1
