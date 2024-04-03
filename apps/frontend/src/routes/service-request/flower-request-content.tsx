@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 // import { ShoppingCart } from "lucide-react";
-import { useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast";
@@ -22,7 +22,7 @@ import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
+  // DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -33,11 +33,47 @@ interface cartItem {
   cost: number;
   name: string;
 }
+
+interface requestForm {
+  cartItems: cartItem[];
+  sender: string;
+  recipient: string;
+  location: string;
+  message: string;
+}
+
 export const FlowerContent = () => {
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
+
+  const [form, setForm] = useState<requestForm>({
+    cartItems: cartItems,
+    sender: "",
+    recipient: "",
+    location: "",
+    message: "",
+  });
+
+  // const [sender, setSender] = useState('');
+  // const [recipient, setRecipient] = useState('');
+  // const [location, setLocation] = useState('');
+  // const [message, setMessage] = useState('');
+
+  const handleForm = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setForm((prev) => ({
+      ...prev,
+      cartItems: cartItems,
+      [event.target.id]: event.target.value,
+    }));
+  };
+
   const { toast } = useToast();
   const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
   async function submit() {
+    console.log(form);
     const res = await axios.post("/api/flowerReq", totalCost, {
       headers: {
         "content-type": "Application/json",
@@ -99,49 +135,55 @@ export const FlowerContent = () => {
                   done.
                 </DialogDescription>
               </DialogHeader>
-              <div className="grid gap-4 py-4">
+              <div className="grid gap-4 pt-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <Label htmlFor="sender" className="text-right">
                     Sender's Name
                   </Label>
                   <Input
+                    onChange={handleForm}
                     id="sender"
                     placeholder="Sender"
                     className="col-span-3"
                   />
-                  <Label htmlFor="Recipient" className="text-right">
+
+                  <Label htmlFor="recipient" className="text-right">
                     Recipient's Name
                   </Label>
                   <Input
-                    id="name"
-                    placeholder="Recipient"
+                    id="recipient"
+                    onChange={handleForm}
+                    placeholder="recipient"
                     className="col-span-3"
                   />
                   <Label htmlFor="location" className="text-right">
                     Recipient's Location
                   </Label>
                   <Input
+                    onChange={handleForm}
                     id="location"
                     placeholder="Location"
                     className="col-span-3"
                   />
                   <Label htmlFor="message" className="text-right">
-                    Recipient's Location (Optional)
+                    Message to Recipient's (Optional)
                   </Label>
                   <Textarea
+                    onChange={handleForm}
                     id="message"
                     placeholder="Message"
                     className="col-span-3"
                   />
                 </div>
-
-                <div className="grid grid-cols-4 items-center gap-4"></div>
-              </div>
-              <DialogFooter>
+                <div className={"flex text-center text-bold item-center"}>
+                  <h1 className={"text-right font-semibold text-xl"}>
+                    Total Cost: ${totalCost}
+                  </h1>
+                </div>
                 <Button type="submit" onClick={submit}>
                   Send!
                 </Button>
-              </DialogFooter>
+              </div>
             </DialogContent>
           </Dialog>
         </div>
