@@ -1,10 +1,10 @@
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 import LoginPage from "./routes/LoginPage.tsx";
-import HomePage from "@/routes/HomePage.tsx";
-import AboutUsPage from "@/routes/AboutUsPage.tsx";
-import ServiceRequestPage from "@/routes/service-request/ServiceRequestPage.tsx";
-// import HeroPage from "@/routes/HeroPage.tsx";
+import HomePage from "./routes/HomePage.tsx"; // Correct import path
+import AboutUsPage from "./routes/AboutUsPage.tsx"; // Correct import path
+import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"; // Correct import path
+//import CSVTable from "./components/blocks/csvTable.tsx"; // Correct import path
 
 function App() {
   const router = createBrowserRouter([
@@ -25,24 +25,18 @@ function App() {
       element: <HomePage />,
     },
     {
-      path: "/login",
-      errorElement: <h1>ERROR</h1>,
-      element: <LoginPage />,
-    },
-    {
       path: "/about-us",
       errorElement: <h1>ERROR</h1>,
       element: <AboutUsPage />,
     },
     {
-      path: "/login",
-      errorElement: <h1>ERROR</h1>,
-      element: <LoginPage />,
-    },
-    {
       path: "/service-requests",
       errorElement: <h1>ERROR</h1>,
       element: <ServiceRequestPage />,
+    },
+    {
+      path: "/csv-table",
+      //element: <CSVTable />,
     },
   ]);
 

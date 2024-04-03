@@ -4409,6 +4409,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/papaparse", [\
+      ["npm:5.3.14", {\
+        "packageLocation": "./.yarn/cache/@types-papaparse-npm-5.3.14-864eddd3a0-9bd5cc0e6a.zip/node_modules/@types/papaparse/",\
+        "packageDependencies": [\
+          ["@types/papaparse", "npm:5.3.14"],\
+          ["@types/node", "npm:20.11.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/pathfinding", [\
       ["npm:0.0.9", {\
         "packageLocation": "./.yarn/cache/@types-pathfinding-npm-0.0.9-695c863f1e-c2d0e4a05a.zip/node_modules/@types/pathfinding/",\
@@ -7986,6 +7996,7 @@ const RAW_RUNTIME_STATE =
           ["@types/leaflet", "npm:1.9.8"],\
           ["@types/multer", "npm:1.4.11"],\
           ["@types/node", "npm:20.12.2"],\
+          ["@types/papaparse", "npm:5.3.14"],\
           ["@types/pg", "npm:8.11.4"],\
           ["@types/prop-types", "npm:15.7.11"],\
           ["@types/react", "npm:18.2.48"],\
@@ -8019,6 +8030,7 @@ const RAW_RUNTIME_STATE =
           ["match-sorter", "npm:6.3.3"],\
           ["multer", "npm:1.4.5-lts.1"],\
           ["next-themes", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:0.3.0"],\
+          ["papaparse", "npm:5.4.1"],\
           ["pg", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:8.11.5"],\
           ["postcss", "npm:8.4.35"],\
           ["prettier", "npm:3.2.4"],\
@@ -10513,6 +10525,15 @@ const RAW_RUNTIME_STATE =
           ["sigstore", "npm:2.2.2"],\
           ["ssri", "npm:10.0.5"],\
           ["tar", "npm:6.2.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["papaparse", [\
+      ["npm:5.4.1", {\
+        "packageLocation": "./.yarn/cache/papaparse-npm-5.4.1-954555a2a7-5e6dc97818.zip/node_modules/papaparse/",\
+        "packageDependencies": [\
+          ["papaparse", "npm:5.4.1"]\
         ],\
         "linkType": "HARD"\
       }]\
