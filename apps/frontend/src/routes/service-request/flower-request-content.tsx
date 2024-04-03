@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/card.tsx";
 // import { ShoppingCart } from "lucide-react";
 import { useState } from "react";
-// import axios from "axios";
+import axios from "axios";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast";
 import { Input } from "@/components/ui/input.tsx";
@@ -27,26 +27,26 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
+import { Textarea } from "@/components/ui/textarea.tsx";
 
 interface cartItem {
   cost: number;
   name: string;
 }
-
 export const FlowerContent = () => {
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
-  // const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
   const { toast } = useToast();
-  // async function submit() {
-  //     const res = await axios.post("/api/flowerReq", totalCost, {
-  //         headers: {
-  //             "content-type": "Application/json",
-  //         },
-  //     });
-  //     if (res.status == 200) {
-  //         console.log("success");
-  //     }
-  // }
+  const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
+  async function submit() {
+    const res = await axios.post("/api/flowerReq", totalCost, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    }
+  }
 
   const onAddItem = (item: cartItem): void => {
     const prevItems = [...cartItems];
@@ -75,11 +75,6 @@ export const FlowerContent = () => {
     });
   };
 
-  // <Button variant={"outline"} >
-  //     {/*<ShoppingCart className="mr-2 h-4 w-4" />*/}
-  //     Send Gift
-  // </Button>
-
   return (
     <>
       <div className="flex items-center justify-between">
@@ -101,29 +96,51 @@ export const FlowerContent = () => {
                 <DialogTitle>Submission form</DialogTitle>
                 <DialogDescription>
                   Enter recipient's information below, then click submit when
-                  done..
+                  done.
                 </DialogDescription>
               </DialogHeader>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="name" className="text-right">
+                  <Label htmlFor="sender" className="text-right">
+                    Sender's Name
+                  </Label>
+                  <Input
+                    id="sender"
+                    placeholder="Sender"
+                    className="col-span-3"
+                  />
+                  <Label htmlFor="Recipient" className="text-right">
                     Recipient's Name
                   </Label>
-                  <Input id="name" placeholder="Name" className="col-span-3" />
-                </div>
-                <div className="grid grid-cols-4 items-center gap-4">
-                  <Label htmlFor="locatiom" className="text-right">
+                  <Input
+                    id="name"
+                    placeholder="Recipient"
+                    className="col-span-3"
+                  />
+                  <Label htmlFor="location" className="text-right">
                     Recipient's Location
                   </Label>
                   <Input
-                    id="locatiom"
-                    placeholder="@peduarte"
+                    id="location"
+                    placeholder="Location"
+                    className="col-span-3"
+                  />
+                  <Label htmlFor="message" className="text-right">
+                    Recipient's Location (Optional)
+                  </Label>
+                  <Textarea
+                    id="message"
+                    placeholder="Message"
                     className="col-span-3"
                   />
                 </div>
+
+                <div className="grid grid-cols-4 items-center gap-4"></div>
               </div>
               <DialogFooter>
-                <Button type="submit">Save changes</Button>
+                <Button type="submit" onClick={submit}>
+                  Send!
+                </Button>
               </DialogFooter>
             </DialogContent>
           </Dialog>
