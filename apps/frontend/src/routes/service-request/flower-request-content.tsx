@@ -39,18 +39,19 @@ interface requestForm {
   sender: string;
   recipient: string;
   location: string;
-  message: string;
+  message?: string;
+  total: number;
 }
 
 export const FlowerContent = () => {
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
-
+  const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
   const [form, setForm] = useState<requestForm>({
     cartItems: cartItems,
     sender: "",
     recipient: "",
     location: "",
-    message: "",
+    total: totalCost,
   });
 
   // const [sender, setSender] = useState('');
@@ -66,12 +67,13 @@ export const FlowerContent = () => {
     setForm((prev) => ({
       ...prev,
       cartItems: cartItems,
+      total: totalCost,
+
       [event.target.id]: event.target.value,
     }));
   };
 
   const { toast } = useToast();
-  const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
   async function submit() {
     console.log(form);
     const res = await axios.post("/api/flowerReq", totalCost, {
@@ -97,6 +99,7 @@ export const FlowerContent = () => {
 
     toast({
       title: `You added ${item.name} to cart!`,
+      duration: 4000,
       description: "Would you like to undo?",
       action: (
         <ToastAction
