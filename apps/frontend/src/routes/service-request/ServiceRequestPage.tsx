@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/tabs.tsx";
 
 import { Car, Church, FlowerIcon } from "lucide-react";
-import { FlowerContent } from "@/routes/service-request/FlowerRequestPage/flower-request-content.tsx";
+import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
 
 export default function ServiceRequestPage() {
   return (
@@ -24,7 +24,7 @@ export default function ServiceRequestPage() {
             <div className="grid lg:grid-cols-5">
               {/*<Sidebar className="hidden lg:block" />*/}
               {/*<div className="col-span-4 lg:col-span-4 lg:border-l overflow-x-auto">*/}
-              <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
+              <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                 <div className=" pl-4 py-6 lg:pl-6">
                   <Tabs
                     defaultValue="Flower Request"

@@ -2,9 +2,9 @@ import { Button } from "@/components/ui/button.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area.tsx";
 import {
-  chocolateCards,
+  addOnCards,
   flowerCards,
-} from "@/routes/service-request/FlowerRequestPage/contentInfo.ts";
+} from "@/routes/service-request/contentInfo.ts";
 import {
   Card,
   CardContent,
@@ -63,8 +63,12 @@ export const FlowerContent = () => {
                   "lg-card justify-center shadow-none object-cover transition-all hover:scale-105 hover:shadow"
                 }
               >
-                <CardContent className={"w-[300px] mt-2"}>
-                  <img src={flower.image} alt={flower.name} width={"300px"} />
+                <CardContent className={" w-[300px] mt-2"}>
+                  <img
+                    src={flower.image}
+                    alt={flower.name}
+                    className="h-64 mx-auto"
+                  />
                   <CardTitle className={"text-center pt-2"}>
                     {flower.name}
                   </CardTitle>
@@ -112,7 +116,7 @@ export const FlowerContent = () => {
       <div className="relative">
         <ScrollArea>
           <div className="flex space-x-4 my-3 pb-4 ml-1">
-            {chocolateCards.map((chocolate) => (
+            {addOnCards.map((addon) => (
               <Card
                 className={
                   "lg-card justify-center shadow-none object-cover transition-all hover:scale-105 hover:shadow"
@@ -120,17 +124,18 @@ export const FlowerContent = () => {
               >
                 <CardContent className={"w-[150px] mt-2"}>
                   <img
-                    src={chocolate.image}
-                    alt={chocolate.name}
+                    src={addon.image}
+                    alt={addon.name}
                     width={"150px"}
+                    className="h-32 mx-auto"
                   />
                   <CardTitle className={"text-center pt-2 font-normal"}>
-                    {chocolate.name}
+                    {addon.name}
                   </CardTitle>
                   <CardDescription
                     className={"text-center text-lg text-muted-foreground"}
                   >
-                    ${chocolate.cost}
+                    ${addon.cost}
                   </CardDescription>
                   <CardDescription
                     className={
@@ -144,11 +149,11 @@ export const FlowerContent = () => {
                         setCartItems((prev) => [
                           ...prev,
                           {
-                            name: chocolate.name,
-                            cost: chocolate.cost,
+                            name: addon.name,
+                            cost: addon.cost,
                           },
                         ]);
-                        console.log(chocolate.name);
+                        console.log(addon.name);
                       }}
                     >
                       Add to cart
