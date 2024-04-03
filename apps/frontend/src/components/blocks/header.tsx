@@ -23,6 +23,7 @@ import Logo from "@/assets/brighamJlogo.png";
 //     CardTitle,
 // } from "@/components/ui/card"
 // import { Checkbox } from "@/components/ui/checkbox"
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -44,187 +45,187 @@ import { ModeToggle } from "@/components/modeToggle.tsx";
 export function Header() {
   return (
     <div className="flex w-full flex-col">
-      <header className="sticky top-0 flex h-20 items-center gap-4 border-b bg-background px-4 md:px-6">
-        <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-md lg:gap-6 text-nowrap">
-          <a
-            href="/login"
-            className="flex items-center gap-2 text-lg font-semibold md:text-base"
-          >
-            <img src={Logo} alt={"brigham logo"} className={"w-10"} />
-            <Package className="h-6 w-6" />
-            <span className="sr-only">Acme Inc</span>
-          </a>
-          <a
-            href="/home"
-            className="text-muted-foreground transition-colors hover:text-foreground "
-          >
-            Home
-          </a>
-          {/*<a*/}
-          {/*  href="https://en.wikipedia.org/wiki/Shrek"*/}
-          {/*  className="text-muted-foreground transition-colors hover:text-foreground"*/}
-          {/*>*/}
-          {/*  Navigation*/}
-          {/*</a>*/}
-          <a
-            href="/service-requests"
-            className="text-muted-foreground transition-colors hover:text-foreground "
-          >
-            Service Requests
-          </a>
-          <a
-            href="/about-us"
-            className="text-muted-foreground transition-colors hover:text-foreground"
-          >
-            About Us
-          </a>
-        </nav>
-        <Sheet>
-          <SheetTrigger asChild className={"f"}>
-            <Button
-              variant="invisible"
-              size="icon"
-              className="shrink-0 md:hidden hover:accent-white"
+      <header className="sticky top-0 flex flex-col items-center gap-4 bg-blue-900">
+        <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6">
+          <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-md lg:gap-6 text-nowrap">
+            <a
+              href="/login"
+              className="flex items-center gap-2 text-lg font-semibold md:text-base"
             >
               <img src={Logo} alt={"brigham logo"} className={"w-10"} />
-              <span className="sr-only">Toggle navigation menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left">
-            <nav className="grid gap-6 text-lg font-medium">
-              <a
-                href="https://en.wikipedia.org/wiki/Shrek"
-                className="flex items-center gap-2 text-lg font-semibold"
+              <Package className="h-6 w-6" />
+              <span className="sr-only">Acme Inc</span>
+            </a>
+            <a
+              href="/home"
+              className="transition-colors hover:text-yellow-500 text-gray-300"
+            >
+              Home
+            </a>
+            {/*<a*/}
+            {/*  href="https://en.wikipedia.org/wiki/Shrek"*/}
+            {/*  className="text-muted-foreground transition-colors hover:text-foreground"*/}
+            {/*>*/}
+            {/*  Navigation*/}
+            {/*</a>*/}
+            <a
+              href="/service-requests"
+              className="text-muted-foreground transition-colors hover:text-yellow-500 text-gray-300"
+            >
+              Service Requests
+            </a>
+            <a
+              href="csv-table"
+              className="text-muted-foreground transition-colors hover:text-yellow-500 text-gray-300"
+            >
+              CSV Table
+            </a>
+            <a
+              href="/about-us"
+              className="text-muted-foreground transition-colors hover:text-yellow-500 text-gray-300"
+            >
+              About Us
+            </a>
+          </nav>
+          <Sheet>
+            <SheetTrigger asChild className={"f"}>
+              <Button
+                variant="invisible"
+                size="icon"
+                className="shrink-0 md:hidden hover:accent-white"
               >
                 <img src={Logo} alt={"brigham logo"} className={"w-10"} />
-
-                <span className="sr-only">Acme Inc</span>
-              </a>
-              <a
-                href="https://en.wikipedia.org/wiki/Shrek"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Dashboard
-              </a>
-              <a
-                href="https://en.wikipedia.org/wiki/Shrek"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Orders
-              </a>
-              <a
-                href="https://en.wikipedia.org/wiki/Shrek"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Products
-              </a>
-              <a
-                href="https://en.wikipedia.org/wiki/Shrek"
-                className="text-muted-foreground hover:text-foreground"
-              >
-                Customers
-              </a>
-              <a
-                href="https://en.wikipedia.org/wiki/Shrek"
-                className="hover:text-foreground"
-              >
-                Settings
-              </a>
-            </nav>
-          </SheetContent>
-        </Sheet>
-        <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <form className="ml-auto flex-1 sm:flex-initial">
-            <div className="relative">
-              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-              <Input
-                type="search"
-                placeholder="Search products..."
-                className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
-              />
-            </div>
-          </form>
-          <ModeToggle />
-          {/*<DropdownMenu>*/}
-          {/*  <DropdownMenuTrigger asChild>*/}
-          {/*    <Button variant="secondary" size="icon" className="rounded-full">*/}
-          {/*      <CircleUser className="h-5 w-5" />*/}
-          {/*      <span className="sr-only">Toggle user menu</span>*/}
-          {/*    </Button>*/}
-          {/*  </DropdownMenuTrigger>*/}
-          {/*  <DropdownMenuContent align="end">*/}
-          {/*    <DropdownMenuLabel>Home</DropdownMenuLabel>*/}
-          {/*    <DropdownMenuSeparator />*/}
-          {/*    <DropdownMenuItem>Navigation</DropdownMenuItem>*/}
-          {/*    <DropdownMenuItem>Service Request</DropdownMenuItem>*/}
-          {/*    <DropdownMenuSeparator />*/}
-          {/*    <DropdownMenuItem>About Us</DropdownMenuItem>*/}
-          {/*  </DropdownMenuContent>*/}
-          {/*</DropdownMenu>*/}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="secondary" size="icon" className="rounded-full">
-                <CircleUser className="h-5 w-5" />
-                <span className="sr-only">Toggle user menu</span>
+                <span className="sr-only">Toggle navigation menu</span>
               </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent className="w-56">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
+            </SheetTrigger>
+            <SheetContent side="left">
+              <nav className="grid gap-6 text-lg font-medium">
+                <a
+                  href="/home"
+                  className="flex items-center gap-2 text-lg font-semibold"
+                >
+                  <img src={Logo} alt={"brigham logo"} className={"w-10"} />
+
+                  <span className="sr-only">Home</span>
+                </a>
+                <a
+                  href="/service-requests"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Service Requests
+                </a>
+                <a
+                  href="/about-us"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  About Us
+                </a>
+                <a
+                  href="https://en.wikipedia.org/wiki/Shrek"
+                  className="hover:text-foreground"
+                >
+                  Settings
+                </a>
+              </nav>
+            </SheetContent>
+          </Sheet>
+          <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2  lg:gap-4">
+            <form className="ml-auto flex-1 sm:flex-initial">
+              <div className="relative">
+                <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search products..."
+                  className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
+                />
+              </div>
+            </form>
+            <ModeToggle />
+            {/*<DropdownMenu>*/}
+            {/*  <DropdownMenuTrigger asChild>*/}
+            {/*    <Button variant="secondary" size="icon" className="rounded-full">*/}
+            {/*      <CircleUser className="h-5 w-5" />*/}
+            {/*      <span className="sr-only">Toggle user menu</span>*/}
+            {/*    </Button>*/}
+            {/*  </DropdownMenuTrigger>*/}
+            {/*  <DropdownMenuContent align="end">*/}
+            {/*    <DropdownMenuLabel>Home</DropdownMenuLabel>*/}
+            {/*    <DropdownMenuSeparator />*/}
+            {/*    <DropdownMenuItem>Navigation</DropdownMenuItem>*/}
+            {/*    <DropdownMenuItem>Service Request</DropdownMenuItem>*/}
+            {/*    <DropdownMenuSeparator />*/}
+            {/*    <DropdownMenuItem>About Us</DropdownMenuItem>*/}
+            {/*  </DropdownMenuContent>*/}
+            {/*</DropdownMenu>*/}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="secondary"
+                  size="icon"
+                  className="rounded-full"
+                >
+                  <CircleUser className="h-5 w-5" />
+                  <span className="sr-only">Toggle user menu</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem>
+                    <User className="mr-2 h-4 w-4" />
+                    <span>Profile</span>
+                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <CreditCard className="mr-2 h-4 w-4" />
+                    <span>Billing</span>
+                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <Settings className="mr-2 h-4 w-4" />
+                    <span>Settings</span>
+                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>
+                      <Users className="mr-2 h-4 w-4" />
+                      <span>Switch Account</span>
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            window.location.href = "/login";
+                          }}
+                        >
+                          <Key className="mr-2 h-4 w-4" />
+                          <span>Admin</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => {
+                            window.location.href = "/login";
+                          }}
+                        >
+                          <User className="mr-2 h-4 w-4" />
+                          <span>Patient</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
                 <DropdownMenuItem>
-                  <User className="mr-2 h-4 w-4" />
-                  <span>Profile</span>
-                  <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+                  <LogOut className="mr-2 h-4 w-4" />
+                  <span>Log out</span>
+                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <CreditCard className="mr-2 h-4 w-4" />
-                  <span>Billing</span>
-                  <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <Settings className="mr-2 h-4 w-4" />
-                  <span>Settings</span>
-                  <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuGroup>
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    <Users className="mr-2 h-4 w-4" />
-                    <span>Switch Account</span>
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuPortal>
-                    <DropdownMenuSubContent>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          window.location.href = "/login";
-                        }}
-                      >
-                        <Key className="mr-2 h-4 w-4" />
-                        <span>Admin</span>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem
-                        onClick={() => {
-                          window.location.href = "/login";
-                        }}
-                      >
-                        <User className="mr-2 h-4 w-4" />
-                        <span>Patient</span>
-                      </DropdownMenuItem>
-                    </DropdownMenuSubContent>
-                  </DropdownMenuPortal>
-                </DropdownMenuSub>
-              </DropdownMenuGroup>
-              <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <LogOut className="mr-2 h-4 w-4" />
-                <span>Log out</span>
-                <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
       </header>
 

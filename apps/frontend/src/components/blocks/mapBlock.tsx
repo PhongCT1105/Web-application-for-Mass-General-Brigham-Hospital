@@ -93,7 +93,18 @@ export const MapBlock: React.FC = () => {
       const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
       const nLat = 3400 - lng;
       const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
-      marker.bindPopup(hospital.name).openPopup();
+
+      // Add a click event handler to toggle popup visibility
+      const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+      marker.bindPopup(popupContent);
+
+      marker.on("click", function (this: L.Marker) {
+        // Specify the type of 'this' as L.Marker
+        if (!this.isPopupOpen()) {
+          // Check if the popup is not already open
+          this.openPopup(); // Open the popup when the marker is clicked
+        }
+      });
     });
 
     const zoomControl = L.control.zoom({ position: "topright" });
@@ -140,6 +151,14 @@ export const MapBlock: React.FC = () => {
     setPath(newPath);
   }
 
+  function clearLine() {
+    const map = mapRef.current;
+    if (!map || !path) return;
+
+    path.removeFrom(map);
+    setPath(null);
+  }
+
   function handleSearch(start: string, end: string) {
     drawPath(start, end);
   }
@@ -151,6 +170,7 @@ export const MapBlock: React.FC = () => {
         <SearchBar
           locations={hospitalData.map((hospital) => hospital.name)}
           onSearch={handleSearch}
+          onClear={clearLine} // Pass the clearLine function to SearchBar
         />
       </div>
       {/* Map container */}
@@ -158,7 +178,7 @@ export const MapBlock: React.FC = () => {
         id="map-container"
         style={{
           flex: 2.5,
-          backgroundColor: "lightcyan",
+          backgroundColor: "gray-300",
           position: "relative",
         }}
       ></div>

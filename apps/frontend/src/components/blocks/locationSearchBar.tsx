@@ -10,17 +10,25 @@ import {
 interface SearchBarProps {
   locations: string[];
   onSearch: (start: string, end: string) => void;
+  onClear: () => void; // New prop for handling clearing
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
   locations,
   onSearch,
+  onClear,
 }) => {
   const [startPoint, setStartPoint] = useState<string>("");
   const [endPoint, setEndPoint] = useState<string>("");
 
   const handleSearch = () => {
     onSearch(startPoint, endPoint);
+  };
+
+  const handleClear = () => {
+    setStartPoint("");
+    setEndPoint("");
+    onClear(); // Clear the line on the map
   };
 
   return (
@@ -65,12 +73,20 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         </DropdownMenu>
       </div>
 
-      <button
-        onClick={handleSearch}
-        className="px-8 py-2 bg-blue-500 text-white rounded cursor-pointer"
-      >
-        Find Path
-      </button>
+      <div className="flex mb-4">
+        <button
+          onClick={handleSearch}
+          className="px-8 py-2 bg-blue-500 text-white rounded cursor-pointer mr-2"
+        >
+          Find Path
+        </button>
+        <button
+          onClick={handleClear}
+          className="px-8 py-2 bg-red-500 text-white rounded cursor-pointer"
+        >
+          Clear
+        </button>
+      </div>
     </div>
   );
 };

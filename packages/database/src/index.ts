@@ -72,6 +72,13 @@ async function readCsvFile() {
         console.log(`${edge.startNodeID} | ${edge.endNodeID}`);
     });
     */
+
+  await prisma.user.create({
+    data: {
+      username: "admin",
+      password: "admin",
+    },
+  });
 }
 
 async function exportToCsv() {
