@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from "express";
 //import { Prisma } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-//import {flowerReq} from "common/scr/flowerReq.ts";
+// import {flowerReq} from "common/scr/flowerReq.ts";
 
 const router: Router = express.Router();
 
@@ -19,7 +19,7 @@ router.post("/", async function (req: Request, res: Response) {
     console.info("Successfully requested flowers"); // Log that it was successful
   } catch (error) {
     // Log any failures
-    console.error(`Unable to save high score attempt ${flowerReq}: ${error}`);
+    console.error(`Unable to save flower request ${flowerReq}: ${error}`);
     res.sendStatus(400); // Send error
     return; // Don't try to send duplicate statuses
   }

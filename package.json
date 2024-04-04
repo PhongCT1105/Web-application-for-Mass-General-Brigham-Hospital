@@ -64,6 +64,7 @@
     "@types/pathfinding": "^0.0.9",
     "@types/react-icons": "^3.0.0",
     "@yarnpkg/pnpify": "^4.0.0-rc.45",
+    "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.0",
     "install": "^0.13.0",
