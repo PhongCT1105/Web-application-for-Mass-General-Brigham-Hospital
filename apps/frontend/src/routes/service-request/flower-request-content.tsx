@@ -302,21 +302,21 @@ export const FlowerContent = () => {
                     <img
                       src="src/assets/discount-tags/ten-percent-discount.webp"
                       alt="10% discount"
-                      className="absolute top-0 left-0 w-28 h-auto"
+                      className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {discount === 20 && (
                     <img
                       src="src/assets/discount-tags/twenty-percent-discount.webp"
                       alt="20% discount"
-                      className="absolute top-0 left-0 w-28 h-auto"
+                      className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {discount === 30 && (
                     <img
                       src="src/assets/discount-tags/thirty-percent-discount.webp"
                       alt="30% discount"
-                      className="absolute top-0 left-0 w-28 h-auto"
+                      className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {discount === 50 && (
