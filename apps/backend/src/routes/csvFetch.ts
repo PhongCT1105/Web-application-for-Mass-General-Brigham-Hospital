@@ -26,14 +26,16 @@ router.post("/node", async (req, res) => {
     //   return res.status(400).json("fun cancelled: no file."); //No file uploaded
     // }
 
-    await prisma.edges.deleteMany();
-    await prisma.nodes.deleteMany();
+    // await prisma.edges.deleteMany();
+    // await prisma.nodes.deleteMany();
 
-    for (let i = 0; i < data.length; i++) {
-      await prisma.nodes.create({
-        data: data[i],
-      });
-    }
+    // for (let i = 0; i < data.length; i++) {
+    //   await prisma.nodes.create({
+    //     data: data[i],
+    //   });
+    //
+    // }
+    prisma.nodes.createMany({ data, skipDuplicates: true });
 
     res.status(200).send("CSV data imported successfully.");
   } catch (error) {
@@ -57,7 +59,7 @@ router.post("/edge", async (req, res) => {
   }[] = req.body;
 
   try {
-    await prisma.edges.deleteMany();
+    //await prisma.edges.deleteMany();
     for (let i = 0; i < data.length; i++) {
       await prisma.edges.create({
         data: data[i],
