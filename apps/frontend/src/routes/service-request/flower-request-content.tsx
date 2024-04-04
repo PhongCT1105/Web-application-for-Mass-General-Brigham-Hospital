@@ -125,15 +125,28 @@ export const FlowerContent = () => {
       ),
     });
   };
-  let discount = 0;
-  function getDiscount() {
-    const discounts = [
-      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10,
-      20, 20, 30, 50,
-    ]; // In Percent
-    discount = discounts[Math.floor(Math.random() * discounts.length)];
-    return discount;
+
+  const discount = [0];
+  const discountState = [true];
+  const discountImg = [""];
+  const discounts = [
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10, 20,
+    20, 30, 50,
+  ]; // In Percent
+  for (let i = 0; i < flowerCards.length; i++) {
+    discount[i] = discounts[Math.floor(Math.random() * discounts.length)];
+    discountState[i] = true;
+    if (discount[i] === 10)
+      discountImg[i] = "src/assets/discount-tags/ten-percent-discount.webp";
+    else if (discount[i] === 20)
+      discountImg[i] = "src/assets/discount-tags/twenty-percent-discount.webp";
+    else if (discount[i] === 30)
+      discountImg[i] = "src/assets/discount-tags/thirty-percent-discount.webp";
+    else if (discount[i] === 50)
+      discountImg[i] = "src/assets/discount-tags/fifty-percent-discount.png";
+    else discountState[i] = false;
   }
+
   return (
     <>
       <div className="flex items-center justify-between">
@@ -290,40 +303,18 @@ export const FlowerContent = () => {
       <div className="relative">
         <ScrollArea>
           <div className="flex space-x-4 pb-4 my-3 ml-2">
-            {flowerCards.map((flower) => (
+            {flowerCards.map((flower, i) => (
               <Card
                 className={
                   "lg-card justify-center shadow-none object-cover transition-all hover:scale-105 hover:shadow"
                 }
               >
-                <div className={""}>{(discount = getDiscount())}</div>
                 <CardContent className={"relative w-[300px] mt-2"}>
-                  {discount === 10 && (
+                  {discountState[i] && (
                     <img
-                      src="src/assets/discount-tags/ten-percent-discount.webp"
-                      alt="10% discount"
+                      src={discountImg[i]}
+                      alt="discount"
                       className="absolute top-0 left-0 w-24 h-auto"
-                    />
-                  )}
-                  {discount === 20 && (
-                    <img
-                      src="src/assets/discount-tags/twenty-percent-discount.webp"
-                      alt="20% discount"
-                      className="absolute top-0 left-0 w-24 h-auto"
-                    />
-                  )}
-                  {discount === 30 && (
-                    <img
-                      src="src/assets/discount-tags/thirty-percent-discount.webp"
-                      alt="30% discount"
-                      className="absolute top-0 left-0 w-24 h-auto"
-                    />
-                  )}
-                  {discount === 50 && (
-                    <img
-                      src="src/assets/discount-tags/fifty-percent-discount.png"
-                      alt="50% discount"
-                      className="absolute top-0 left-0 w-28 h-auto"
                     />
                   )}
                   {/* Flower image */}
@@ -337,13 +328,8 @@ export const FlowerContent = () => {
                   <CardTitle className={"text-center pt-2"}>
                     {flower.name}
                   </CardTitle>
-                  {discount === 0 ? (
-                    <CardDescription
-                      className={"text-center text-lg text-muted-foreground"}
-                    >
-                      ${flower.cost}
-                    </CardDescription>
-                  ) : (
+
+                  {discountState && (
                     <CardDescription
                       className={"text-center text-lg text-muted-foreground"}
                     >
@@ -354,10 +340,17 @@ export const FlowerContent = () => {
                       </span>{" "}
                       $
                       {(flower.cost =
-                        (flower.cost * (100 - discount)) / 100).toFixed(2)}
+                        (flower.cost * (100 - discount[i])) / 100).toFixed(2)}
                     </CardDescription>
                   )}
 
+                  {!discountState && (
+                    <CardDescription
+                      className={"text-center text-lg text-muted-foreground"}
+                    >
+                      ${flower.cost}
+                    </CardDescription>
+                  )}
                   <CardDescription
                     className={
                       "text-center text-lg text-muted-foreground flex flex-col pt-2 items-center "
