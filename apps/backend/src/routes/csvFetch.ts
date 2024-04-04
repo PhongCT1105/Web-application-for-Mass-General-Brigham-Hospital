@@ -73,4 +73,25 @@ router.post("/edge", async (req, res) => {
   }
 });
 
+router.get("/node", async (req, res) => {
+  try {
+    const nodes = await prisma.nodes.findMany();
+    res.status(200).json(nodes);
+  } catch (error) {
+    console.error("Error fetching nodes:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
+// Fetch edges from the database and send them as a response
+router.get("/edge", async (req, res) => {
+  try {
+    const edges = await prisma.edges.findMany();
+    res.status(200).json(edges);
+  } catch (error) {
+    console.error("Error fetching edges:", error);
+    res.status(500).send("Internal server error");
+  }
+});
+
 export default router;

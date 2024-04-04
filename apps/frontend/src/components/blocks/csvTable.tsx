@@ -16,10 +16,34 @@ import {
 } from "@/components/ui/tabs.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import { parse, ParseResult } from "papaparse";
-import axios from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 
 interface CSVData {
   [key: string]: string; // Assuming all values in CSV are strings, adjust as needed
+}
+
+interface TableColumn {
+  title: string;
+  dataIndex: string;
+}
+
+interface Edge {
+  edgeID: string;
+  startNodeID: string;
+  endNodeID: string;
+  // Other fields as needed
+}
+
+interface Node {
+  nodeID: string;
+  xcoord: number;
+  ycoord: number;
+  floor: string;
+  building: string;
+  nodeType: string;
+  longName: string;
+  shortName: string;
+  // Add other fields as needed
 }
 
 const CSVTable: React.FC = () => {
@@ -28,8 +52,10 @@ const CSVTable: React.FC = () => {
   const [uploading, setUploading] = useState<boolean>(false);
   const [uploadStatus, setUploadStatus] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [rowsPerPage, setRowsPerPage] = useState<number>(100); // Added back rowsPerPage state
-  const [paginationButtonCount, setPaginationButtonCount] = useState<number>(5);
+  const [rowsPerPage] = useState<number>(100); // Added back rowsPerPage state
+  const [paginationButtonCount] = useState<number>(5);
+  const [nodes, setNodes] = useState<Node[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -71,29 +97,32 @@ const CSVTable: React.FC = () => {
   };
 
   // Pagination logic
-  const indexOfFirstRow = (currentPage - 1) * rowsPerPage;
-  const indexOfLastRow = Math.min(
-    indexOfFirstRow + rowsPerPage,
-    jsonData.length,
-  );
-  const currentRows = jsonData.slice(indexOfFirstRow, indexOfLastRow);
+  const indexOfLastRow = currentPage * rowsPerPage;
+  const indexOfFirstRow = indexOfLastRow - rowsPerPage;
+  const currentNodes = nodes.slice(indexOfFirstRow, indexOfLastRow);
+  const currentEdges = edges.slice(indexOfFirstRow, indexOfLastRow);
 
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
-    setRowsPerPage(100);
   };
 
   useEffect(() => {
-    // Calculate the number of pages based on the updated finalVals length and rowsPerPage
-    const pageCount = Math.ceil(jsonData.length / rowsPerPage);
-    // Set paginationButtonCount based on the total number of pages
-    setPaginationButtonCount(Math.min(5, pageCount)); // Default to 5 buttons
+    const fetchData = async () => {
+      try {
+        const nodesRes: AxiosResponse<Node[]> =
+          await axios.get("/api/csvFetch/node");
+        const edgesRes: AxiosResponse<Edge[]> =
+          await axios.get("/api/csvFetch/edge");
+        setNodes(nodesRes.data);
+        setEdges(edgesRes.data);
+      } catch (error) {
+        const axiosError = error as AxiosError;
+        console.error("Error fetching data:", axiosError.message);
+      }
+    };
 
-    // Adjust paginationButtonCount if there are more than 50 data points
-    if (pageCount > 10) {
-      setPaginationButtonCount(Math.min(10, pageCount)); // Set a maximum of 10 buttons
-    }
-  }, [jsonData, rowsPerPage]);
+    fetchData(); // Fetch data when the component mounts
+  }, []); // Empty dependency array to fetch data only once
 
   const importCSV = async (file: File): Promise<CSVData[]> => {
     return new Promise<CSVData[]>((resolve, reject) => {
@@ -213,7 +242,7 @@ const CSVTable: React.FC = () => {
     }
   }
 
-  const columns =
+  const columns: TableColumn[] =
     jsonData && jsonData.length > 0
       ? Object.keys(jsonData[0]).map((header) => ({
           title: capitalizeTableColumn(header),
@@ -235,10 +264,21 @@ const CSVTable: React.FC = () => {
                     <TabsTrigger value="Edges">Edges</TabsTrigger>
                   </TabsList>
                   <TabsContent value="Nodes">
-                    {/* Place node-related content here */}
+                    {currentNodes.map((node) => (
+                      <div key={node.nodeID}>
+                        <span>{node.nodeID}</span>
+                        <span>{node.nodeType}</span>
+                      </div>
+                    ))}
                   </TabsContent>
                   <TabsContent value="Edges">
-                    {/* Place edge-related content here */}
+                    {currentEdges.map((edge) => (
+                      <div key={edge.edgeID}>
+                        <span>{edge.edgeID}</span>
+                        <span>{edge.startNodeID}</span>
+                        <span>{edge.endNodeID}</span>
+                      </div>
+                    ))}
                   </TabsContent>
                 </Tabs>
                 <Separator className="my-4" />
@@ -249,7 +289,8 @@ const CSVTable: React.FC = () => {
                   <div className="flex space-x-4">
                     <Button onClick={exportCSV}>Export CSV</Button>
                     <form onSubmit={handleSubmit}>
-                      <Button>Upload</Button>
+                      <Button type="submit">Upload</Button>{" "}
+                      {/* Added type="submit" */}
                     </form>
                   </div>
                 </div>
@@ -265,15 +306,17 @@ const CSVTable: React.FC = () => {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {currentRows.map((row, rowIndex) => (
-                      <TableRow key={rowIndex}>
-                        {columns.map((column) => (
-                          <TableCell key={column.dataIndex}>
-                            {row[column.dataIndex]}
-                          </TableCell>
-                        ))}
-                      </TableRow>
-                    ))}
+                    {jsonData
+                      .slice(indexOfFirstRow, indexOfLastRow)
+                      .map((row, rowIndex) => (
+                        <TableRow key={rowIndex}>
+                          {columns.map((column) => (
+                            <TableCell key={column.dataIndex}>
+                              {row[column.dataIndex]}
+                            </TableCell>
+                          ))}
+                        </TableRow>
+                      ))}
                   </TableBody>
                 </Table>
                 {/* Pagination */}
