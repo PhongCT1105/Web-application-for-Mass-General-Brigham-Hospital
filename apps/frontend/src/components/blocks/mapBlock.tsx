@@ -5,72 +5,89 @@ import lowerLevelMap from "@/assets/lower-level-map.png";
 import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/locationSearchBar";
+import axios from "axios";
+import { Graph } from "@/util/graph.tsx";
+import { Node } from "../../util/node.tsx";
+import { BFS } from "@/util/bfs.tsx";
+//import { Edge } from "../../util/edge.tsx";
+// import {mapReq} from "common/src/mapReq.ts";
 
 interface HospitalData {
+  nodeID: string;
   name: string;
   geocode: string;
 }
 
-const hospitalData: HospitalData[] = [
-  { name: "Anesthesia Conf Floor L1", geocode: "2255,849" },
-  { name: "Medical Records Conference Room Floor L1", geocode: "2665,1043" },
-  { name: "Abrams Conference Room", geocode: "2445,1245" },
-  { name: "Day Surgery Family Waiting Floor L1", geocode: "1980,844" },
-  { name: "Day Surgery Family Waiting Exit Floor L1", geocode: "1845,844" },
-  { name: "Medical Records Film Library Floor L1", geocode: "2310,1043" },
-  { name: "Hallway 1 Floor L1", geocode: "1732,924" },
-  { name: "Hallway 2 Floor L1", geocode: "2445,1043" },
-  { name: "Hallway 3 Floor L1", geocode: "2445,1284" },
-  { name: "Hallway 4 Floor L1", geocode: "2770,1070" },
-  { name: "Hallway 5 Floor L1", geocode: "1750,1284" },
-  { name: "Hallway 6 Floor L1", geocode: "2130,1284" },
-  { name: "Hallway 7 Floor L1", geocode: "2130,1045" },
-  { name: "Hallway 8 Floor L1", geocode: "2215,1045" },
-  { name: "Hallway 9 Floor L1", geocode: "2220,904" },
-  { name: "Hallway 10 Floor L1", geocode: "2265,904" },
-  { name: "Hallway 11 Floor L1", geocode: "2360,849" },
-  { name: "Hallway 12 Floor L1", geocode: "2130,904" },
-  { name: "Hallway 13 Floor L1", geocode: "2130,844" },
-  { name: "Hallway 14 Floor L1", geocode: "1845,924" },
-  { name: "Hallway 15 Floor L1", geocode: "2300,849" },
-  { name: "Outpatient Fluoroscopy Floor L1", geocode: "1965,1284" },
-  { name: "Pre-Op PACU Floor L1", geocode: "1750,1090" },
-  { name: "Nuclear Medicine Floor L1", geocode: "2290,1284" },
-  { name: "Ultrasound Floor L1", geocode: "2320,1284" },
-  { name: "CSIR MRI Floor L1", geocode: "2770,1284" },
-  { name: "Restroom L Elevator Floor L1", geocode: "1732,1019" },
-  { name: "Restroom M Elevator Floor L1", geocode: "2065,1284" },
-  { name: "Restroom K Elevator Floor L1", geocode: "2300,879" },
-  { name: "Restroom H Elevator Floor L1", geocode: "2770,1160" },
-  { name: "Vending Machine 1 L1", geocode: "2185,904" },
-  { name: "Volunteers Floor L1", geocode: "2490,1043" },
-  { name: "Interpreter Services Floor L2", geocode: "2015,1280" },
-  { name: "Elevator Q MapNode 7 Floor L1", geocode: "1637,2116" },
-  { name: "Fenwood Road Exit MapNode 1 Floor L1", geocode: "1702,2260" },
-  { name: "Hallway MapNode 2 Floor L1", geocode: "1702,2167" },
-  { name: "Hallway MapNode 3 Floor L1", geocode: "1688,2167" },
-  { name: "Hallway MapNode 4 Floor L1", geocode: "1666,2167" },
-  { name: "Hallway MapNode 5 Floor L1", geocode: "1688,2131" },
-  { name: "Hallway MapNode 6 Floor L1", geocode: "1665,2116" },
-  { name: "Stairs MapNode 8 Floor L1", geocode: "1720,2131" },
-  { name: "Elevator H Floor L1", geocode: "2715,1070" },
-  { name: "Elevator J Floor L1", geocode: "2360,799" },
-  { name: "Elevator K Floor L1", geocode: "2220,974" },
-  { name: "Elevator L Floor L1", geocode: "1785,924" },
-  { name: "Elevator M Floor L1", geocode: "1820,1284" },
-];
+let hospitalGraph = new Graph();
+
+const hospitalData: HospitalData[] = [];
 
 // Define the map component
 export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
-  const [path, setPath] = useState<Polyline | null>(null);
+  // const [path, setPath] = useState<Polyline | null>(null);
+  const [paths, setPaths] = useState<Polyline[]>([]);
+  const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
 
-  useEffect(() => {
+  const [graph, setGraph] = useState<Graph>(new Graph());
+
+  const drawNodes = async () => {
+    const { data: edgeData } = await axios.get("/api/mapreq/edges");
+    const { data: nodeData } = await axios.get("/api/mapreq/nodes");
+
+    console.log(edgeData);
+
+    const stringData: string[] = [];
+
+    const newGraph: Graph = new Graph();
+    for (let i = 0; i < nodeData.length; i++) {
+      hospitalData.push({
+        nodeID: nodeData[i].nodeID,
+        name: nodeData[i].longName,
+        geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
+      });
+
+      console.log(hospitalData);
+      stringData.push(nodeData[i].longName);
+
+      newGraph.addNode(
+        new Node(
+          nodeData[i].nodeID,
+          parseInt(nodeData[i].xcoord),
+          parseInt(nodeData[i].ycoord),
+          nodeData[i].floor,
+          nodeData[i].building,
+          nodeData[i].nodeType,
+          nodeData[i].longName,
+          nodeData[i].shortName,
+          new Set<Node>(),
+        ),
+      );
+    }
+
+    console.log("Nodes added");
+    console.log(newGraph);
+
+    for (let i = 0; i < edgeData.length; i++) {
+      console.log(edgeData[i].startNodeID + edgeData[i].endNodeID);
+      newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
+    }
+
+    console.log("Edges added??????");
+    console.log(newGraph);
+    setHospitalDataString(stringData);
+    setGraph(newGraph);
+
+    hospitalGraph = newGraph;
+
+    console.log(hospitalData);
+    console.log(hospitalGraph);
+
     const map: Map = L.map("map-container", {
       crs: CRS.Simple,
       minZoom: -2,
       maxZoom: 2,
-      zoomControl: false,
+      zoomControl: true,
     }).setView([3400, 5000], -2);
 
     mapRef.current = map;
@@ -105,19 +122,22 @@ export const MapBlock: React.FC = () => {
           this.openPopup(); // Open the popup when the marker is clicked
         }
       });
+
+      return () => {
+        map.remove();
+      };
     });
+  };
 
-    const zoomControl = L.control.zoom({ position: "topright" });
-    map.addControl(zoomControl);
-
-    return () => {
-      map.remove();
-    };
+  useEffect(() => {
+    drawNodes();
   }, []);
-
+  function addToPaths(newPath: Polyline) {
+    setPaths((prevPaths) => [...prevPaths, newPath]);
+  }
   function drawPath(start: string, end: string) {
-    const startHospital = hospitalData.find((h) => h.name === start);
-    const endHospital = hospitalData.find((h) => h.name === end);
+    const startHospital = hospitalData.find((h) => h.nodeID === start);
+    const endHospital = hospitalData.find((h) => h.nodeID === end);
     if (!startHospital || !endHospital) {
       console.error("Start or end location not found in hospital data.");
       return;
@@ -134,6 +154,25 @@ export const MapBlock: React.FC = () => {
     drawLine(startCoords, endCoords);
   }
 
+  function drawFullPath(graph: Graph, start: string, end: string) {
+    const startNode = graph.getNodeID(start);
+    const endNode = graph.getNodeID(end);
+
+    if (!startNode || !endNode) {
+      console.error("Start or end node not found in the graph.");
+      return;
+    }
+
+    const nodes: Node[] = BFS.run(graph, startNode, endNode);
+
+    console.log(nodes);
+    for (let i = 0; i < nodes.length - 1; i++) {
+      console.log("A path should be created now");
+      drawPath(nodes[i].nodeID, nodes[i + 1].nodeID);
+    }
+    console.log("done :D");
+  }
+
   function drawLine(
     startCoordinates: [number, number],
     endCoordinates: [number, number],
@@ -141,26 +180,24 @@ export const MapBlock: React.FC = () => {
     const map = mapRef.current;
     if (!map) return;
 
-    if (path) {
-      path.removeFrom(map);
-    }
-
     const newPath = L.polyline([startCoordinates, endCoordinates], {
       color: "blue",
     }).addTo(map);
-    setPath(newPath);
+    addToPaths(newPath); // Add the new path to the paths list
   }
 
-  function clearLine() {
+  function clearLines() {
     const map = mapRef.current;
-    if (!map || !path) return;
+    if (!map || paths.length === 0) return;
 
-    path.removeFrom(map);
-    setPath(null);
+    paths.forEach((path) => path.removeFrom(map));
+    setPaths([]);
   }
 
-  function handleSearch(start: string, end: string) {
-    drawPath(start, end);
+  async function handleSearch(start: string, end: string) {
+    console.log(start);
+    console.log(end);
+    drawFullPath(graph, start, end);
   }
 
   return (
@@ -168,9 +205,9 @@ export const MapBlock: React.FC = () => {
       {/* SearchBar component */}
       <div style={{ flex: 1, padding: "10px" }}>
         <SearchBar
-          locations={hospitalData.map((hospital) => hospital.name)}
+          locations={hospitalDataString.sort((a, b) => a.localeCompare(b))}
           onSearch={handleSearch}
-          onClear={clearLine} // Pass the clearLine function to SearchBar
+          onClear={clearLines} // Pass the clearLine function to SearchBar
         />
       </div>
       {/* Map container */}

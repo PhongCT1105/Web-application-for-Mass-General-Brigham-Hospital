@@ -11,7 +11,7 @@ export class Node {
   nodeType: string;
   longName: string;
   shortName: string;
-  neighbors: Set<string>;
+  neighbors: Set<Node>;
 
   constructor(
     nodeID: string,
@@ -22,7 +22,7 @@ export class Node {
     nodeType: string,
     longName: string,
     shortName: string,
-    neighbors: Set<string>,
+    neighbors: Set<Node>,
   ) {
     this.nodeID = nodeID;
     this.xcoord = xcoord;

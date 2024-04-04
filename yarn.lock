@@ -1181,20 +1181,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@prisma/client@npm:4.15.0":
-  version: 4.15.0
-  resolution: "@prisma/client@npm:4.15.0"
-  dependencies:
-    "@prisma/engines-version": "npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944"
-  peerDependencies:
-    prisma: "*"
-  peerDependenciesMeta:
-    prisma:
-      optional: true
-  checksum: 14d6609dbb41c9689731d5da06237138bc51da07aa8506bdfb3789324964f68c70ef451590a1d4c041acb1eca6227c332c3791a7f55f3ea86e16e8431a307518
-  languageName: node
-  linkType: hard
-
 "@prisma/client@npm:5.12.0-dev.46":
   version: 5.12.0-dev.46
   resolution: "@prisma/client@npm:5.12.0-dev.46"
@@ -1207,17 +1193,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:^5.12.0":
+  version: 5.12.0
+  resolution: "@prisma/client@npm:5.12.0"
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: cf89933b62fab7ea8c3e7a1161a6c6ef62c3965b1ea59d65e5151c2bb48358464819d1abebd07e6bb3c797bf0615c8182bf8788b07b76755fbd5d459baf334d5
+  languageName: node
+  linkType: hard
+
 "@prisma/debug@npm:5.12.0-dev.46":
   version: 5.12.0-dev.46
   resolution: "@prisma/debug@npm:5.12.0-dev.46"
   checksum: f352fefbe29fa846226252cf874ea364010e7673c668034f5abd618fb98c2bc2026f73549138bb9c0b310ab6c2f444c5de4748737790a606f3177c4102fe181b
-  languageName: node
-  linkType: hard
-
-"@prisma/engines-version@npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944":
-  version: 4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944
-  resolution: "@prisma/engines-version@npm:4.15.0-28.8fbc245156db7124f997f4cecdd8d1219e360944"
-  checksum: 693ebe6c19b44a829c60adb2b461ac6799150aff1b8e0446bbbbf9888021f3890880d640c2320afd81afda2af8caf4ca3937ef5ad43325e6863730c16bf510f0
   languageName: node
   linkType: hard
 
@@ -2911,22 +2902,22 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tanstack/react-table@npm:^8.9.3":
-  version: 8.11.6
-  resolution: "@tanstack/react-table@npm:8.11.6"
+"@tanstack/react-table@npm:^8.15.3":
+  version: 8.15.3
+  resolution: "@tanstack/react-table@npm:8.15.3"
   dependencies:
-    "@tanstack/table-core": "npm:8.11.6"
+    "@tanstack/table-core": "npm:8.15.3"
   peerDependencies:
-    react: ">=16"
-    react-dom: ">=16"
-  checksum: b8b73d987d3656c3046697d89884438c4dcecfd7a567d6492823d067cb3c7466030065b3e970f59bbd9e413e829f179601353a31ff426a06f7a955c7dd4add5a
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: cc0f871f2e1df5b5b6671b58612ce89f3cdb7fca69db55b258e1266436cfcd2272292a6eea8dd56cc95a1398fd67a221b633ac06ec935238fdf952722fac1453
   languageName: node
   linkType: hard
 
-"@tanstack/table-core@npm:8.11.6":
-  version: 8.11.6
-  resolution: "@tanstack/table-core@npm:8.11.6"
-  checksum: f3a286f2f6bc4831d076cc4a59036b92309e2e9286256704bfb69c06c22a28172417e403422c31a9199f0a82a799d6252f60e5c211994afb84e73be95af96d87
+"@tanstack/table-core@npm:8.15.3":
+  version: 8.15.3
+  resolution: "@tanstack/table-core@npm:8.15.3"
+  checksum: 671220918527a6b88a1963d956b565158ae62983138b3f5423ed623fdba1ccd731949e081ff5c4484ddfa5630db74090b05b6c3eabb266f60e53948238af54c5
   languageName: node
   linkType: hard
 
@@ -5066,6 +5057,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"convert-csv-to-json@npm:^2.44.0":
+  version: 2.44.0
+  resolution: "convert-csv-to-json@npm:2.44.0"
+  checksum: dfb20d46a894c910942c195df741d6dc0f1d4229bc0b2502b34bdc7cf5b185a78eccae68a0ec286b32fdd4b0649fe40a7153faf1adb83615dbdf0a0e9a3c3c26
+  languageName: node
+  linkType: hard
+
 "convert-source-map@npm:^2.0.0":
   version: 2.0.0
   resolution: "convert-source-map@npm:2.0.0"
@@ -5173,6 +5171,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"csv-parser@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "csv-parser@npm:3.0.0"
+  dependencies:
+    minimist: "npm:^1.2.0"
+  bin:
+    csv-parser: bin/csv-parser
+  checksum: 2f003d15d8361a94359d6715a8f05feac1252ab4d1d4e2908ea1baa0454c7e00fb99c53cdc86336635c5fd04f17b510291338df93da1e54944695f0c3b4a6bc1
+  languageName: node
+  linkType: hard
+
 "csv-stringify@npm:^6.4.6":
   version: 6.4.6
   resolution: "csv-stringify@npm:6.4.6"
@@ -5184,7 +5193,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "database@workspace:packages/database"
   dependencies:
-    "@prisma/client": "npm:4.15.0"
+    "@prisma/client": "npm:5.12.0-dev.46"
     "@types/node": "npm:^20.11.30"
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"
@@ -6408,7 +6417,7 @@ __metadata:
     "@radix-ui/react-toggle": "npm:^1.0.3"
     "@radix-ui/react-toggle-group": "npm:^1.0.4"
     "@radix-ui/react-tooltip": "npm:^1.0.7"
-    "@tanstack/react-table": "npm:^8.9.3"
+    "@tanstack/react-table": "npm:^8.15.3"
     "@types/bootstrap": "npm:^5.2.6"
     "@types/csv-parse": "npm:^1.2.2"
     "@types/express": "npm:^4"
@@ -6432,7 +6441,9 @@ __metadata:
     clsx: "npm:^2.1.0"
     cmdk: "npm:^1.0.0"
     common: "workspace:*"
+    convert-csv-to-json: "npm:^2.44.0"
     csv-parse: "npm:^5.5.5"
+    csv-parser: "npm:^3.0.0"
     csv-stringify: "npm:^6.4.6"
     database: "workspace:*"
     date-fns: "npm:^3.6.0"
@@ -10553,7 +10564,7 @@ __metadata:
     "@fortawesome/free-solid-svg-icons": "npm:^6.5.1"
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
     "@iconify/icons-lucide": "npm:^1.2.135"
-    "@prisma/client": "npm:5.12.0-dev.46"
+    "@prisma/client": "npm:^5.12.0"
     "@react-leaflet/core": "npm:^2.1.0"
     "@types/csv-parse": "npm:^1.2.2"
     "@types/leaflet": "npm:^1.9.8"
@@ -10566,6 +10577,8 @@ __metadata:
     "@types/react-leaflet-markercluster": "npm:^3"
     "@vitest/ui": "npm:^0.33.0"
     "@yarnpkg/pnpify": "npm:^4.0.0-rc.45"
+    axios: "npm:^1.6.8"
+    csv-parser: "npm:^3.0.0"
     dotenv: "npm:^16.4.5"
     dotenv-cli: "npm:^7.4.0"
     eslint: "npm:^8.57.0"

@@ -1,51 +1,63 @@
 import express, { Router, Request, Response } from "express";
-//import { Prisma } from "database";
+// import { Flower, flowerRequest } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-//import {flowerReq} from "common/scr/flowerReq.ts";
 
 const router: Router = express.Router();
 
-interface cartItem {
-  cost: number;
+export interface cartItem {
   name: string;
+  cost: number;
 }
 
-router.post("/", async function (req: Request, res: Response) {
-  const flowerReq: cartItem = req.body;
-  // Attempt to save the high score
+interface RequestForm {
+  cartItems: cartItem[];
+  sender: string;
+  recipient: string;
+  location: string;
+  message?: string;
+  total: number;
+}
+
+function productsToString(products: cartItem[]): string {
+  return products.map((product) => `${product.name},${product.cost}`).join(",");
+}
+
+router.post("/", async (req: Request, res: Response) => {
   try {
-    // Attempt to create in the database
-    await PrismaClient.flowerRequest.createMany({ data: flowerReq });
-    console.info("Successfully requested flowers"); // Log that it was successful
+    const requestBody = req.body;
+    console.log(requestBody);
+    const jsonString = JSON.stringify(requestBody);
+    console.log("JSON String:", jsonString);
+
+    // Parse the JSON string back into an object
+    const requestForm: RequestForm = JSON.parse(jsonString);
+    console.log(requestForm);
+    const cartItems = requestForm.cartItems;
+    const namesString = productsToString(cartItems);
+
+    await PrismaClient.flowerRequest.create({
+      data: {
+        cartItems: namesString,
+        location: requestForm.location,
+        message: requestForm.message,
+        recipient: requestForm.recipient,
+        sender: requestForm.sender,
+        total: requestForm.total,
+      },
+    });
+    console.info("Successfully requested flowers");
+    res.status(200).json({ message: "Flower requests created successfully" });
   } catch (error) {
     // Log any failures
-    console.error(`Unable to save high score attempt ${flowerReq}: ${error}`);
+    console.error(`Unable to save flower request ${req}: ${error}`);
     res.sendStatus(400); // Send error
     return; // Don't try to send duplicate statuses
   }
-
-  res.sendStatus(200); // Otherwise say it's fine
 });
 
-/*
-// Whenever a get request is made, return the high score
-router.get("/", async function (req: Request, res: Response) {
-  // Fetch the high score from Prisma
-  const highScore = await PrismaClient.highScore.findFirst({
-    orderBy: {
-      score: "desc",
-    },
-  });
-
-  // If the high score doesn't exist
-  if (highScore === null) {
-    // Log that (it's a problem)
-    console.error("No high score found in database!");
-    res.sendStatus(204); // and send 204, no data
-  } else {
-    // Otherwise, send the score
-    res.send(highScore);
-  }
+router.get("/", async function (flowerReq: Request, res: Response) {
+  const flowerRequest = await PrismaClient.flowerRequest.findMany();
+  res.send(flowerRequest);
 });
-*/
+
 export default router;
