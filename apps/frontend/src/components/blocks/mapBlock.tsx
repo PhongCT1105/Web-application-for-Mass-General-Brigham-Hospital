@@ -9,7 +9,7 @@ import axios from "axios";
 import { Graph } from "@/util/graph.tsx";
 import { Node } from "../../util/node.tsx";
 import { BFS } from "@/util/bfs.tsx";
-//mport { Edge } from "../../util/edge.tsx";
+//import { Edge } from "../../util/edge.tsx";
 // import {mapReq} from "common/src/mapReq.ts";
 
 interface HospitalData {
@@ -205,7 +205,7 @@ export const MapBlock: React.FC = () => {
       {/* SearchBar component */}
       <div style={{ flex: 1, padding: "10px" }}>
         <SearchBar
-          locations={hospitalDataString}
+          locations={hospitalDataString.sort((a, b) => a.localeCompare(b))}
           onSearch={handleSearch}
           onClear={clearLines} // Pass the clearLine function to SearchBar
         />
