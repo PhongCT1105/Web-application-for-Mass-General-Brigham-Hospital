@@ -125,7 +125,15 @@ export const FlowerContent = () => {
       ),
     });
   };
-
+  let discount = 0;
+  function getDiscount() {
+    const discounts = [
+      0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10,
+      20, 20, 30, 50,
+    ]; // In Percent
+    discount = discounts[Math.floor(Math.random() * discounts.length)];
+    return discount;
+  }
   return (
     <>
       <div className="flex items-center justify-between">
@@ -288,20 +296,68 @@ export const FlowerContent = () => {
                   "lg-card justify-center shadow-none object-cover transition-all hover:scale-105 hover:shadow"
                 }
               >
-                <CardContent className={" w-[300px] mt-2"}>
+                <div className={""}>{(discount = getDiscount())}</div>
+                <CardContent className={"relative w-[300px] mt-2"}>
+                  {discount === 10 && (
+                    <img
+                      src="src/assets/discount-tags/ten-percent-discount.webp"
+                      alt="10% discount"
+                      className="absolute top-0 left-0 w-28 h-auto"
+                    />
+                  )}
+                  {discount === 20 && (
+                    <img
+                      src="src/assets/discount-tags/twenty-percent-discount.webp"
+                      alt="20% discount"
+                      className="absolute top-0 left-0 w-28 h-auto"
+                    />
+                  )}
+                  {discount === 30 && (
+                    <img
+                      src="src/assets/discount-tags/thirty-percent-discount.webp"
+                      alt="30% discount"
+                      className="absolute top-0 left-0 w-28 h-auto"
+                    />
+                  )}
+                  {discount === 50 && (
+                    <img
+                      src="src/assets/discount-tags/fifty-percent-discount.png"
+                      alt="50% discount"
+                      className="absolute top-0 left-0 w-28 h-auto"
+                    />
+                  )}
+                  {/* Flower image */}
                   <img
                     src={flower.image}
                     alt={flower.name}
                     className="h-64 mx-auto"
                   />
+
+                  {/* Flower details */}
                   <CardTitle className={"text-center pt-2"}>
                     {flower.name}
                   </CardTitle>
-                  <CardDescription
-                    className={"text-center text-lg text-muted-foreground"}
-                  >
-                    ${flower.cost}
-                  </CardDescription>
+                  {discount === 0 ? (
+                    <CardDescription
+                      className={"text-center text-lg text-muted-foreground"}
+                    >
+                      ${flower.cost}
+                    </CardDescription>
+                  ) : (
+                    <CardDescription
+                      className={"text-center text-lg text-muted-foreground"}
+                    >
+                      <span
+                        style={{ textDecoration: "line-through", color: "red" }}
+                      >
+                        ${flower.cost}
+                      </span>{" "}
+                      $
+                      {(flower.cost =
+                        (flower.cost * (100 - discount)) / 100).toFixed(2)}
+                    </CardDescription>
+                  )}
+
                   <CardDescription
                     className={
                       "text-center text-lg text-muted-foreground flex flex-col pt-2 items-center "
@@ -344,6 +400,11 @@ export const FlowerContent = () => {
                     alt={addon.name}
                     // width={"200px"}
                     className="h-64 mx-auto"
+                  />
+                  <img
+                    src="src/assets/discount-tags/ten-percent-discount.webp"
+                    alt="discount"
+                    className="absolute inset-0 w-1/4 h-auto mx-auto "
                   />
                   <CardTitle className={"text-center pt-2"}>
                     {addon.name}
