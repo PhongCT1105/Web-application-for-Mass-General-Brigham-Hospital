@@ -55,7 +55,7 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/", async function (req: Request, res: Response) {
+router.get("/", async function (flowerReq: Request, res: Response) {
   const flowerRequest = await PrismaClient.flowerRequest.findMany();
   res.send(flowerRequest);
 });
