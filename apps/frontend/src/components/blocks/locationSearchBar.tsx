@@ -22,6 +22,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [endPoint, setEndPoint] = useState<string>("");
 
   const handleSearch = () => {
+    onClear();
     onSearch(startPoint, endPoint);
   };
 
