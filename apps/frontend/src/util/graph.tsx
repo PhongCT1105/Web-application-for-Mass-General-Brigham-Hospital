@@ -20,13 +20,14 @@ export class Graph {
   }
 
   addEdge(startNode: string, endNode: string) {
+    this.edges.push(new Edge(startNode, endNode));
     this.addNeighbors(startNode, endNode);
   }
 
   // Setting neighbors bidirectionally to a node
   addNeighbors(source: string, target: string) {
-    const sourceNode = this.nodes.get(source);
-    const targetNode = this.nodes.get(target);
+    const sourceNode = this.nodes.get(source.trim());
+    const targetNode = this.nodes.get(target.trim());
 
     // testing if node is valid before adding
     if (!sourceNode) {

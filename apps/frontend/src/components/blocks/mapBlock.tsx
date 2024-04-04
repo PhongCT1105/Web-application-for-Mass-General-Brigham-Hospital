@@ -8,6 +8,7 @@ import { SearchBar } from "@/components/blocks/locationSearchBar";
 import axios from "axios";
 import { Graph } from "@/util/graph.tsx";
 import { Node } from "../../util/node.tsx";
+import { BFS } from "@/util/bfs.tsx";
 //mport { Edge } from "../../util/edge.tsx";
 // import {mapReq} from "common/src/mapReq.ts";
 
@@ -75,7 +76,7 @@ export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   const [path, setPath] = useState<Polyline | null>(null);
   const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   const [graph, setGraph] = useState<Graph>(new Graph());
 
   const drawNodes = async () => {
@@ -95,7 +96,8 @@ export const MapBlock: React.FC = () => {
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
       });
 
-      stringData.push(nodeData[i].longName);
+      console.log(hospitalData);
+      stringData.push(nodeData[i].nodeID);
 
       newGraph.addNode(
         new Node(
@@ -112,12 +114,16 @@ export const MapBlock: React.FC = () => {
       );
     }
 
+    console.log("Nodes added");
+    console.log(newGraph);
+
     for (let i = 0; i < edgeData.length; i++) {
-      console.log(edgeData[i].startNode + edgeData[i].endNode);
-      newGraph.addNeighbors(edgeData[i].startNode, edgeData[i].endNode);
-      // function to find a node based on a string
+      console.log(edgeData[i].startNodeID + edgeData[i].endNodeID);
+      newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
     }
 
+    console.log("Edges added??????");
+    console.log(newGraph);
     setHospitalDataString(stringData);
     setGraph(newGraph);
 
@@ -180,8 +186,8 @@ export const MapBlock: React.FC = () => {
   }, []);
 
   function drawPath(start: string, end: string) {
-    const startHospital = hospitalData.find((h) => h.name === start);
-    const endHospital = hospitalData.find((h) => h.name === end);
+    const startHospital = hospitalData.find((h) => h.nodeID === start);
+    const endHospital = hospitalData.find((h) => h.nodeID === end);
     if (!startHospital || !endHospital) {
       console.error("Start or end location not found in hospital data.");
       return;
@@ -196,6 +202,17 @@ export const MapBlock: React.FC = () => {
     const endCoords: [number, number] = [3400 - endLng, endLat];
 
     drawLine(startCoords, endCoords);
+  }
+
+  function drawFullPath(graph: Graph, start: string, end: string) {
+    console.log(graph);
+    const nodes: Node[] = BFS.run(graph, start, end);
+    console.log(nodes);
+    for (let i = 0; i < nodes.length - 1; i++) {
+      console.log("A path should be created now");
+      drawPath(nodes[i].nodeID, nodes[i + 1].nodeID);
+    }
+    console.log("done :D");
   }
 
   function drawLine(
@@ -226,7 +243,7 @@ export const MapBlock: React.FC = () => {
   async function handleSearch(start: string, end: string) {
     console.log(start);
     console.log(end);
-    drawPath(start, end);
+    drawFullPath(graph, start, end);
   }
 
   return (
