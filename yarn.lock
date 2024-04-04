@@ -5057,6 +5057,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"convert-csv-to-json@npm:^2.44.0":
+  version: 2.44.0
+  resolution: "convert-csv-to-json@npm:2.44.0"
+  checksum: dfb20d46a894c910942c195df741d6dc0f1d4229bc0b2502b34bdc7cf5b185a78eccae68a0ec286b32fdd4b0649fe40a7153faf1adb83615dbdf0a0e9a3c3c26
+  languageName: node
+  linkType: hard
+
 "convert-source-map@npm:^2.0.0":
   version: 2.0.0
   resolution: "convert-source-map@npm:2.0.0"
@@ -5161,6 +5168,17 @@ __metadata:
   version: 5.5.5
   resolution: "csv-parse@npm:5.5.5"
   checksum: 759ca2e5f3977cac7cbf3b1992dd507c6dd458163ab60671e7959d7aefd5b367d7043db65d55ed77ec56aeba2ecfa0881a2c416a44341edcfd266c3d29a424f0
+  languageName: node
+  linkType: hard
+
+"csv-parser@npm:^3.0.0":
+  version: 3.0.0
+  resolution: "csv-parser@npm:3.0.0"
+  dependencies:
+    minimist: "npm:^1.2.0"
+  bin:
+    csv-parser: bin/csv-parser
+  checksum: 2f003d15d8361a94359d6715a8f05feac1252ab4d1d4e2908ea1baa0454c7e00fb99c53cdc86336635c5fd04f17b510291338df93da1e54944695f0c3b4a6bc1
   languageName: node
   linkType: hard
 
@@ -6423,7 +6441,9 @@ __metadata:
     clsx: "npm:^2.1.0"
     cmdk: "npm:^1.0.0"
     common: "workspace:*"
+    convert-csv-to-json: "npm:^2.44.0"
     csv-parse: "npm:^5.5.5"
+    csv-parser: "npm:^3.0.0"
     csv-stringify: "npm:^6.4.6"
     database: "workspace:*"
     date-fns: "npm:^3.6.0"
@@ -10558,6 +10578,7 @@ __metadata:
     "@vitest/ui": "npm:^0.33.0"
     "@yarnpkg/pnpify": "npm:^4.0.0-rc.45"
     axios: "npm:^1.6.8"
+    csv-parser: "npm:^3.0.0"
     dotenv: "npm:^16.4.5"
     dotenv-cli: "npm:^7.4.0"
     eslint: "npm:^8.57.0"

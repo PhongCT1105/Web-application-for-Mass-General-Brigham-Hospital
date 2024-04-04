@@ -6,4 +6,4 @@ const client = new PrismaClient();
 // Export the client
 export default client;
 
-// Prisma automatically closes on shutdown
+// Prisma automatically closes on s

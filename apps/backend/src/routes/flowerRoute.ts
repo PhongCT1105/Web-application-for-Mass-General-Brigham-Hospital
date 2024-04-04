@@ -48,12 +48,14 @@ router.post("/", async (req: Request, res: Response) => {
     console.info("Successfully requested flowers");
     res.status(200).json({ message: "Flower requests created successfully" });
   } catch (error) {
+    // Log any failures
+    console.error(`Unable to save flower request ${req}: ${error}`);
     res.sendStatus(400); // Send error
     return; // Don't try to send duplicate statuses
   }
 });
 
-router.get("/", async function (req: Request, res: Response) {
+router.get("/", async function (flowerReq: Request, res: Response) {
   const flowerRequest = await PrismaClient.flowerRequest.findMany();
   res.send(flowerRequest);
 });

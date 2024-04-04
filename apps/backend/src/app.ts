@@ -5,6 +5,7 @@ import logger from "morgan";
 //import exampleRouter from "./routes/example.ts";
 import flowerRouter from "./routes/flowerRoute.ts";
 import mapRoute from "./routes/mapRoute.ts";
+import csvFetch from "./routes/csvFetch.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -26,7 +27,7 @@ app.use(cookieParser()); // Cookie parser
 //app.use("/api/high-score", exampleRouter);
 app.use("/api/flowerReq", flowerRouter);
 app.use("/api/mapreq", mapRoute);
-
+app.use("/api/csvFetch", csvFetch);
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });

@@ -24,23 +24,19 @@ router.post("/", async function (req: Request, res: Response) {
 });
 
 // Whenever a get request is made, return the high score
-router.get("/", async function (req: Request, res: Response) {
-  // Fetch the high score from Prisma
-  const highScore = await PrismaClient.highScore.findFirst({
-    orderBy: {
-      score: "desc",
-    },
-  });
-
-  // If the high score doesn't exist
-  if (highScore === null) {
-    // Log that (it's a problem)
-    console.error("No high score found in database!");
-    res.sendStatus(204); // and send 204, no data
-  } else {
-    // Otherwise, send the score
-    res.send(highScore);
-  }
-});
-
-export default router;
+// router.get("/", async function (req: Request, res: Response) {
+//   // Fetch the high score from Prisma
+//   const highScore = await PrismaClient.highScore.findFirst({
+//     orderBy: {
+//       score: "desc",
+//     },
+//   });
+//
+//   // If the high score doesn't exist
+//   if (highScore === null) {
+//     // Log that (it's a problem)
+//     console.error("No high score found in database!");
+//     res.sendStatus(204); // and send 204, no data
+//   } else {
+//     // Otherwise, send the score
+//     res.send(hig

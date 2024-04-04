@@ -80,6 +80,7 @@ const RAW_RUNTIME_STATE =
           ["@vitest/ui", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.33.0"],\
           ["@yarnpkg/pnpify", "npm:4.0.1"],\
           ["axios", "npm:1.6.8"],\
+          ["csv-parser", "npm:3.0.0"],\
           ["dotenv", "npm:16.4.5"],\
           ["dotenv-cli", "npm:7.4.0"],\
           ["eslint", "npm:8.57.0"],\
@@ -6540,6 +6541,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["convert-csv-to-json", [\
+      ["npm:2.44.0", {\
+        "packageLocation": "./.yarn/cache/convert-csv-to-json-npm-2.44.0-f8bc4487fa-dfb20d46a8.zip/node_modules/convert-csv-to-json/",\
+        "packageDependencies": [\
+          ["convert-csv-to-json", "npm:2.44.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["convert-source-map", [\
       ["npm:2.0.0", {\
         "packageLocation": "./.yarn/cache/convert-source-map-npm-2.0.0-7ab664dc4e-c987be3ec0.zip/node_modules/convert-source-map/",\
@@ -6665,6 +6675,16 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/csv-parse-npm-5.5.5-db6ed28c6c-759ca2e5f3.zip/node_modules/csv-parse/",\
         "packageDependencies": [\
           ["csv-parse", "npm:5.5.5"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["csv-parser", [\
+      ["npm:3.0.0", {\
+        "packageLocation": "./.yarn/cache/csv-parser-npm-3.0.0-b80672e147-2f003d15d8.zip/node_modules/csv-parser/",\
+        "packageDependencies": [\
+          ["csv-parser", "npm:3.0.0"],\
+          ["minimist", "npm:1.2.8"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8092,7 +8112,9 @@ const RAW_RUNTIME_STATE =
           ["clsx", "npm:2.1.0"],\
           ["cmdk", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.0.0"],\
           ["common", "workspace:packages/common"],\
+          ["convert-csv-to-json", "npm:2.44.0"],\
           ["csv-parse", "npm:5.5.5"],\
+          ["csv-parser", "npm:3.0.0"],\
           ["csv-stringify", "npm:6.4.6"],\
           ["database", "workspace:packages/database"],\
           ["date-fns", "npm:3.6.0"],\
@@ -13103,6 +13125,7 @@ const RAW_RUNTIME_STATE =
           ["@vitest/ui", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.33.0"],\
           ["@yarnpkg/pnpify", "npm:4.0.1"],\
           ["axios", "npm:1.6.8"],\
+          ["csv-parser", "npm:3.0.0"],\
           ["dotenv", "npm:16.4.5"],\
           ["dotenv-cli", "npm:7.4.0"],\
           ["eslint", "npm:8.57.0"],\
