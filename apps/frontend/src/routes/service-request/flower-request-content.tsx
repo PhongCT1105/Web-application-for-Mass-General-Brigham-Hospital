@@ -98,13 +98,13 @@ export const FlowerContent = () => {
     }
   }
 
-  const onAddItem = (item: cartItem): void => {
+  const onAddItem = (item: cartItem, discount: number): void => {
     const prevItems = [...cartItems];
     setCartItems((prev) => [
       ...prev,
       {
         name: item.name,
-        cost: item.cost,
+        cost: parseFloat(((item.cost * (100 - discount)) / 100).toFixed(2)),
       },
     ]);
     console.log(item.name);
@@ -125,27 +125,6 @@ export const FlowerContent = () => {
       ),
     });
   };
-
-  const discount = [0];
-  const discountState = [true];
-  const discountImg = [""];
-  const discounts = [
-    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10, 20,
-    20, 30, 50,
-  ]; // In Percent
-  for (let i = 0; i < flowerCards.length; i++) {
-    discount[i] = discounts[Math.floor(Math.random() * discounts.length)];
-    discountState[i] = true;
-    if (discount[i] === 10)
-      discountImg[i] = "src/assets/discount-tags/ten-percent-discount.webp";
-    else if (discount[i] === 20)
-      discountImg[i] = "src/assets/discount-tags/twenty-percent-discount.webp";
-    else if (discount[i] === 30)
-      discountImg[i] = "src/assets/discount-tags/thirty-percent-discount.webp";
-    else if (discount[i] === 50)
-      discountImg[i] = "src/assets/discount-tags/fifty-percent-discount.png";
-    else discountState[i] = false;
-  }
 
   return (
     <>
@@ -303,17 +282,38 @@ export const FlowerContent = () => {
       <div className="relative">
         <ScrollArea>
           <div className="flex space-x-4 pb-4 my-3 ml-2">
-            {flowerCards.map((flower, i) => (
+            {flowerCards.map((flower) => (
               <Card
                 className={
                   "lg-card justify-center shadow-none object-cover transition-all hover:scale-105 hover:shadow"
                 }
               >
                 <CardContent className={"relative w-[300px] mt-2"}>
-                  {discountState[i] && (
+                  {flower.discountAmt === 10 && (
                     <img
-                      src={discountImg[i]}
-                      alt="discount"
+                      src="src/assets/discount-tags/ten-percent-discount.webp"
+                      alt="10% discount"
+                      className="absolute top-0 left-0 w-24 h-auto"
+                    />
+                  )}
+                  {flower.discountAmt === 20 && (
+                    <img
+                      src="src/assets/discount-tags/twenty-percent-discount.webp"
+                      alt="20% discount"
+                      className="absolute top-0 left-0 w-24 h-auto"
+                    />
+                  )}
+                  {flower.discountAmt === 30 && (
+                    <img
+                      src="src/assets/discount-tags/thirty-percent-discount.webp"
+                      alt="30% discount"
+                      className="absolute top-0 left-0 w-24 h-auto"
+                    />
+                  )}
+                  {flower.discountAmt === 50 && (
+                    <img
+                      src="src/assets/discount-tags/fifty-percent-discount.png"
+                      alt="50% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
@@ -329,7 +329,7 @@ export const FlowerContent = () => {
                     {flower.name}
                   </CardTitle>
 
-                  {discountState && (
+                  {flower.discountAmt !== 0 && (
                     <CardDescription
                       className={"text-center text-lg text-muted-foreground"}
                     >
@@ -339,12 +339,14 @@ export const FlowerContent = () => {
                         ${flower.cost}
                       </span>{" "}
                       $
-                      {(flower.cost =
-                        (flower.cost * (100 - discount[i])) / 100).toFixed(2)}
+                      {(
+                        (flower.cost * (100 - flower.discountAmt)) /
+                        100
+                      ).toFixed(2)}
                     </CardDescription>
                   )}
 
-                  {!discountState && (
+                  {!flower.discountAmt && (
                     <CardDescription
                       className={"text-center text-lg text-muted-foreground"}
                     >
@@ -359,7 +361,7 @@ export const FlowerContent = () => {
                     <Button
                       variant={"default"}
                       type={"button"}
-                      onClick={() => onAddItem(flower)}
+                      onClick={() => onAddItem(flower, flower.discountAmt)}
                     >
                       Add to cart
                     </Button>
@@ -394,11 +396,6 @@ export const FlowerContent = () => {
                     // width={"200px"}
                     className="h-64 mx-auto"
                   />
-                  <img
-                    src="src/assets/discount-tags/ten-percent-discount.webp"
-                    alt="discount"
-                    className="absolute inset-0 w-1/4 h-auto mx-auto "
-                  />
                   <CardTitle className={"text-center pt-2"}>
                     {addon.name}
                   </CardTitle>
@@ -415,7 +412,7 @@ export const FlowerContent = () => {
                     <Button
                       variant={"default"}
                       type={"button"}
-                      onClick={() => onAddItem(addon)}
+                      onClick={() => onAddItem(addon, 0)}
                     >
                       Add to cart
                     </Button>
