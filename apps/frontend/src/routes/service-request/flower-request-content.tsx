@@ -52,7 +52,7 @@ export interface cartItem {
   name: string;
 }
 
-interface requestForm {
+export interface requestForm {
   cartItems: cartItem[];
   sender: string;
   recipient: string;
@@ -97,10 +97,6 @@ export const FlowerContent = () => {
       console.log("success");
     }
   }
-
-  // const removeItem = (item: cartItem) => {
-  //
-  // }
 
   const onAddItem = (item: cartItem): void => {
     const prevItems = [...cartItems];

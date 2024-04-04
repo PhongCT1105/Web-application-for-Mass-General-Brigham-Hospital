@@ -4,7 +4,8 @@ import LoginPage from "./routes/LoginPage.tsx";
 import HomePage from "./routes/HomePage.tsx"; // Correct import path
 import AboutUsPage from "./routes/AboutUsPage.tsx"; // Correct import path
 import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"; // Correct import path
-import CSVTable from "./components/blocks/csvTable.tsx"; // Correct import path
+import CSVTable from "./components/blocks/csvTable.tsx";
+import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
 
 function App() {
   const router = createBrowserRouter([
@@ -28,6 +29,11 @@ function App() {
       path: "/login",
       errorElement: <h1>ERROR</h1>,
       element: <LoginPage />,
+    },
+    {
+      path: "/request-log-Page",
+      errorElement: <h1>ERROR</h1>,
+      element: <RequestLogPage />,
     },
     {
       path: "/about-us",
