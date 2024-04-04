@@ -32,10 +32,10 @@ export class BFS {
       dist++;
 
       for (const neighbor of currNode.neighbors) {
-        if (!visited.includes(neighbor)) {
-          par.set(neighbor, currNodeID); // setting the neighbor as a parent
-          distance.set(neighbor, dist);
-          queue.enqueue(neighbor); //adding curr's neighbors to queue
+        if (!visited.includes(neighbor.nodeID)) {
+          par.set(neighbor.nodeID, currNodeID); // setting the neighbor as a parent
+          distance.set(neighbor.nodeID, dist);
+          queue.enqueue(neighbor.nodeID); //adding curr's neighbors to queue
         }
       }
       visited.push(currNodeID); //add curr to visited
