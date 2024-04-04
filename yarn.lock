@@ -10566,6 +10566,7 @@ __metadata:
     "@types/react-leaflet-markercluster": "npm:^3"
     "@vitest/ui": "npm:^0.33.0"
     "@yarnpkg/pnpify": "npm:^4.0.0-rc.45"
+    axios: "npm:^1.6.8"
     dotenv: "npm:^16.4.5"
     dotenv-cli: "npm:^7.4.0"
     eslint: "npm:^8.57.0"

@@ -79,6 +79,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-leaflet-markercluster", "npm:3.0.4"],\
           ["@vitest/ui", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.33.0"],\
           ["@yarnpkg/pnpify", "npm:4.0.1"],\
+          ["axios", "npm:1.6.8"],\
           ["dotenv", "npm:16.4.5"],\
           ["dotenv-cli", "npm:7.4.0"],\
           ["eslint", "npm:8.57.0"],\
@@ -13109,6 +13110,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-leaflet-markercluster", "npm:3.0.4"],\
           ["@vitest/ui", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.33.0"],\
           ["@yarnpkg/pnpify", "npm:4.0.1"],\
+          ["axios", "npm:1.6.8"],\
           ["dotenv", "npm:16.4.5"],\
           ["dotenv-cli", "npm:7.4.0"],\
           ["eslint", "npm:8.57.0"],\
