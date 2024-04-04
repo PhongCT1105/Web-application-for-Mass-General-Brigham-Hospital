@@ -87,7 +87,7 @@ export const MapBlock: React.FC = () => {
       crs: CRS.Simple,
       minZoom: -2,
       maxZoom: 2,
-      zoomControl: false,
+      zoomControl: true,
     }).setView([3400, 5000], -2);
 
     mapRef.current = map;
@@ -122,9 +122,6 @@ export const MapBlock: React.FC = () => {
           this.openPopup(); // Open the popup when the marker is clicked
         }
       });
-
-      const zoomControl = L.control.zoom({ position: "topright" });
-      map.addControl(zoomControl);
 
       return () => {
         map.remove();
