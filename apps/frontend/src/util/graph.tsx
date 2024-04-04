@@ -19,6 +19,15 @@ export class Graph {
     this.nodes.set(node.nodeID, node);
   }
 
+  getNodeID(longName: string): string | undefined {
+    for (const [nodeID, node] of this.nodes) {
+      if (node.longName === longName) {
+        return nodeID;
+      }
+    }
+    return undefined;
+  }
+
   addEdge(startNode: string, endNode: string) {
     this.edges.push(new Edge(startNode, endNode));
     this.addNeighbors(startNode, endNode);

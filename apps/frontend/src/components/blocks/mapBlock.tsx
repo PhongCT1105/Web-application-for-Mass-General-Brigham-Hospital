@@ -48,7 +48,7 @@ export const MapBlock: React.FC = () => {
       });
 
       console.log(hospitalData);
-      stringData.push(nodeData[i].nodeID);
+      stringData.push(nodeData[i].longName);
 
       newGraph.addNode(
         new Node(
@@ -155,8 +155,16 @@ export const MapBlock: React.FC = () => {
   }
 
   function drawFullPath(graph: Graph, start: string, end: string) {
-    console.log(graph);
-    const nodes: Node[] = BFS.run(graph, start, end);
+    const startNode = graph.getNodeID(start);
+    const endNode = graph.getNodeID(end);
+
+    if (!startNode || !endNode) {
+      console.error("Start or end node not found in the graph.");
+      return;
+    }
+
+    const nodes: Node[] = BFS.run(graph, startNode, endNode);
+
     console.log(nodes);
     for (let i = 0; i < nodes.length - 1; i++) {
       console.log("A path should be created now");
