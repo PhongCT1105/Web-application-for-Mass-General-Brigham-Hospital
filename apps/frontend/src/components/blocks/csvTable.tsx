@@ -145,7 +145,7 @@ const CSVTable: React.FC = () => {
     console.log(selectedFile);
     const jsonData = await importCSV(selectedFile);
 
-    if (selectedFile.name.includes("L1Nodes.csv")) {
+    if (selectedFile.name.toLowerCase().includes("node")) {
       const redefinedJsonData = jsonData as {
         nodeID: string;
         xcoord: string;
@@ -186,7 +186,7 @@ const CSVTable: React.FC = () => {
       if (res.status == 200) {
         console.log("success");
       }
-    } else if (selectedFile.name.includes("Edge")) {
+    } else if (selectedFile.name.toLowerCase().includes("edge")) {
       const redefinedJsonData = jsonData as {
         startNodeID: string;
         endNodeID: string;
