@@ -1,9 +1,22 @@
-import React, { useState } from "react";
-import "@/styles/CSVTable.css"; // Import CSS file for table styling
+import React, { useState, useEffect } from "react";
 import { Header } from "@/components/blocks/header.tsx";
-import axios from "axios";
-//import * as fs from "fs";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@/components/ui/tabs.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
 import { parse, ParseResult } from "papaparse";
+import axios from "axios";
 
 interface CSVData {
   [key: string]: string; // Assuming all values in CSV are strings, adjust as needed
@@ -13,7 +26,10 @@ const CSVTable: React.FC = () => {
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [jsonData, setJsonData] = useState<CSVData[]>([]);
   const [uploading, setUploading] = useState<boolean>(false);
-  const [uploadStatus, setUploadStatus] = useState<string>(""); // Upload status message
+  const [uploadStatus, setUploadStatus] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [rowsPerPage, setRowsPerPage] = useState<number>(100); // Added back rowsPerPage state
+  const [paginationButtonCount, setPaginationButtonCount] = useState<number>(5);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -34,8 +50,6 @@ const CSVTable: React.FC = () => {
     }
   };
 
-  // error uploading csv file: error: error uploading csv file
-  // err_aborted 404 (not found)
   const capitalizeTableColumn = (value: string) => {
     return value.charAt(0).toUpperCase() + value.slice(1);
   };
@@ -55,6 +69,31 @@ const CSVTable: React.FC = () => {
       document.body.removeChild(link);
     }
   };
+
+  // Pagination logic
+  const indexOfFirstRow = (currentPage - 1) * rowsPerPage;
+  const indexOfLastRow = Math.min(
+    indexOfFirstRow + rowsPerPage,
+    jsonData.length,
+  );
+  const currentRows = jsonData.slice(indexOfFirstRow, indexOfLastRow);
+
+  const paginate = (pageNumber: number) => {
+    setCurrentPage(pageNumber);
+    setRowsPerPage(100);
+  };
+
+  useEffect(() => {
+    // Calculate the number of pages based on the updated finalVals length and rowsPerPage
+    const pageCount = Math.ceil(jsonData.length / rowsPerPage);
+    // Set paginationButtonCount based on the total number of pages
+    setPaginationButtonCount(Math.min(5, pageCount)); // Default to 5 buttons
+
+    // Adjust paginationButtonCount if there are more than 50 data points
+    if (pageCount > 10) {
+      setPaginationButtonCount(Math.min(10, pageCount)); // Set a maximum of 10 buttons
+    }
+  }, [jsonData, rowsPerPage]);
 
   const importCSV = async (file: File): Promise<CSVData[]> => {
     return new Promise<CSVData[]>((resolve, reject) => {
@@ -174,52 +213,95 @@ const CSVTable: React.FC = () => {
     }
   }
 
-  return (
-    <>
-      <Header />
-      <div className="csv-container">
-        <form id="csvForm" onSubmit={handleSubmit}>
-          <input
-            id="csvFile"
-            type="file"
-            accept=".csv"
-            onChange={handleFileUpload}
-          />
-          <button className="upload-btn" type="submit" disabled={uploading}>
-            {uploading ? "Uploading..." : "Upload"}
-          </button>
-        </form>
-        <div className="button-group">
-          <button className="export-btn" onClick={exportCSV}>
-            Export CSV
-          </button>
-        </div>
+  const columns =
+    jsonData && jsonData.length > 0
+      ? Object.keys(jsonData[0]).map((header) => ({
+          title: capitalizeTableColumn(header),
+          dataIndex: header,
+        }))
+      : [];
 
-        {selectedFile && <p>Selected File: {selectedFile.name}</p>}
-        {uploadStatus && <p className="upload-status">{uploadStatus}</p>}
-        <div id="displayArea">
-          <table className="table table-striped">
-            <thead>
-              <tr>
-                {jsonData.length > 0 &&
-                  Object.keys(jsonData[0]).map((header, index) => (
-                    <th key={index}>{capitalizeTableColumn(header)}</th>
-                  ))}
-              </tr>
-            </thead>
-            <tbody>
-              {jsonData.map((row, rowIndex) => (
-                <tr key={rowIndex}>
-                  {Object.values(row).map((cell, cellIndex) => (
-                    <td key={cellIndex}>{cell}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+  return (
+    <div className={"scrollbar"}>
+      <Header />
+      <div className="hidden md:block">
+        <div className="border-t">
+          <div className="bg-background">
+            <div className="grid lg:grid-cols-5">
+              <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
+                <Tabs defaultValue="Nodes">
+                  <TabsList>
+                    <TabsTrigger value="Nodes">Nodes</TabsTrigger>
+                    <TabsTrigger value="Edges">Edges</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="Nodes">
+                    {/* Place node-related content here */}
+                  </TabsContent>
+                  <TabsContent value="Edges">
+                    {/* Place edge-related content here */}
+                  </TabsContent>
+                </Tabs>
+                <Separator className="my-4" />
+                <div className="flex items-center justify-between mb-4">
+                  <div className="space-y-1">
+                    <input type="file" onChange={handleFileUpload} />
+                  </div>
+                  <div className="flex space-x-4">
+                    <Button onClick={exportCSV}>Export CSV</Button>
+                    <form onSubmit={handleSubmit}>
+                      <Button>Upload</Button>
+                    </form>
+                  </div>
+                </div>
+                <Separator className="my-4" />
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      {columns.map((column) => (
+                        <TableCell key={column.dataIndex}>
+                          {column.title}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {currentRows.map((row, rowIndex) => (
+                      <TableRow key={rowIndex}>
+                        {columns.map((column) => (
+                          <TableCell key={column.dataIndex}>
+                            {row[column.dataIndex]}
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                {/* Pagination */}
+                {jsonData.length > 0 && (
+                  <div className="flex justify-center my-4">
+                    {Array.from({ length: paginationButtonCount }).map(
+                      (_, index) => {
+                        const pageNumber = index + 1;
+                        return (
+                          <Button
+                            key={index}
+                            onClick={() => paginate(pageNumber)}
+                          >
+                            {pageNumber}
+                          </Button>
+                        );
+                      },
+                    )}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+          {uploading && <div>Loading...</div>}
+          {uploadStatus && <div>{uploadStatus}</div>}
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
