@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import "@/styles/CSVTable.css"; // Import CSS file for table styling
 import { Header } from "@/components/blocks/header.tsx";
 import axios from "axios";
-import * as fs from "fs";
+//import * as fs from "fs";
 import { parse, ParseResult } from "papaparse";
 
 interface CSVData {
@@ -33,6 +33,7 @@ const CSVTable: React.FC = () => {
         });
     }
   };
+
   // error uploading csv file: error: error uploading csv file
   // err_aborted 404 (not found)
   const capitalizeTableColumn = (value: string) => {
@@ -93,6 +94,7 @@ const CSVTable: React.FC = () => {
       reader.readAsText(file);
     });
   };
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!selectedFile) {
@@ -105,57 +107,64 @@ const CSVTable: React.FC = () => {
     const jsonData = await importCSV(selectedFile);
 
     if (selectedFile.name.includes("L1Nodes.csv")) {
-      const nodesCSV = fs.readFileSync(selectedFile.name, "utf8");
-      console.log(nodesCSV);
-      const nodesData: string[] = nodesCSV.trim().split("\n").slice(1);
-      console.log(nodesData);
-      const nodes = nodesData.map((nodesData) => {
-        const [
-          nodeID,
-          xcoord,
-          ycoord,
-          floor,
-          building,
-          nodeType,
-          longName,
-          shortName,
-        ] = nodesData.split(",");
-        return {
-          nodeID,
-          xcoord: parseInt(xcoord),
-          ycoord: parseInt(ycoord),
-          floor,
-          building,
-          nodeType,
-          longName,
-          shortName,
-        };
-      });
+      const redefinedJsonData = jsonData as {
+        nodeID: string;
+        xcoord: string;
+        ycoord: string;
+        floor: string;
+        building: string;
+        nodeType: string;
+        longName: string;
+        shortName: string;
+      }[];
 
-      console.log(nodes);
-      const res = await axios.post("/api/csvFetch/node", nodes, {
-        headers: {
-          "content-type": "Application/json",
+      const parsedJsonData = [];
+
+      for (let i = 0; i < jsonData.length; i++) {
+        parsedJsonData.push({
+          nodeID: redefinedJsonData[i].nodeID,
+          xcoord: parseInt(redefinedJsonData[i].xcoord),
+          ycoord: parseInt(redefinedJsonData[i].ycoord),
+          floor: redefinedJsonData[i].floor,
+          building: redefinedJsonData[i].building,
+          nodeType: redefinedJsonData[i].nodeType,
+          longName: redefinedJsonData[i].longName,
+          shortName: redefinedJsonData[i].shortName,
+        });
+      }
+
+      console.log(parsedJsonData);
+      const res = await axios.post(
+        "/api/csvFetch/node",
+        JSON.stringify(parsedJsonData),
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
 
       if (res.status == 200) {
         console.log("success");
       }
     } else if (selectedFile.name.includes("Edge")) {
-      const edgesData: string[] = selectedFile.name
-        .trim()
-        .replace(/\r/g, "")
-        .split("\n")
-        .slice(1);
-      const edges = edgesData.map((edge) => {
-        const [startNodeID, endNodeID] = edge.split(",");
-        return { startNodeID, endNodeID };
-      });
+      const redefinedJsonData = jsonData as {
+        startNodeID: string;
+        endNodeID: string;
+      }[];
 
-      const res = await axios.post("/api/csvFetch/edge", edges, {
+      const parsedJsonData = [];
+
+      for (let i = 0; i < jsonData.length; i++) {
+        parsedJsonData.push({
+          startNodeID: redefinedJsonData[i].startNodeID,
+          endNodeID: redefinedJsonData[i].endNodeID,
+        });
+      }
+
+      const res = await axios.post("/api/csvFetch/edge", parsedJsonData, {
         headers: {
-          "content-type": "Application/json",
+          "Content-Type": "application/json",
         },
       });
       if (res.status == 200) {
@@ -163,118 +172,7 @@ const CSVTable: React.FC = () => {
         setJsonData(jsonData);
       }
     }
-
-    try {
-      // const filename = selectedFile.name.toLowerCase(); // Convert filename to lowercase for case-insensitive comparison
-      const endpoint = "/api/csvFetch/node";
-      const jsonData = await importCSV(selectedFile);
-      console.log(selectedFile);
-      setJsonData(jsonData);
-      const res = await axios.post(endpoint, selectedFile, {
-        headers: {
-          "content-type": "Application/json",
-        },
-      });
-
-      if (res.status == 200) {
-        console.log("success");
-      }
-    } catch (error) {
-      console.error("Error storing data:", error);
-    } finally {
-      setUploading(false);
-    }
   }
-
-  //         const edgesData: string[] = filename.trim().split("\n").slice(1);
-  //
-  //         console.log(edgesData + "THIS IS A TEST");
-  //
-  //         const edges = edgesData.map((edge) => { // PROBLEM LINE
-  //             const [startNodeID, endNodeID] = edge.split(",");
-  //             return { startNodeID, endNodeID };
-  //
-  //         });
-  //
-  //
-  //
-  //
-  //
-  //         importCSV(selectedFile)
-  //             .then(() => {
-  //                 setUploading(false);
-  //             })
-  //             .catch((error) => {
-  //                 console.error("Error importing file:", error);
-  //                 setUploading(false);
-  //             });
-  //     } else if (filename.includes('node')) {
-  //         const nodesData: string[] = filename.trim().split("\n").slice(1);
-  //         const nodes = nodesData.map((nodesData) => {
-  //             const [
-  //                 nodeID,
-  //                 xcoord,
-  //                 ycoord,
-  //                 floor,
-  //                 building,
-  //                 nodeType,
-  //                 longName,
-  //                 shortName,
-  //             ] = nodesData.split(",");
-  //             return {
-  //                 nodeID,
-  //                 xcoord: parseInt(xcoord),
-  //                 ycoord: parseInt(ycoord),
-  //                 floor,
-  //                 building,
-  //                 nodeType,
-  //                 longName,
-  //                 shortName,
-  //             };
-  //         });
-  //
-  //         const res = await axios.post("/api/csvTable", nodes, {
-  //             headers: {
-  //                 "content-type": "Application/json",
-  //             },
-  //         });
-  //
-  //         if (res.status == 200) {
-  //             console.log("success");
-  //         }
-  //
-  //         importCSV(selectedFile)
-  //             .then(() => {
-  //                 setUploading(false);
-  //             })
-  //             .catch((error) => {
-  //                 console.error("Error importing file:", error);
-  //                 setUploading(false);
-  //             });
-  //
-  //     } else {
-  //         console.error("File name does not contain 'Edge' or 'Node'.");
-  //     }
-  //
-  //   const res = await axios.post("/api/csvTable", selectedFile, {
-  //       headers: {
-  //           "content-type": "Application/json",
-  //       },
-  //   });
-  //
-  //   if (res.status == 200) {
-  //       console.log("success");
-  //   }
-  //
-  //   importCSV(selectedFile)
-  //     .then(() => {
-  //       setUploading(false);
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error importing file:", error);
-  //       setUploading(false);
-  //     });
-  // }
 
   return (
     <>
