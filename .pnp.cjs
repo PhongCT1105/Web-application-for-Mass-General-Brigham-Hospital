@@ -93,7 +93,7 @@ const RAW_RUNTIME_STATE =
           ["pathfinding", "npm:0.4.18"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-          ["prisma", "npm:5.12.0-dev.46"],\
+          ["prisma", "npm:5.12.0"],\
           ["queue-typescript", "npm:1.0.1"],\
           ["react", "npm:18.2.0"],\
           ["react-bootstrap", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.10.0"],\
@@ -1595,7 +1595,7 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0"],\
           ["@types/prisma", null],\
-          ["prisma", "npm:5.12.0-dev.46"]\
+          ["prisma", "npm:5.12.0"]\
         ],\
         "packagePeers": [\
           "@types/prisma",\
@@ -1618,10 +1618,10 @@ const RAW_RUNTIME_STATE =
       }]\
     ]],\
     ["@prisma/debug", [\
-      ["npm:5.12.0-dev.46", {\
-        "packageLocation": "./.yarn/cache/@prisma-debug-npm-5.12.0-dev.46-e10a522486-f352fefbe2.zip/node_modules/@prisma/debug/",\
+      ["npm:5.12.0", {\
+        "packageLocation": "./.yarn/cache/@prisma-debug-npm-5.12.0-bb4892d1f4-43e8c020b8.zip/node_modules/@prisma/debug/",\
         "packageDependencies": [\
-          ["@prisma/debug", "npm:5.12.0-dev.46"]\
+          ["@prisma/debug", "npm:5.12.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -1634,45 +1634,45 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:5.12.0-dev.46", {\
-        "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-5.12.0-dev.46-7a73cb6f1e/node_modules/@prisma/engines/",\
+      ["npm:5.12.0", {\
+        "packageLocation": "./.yarn/unplugged/@prisma-engines-npm-5.12.0-74d4f8f678/node_modules/@prisma/engines/",\
         "packageDependencies": [\
-          ["@prisma/engines", "npm:5.12.0-dev.46"],\
-          ["@prisma/debug", "npm:5.12.0-dev.46"],\
-          ["@prisma/engines-version", "npm:5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9"],\
-          ["@prisma/fetch-engine", "npm:5.12.0-dev.46"],\
-          ["@prisma/get-platform", "npm:5.12.0-dev.46"]\
+          ["@prisma/engines", "npm:5.12.0"],\
+          ["@prisma/debug", "npm:5.12.0"],\
+          ["@prisma/engines-version", "npm:5.12.0-21.473ed3124229e22d881cb7addf559799debae1ab"],\
+          ["@prisma/fetch-engine", "npm:5.12.0"],\
+          ["@prisma/get-platform", "npm:5.12.0"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@prisma/engines-version", [\
-      ["npm:5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9", {\
-        "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9-9d36734c5f-5e54531754.zip/node_modules/@prisma/engines-version/",\
+      ["npm:5.12.0-21.473ed3124229e22d881cb7addf559799debae1ab", {\
+        "packageLocation": "./.yarn/cache/@prisma-engines-version-npm-5.12.0-21.473ed3124229e22d881cb7addf559799debae1ab-6c4e73c389-99db2c71a0.zip/node_modules/@prisma/engines-version/",\
         "packageDependencies": [\
-          ["@prisma/engines-version", "npm:5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9"]\
+          ["@prisma/engines-version", "npm:5.12.0-21.473ed3124229e22d881cb7addf559799debae1ab"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@prisma/fetch-engine", [\
-      ["npm:5.12.0-dev.46", {\
-        "packageLocation": "./.yarn/cache/@prisma-fetch-engine-npm-5.12.0-dev.46-dc96260e0c-d39234c061.zip/node_modules/@prisma/fetch-engine/",\
+      ["npm:5.12.0", {\
+        "packageLocation": "./.yarn/cache/@prisma-fetch-engine-npm-5.12.0-cf02a7aebd-2eeab9e0ba.zip/node_modules/@prisma/fetch-engine/",\
         "packageDependencies": [\
-          ["@prisma/fetch-engine", "npm:5.12.0-dev.46"],\
-          ["@prisma/debug", "npm:5.12.0-dev.46"],\
-          ["@prisma/engines-version", "npm:5.12.0-17.12fad4795eef0c21ed444646215f274961d99cf9"],\
-          ["@prisma/get-platform", "npm:5.12.0-dev.46"]\
+          ["@prisma/fetch-engine", "npm:5.12.0"],\
+          ["@prisma/debug", "npm:5.12.0"],\
+          ["@prisma/engines-version", "npm:5.12.0-21.473ed3124229e22d881cb7addf559799debae1ab"],\
+          ["@prisma/get-platform", "npm:5.12.0"]\
         ],\
         "linkType": "HARD"\
       }]\
     ]],\
     ["@prisma/get-platform", [\
-      ["npm:5.12.0-dev.46", {\
-        "packageLocation": "./.yarn/cache/@prisma-get-platform-npm-5.12.0-dev.46-edf956e5aa-76f2ba09fe.zip/node_modules/@prisma/get-platform/",\
+      ["npm:5.12.0", {\
+        "packageLocation": "./.yarn/cache/@prisma-get-platform-npm-5.12.0-8f8d3deb83-ef2a5c0c79.zip/node_modules/@prisma/get-platform/",\
         "packageDependencies": [\
-          ["@prisma/get-platform", "npm:5.12.0-dev.46"],\
-          ["@prisma/debug", "npm:5.12.0-dev.46"]\
+          ["@prisma/get-platform", "npm:5.12.0"],\
+          ["@prisma/debug", "npm:5.12.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -11355,11 +11355,11 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["npm:5.12.0-dev.46", {\
-        "packageLocation": "./.yarn/unplugged/prisma-npm-5.12.0-dev.46-fb95a5afdb/node_modules/prisma/",\
+      ["npm:5.12.0", {\
+        "packageLocation": "./.yarn/unplugged/prisma-npm-5.12.0-31c51fa1da/node_modules/prisma/",\
         "packageDependencies": [\
-          ["prisma", "npm:5.12.0-dev.46"],\
-          ["@prisma/engines", "npm:5.12.0-dev.46"]\
+          ["prisma", "npm:5.12.0"],\
+          ["@prisma/engines", "npm:5.12.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13116,7 +13116,7 @@ const RAW_RUNTIME_STATE =
           ["pathfinding", "npm:0.4.18"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
-          ["prisma", "npm:5.12.0-dev.46"],\
+          ["prisma", "npm:5.12.0"],\
           ["queue-typescript", "npm:1.0.1"],\
           ["react", "npm:18.2.0"],\
           ["react-bootstrap", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.10.0"],\
