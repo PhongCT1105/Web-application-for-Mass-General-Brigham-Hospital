@@ -14,6 +14,9 @@ import {
 import { Car, Church, FlowerIcon } from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
 
+// const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
+// const randomItem = items[Math.floor(Math.random() * items.length)];
+
 export default function ServiceRequestPage() {
   return (
     <div className={" scrollbar-hide"}>
