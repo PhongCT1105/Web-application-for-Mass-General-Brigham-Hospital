@@ -49,10 +49,22 @@ model User {
   // flowerReq flowerRequest[] @relation("reqUser")
 }
 
+// model Flower {
+//   // fID       Int             @id @default(autoincrement())
+//   name      String          @id
+//   // cost      Float
+//   flowerreq flowerRequest[] @relation("Flowers")
+// }
+
 model flowerRequest {
-  reqID Int    @id @default(autoincrement())
+  reqID     Int     @id @default(autoincrement())
   // reqUser User     @relation("reqUser", fields: [userID], references: [userID], onDelete: Cascade)
   // userID  Int
-  name  String
-  cost  Float
+  cartItems String //@relation("Flowers")
+  // cartItems String?
+  location  String
+  message   String?
+  recipient String
+  sender    String
+  total     Float
 }
