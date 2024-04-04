@@ -19,17 +19,19 @@ interface RequestForm {
 }
 
 function productsToString(products: cartItem[]): string {
-    return products.map(product => `${product.name},${product.cost}`).join(",");
+  return products.map((product) => `${product.name},${product.cost}`).join(",");
 }
 
 router.post("/", async (req: Request, res: Response) => {
   try {
     const requestBody = req.body;
+    console.log(requestBody);
     const jsonString = JSON.stringify(requestBody);
     console.log("JSON String:", jsonString);
 
     // Parse the JSON string back into an object
-    const requestForm: RequestForm = JSON.parse(jsonString)[0];
+    const requestForm: RequestForm = JSON.parse(jsonString);
+    console.log(requestForm);
     const cartItems = requestForm.cartItems;
     const namesString = productsToString(cartItems);
 
@@ -49,7 +51,6 @@ router.post("/", async (req: Request, res: Response) => {
     res.sendStatus(400); // Send error
     return; // Don't try to send duplicate statuses
   }
-
 });
 
 router.get("/", async function (req: Request, res: Response) {
