@@ -1,5 +1,8 @@
+// Importing necessary modules from React and react-router-dom library
 import React from "react";
 import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
+
+// Importing different pages and components for routing
 import LoginPage from "./routes/LoginPage.tsx";
 import HomePage from "./routes/HomePage.tsx"; // Correct import path
 import AboutUsPage from "./routes/AboutUsPage.tsx"; // Correct import path

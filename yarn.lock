@@ -1181,6 +1181,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@prisma/client@npm:5.12.0-dev.46":
+  version: 5.12.0-dev.46
+  resolution: "@prisma/client@npm:5.12.0-dev.46"
+  peerDependencies:
+    prisma: "*"
+  peerDependenciesMeta:
+    prisma:
+      optional: true
+  checksum: 9e2e4926769eaf8c113148fa99270217e97764d12130f0a831d0c011ea9da17ef1518ea2c036d5ac8bd62100cb499ac9f599c850930b695cb044c35d013e3b0c
+  languageName: node
+  linkType: hard
+
 "@prisma/client@npm:^5.12.0":
   version: 5.12.0
   resolution: "@prisma/client@npm:5.12.0"
@@ -5163,7 +5175,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "database@workspace:packages/database"
   dependencies:
-    "@prisma/client": "npm:^5.12.0"
+    "@prisma/client": "npm:5.12.0-dev.46"
     "@types/node": "npm:^20.11.30"
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"

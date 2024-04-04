@@ -1577,9 +1577,16 @@ const RAW_RUNTIME_STATE =
     ]],\
     ["@prisma/client", [\
       ["npm:5.12.0", {\
-        "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-f09cd73dbc/node_modules/@prisma/client/",\
+        "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-9938d78b4d/node_modules/@prisma/client/",\
         "packageDependencies": [\
           ["@prisma/client", "npm:5.12.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["npm:5.12.0-dev.46", {\
+        "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-2e915707a8/node_modules/@prisma/client/",\
+        "packageDependencies": [\
+          ["@prisma/client", "npm:5.12.0-dev.46"]\
         ],\
         "linkType": "SOFT"\
       }],\
@@ -1596,10 +1603,10 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
-      ["virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:5.12.0", {\
-        "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-f09cd73dbc/node_modules/@prisma/client/",\
+      ["virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:5.12.0-dev.46", {\
+        "packageLocation": "./.yarn/unplugged/@prisma-client-virtual-2e915707a8/node_modules/@prisma/client/",\
         "packageDependencies": [\
-          ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:5.12.0"],\
+          ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:5.12.0-dev.46"],\
           ["@types/prisma", null],\
           ["prisma", "npm:4.15.0"]\
         ],\
@@ -6676,7 +6683,7 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./packages/database/",\
         "packageDependencies": [\
           ["database", "workspace:packages/database"],\
-          ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:5.12.0"],\
+          ["@prisma/client", "virtual:fe27c481e11f854f2aaf80c4760560439cddfbeba750e60d2e16a63e1f6a6a95afa15077c31c3bb85454931e3cde1f859cec18d092f611e16a968032948f7247#npm:5.12.0-dev.46"],\
           ["@types/node", "npm:20.12.2"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
