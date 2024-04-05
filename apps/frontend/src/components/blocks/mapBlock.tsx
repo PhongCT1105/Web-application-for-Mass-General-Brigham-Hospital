@@ -132,9 +132,11 @@ export const MapBlock: React.FC = () => {
   useEffect(() => {
     drawNodes();
   }, []);
+
   function addToPaths(newPath: Polyline) {
     setPaths((prevPaths) => [...prevPaths, newPath]);
   }
+
   function drawPath(start: string, end: string) {
     const startHospital = hospitalData.find((h) => h.nodeID === start);
     const endHospital = hospitalData.find((h) => h.nodeID === end);
@@ -205,7 +207,11 @@ export const MapBlock: React.FC = () => {
       {/* SearchBar component */}
       <div style={{ flex: 1, padding: "10px" }}>
         <SearchBar
-          locations={hospitalDataString.sort((a, b) => a.localeCompare(b))}
+          locations={hospitalDataString
+            .sort((a, b) => a.localeCompare(b))
+            .filter(function (str) {
+              return str.indexOf("Hallway") === -1;
+            })}
           onSearch={handleSearch}
           onClear={clearLines} // Pass the clearLine function to SearchBar
         />
