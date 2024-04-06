@@ -11,6 +11,7 @@ interface SearchBarProps {
   locations: string[];
   onSearch: (start: string, end: string) => void;
   onClear: () => void; // New prop for handling clearing
+  currentFloor: string;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
