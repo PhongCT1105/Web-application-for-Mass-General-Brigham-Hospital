@@ -102,6 +102,8 @@ export const MapBlock: React.FC = () => {
       console.log("Hospital Data:", hospitalData);
       console.log("Hospital Graph:", hospitalGraph);
 
+      // Initialize the map with the correct initial floor image
+      const initialFloorImage = floorMaps["lowerLevel1"]; // Change this to the desired initial floor
       const map: Map = L.map("map-container", {
         crs: CRS.Simple,
         minZoom: -2,
@@ -116,11 +118,7 @@ export const MapBlock: React.FC = () => {
         [3400, 5000], // change to resolution of the image
       ];
 
-      L.imageOverlay(floorMaps["lowerLevel1"], map.getBounds()).addTo(map);
-      L.imageOverlay(floorMaps["lowerLevel2"], map.getBounds()).addTo(map);
-      L.imageOverlay(floorMaps["theFirstFloor"], map.getBounds()).addTo(map);
-      L.imageOverlay(floorMaps["theSecondFloor"], map.getBounds()).addTo(map);
-      L.imageOverlay(floorMaps["theThirdFloor"], map.getBounds()).addTo(map);
+      L.imageOverlay(initialFloorImage, map.getBounds()).addTo(map);
       map.setMaxBounds(bounds);
 
       hospitalData.forEach((hospital) => {
