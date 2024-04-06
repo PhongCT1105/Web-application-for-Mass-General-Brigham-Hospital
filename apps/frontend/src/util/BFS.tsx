@@ -1,9 +1,12 @@
-import { Graph } from "./graph.tsx";
-import { Node } from "./node.tsx";
+import { Graph } from "./Graph.tsx";
+import { Node } from "./Node.tsx";
 import { Queue } from "queue-typescript";
 
 export class BFS {
   static run(graph: Graph, startNodeID: string, endNodeID: string) {
+    console.log(graph);
+    console.log(startNodeID);
+    console.log(endNodeID);
     // setting up queue, visited, distance, and parent
     const visited: Set<string> = new Set();
     const queue = new Queue<{ nodeID: string; distance: number }>();

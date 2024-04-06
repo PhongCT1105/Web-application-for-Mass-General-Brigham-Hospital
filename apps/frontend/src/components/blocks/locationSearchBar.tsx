@@ -6,17 +6,25 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  BFSPathfindingStrategy,
+  PathfindingStrategy,
+  AStarPathfindingStrategy,
+} from "@/util/PathfindingStrategy.tsx";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 
 interface SearchBarProps {
   locations: string[];
   onSearch: (start: string, end: string) => void;
   onClear: () => void; // New prop for handling clearing
+  changePathfindingStrategy: (strategy: PathfindingStrategy) => void; // New prop for changing pathfinding strategy
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
   locations,
   onSearch,
   onClear,
+  changePathfindingStrategy, // New prop
 }) => {
   const [startPoint, setStartPoint] = useState<string>("");
   const [endPoint, setEndPoint] = useState<string>("");
@@ -34,7 +42,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div className="flex flex-col items-center">
-      <h3 className="mb-3 mt-0 text-center">Path Search</h3>
+      <h3 className="mb-3 mt-0 text-center text-2xl">Path Search</h3>
       <div className="flex mb-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -72,6 +80,43 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             ))}
           </DropdownMenuContent>
         </DropdownMenu>
+      </div>
+
+      <Tabs defaultValue="account" className="w-[400px]">
+        <TabsList>
+          <TabsTrigger
+            value="account"
+            onClick={() =>
+              changePathfindingStrategy(new BFSPathfindingStrategy())
+            }
+          >
+            Account
+          </TabsTrigger>
+          <TabsTrigger value="password">Password</TabsTrigger>
+        </TabsList>
+        {/*<TabsContent value="account">Make changes to your account here.</TabsContent>*/}
+        {/*<TabsContent value="password">Change your password here.</TabsContent>*/}
+      </Tabs>
+
+      <div className="flex mb-4">
+        {/* Button to switch to BFS strategy */}
+        <button
+          onClick={() =>
+            changePathfindingStrategy(new BFSPathfindingStrategy())
+          }
+          className="px-8 py-2 bg-green-500 text-white rounded cursor-pointer mr-2"
+        >
+          BFS
+        </button>
+        {/* Button to switch to A* strategy */}
+        <button
+          onClick={() =>
+            changePathfindingStrategy(new AStarPathfindingStrategy())
+          }
+          className="px-8 py-2 bg-green-500 text-white rounded cursor-pointer"
+        >
+          A*
+        </button>
       </div>
 
       <div className="flex mb-4">

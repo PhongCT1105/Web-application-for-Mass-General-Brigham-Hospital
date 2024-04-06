@@ -6,11 +6,12 @@ import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/locationSearchBar";
 import axios from "axios";
-import { Graph } from "@/util/graph.tsx";
-import { Node } from "../../util/node.tsx";
-import { BFS } from "@/util/bfs.tsx";
-//import { Edge } from "../../util/edge.tsx";
-// import {mapReq} from "common/src/mapReq.ts";
+import { Graph } from "@/util/Graph.tsx";
+import { Node } from "../../util/Node.tsx";
+import {
+  BFSPathfindingStrategy,
+  PathfindingStrategy,
+} from "@/util/PathfindingStrategy.tsx";
 
 interface HospitalData {
   nodeID: string;
@@ -28,14 +29,18 @@ export const MapBlock: React.FC = () => {
   // const [path, setPath] = useState<Polyline | null>(null);
   const [paths, setPaths] = useState<Polyline[]>([]);
   const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
+  const [pathfindingStrategy, setPathfindingStrategy] =
+    useState<PathfindingStrategy>(new BFSPathfindingStrategy());
+
+  const changePathfindingStrategy = (strategy: PathfindingStrategy) => {
+    setPathfindingStrategy(strategy);
+  };
 
   const [graph, setGraph] = useState<Graph>(new Graph());
 
   const drawNodes = async () => {
     const { data: edgeData } = await axios.get("/api/mapreq/edges");
     const { data: nodeData } = await axios.get("/api/mapreq/nodes");
-
-    console.log(edgeData);
 
     const stringData: string[] = [];
 
@@ -46,8 +51,6 @@ export const MapBlock: React.FC = () => {
         name: nodeData[i].longName,
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
       });
-
-      console.log(hospitalData);
       stringData.push(nodeData[i].longName);
 
       newGraph.addNode(
@@ -65,16 +68,9 @@ export const MapBlock: React.FC = () => {
       );
     }
 
-    console.log("Nodes added");
-    console.log(newGraph);
-
     for (let i = 0; i < edgeData.length; i++) {
-      console.log(edgeData[i].startNodeID + edgeData[i].endNodeID);
       newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
     }
-
-    console.log("Edges added??????");
-    console.log(newGraph);
     setHospitalDataString(stringData);
     setGraph(newGraph);
 
@@ -164,12 +160,15 @@ export const MapBlock: React.FC = () => {
       console.error("Start or end node not found in the graph.");
       return;
     }
-
-    const nodes: Node[] = BFS.run(graph, startNode, endNode);
+    console.log("A path should be created now");
+    const nodes: Node[] = pathfindingStrategy.findPath(
+      graph,
+      startNode,
+      endNode,
+    );
 
     console.log(nodes);
     for (let i = 0; i < nodes.length - 1; i++) {
-      console.log("A path should be created now");
       drawPath(nodes[i].nodeID, nodes[i + 1].nodeID);
     }
     console.log("done :D");
@@ -214,6 +213,7 @@ export const MapBlock: React.FC = () => {
             })}
           onSearch={handleSearch}
           onClear={clearLines} // Pass the clearLine function to SearchBar
+          changePathfindingStrategy={changePathfindingStrategy} // Pass the changePathfindingStrategy function to SearchBar
         />
       </div>
       {/* Map container */}
