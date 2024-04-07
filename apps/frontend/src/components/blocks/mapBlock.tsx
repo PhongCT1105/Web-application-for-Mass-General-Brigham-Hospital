@@ -20,6 +20,7 @@ interface HospitalData {
   nodeID: string;
   name: string;
   geocode: string;
+  floor: string;
 }
 
 let hospitalGraph = new Graph();
@@ -43,6 +44,21 @@ export const MapBlock: React.FC = () => {
     theThirdFloor: theThirdFloor,
   };
 
+  useEffect(() => {
+    const preloadedImages = [
+      lowerLevelMap1,
+      lowerLevelMap2,
+      theFirstFloor,
+      theSecondFloor,
+      theThirdFloor,
+    ];
+
+    preloadedImages.forEach((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+  }, []);
+
   const drawNodes = async () => {
     const { data: edgeData } = await axios.get("/api/mapreq/edges");
     const { data: nodeData } = await axios.get("/api/mapreq/nodes");
@@ -57,6 +73,7 @@ export const MapBlock: React.FC = () => {
         nodeID: nodeData[i].nodeID,
         name: nodeData[i].longName,
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
+        floor: nodeData[i].longName,
       });
 
       console.log(hospitalData);
@@ -119,25 +136,29 @@ export const MapBlock: React.FC = () => {
         iconSize: [12, 12],
         iconAnchor: [6, 6],
       });
-      const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
-      const nLat = 3400 - lng;
-      const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
 
-      // Add a click event handler to toggle popup visibility
-      const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-      marker.bindPopup(popupContent);
+      // Check if the hospital is on lowerLevelMap1 before adding the marker
+      if (hospital.floor === "lowerLevel1") {
+        const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
+        const nLat = 3400 - lng;
+        const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
 
-      marker.on("click", function (this: L.Marker) {
-        // Specify the type of 'this' as L.Marker
-        if (!this.isPopupOpen()) {
-          // Check if the popup is not already open
-          this.openPopup(); // Open the popup when the marker is clicked
-        }
-      });
+        // Add a click event handler to toggle popup visibility
+        const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+        marker.bindPopup(popupContent);
 
-      return () => {
-        map.remove();
-      };
+        marker.on("click", function (this: L.Marker) {
+          // Specify the type of 'this' as L.Marker
+          if (!this.isPopupOpen()) {
+            // Check if the popup is not already open
+            this.openPopup(); // Open the popup when the marker is clicked
+          }
+        });
+
+        return () => {
+          map.remove();
+        };
+      }
     });
   };
 
@@ -196,6 +217,7 @@ export const MapBlock: React.FC = () => {
 
     const newPath = L.polyline([startCoordinates, endCoordinates], {
       color: "blue",
+      weight: 5,
     }).addTo(map);
     addToPaths(newPath); // Add the new path to the paths list
   }
