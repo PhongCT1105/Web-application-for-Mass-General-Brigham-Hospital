@@ -10,7 +10,7 @@ async function readCsvFile() {
   await prisma.nodes.deleteMany();
 
   //---------------NODE---------------
-  const nodesCSV = fs.readFileSync("./resources/L1Nodes.csv", "utf8");
+  const nodesCSV = fs.readFileSync("./resources/allNodes.csv", "utf8");
   const nodesData: string[] = nodesCSV.trim().split("\n").slice(1);
   const nodes = nodesData.map((nodesData) => {
     const [
@@ -49,15 +49,15 @@ async function readCsvFile() {
     */
 
   //---------------EDGE---------------
-  const edgesCSV = fs.readFileSync("./resources/L1Edges.csv", "utf8");
+  const edgesCSV = fs.readFileSync("./resources/allEdges.csv", "utf8");
   const edgesData: string[] = edgesCSV
     .trim()
     .replace(/\r/g, "")
     .split("\n")
     .slice(1);
   const edges = edgesData.map((edge) => {
-    const [startNodeID, endNodeID] = edge.split(",");
-    return { startNodeID, endNodeID };
+    const [eID, startNodeID, endNodeID] = edge.split(",");
+    return { eID, startNodeID, endNodeID };
   });
 
   // Insert edge into database
@@ -81,6 +81,7 @@ async function readCsvFile() {
   });
 }
 
+/*
 async function exportToCsv() {
   //---------------NODE---------------
   const nodes = await prisma.nodes.findMany();
@@ -110,6 +111,7 @@ async function exportToCsv() {
   fs.writeFileSync("./resources/edges.csv", edgeCSV);
   console.log("Data is saved into './resources/edges.csv'");
 }
+*/
 
 /*
 async function importFlower() {
@@ -131,4 +133,4 @@ async function importFlower() {
 
 //importFlower();
 readCsvFile();
-exportToCsv();
+//exportToCsv();
