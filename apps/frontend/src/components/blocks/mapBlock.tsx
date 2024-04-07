@@ -267,7 +267,7 @@ export const MapBlock: React.FC = () => {
           locations={hospitalDataString
             .sort((a, b) => a.localeCompare(b))
             .filter(function (str) {
-              return str.indexOf("Hallway") === -1;
+              return str.indexOf("Hall") === -1;
             })}
           onSearch={handleSearch}
           onClear={clearLines} // Pass the clearLine function to SearchBar
