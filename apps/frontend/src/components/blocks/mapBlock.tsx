@@ -1,7 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import L, { CRS, LatLngBoundsExpression, Map, Polyline, Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
-import lowerLevelMap from "@/assets/lower-level-map.png";
+import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
+import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
+import theFirstFloor from "@/assets/01_thefirstfloor.png";
+import theSecondFloor from "@/assets/02_thesecondfloor.png";
+import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/locationSearchBar";
@@ -17,6 +21,7 @@ interface HospitalData {
   nodeID: string;
   name: string;
   geocode: string;
+  floor: string;
 }
 
 let hospitalGraph = new Graph();
@@ -37,6 +42,30 @@ export const MapBlock: React.FC = () => {
   };
 
   const [graph, setGraph] = useState<Graph>(new Graph());
+  const [currentFloor, setCurrentFloor] = useState("lowerLevel1");
+
+  const floorMaps: { [key: string]: string } = {
+    lowerLevel1: lowerLevelMap1,
+    lowerLevel2: lowerLevelMap2,
+    theFirstFloor: theFirstFloor,
+    theSecondFloor: theSecondFloor,
+    theThirdFloor: theThirdFloor,
+  };
+
+  useEffect(() => {
+    const preloadedImages = [
+      lowerLevelMap1,
+      lowerLevelMap2,
+      theFirstFloor,
+      theSecondFloor,
+      theThirdFloor,
+    ];
+
+    preloadedImages.forEach((image) => {
+      const img = new Image();
+      img.src = image;
+    });
+  }, []);
 
   const drawNodes = async () => {
     const { data: edgeData } = await axios.get("/api/mapreq/edges");
@@ -50,6 +79,7 @@ export const MapBlock: React.FC = () => {
         nodeID: nodeData[i].nodeID,
         name: nodeData[i].longName,
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
+        floor: nodeData[i].longName,
       });
       stringData.push(nodeData[i].longName);
 
@@ -93,7 +123,7 @@ export const MapBlock: React.FC = () => {
       [3400, 5000], // change to resolution of the image
     ];
 
-    L.imageOverlay(lowerLevelMap, bounds).addTo(map);
+    L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
 
     map.setMaxBounds(bounds);
 
@@ -103,25 +133,29 @@ export const MapBlock: React.FC = () => {
         iconSize: [12, 12],
         iconAnchor: [6, 6],
       });
-      const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
-      const nLat = 3400 - lng;
-      const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
 
-      // Add a click event handler to toggle popup visibility
-      const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-      marker.bindPopup(popupContent);
+      // Check if the hospital is on lowerLevelMap1 before adding the marker
+      if (hospital.floor === "lowerLevel1") {
+        const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
+        const nLat = 3400 - lng;
+        const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
 
-      marker.on("click", function (this: L.Marker) {
-        // Specify the type of 'this' as L.Marker
-        if (!this.isPopupOpen()) {
-          // Check if the popup is not already open
-          this.openPopup(); // Open the popup when the marker is clicked
-        }
-      });
+        // Add a click event handler to toggle popup visibility
+        const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+        marker.bindPopup(popupContent);
 
-      return () => {
-        map.remove();
-      };
+        marker.on("click", function (this: L.Marker) {
+          // Specify the type of 'this' as L.Marker
+          if (!this.isPopupOpen()) {
+            // Check if the popup is not already open
+            this.openPopup(); // Open the popup when the marker is clicked
+          }
+        });
+
+        return () => {
+          map.remove();
+        };
+      }
     });
   };
 
@@ -183,6 +217,7 @@ export const MapBlock: React.FC = () => {
 
     const newPath = L.polyline([startCoordinates, endCoordinates], {
       color: "blue",
+      weight: 5,
     }).addTo(map);
     addToPaths(newPath); // Add the new path to the paths list
   }
@@ -201,9 +236,32 @@ export const MapBlock: React.FC = () => {
     drawFullPath(graph, start, end);
   }
 
+  function changeFloor(floorName: string) {
+    const map = mapRef.current;
+    if (!map) return;
+
+    setCurrentFloor(floorName);
+
+    map.eachLayer((layer) => {
+      if (layer instanceof L.ImageOverlay) {
+        map.removeLayer(layer);
+      }
+    });
+
+    if (floorMaps[floorName]) {
+      const initialFloorImage = floorMaps[floorName];
+      const bounds: LatLngBoundsExpression = [
+        [0, 0],
+        [3400, 5000], // Update with actual resolution
+      ];
+      L.imageOverlay(initialFloorImage, bounds).addTo(map);
+      map.setMaxBounds(bounds);
+    }
+  }
+
+  console.log("Rendering MapBlock");
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
-      {/* SearchBar component */}
       <div style={{ flex: 1, padding: "10px" }}>
         <SearchBar
           locations={hospitalDataString
@@ -214,17 +272,62 @@ export const MapBlock: React.FC = () => {
           onSearch={handleSearch}
           onClear={clearLines} // Pass the clearLine function to SearchBar
           changePathfindingStrategy={changePathfindingStrategy} // Pass the changePathfindingStrategy function to SearchBar
+          currentFloor={currentFloor}
         />
       </div>
-      {/* Map container */}
       <div
         id="map-container"
         style={{
           flex: 2.5,
           backgroundColor: "gray-300",
           position: "relative",
+          zIndex: 0,
         }}
-      ></div>
+      >
+        <div
+          style={{
+            position: "absolute",
+            bottom: 10,
+            left: "50%",
+            transform: "translateX(-50%)",
+            display: "flex",
+            justifyContent: "space-around",
+            width: "80%",
+            zIndex: 1000,
+          }}
+        >
+          <button
+            style={{ color: "black" }}
+            onClick={() => changeFloor("lowerLevel1")}
+          >
+            Lower Level 1
+          </button>
+          <button
+            style={{ color: "black" }}
+            onClick={() => changeFloor("lowerLevel2")}
+          >
+            Lower Level 2
+          </button>
+          <button
+            style={{ color: "black" }}
+            onClick={() => changeFloor("theFirstFloor")}
+          >
+            First Floor
+          </button>
+          <button
+            style={{ color: "black" }}
+            onClick={() => changeFloor("theSecondFloor")}
+          >
+            Second Floor
+          </button>
+          <button
+            style={{ color: "black" }}
+            onClick={() => changeFloor("theThirdFloor")}
+          >
+            Third Floor
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

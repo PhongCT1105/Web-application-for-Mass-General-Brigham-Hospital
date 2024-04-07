@@ -17,6 +17,7 @@ interface SearchBarProps {
   locations: string[];
   onSearch: (start: string, end: string) => void;
   onClear: () => void; // New prop for handling clearing
+  currentFloor: string;
   changePathfindingStrategy: (strategy: PathfindingStrategy) => void; // New prop for changing pathfinding strategy
 }
 
