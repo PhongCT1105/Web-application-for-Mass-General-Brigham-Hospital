@@ -80,7 +80,7 @@ export const MapBlock: React.FC = () => {
         nodeID: nodeData[i].nodeID,
         name: nodeData[i].longName,
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
-        floor: nodeData[i].longName,
+        floor: nodeData[i].floor, // Use the correct property for the floor
       });
       stringData.push(nodeData[i].longName);
 
@@ -125,11 +125,9 @@ export const MapBlock: React.FC = () => {
       [3400, 5000], // change to resolution of the image
     ];
 
-    L.imageOverlay(theThirdFloor, bounds).addTo(map);
-    L.imageOverlay(theSecondFloor, bounds).addTo(map);
-    L.imageOverlay(theFirstFloor, bounds).addTo(map);
-    L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
-    L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
+    // Display the map image overlay based on the current floor
+    const currentFloorMap = floorMaps[currentFloor];
+    L.imageOverlay(currentFloorMap, bounds).addTo(map);
 
     map.setMaxBounds(bounds);
 
@@ -140,8 +138,8 @@ export const MapBlock: React.FC = () => {
         iconAnchor: [6, 6],
       });
 
-      // Check if the hospital is on lowerLevelMap1 before adding the marker
-      if (hospital.floor === "lowerLevel1") {
+      // Check if the hospital is on the current floor before adding the marker
+      if (hospital.floor === currentFloor) {
         console.log(hospital);
         const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
         const nLat = 3400 - lng;
@@ -158,17 +156,15 @@ export const MapBlock: React.FC = () => {
             this.openPopup(); // Open the popup when the marker is clicked
           }
         });
-
-        return () => {
-          map.remove();
-        };
       }
     });
+
     console.log(map);
   };
 
   useEffect(() => {
     drawNodes();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   function addToPaths(newPath: Polyline) {
@@ -273,12 +269,10 @@ export const MapBlock: React.FC = () => {
         <SearchBar
           locations={hospitalDataString
             .sort((a, b) => a.localeCompare(b))
-            .filter(function (str) {
-              return str.indexOf("Hallway") === -1;
-            })}
+            .filter((str) => str.indexOf("Hallway") === -1)}
           onSearch={handleSearch}
-          onClear={clearLines} // Pass the clearLine function to SearchBar
-          changePathfindingStrategy={changePathfindingStrategy} // Pass the changePathfindingStrategy function to SearchBar
+          onClear={clearLines}
+          changePathfindingStrategy={changePathfindingStrategy}
           currentFloor={currentFloor}
         />
       </div>
@@ -301,36 +295,22 @@ export const MapBlock: React.FC = () => {
             justifyContent: "space-around",
             width: "80%",
             zIndex: 1000,
+            color: "black",
           }}
         >
-          <button
-            style={{ color: "black" }}
-            onClick={() => changeFloor("lowerLevel1")}
-          >
+          <button onClick={() => changeFloor("lowerLevel1")}>
             Lower Level 1
           </button>
-          <button
-            style={{ color: "black" }}
-            onClick={() => changeFloor("lowerLevel2")}
-          >
+          <button onClick={() => changeFloor("lowerLevel2")}>
             Lower Level 2
           </button>
-          <button
-            style={{ color: "black" }}
-            onClick={() => changeFloor("theFirstFloor")}
-          >
+          <button onClick={() => changeFloor("theFirstFloor")}>
             First Floor
           </button>
-          <button
-            style={{ color: "black" }}
-            onClick={() => changeFloor("theSecondFloor")}
-          >
+          <button onClick={() => changeFloor("theSecondFloor")}>
             Second Floor
           </button>
-          <button
-            style={{ color: "black" }}
-            onClick={() => changeFloor("theThirdFloor")}
-          >
+          <button onClick={() => changeFloor("theThirdFloor")}>
             Third Floor
           </button>
         </div>
