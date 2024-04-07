@@ -111,6 +111,7 @@ async function exportToCsv() {
   fs.writeFileSync("./resources/edges.csv", edgeCSV);
   console.log("Data is saved into './resources/edges.csv'");
 }
+*/
 
 /*
 async function importFlower() {
