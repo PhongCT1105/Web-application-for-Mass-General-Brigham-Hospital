@@ -69,8 +69,9 @@ export const MapBlock: React.FC = () => {
 
   const drawNodes = async () => {
     const { data: edgeData } = await axios.get("/api/mapreq/edges");
+    console.log(edgeData);
     const { data: nodeData } = await axios.get("/api/mapreq/nodes");
-
+    console.log(nodeData);
     const stringData: string[] = [];
 
     const newGraph: Graph = new Graph();
@@ -96,6 +97,7 @@ export const MapBlock: React.FC = () => {
           new Set<Node>(),
         ),
       );
+      console.log(hospitalData);
     }
 
     for (let i = 0; i < edgeData.length; i++) {
@@ -140,6 +142,7 @@ export const MapBlock: React.FC = () => {
 
       // Check if the hospital is on lowerLevelMap1 before adding the marker
       if (hospital.floor === "lowerLevel1") {
+        console.log(hospital);
         const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
         const nLat = 3400 - lng;
         const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
@@ -161,35 +164,8 @@ export const MapBlock: React.FC = () => {
         };
       }
     });
+    console.log(map);
   };
-
-  function drawNodesOnFloor(floorName: string) {
-    const map = mapRef.current;
-    if (!map) return;
-
-    hospitalData.forEach((hospital) => {
-      const customIcon = new Icon({
-        iconUrl: RedDot,
-        iconSize: [12, 12],
-        iconAnchor: [6, 6],
-      });
-
-      if (hospital.floor === floorName) {
-        const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
-        const nLat = 3400 - lng;
-        const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
-
-        const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-        marker.bindPopup(popupContent);
-
-        marker.on("click", function (this: L.Marker) {
-          if (!this.isPopupOpen()) {
-            this.openPopup();
-          }
-        });
-      }
-    });
-  }
 
   useEffect(() => {
     drawNodes();
@@ -288,7 +264,6 @@ export const MapBlock: React.FC = () => {
       ];
       L.imageOverlay(initialFloorImage, bounds).addTo(map);
       map.setMaxBounds(bounds);
-      drawNodesOnFloor(currentFloor);
     }
   }
 

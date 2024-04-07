@@ -18,7 +18,7 @@ interface SearchBarProps {
   onSearch: (start: string, end: string) => void;
   onClear: () => void; // New prop for handling clearing
   currentFloor: string;
-  changePathfindingStrategy: (strategy: PathfindingStrategy) => void; // New prop for changing pathfinding strategy
+  changePathfindingStrategy: (strategy: PathfindingStrategy) => void; // Corrected function signature
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
