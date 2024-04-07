@@ -29,6 +29,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const [startPoint, setStartPoint] = useState<string>("");
   const [endPoint, setEndPoint] = useState<string>("");
+  const filteredLocations = locations.filter((loc) => {
+    // Check if the location is not a hallway and does not start with "Hall"
+    return !loc.includes("Hallway") && !loc.startsWith("Hall");
+  });
 
   const handleSearch = () => {
     onClear();
@@ -52,7 +56,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
-            {locations.map((location, index) => (
+            {filteredLocations.map((location, index) => (
               <DropdownMenuRadioItem
                 key={index}
                 value={location}
@@ -70,7 +74,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
-            {locations.map((location, index) => (
+            {filteredLocations.map((location, index) => (
               <DropdownMenuRadioItem
                 key={index}
                 value={location}
