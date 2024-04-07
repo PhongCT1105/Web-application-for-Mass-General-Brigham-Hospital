@@ -123,6 +123,10 @@ export const MapBlock: React.FC = () => {
       [3400, 5000], // change to resolution of the image
     ];
 
+    L.imageOverlay(theThirdFloor, bounds).addTo(map);
+    L.imageOverlay(theSecondFloor, bounds).addTo(map);
+    L.imageOverlay(theFirstFloor, bounds).addTo(map);
+    L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
     L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
 
     map.setMaxBounds(bounds);
