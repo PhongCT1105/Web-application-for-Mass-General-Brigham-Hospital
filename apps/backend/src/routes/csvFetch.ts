@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 const router: Router = express.Router();
 
 // Node stuff good, just copy the format
-router.post("/node", async (req, res) => {
+router.post("/nodes", async (req, res) => {
   console.log("hey this is being called");
 
   const data: {
@@ -51,7 +51,7 @@ router.get("/clearnodes", async (req, res) => {
   res.status(200).json("Cleared nodes and edges");
 });
 
-router.post("/edge", async (req, res) => {
+router.post("/edges", async (req, res) => {
   console.log("hey this is being called");
   const data: {
     eID: string;
@@ -74,7 +74,7 @@ router.post("/edge", async (req, res) => {
   }
 });
 
-router.get("/node", async (req, res) => {
+router.get("/nodes", async (req, res) => {
   try {
     const nodes = await prisma.nodes.findMany();
     res.status(200).json(nodes);
@@ -85,7 +85,7 @@ router.get("/node", async (req, res) => {
 });
 
 // Fetch edges from the database and send them as a response
-router.get("/edge", async (req, res) => {
+router.get("/edges", async (req, res) => {
   try {
     const edges = await prisma.edges.findMany();
     res.status(200).json(edges);
