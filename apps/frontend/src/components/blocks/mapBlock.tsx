@@ -163,6 +163,34 @@ export const MapBlock: React.FC = () => {
     });
   };
 
+  function drawNodesOnFloor(floorName: string) {
+    const map = mapRef.current;
+    if (!map) return;
+
+    hospitalData.forEach((hospital) => {
+      const customIcon = new Icon({
+        iconUrl: RedDot,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
+      });
+
+      if (hospital.floor === floorName) {
+        const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
+        const nLat = 3400 - lng;
+        const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
+
+        const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+        marker.bindPopup(popupContent);
+
+        marker.on("click", function (this: L.Marker) {
+          if (!this.isPopupOpen()) {
+            this.openPopup();
+          }
+        });
+      }
+    });
+  }
+
   useEffect(() => {
     drawNodes();
   }, []);
@@ -260,10 +288,10 @@ export const MapBlock: React.FC = () => {
       ];
       L.imageOverlay(initialFloorImage, bounds).addTo(map);
       map.setMaxBounds(bounds);
+      drawNodesOnFloor(currentFloor);
     }
   }
 
-  console.log("Rendering MapBlock");
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div style={{ flex: 1, padding: "10px" }}>
