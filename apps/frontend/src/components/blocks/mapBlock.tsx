@@ -50,7 +50,7 @@ export const MapBlock: React.FC = () => {
     theFirstFloor: theFirstFloor,
     theSecondFloor: theSecondFloor,
     theThirdFloor: theThirdFloor,
-  };
+  } as const;
 
   useEffect(() => {
     const preloadedImages = [
@@ -67,11 +67,10 @@ export const MapBlock: React.FC = () => {
     });
   }, []);
 
-  const drawNodes = async () => {
+  async function drawNodes() {
     const { data: edgeData } = await axios.get("/api/mapreq/edges");
-    console.log(edgeData);
     const { data: nodeData } = await axios.get("/api/mapreq/nodes");
-    console.log(nodeData);
+
     const stringData: string[] = [];
 
     const newGraph: Graph = new Graph();
@@ -102,6 +101,7 @@ export const MapBlock: React.FC = () => {
     for (let i = 0; i < edgeData.length; i++) {
       newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
     }
+
     setHospitalDataString(stringData);
     setGraph(newGraph);
 
@@ -159,7 +159,7 @@ export const MapBlock: React.FC = () => {
     });
 
     console.log(map);
-  };
+  }
 
   useEffect(() => {
     drawNodes();
@@ -265,8 +265,8 @@ export const MapBlock: React.FC = () => {
       }
     });
 
-    if (floorMaps[floorName]) {
-      const initialFloorImage = floorMaps[floorName];
+    const initialFloorImage = floorMaps[floorName];
+    if (initialFloorImage) {
       const bounds: LatLngBoundsExpression = [
         [0, 0],
         [3400, 5000], // Update with actual resolution
