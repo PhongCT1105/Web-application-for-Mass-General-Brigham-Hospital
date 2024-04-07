@@ -113,23 +113,6 @@ async function exportToCsv() {
 }
 */
 
-/*
-async function importFlower() {
-    await prisma.flower.deleteMany();
-    await prisma.flower.create({
-        data: {
-            name: "Gift of Love",
-        }
-    });
-
-    await prisma.flower.create({
-        data: {
-            name: "Orange Tulips",
-        }
-    });
-
-}
-*/
 
 //importFlower();
 readCsvFile();
