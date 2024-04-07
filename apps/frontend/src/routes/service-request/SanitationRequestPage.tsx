@@ -132,10 +132,10 @@ export function Sanitation() {
   };
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+    <div className="gap-8">
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto max-w-lg">
-          <Card className="w-[350px]">
+          <Card className="w-[400px]">
             <CardHeader>
               <CardTitle>Sanitation Request</CardTitle>
               <CardDescription>
@@ -341,49 +341,48 @@ export function Sanitation() {
               </Button>
             </CardFooter>
           </Card>
-        </div>
-      </div>
-      <div className="hidden bg-muted lg:block"></div>
-      <p>Alex Shettler and Tracy Yang</p>
 
-      <div className="bg-gray-100 p-4 rounded-md">
-        <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
-        <ul>
-          {submittedForms.map((form, index) => (
-            <li key={index} className="mb-4">
-              <div className="font-semibold">Form {index + 1}:</div>
-              <div className="ml-2">
-                <div>
-                  <span className="font-semibold">Name:</span> {form.name}
-                </div>
-                <div>
-                  <span className="font-semibold">Severity:</span>{" "}
-                  {form.severity}
-                </div>
-                <div>
-                  <span className="font-semibold">Location:</span>{" "}
-                  {form.location}
-                </div>
-                <div>
-                  <span className="font-semibold">Type of Issue:</span>{" "}
-                  {form.typeOfIssue}
-                </div>
-                <div>
-                  <span className="font-semibold">Time of Issue:</span>{" "}
-                  {form.time}
-                </div>
-                <div>
-                  <span className="font-semibold">Description:</span>{" "}
-                  {form.description}
-                </div>
-                <div>
-                  <span className="font-semibold">Comments:</span>{" "}
-                  {form.comments}
-                </div>
-              </div>
-            </li>
-          ))}
-        </ul>
+          <div className="mt-8 bg-gray-100 p-4 rounded-md">
+            <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
+            <ul>
+              {submittedForms.map((form, index) => (
+                <li key={index} className="mb-4">
+                  <div className="font-semibold">Form {index + 1}:</div>
+                  <div className="ml-2">
+                    <div>
+                      <span className="font-semibold">Name:</span> {form.name}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Severity:</span>{" "}
+                      {form.severity}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Location:</span>{" "}
+                      {form.location}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Type of Issue:</span>{" "}
+                      {form.typeOfIssue}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Time of Issue:</span>{" "}
+                      {form.time}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Description:</span>{" "}
+                      {form.description}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Comments:</span>{" "}
+                      {form.comments}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <h2 className="mt-8 text-small ml-4">Alex Shettler and Tracy Yang</h2>
+        </div>
       </div>
     </div>
   );
