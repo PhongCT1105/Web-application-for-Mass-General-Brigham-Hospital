@@ -13,6 +13,7 @@ import {
 
 import { Car, Church, FlowerIcon } from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
+import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -46,6 +47,10 @@ export default function ServiceRequestPage() {
                           <TabsTrigger value="Transportation Request">
                             <Car className="mr-2 h-4 w-4" />
                             Transportation Request
+                          </TabsTrigger>
+                          <TabsTrigger value="Sanitation Request">
+                            <Car className="mr-2 h-4 w-4" />
+                            Sanitation Request
                           </TabsTrigger>
                         </TabsList>
                       </div>
@@ -89,6 +94,25 @@ export default function ServiceRequestPage() {
                           </div>
                         </div>
                         <Separator className="my-4" />
+                      </TabsContent>
+                      <TabsContent
+                        value={"Sanitation Request"}
+                        className={
+                          " w-full flex-col border-none p-0 data-[state=active]:flex"
+                        }
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              Sanitation Request
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                              Get sanitation services for an Issue.
+                            </p>
+                          </div>
+                        </div>
+                        <Separator className="my-4" />
+                        <Sanitation />
                       </TabsContent>
                     </Tabs>
                   </div>

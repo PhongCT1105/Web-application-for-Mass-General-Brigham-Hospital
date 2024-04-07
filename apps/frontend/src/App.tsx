@@ -9,7 +9,7 @@ import AboutUsPage from "./routes/AboutUsPage.tsx"; // Correct import path
 import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"; // Correct import path
 import CSVTable from "./components/blocks/csvTable.tsx";
 import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
-
+import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 function App() {
   const router = createBrowserRouter([
     {
@@ -51,6 +51,10 @@ function App() {
     {
       path: "/csv-table",
       element: <CSVTable />,
+    },
+    {
+      path: "/sanitation",
+      element: <Sanitation />,
     },
   ]);
 
