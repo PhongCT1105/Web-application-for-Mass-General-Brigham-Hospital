@@ -54,6 +54,7 @@ router.get("/clearnodes", async (req, res) => {
 router.post("/edge", async (req, res) => {
   console.log("hey this is being called");
   const data: {
+    eID: string;
     startNodeID: string;
     endNodeID: string;
   }[] = req.body;
