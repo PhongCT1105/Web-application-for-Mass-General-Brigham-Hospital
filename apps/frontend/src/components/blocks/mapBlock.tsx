@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import L, { CRS, LatLngBoundsExpression, Map, Polyline, Icon } from "leaflet";
+import L, { CRS, Icon, LatLngBoundsExpression, Map, Polyline } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
 import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
@@ -97,7 +97,6 @@ export const MapBlock: React.FC = () => {
           new Set<Node>(),
         ),
       );
-      console.log(hospitalData);
     }
 
     for (let i = 0; i < edgeData.length; i++) {
@@ -209,7 +208,21 @@ export const MapBlock: React.FC = () => {
     for (let i = 0; i < nodes.length - 1; i++) {
       drawPath(nodes[i].nodeID, nodes[i + 1].nodeID);
     }
+    console.log(parsePath(nodes));
     console.log("done :D");
+  }
+
+  function parsePath(nodes: Node[]): Node[][] {
+    const pathsByFloor: { [key: string]: Node[] } = {};
+
+    nodes.forEach((node) => {
+      if (!pathsByFloor[node.floor]) {
+        pathsByFloor[node.floor] = [];
+      }
+      pathsByFloor[node.floor].push(node);
+    });
+
+    return Object.values(pathsByFloor);
   }
 
   function drawLine(
