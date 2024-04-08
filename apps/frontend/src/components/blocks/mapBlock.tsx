@@ -103,7 +103,6 @@ export const MapBlock: React.FC = () => {
     }
     setHospitalDataString(stringData);
     setGraph(newGraph);
-
     hospitalGraph = newGraph;
 
     console.log(hospitalData);
