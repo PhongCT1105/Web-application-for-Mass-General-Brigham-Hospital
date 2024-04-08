@@ -23,7 +23,7 @@ module.exports = {
         wong2: "1.5vw",
       },
       spacing: {
-        wongoffset: "7vw",
+        wongoffset: "14vw",
         wongoffset2: "15vw",
         mapoffset1: "20vh",
         dropdownheight: "60vh",

@@ -69,6 +69,7 @@
     "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.0",
+    "embla-carousel": "^8.0.1",
     "embla-carousel-autoplay": "^8.0.1",
     "embla-carousel-react": "^8.0.1",
     "install": "^0.13.0",
