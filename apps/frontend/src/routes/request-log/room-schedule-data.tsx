@@ -157,8 +157,8 @@ export const SheduleContent = () => {
 
       <Separator className="my-4" />
 
-      <div className="relative flex border rounded-md flex text">
-        <div className="w-1/2 justify-center items-center">
+      <div className=" flex flex-row border rounded-md  text mx-10 my-5">
+        <div className="w-3/4 justify-center items-center">
           <Card className="mr-20 border-none">
             <CardHeader>
               <CardTitle>Request Information</CardTitle>
@@ -306,19 +306,22 @@ export const SheduleContent = () => {
           </Card>
         </div>
 
-        <div className="w-1/2 scale-110">
-          <h1 className="text-2xl font-bold text-center mt-14">Pick a Date</h1>
-            <Calendar
-                className={""}
-                mode="single"
-                selected={form.date}
-                onSelect={ handleDateChange }
-                disabled={(date) =>
-                    date > new Date() || date < new Date("1900-01-01")
-                }
-                initialFocus
-            />
-          <h2>You picked {formattedDate}</h2>
+        <div className=" flex-row items-center mt-5">
+          <h1 className="text-2xl font-bold text-center mt-10">
+            Pick a Date
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{" "}
+          </h1>
+          <Calendar
+            className={"w-full scale-150 mx-20 my-20"}
+            mode="single"
+            selected={form.date}
+            onSelect={handleDateChange}
+            disabled={(date) =>
+              date < new Date() || date > new Date("2025-01-01")
+            }
+            initialFocus
+          ></Calendar>
+          <h2 className={"pt-20"}>You picked {formattedDate}</h2>
         </div>
       </div>
     </>
