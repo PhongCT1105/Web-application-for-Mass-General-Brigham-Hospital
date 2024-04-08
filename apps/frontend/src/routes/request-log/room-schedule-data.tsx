@@ -222,7 +222,7 @@ export const SheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/3">
+                  <div className="w-1/3 ml-4">
                     {/*<h1 className="text-2xl font-bold">Location</h1>*/}
                     {/*<Input*/}
                     {/*  type="text"*/}
@@ -252,7 +252,7 @@ export const SheduleContent = () => {
                     </DropdownMenu>
                   </div>
 
-                  <div>
+                  <div className={"ml-4"}>
                     <h1 className="text-2xl font-bold">Time</h1>
                     <Input
                       type="time"
@@ -306,24 +306,18 @@ export const SheduleContent = () => {
           </Card>
         </div>
 
-        <div className="justify-self-center scale-110">
-          <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
-          <Calendar
-            mode="single"
-            selected={form.date}
-            onSelect={() => handleDateChange}
-            className=""
-            styles={{
-              table: {
-                maxWidth: "none",
-                width: "120px",
-                fontSize: "0.6rem",
-              },
-              day: {
-                margin: "auto",
-              },
-            }}
-          />
+        <div className="w-1/2 scale-110">
+          <h1 className="text-2xl font-bold text-center mt-14">Pick a Date</h1>
+            <Calendar
+                className={""}
+                mode="single"
+                selected={form.date}
+                onSelect={ handleDateChange }
+                disabled={(date) =>
+                    date > new Date() || date < new Date("1900-01-01")
+                }
+                initialFocus
+            />
           <h2>You picked {formattedDate}</h2>
         </div>
       </div>
