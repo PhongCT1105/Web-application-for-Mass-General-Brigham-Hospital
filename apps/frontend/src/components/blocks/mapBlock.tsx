@@ -67,7 +67,7 @@ export const MapBlock: React.FC = () => {
     });
   }, []);
 
-  async function drawNodes() {
+  const drawNodes = async () => {
     const { data: edgeData } = await axios.get("/api/mapreq/edges");
     const { data: nodeData } = await axios.get("/api/mapreq/nodes");
 
@@ -79,7 +79,7 @@ export const MapBlock: React.FC = () => {
         nodeID: nodeData[i].nodeID,
         name: nodeData[i].longName,
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
-        floor: nodeData[i].floor, // Use the correct property for the floor
+        floor: nodeData[i].floor,
       });
       stringData.push(nodeData[i].longName);
 
@@ -101,7 +101,6 @@ export const MapBlock: React.FC = () => {
     for (let i = 0; i < edgeData.length; i++) {
       newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
     }
-
     setHospitalDataString(stringData);
     setGraph(newGraph);
 
@@ -124,9 +123,11 @@ export const MapBlock: React.FC = () => {
       [3400, 5000], // change to resolution of the image
     ];
 
-    // Display the map image overlay based on the current floor
-    const currentFloorMap = floorMaps[currentFloor];
-    L.imageOverlay(currentFloorMap, bounds).addTo(map);
+    L.imageOverlay(theThirdFloor, bounds).addTo(map);
+    L.imageOverlay(theSecondFloor, bounds).addTo(map);
+    L.imageOverlay(theFirstFloor, bounds).addTo(map);
+    L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
+    L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
 
     map.setMaxBounds(bounds);
 
@@ -136,35 +137,31 @@ export const MapBlock: React.FC = () => {
         iconSize: [12, 12],
         iconAnchor: [6, 6],
       });
+      const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
+      const nLat = 3400 - lng;
+      const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
 
-      // Check if the hospital is on the current floor before adding the marker
-      if (hospital.floor === currentFloor) {
-        console.log(hospital);
-        const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
-        const nLat = 3400 - lng;
-        const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
+      // Add a click event handler to toggle popup visibility
+      const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+      marker.bindPopup(popupContent);
 
-        // Add a click event handler to toggle popup visibility
-        const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-        marker.bindPopup(popupContent);
+      marker.on("click", function (this: L.Marker) {
+        // Specify the type of 'this' as L.Marker
+        if (!this.isPopupOpen()) {
+          // Check if the popup is not already open
+          this.openPopup(); // Open the popup when the marker is clicked
+        }
+      });
 
-        marker.on("click", function (this: L.Marker) {
-          // Specify the type of 'this' as L.Marker
-          if (!this.isPopupOpen()) {
-            // Check if the popup is not already open
-            this.openPopup(); // Open the popup when the marker is clicked
-          }
-        });
-      }
+      return () => {
+        map.remove();
+      };
     });
-
-    console.log(map);
-  }
+  };
 
   useEffect(() => {
     drawNodes();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, []); // Empty dependency array to ensure it's only called once
 
   function addToPaths(newPath: Polyline) {
     setPaths((prevPaths) => [...prevPaths, newPath]);
