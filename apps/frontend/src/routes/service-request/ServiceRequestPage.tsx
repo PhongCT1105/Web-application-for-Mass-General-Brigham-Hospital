@@ -97,8 +97,7 @@ export default function ServiceRequestPage() {
                       </TabsContent>
                       <TabsContent
                         value="Room Schedule Request"
-                        className="border-none p-0 flex-col data-[state=active]:flex "
-                        // h-full  ^^^^^
+                        className="w-full flex-col border-none p-0 data-[state=active]:flex"
                       >
                         <SheduleContent />
                       </TabsContent>
