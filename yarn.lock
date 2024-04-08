@@ -5496,6 +5496,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"embla-carousel-autoplay@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "embla-carousel-autoplay@npm:8.0.1"
+  peerDependencies:
+    embla-carousel: 8.0.1
+  checksum: 84abd0603c971eff12e5c4506dff4d9a7536c8d900f0da4c359a9999606311c8a10cdd0d4606150d1bd8cf77736dc43e4e193f29dad1744fca49f5a561958792
+  languageName: node
+  linkType: hard
+
 "embla-carousel-react@npm:^8.0.0":
   version: 8.0.0
   resolution: "embla-carousel-react@npm:8.0.0"
@@ -5508,6 +5517,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"embla-carousel-react@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "embla-carousel-react@npm:8.0.1"
+  dependencies:
+    embla-carousel: "npm:8.0.1"
+    embla-carousel-reactive-utils: "npm:8.0.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.1 || ^18.0.0
+  checksum: 7c8201bd50cac1ffa5e80fe84f27228cfcb66cf600e38ec9145fd11488366926d4ba66277c791d82ba761b7bc652434a044ce3af13b65b159afbfc46092a4ee9
+  languageName: node
+  linkType: hard
+
 "embla-carousel-reactive-utils@npm:8.0.0":
   version: 8.0.0
   resolution: "embla-carousel-reactive-utils@npm:8.0.0"
@@ -5517,10 +5538,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"embla-carousel-reactive-utils@npm:8.0.1":
+  version: 8.0.1
+  resolution: "embla-carousel-reactive-utils@npm:8.0.1"
+  peerDependencies:
+    embla-carousel: 8.0.1
+  checksum: 38f24ced814dc7e4eddcda4c64e95c43095183cffca550a8d7942ec3b54b5d5811e121c1bf4508d2d3b856d1b179df2ce90262fa7132a0dbecca2f7038202114
+  languageName: node
+  linkType: hard
+
 "embla-carousel@npm:8.0.0":
   version: 8.0.0
   resolution: "embla-carousel@npm:8.0.0"
   checksum: 762b2a642bb9e698190d5bf32d7a2ec634d264a3da94ef8b3515011c4674f8d5fb3a0db4b6946d6ecbaaf46929c5a20ba9865656006c8514bb88b8a29ddc176c
+  languageName: node
+  linkType: hard
+
+"embla-carousel@npm:8.0.1":
+  version: 8.0.1
+  resolution: "embla-carousel@npm:8.0.1"
+  checksum: 1f8f9bb011d2b7ed51a901bfa4cb5236396b3bda0bb2d9ab7e5ac50cf26b0eae3b13f8946c57640910a1785092a40ccb26029ba881c3dfd70a0d681dfa65ec02
   languageName: node
   linkType: hard
 
@@ -10565,6 +10602,7 @@ __metadata:
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
     "@iconify/icons-lucide": "npm:^1.2.135"
     "@prisma/client": "npm:^5.12.0"
+    "@radix-ui/react-slot": "npm:^1.0.2"
     "@react-leaflet/core": "npm:^2.1.0"
     "@types/csv-parse": "npm:^1.2.2"
     "@types/leaflet": "npm:^1.9.8"
@@ -10581,6 +10619,8 @@ __metadata:
     csv-parser: "npm:^3.0.0"
     dotenv: "npm:^16.4.5"
     dotenv-cli: "npm:^7.4.0"
+    embla-carousel-autoplay: "npm:^8.0.1"
+    embla-carousel-react: "npm:^8.0.1"
     eslint: "npm:^8.57.0"
     eslint-config-custom: "workspace:*"
     happy-dom: "npm:^10.6.3"
