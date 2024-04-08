@@ -28,6 +28,8 @@ module.exports = {
         mapoffset1: "20vh",
         dropdownheight: "60vh",
         carousel: "45vw",
+        carouselOffset: "5vh",
+        carouselButton: "13vh",
       },
       colors: {
         border: "hsl(var(--border))",

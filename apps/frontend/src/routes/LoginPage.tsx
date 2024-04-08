@@ -21,7 +21,7 @@ export function CarouselDemo() {
   const carouselImages = [carousel1, carousel2, carousel3, carousel4];
 
   return (
-    <Carousel className="ml-14 w-full max-w-carousel">
+    <Carousel className="ml-14 w-full max-w-carousel mt-carouselOffset mb-carouselOffset  h-[500px]">
       <CarouselContent>
         {Array.from({ length: 4 }).map((_, index) => (
           <CarouselItem key={index}>
@@ -38,8 +38,8 @@ export function CarouselDemo() {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
+      <CarouselPrevious className="mt-carouselButton" />
+      <CarouselNext className="mt-carouselButton" />
     </Carousel>
   );
 }
