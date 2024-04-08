@@ -306,30 +306,23 @@ export const SheduleContent = () => {
           </Card>
         </div>
 
-        <div className="mx-auto w-1/2 p-0 justify-center">
-          <h1 className="text-2xl font-bold text-center">Pick a Date</h1>
+        <div className="mx-auto w-1/2 p-0 justify-self-end scale-150">
+          <h1 className="text-2xl font-bold text-center ">Pick a Date</h1>
           <Calendar
             mode="single"
             selected={form.date}
-            onSelect={handleDateChange}
+            onSelect={() => handleDateChange}
             className=""
             styles={{
-              head_cell: {
-                width: "100%",
-              },
               table: {
                 maxWidth: "none",
-                width: "60px",
-                fontSize: "60px",
+                width: "120px",
+                fontSize: "0.6rem",
               },
               day: {
                 margin: "auto",
               },
             }}
-            // disable={(date: Date) =>
-            //   date <= new Date() || date < new Date("2025-01.-01")
-            // }
-            initialFocus
           />
           <h2>You picked {formattedDate}</h2>
         </div>
