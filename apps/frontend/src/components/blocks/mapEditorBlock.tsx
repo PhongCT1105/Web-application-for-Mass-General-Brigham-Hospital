@@ -109,15 +109,50 @@ export const MapEditorBlock: React.FC = () => {
         }
       });
 
+      for (let i = 0; i < edgeData.length; i++) {
+        drawPath(edgeData[i].startNodeID, edgeData[i].endNodeID);
+      }
+
       return () => {
         map.remove();
       };
     });
   };
 
+  function drawLine(
+    startCoordinates: [number, number],
+    endCoordinates: [number, number],
+  ) {
+    const map = mapRef.current;
+    if (!map) return;
+
+    L.polyline([startCoordinates, endCoordinates], {
+      color: "blue",
+    }).addTo(map);
+  }
+
+  function drawPath(start: string, end: string) {
+    const startHospital = hospitalData.find((h) => h.nodeID === start);
+    const endHospital = hospitalData.find((h) => h.nodeID === end);
+    if (!startHospital || !endHospital) {
+      console.error("Start or end location not found in hospital data.");
+      return;
+    }
+
+    const [startLat, startLng] = startHospital.geocode
+      .split(",")
+      .map(parseFloat);
+    const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
+
+    const startCoords: [number, number] = [3400 - startLng, startLat];
+    const endCoords: [number, number] = [3400 - endLng, endLat];
+
+    drawLine(startCoords, endCoords);
+  }
+
   useEffect(() => {
     drawNodes();
-  }, []);
+  });
 
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
