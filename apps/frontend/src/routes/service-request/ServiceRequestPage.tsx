@@ -11,8 +11,9 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
 
-import { Car, Church, FlowerIcon } from "lucide-react";
+import { Car, Church, FlowerIcon, Calendar } from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
+import { SheduleContent } from "@/routes/request-log/room-schedule-data.tsx";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -46,6 +47,10 @@ export default function ServiceRequestPage() {
                           <TabsTrigger value="Transportation Request">
                             <Car className="mr-2 h-4 w-4" />
                             Transportation Request
+                          </TabsTrigger>
+                          <TabsTrigger value="Room Schedule Request">
+                            <Calendar className="mr-2 h-4 w-4" />
+                            Room Schedule Request
                           </TabsTrigger>
                         </TabsList>
                       </div>
@@ -89,6 +94,13 @@ export default function ServiceRequestPage() {
                           </div>
                         </div>
                         <Separator className="my-4" />
+                      </TabsContent>
+                      <TabsContent
+                        value="Room Schedule Request"
+                        className="border-none p-0 flex-col data-[state=active]:flex "
+                        // h-full  ^^^^^
+                      >
+                        <SheduleContent />
                       </TabsContent>
                     </Tabs>
                   </div>
