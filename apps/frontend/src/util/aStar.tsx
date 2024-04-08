@@ -30,7 +30,7 @@ export class aStar {
         aStarFound = true;
       }
 
-      for (const neighNode of curr.neighbors) {
+      for (const neighNode of curr.neighbors!) {
         const x = neighNode.xcoord - curr.xcoord;
         const y = neighNode.ycoord - curr.ycoord;
         const heurX = endNode.xcoord - neighNode.xcoord;
