@@ -157,7 +157,7 @@ export const SheduleContent = () => {
 
       <Separator className="my-4" />
 
-      <div className="relative flex border rounded-md ml-20 mr-20 mt-10 mb-10 text">
+      <div className="relative flex border rounded-md flex text">
         <div className="w-1/2 justify-center items-center">
           <Card className="mr-20 border-none">
             <CardHeader>
@@ -306,8 +306,8 @@ export const SheduleContent = () => {
           </Card>
         </div>
 
-        <div className="mx-auto w-1/2 p-0 justify-self-end scale-150">
-          <h1 className="text-2xl font-bold text-center ">Pick a Date</h1>
+        <div className="justify-self-center scale-110">
+          <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
           <Calendar
             mode="single"
             selected={form.date}
