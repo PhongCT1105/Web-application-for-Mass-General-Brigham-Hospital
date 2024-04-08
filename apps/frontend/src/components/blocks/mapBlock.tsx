@@ -93,13 +93,12 @@ export const MapBlock: React.FC = () => {
           nodeData[i].nodeType,
           nodeData[i].longName,
           nodeData[i].shortName,
-          new Set<Node>(),
         ),
       );
     }
 
     for (let i = 0; i < edgeData.length; i++) {
-      newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
+      newGraph.addEdge(edgeData[i].startNodeID, edgeData[i].endNodeID);
     }
     setHospitalDataString(stringData);
     setGraph(newGraph);
@@ -195,6 +194,8 @@ export const MapBlock: React.FC = () => {
       return;
     }
     console.log("A path should be created now");
+    console.log(startNode);
+    console.log(endNode);
     const nodes: Node[] = pathfindingStrategy.findPath(
       graph,
       startNode,
@@ -231,8 +232,6 @@ export const MapBlock: React.FC = () => {
   }
 
   async function handleSearch(start: string, end: string) {
-    console.log(start);
-    console.log(end);
     drawFullPath(graph, start, end);
   }
 

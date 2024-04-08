@@ -4,49 +4,46 @@ import { Queue } from "queue-typescript";
 
 export class BFS {
   static run(graph: Graph, startNodeID: string, endNodeID: string) {
-    console.log(graph);
-    console.log(startNodeID);
-    console.log(endNodeID);
-    // setting up queue, visited, distance, and parent
-    const visited: Set<string> = new Set();
-    const queue = new Queue<{ nodeID: string; distance: number }>();
-    const distanceMap = new Map<string, number>();
-    const parentMap = new Map<string, string>();
-    //let dist = 0; // starting distance is 0
+    // setting up queue, visited, and parent
+    const visited: Set<Node> = new Set();
+    const queue = new Queue<Node>();
+    const parentMap = new Map<Node, Node>();
+    const startingNode = graph.nodes.get(startNodeID);
+    const endingNode = graph.nodes.get(endNodeID);
 
-    // add startNode and set initial distance
-    queue.enqueue({ nodeID: startNodeID, distance: 0 });
-    distanceMap.set(startNodeID, 0);
+    // add startNodeID to queue
+    queue.enqueue(startingNode!);
+    //visited.add(startNodeID);
 
     let pathFound = false; // flag to track if the end node is found
 
     //iterating through nodes until queue is empty
     while (queue.length > 0) {
-      const { nodeID, distance } = queue.dequeue(); // inspecting
-      const currNode = graph.nodes.get(nodeID)!;
+      const current = queue.dequeue(); // inspecting current
 
-      // if (nodeID == endNodeID) {
-      //     return this.reconstructPath(parentMap,distanceMap, startNodeID, endNodeID, graph);
-      // }
+      if (!visited.has(current)) {
+        visited.add(current);
+      } //add current node to visited
 
-      visited.add(nodeID); //add current node to visited
-
-      if (nodeID === endNodeID) {
+      // terminate loop
+      if (current === endingNode) {
         pathFound = true;
+        console.log("Found path!");
+        break;
         // continue; // uncomment this line if you want to stop when end node is found
       }
 
-      for (const neighbor of currNode.neighbors) {
-        if (!visited.has(neighbor.nodeID)) {
-          parentMap.set(neighbor.nodeID, nodeID); // setting the neighbor as a parent
-          const newDistance = distanceMap.get(nodeID)! + 1;
-          if (
-            !distanceMap.has(neighbor.nodeID) ||
-            newDistance < distanceMap.get(neighbor.nodeID)!
-          ) {
-            distanceMap.set(neighbor.nodeID, distance + 1);
-            queue.enqueue({ nodeID: neighbor.nodeID, distance: distance + 1 }); //adding curr's neighbors to queue
-          }
+      for (const edge of graph.edges) {
+        if (edge.startNode === current && !visited.has(edge.endNode)) {
+          console.log("Found as starting");
+          parentMap.set(edge.endNode, current);
+          queue.enqueue(edge.endNode);
+          visited.add(edge.endNode);
+        } else if (edge.endNode === current && !visited.has(edge.startNode)) {
+          console.log("Found as ending");
+          parentMap.set(edge.startNode, current);
+          queue.enqueue(edge.startNode);
+          visited.add(edge.startNode);
         }
       }
     }
@@ -56,39 +53,31 @@ export class BFS {
       return []; // Return an empty array to indicate that the path does not exist
     }
 
-    //console.log("No path found");
-    return this.reconstructPath(
-      parentMap,
-      distanceMap,
-      startNodeID,
-      endNodeID,
-      graph,
-    );
+    return this.reconstructPath(parentMap, startNodeID, endNodeID, graph);
   }
 
   static reconstructPath(
-    parentMap: Map<string, string>,
-    distanceMap: Map<string, number>,
+    parentMap: Map<Node, Node>,
     startNodeID: string,
     endNodeID: string,
     graph: Graph,
   ): Node[] {
     const path: Node[] = []; // returning an array of Nodes
-    let currentNodeID = endNodeID;
+    let currentNode: Node = graph.nodes.get(endNodeID)!;
+    const startNode = graph.nodes.get(startNodeID);
 
-    while (currentNodeID != startNodeID) {
-      const node = graph.nodes.get(currentNodeID);
-      if (node) {
-        path.push(node);
-      }
-      currentNodeID = parentMap.get(currentNodeID)!;
+    while (currentNode && currentNode !== startNode) {
+      path.push(currentNode);
+      currentNode = parentMap.get(currentNode)!;
+    }
+
+    if (!currentNode) {
+      console.log("Invalid parent map or end node");
+      return [];
     }
 
     // add start node to the path
-    const startNode = graph.nodes.get(startNodeID);
-    if (startNode) {
-      path.push(startNode);
-    }
+    path.push(startNode!);
 
     return path.reverse();
   }

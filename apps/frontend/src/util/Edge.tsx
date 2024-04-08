@@ -2,11 +2,13 @@
  * This class uses two node IDs as start and end points to generate an Edge.
  */
 
-export class Edge {
-  startNode: string;
-  endNode: string;
+import { Node } from "./Node.tsx";
 
-  constructor(startNode: string, endNode: string) {
+export class Edge {
+  startNode: Node;
+  endNode: Node;
+
+  constructor(startNode: Node, endNode: Node) {
     this.startNode = startNode;
     this.endNode = endNode;
   }
