@@ -38,7 +38,7 @@ export const flowerCards: CardInfo[] = [
     discountAmt: 0,
   },
   {
-    image: "src/assets/flower-request-imgs/bouquets/redrosepremium.webp",
+    image: "src/assets/flower-request-imgs/bouquets/redrosepremium.png",
     name: "Red Roses",
     cost: 39.99,
     discountAmt: 0,
@@ -94,7 +94,7 @@ export const flowerCards: CardInfo[] = [
 ];
 export const addOnCards: CardInfo[] = [
   {
-    image: "src/assets/flower-request-imgs/add-ons/box-of-choc.jpg",
+    image: "src/assets/flower-request-imgs/add-ons/box-of-choc.png",
     name: "Chocolate Truffles",
     cost: 22.99,
     discountAmt: 0,

@@ -1,14 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
-import L, { CRS, LatLngBoundsExpression, Map, Polyline, Icon } from "leaflet";
+import React, { useEffect, useRef } from "react";
+import L, { CRS, LatLngBoundsExpression, Map, Icon } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap from "@/assets/lower-level-map.png";
 import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
-import { SearchBar } from "@/components/blocks/locationSearchBar";
 import axios from "axios";
 import { Graph } from "@/util/graph.tsx";
 import { Node } from "../../util/node.tsx";
-import { BFS } from "@/util/bfs.tsx";
 //import { Edge } from "../../util/edge.tsx";
 // import {mapReq} from "common/src/mapReq.ts";
 
@@ -23,21 +21,14 @@ let hospitalGraph = new Graph();
 const hospitalData: HospitalData[] = [];
 
 // Define the map component
-export const MapBlock: React.FC = () => {
+export const MapEditorBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
-  // const [path, setPath] = useState<Polyline | null>(null);
-  const [paths, setPaths] = useState<Polyline[]>([]);
-  const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
-
-  const [graph, setGraph] = useState<Graph>(new Graph());
 
   const drawNodes = async () => {
     const { data: edgeData } = await axios.get("/api/mapreq/edges");
     const { data: nodeData } = await axios.get("/api/mapreq/nodes");
 
     console.log(edgeData);
-
-    const stringData: string[] = [];
 
     const newGraph: Graph = new Graph();
     for (let i = 0; i < nodeData.length; i++) {
@@ -46,9 +37,6 @@ export const MapBlock: React.FC = () => {
         name: nodeData[i].longName,
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
       });
-
-      console.log(hospitalData);
-      stringData.push(nodeData[i].longName);
 
       newGraph.addNode(
         new Node(
@@ -75,8 +63,6 @@ export const MapBlock: React.FC = () => {
 
     console.log("Edges added??????");
     console.log(newGraph);
-    setHospitalDataString(stringData);
-    setGraph(newGraph);
 
     hospitalGraph = newGraph;
 
@@ -123,18 +109,26 @@ export const MapBlock: React.FC = () => {
         }
       });
 
+      for (let i = 0; i < edgeData.length; i++) {
+        drawPath(edgeData[i].startNodeID, edgeData[i].endNodeID);
+      }
+
       return () => {
         map.remove();
       };
     });
   };
 
-  useEffect(() => {
-    drawNodes();
-  }, []);
+  function drawLine(
+    startCoordinates: [number, number],
+    endCoordinates: [number, number],
+  ) {
+    const map = mapRef.current;
+    if (!map) return;
 
-  function addToPaths(newPath: Polyline) {
-    setPaths((prevPaths) => [...prevPaths, newPath]);
+    L.polyline([startCoordinates, endCoordinates], {
+      color: "blue",
+    }).addTo(map);
   }
 
   function drawPath(start: string, end: string) {
@@ -156,67 +150,12 @@ export const MapBlock: React.FC = () => {
     drawLine(startCoords, endCoords);
   }
 
-  function drawFullPath(graph: Graph, start: string, end: string) {
-    const startNode = graph.getNodeID(start);
-    const endNode = graph.getNodeID(end);
-
-    if (!startNode || !endNode) {
-      console.error("Start or end node not found in the graph.");
-      return;
-    }
-
-    const nodes: Node[] = BFS.run(graph, startNode, endNode);
-
-    console.log(nodes);
-    for (let i = 0; i < nodes.length - 1; i++) {
-      console.log("A path should be created now");
-      drawPath(nodes[i].nodeID, nodes[i + 1].nodeID);
-    }
-    console.log("done :D");
-  }
-
-  function drawLine(
-    startCoordinates: [number, number],
-    endCoordinates: [number, number],
-  ) {
-    const map = mapRef.current;
-    if (!map) return;
-
-    const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: "blue",
-    }).addTo(map);
-    addToPaths(newPath); // Add the new path to the paths list
-  }
-
-  function clearLines() {
-    const map = mapRef.current;
-    if (!map || paths.length === 0) return;
-
-    paths.forEach((path) => path.removeFrom(map));
-    setPaths([]);
-  }
-
-  async function handleSearch(start: string, end: string) {
-    console.log(start);
-    console.log(end);
-    drawFullPath(graph, start, end);
-  }
+  useEffect(() => {
+    drawNodes();
+  });
 
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
-      {/* SearchBar component */}
-      <div style={{ flex: 1, padding: "10px" }}>
-        <SearchBar
-          locations={hospitalDataString
-            .sort((a, b) => a.localeCompare(b))
-            .filter(function (str) {
-              return str.indexOf("Hallway") === -1;
-            })}
-          onSearch={handleSearch}
-          onClear={clearLines} // Pass the clearLine function to SearchBar
-        />
-      </div>
-      {/* Map container */}
       <div
         id="map-container"
         style={{
