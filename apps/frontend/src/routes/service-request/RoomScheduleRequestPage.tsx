@@ -5,7 +5,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
+} from "@/components/ui/card.tsx";
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
@@ -90,11 +90,13 @@ export const SheduleContent = () => {
       priority: "",
       location: "",
       purpose: "",
+      date: new Date(),
       time: "",
       status: "",
       note: "",
     }));
     setSelectedPriority("");
+    setSelectedStatus("");
   };
 
   const handlePriorityChange = (priority: string) => {
@@ -164,7 +166,7 @@ export const SheduleContent = () => {
 
   return (
     <>
-      <div className="flex space-y-1">
+      <div className="flex">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">
             Room Schedule Request
@@ -179,7 +181,7 @@ export const SheduleContent = () => {
 
       <div className=" flex  border rounded-md  text mx-10 my-5">
         <div className="w-3/4 justify-center items-center">
-          <Card className="mr-20 border-none">
+          <Card className=" border-none">
             <CardHeader>
               <CardTitle>Request Information</CardTitle>
               <CardDescription>
@@ -349,8 +351,15 @@ export const SheduleContent = () => {
               </div>
             </CardContent>
 
-            <CardFooter>
-              <Button variant={"outline"} onClick={handleSubmit}>
+            <CardFooter className="flex justify-between">
+              <Button
+                variant={"destructive"}
+                className="mr-20"
+                onClick={clearForm}
+              >
+                Clear
+              </Button>
+              <Button className="p-5" onClick={handleSubmit}>
                 Submit
               </Button>
             </CardFooter>
@@ -359,7 +368,7 @@ export const SheduleContent = () => {
 
         <div className="w-2/5 items-center bg-secondary">
           <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
-          <div className="w-full max-w-md md:max-w-none mt-6 items-center ml-20">
+          <div className="max-w-md md:max-w-none mt-6 items-center">
             <Calendar
               className={"w-full transform scale-150 md:ml-40 my-6 md:my-20"}
               mode="single"
@@ -374,6 +383,51 @@ export const SheduleContent = () => {
 
           <h2 className={"pt-10 ml-10"}>You picked {formattedDate}</h2>
         </div>
+      </div>
+      <div>
+        <Card className="mt-8 w-[400px]">
+          <div className="bg-gray-4 p-4 rounded-md">
+            <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
+            <ul>
+              {submittedForms.map((form, index) => (
+                <li key={index} className="mb-4">
+                  <div className="font-semibold">Form {index + 1}:</div>
+                  <div className="ml-2">
+                    <div>
+                      <span className="font-semibold">Name:</span> {form.name}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Priority:</span>{" "}
+                      {form.priority}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Location:</span>{" "}
+                      {form.location}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Date:</span>{" "}
+                      {formattedDate}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Time:</span> {form.time}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Purpose:</span>{" "}
+                      {form.purpose}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Note:</span> {form.note}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Status:</span>{" "}
+                      {form.status}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Card>
       </div>
     </>
   );
