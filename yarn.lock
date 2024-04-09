@@ -3366,6 +3366,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/react-lazyload@npm:^3":
+  version: 3.2.3
+  resolution: "@types/react-lazyload@npm:3.2.3"
+  dependencies:
+    "@types/react": "npm:*"
+  checksum: a49540f576009d9655a25efcd4f3b5835fb49799e1a2c55886edd2983feceacb6cdfc9d96485289a826d8236cf8fc414d5cf9137413323f93382d275346a96d0
+  languageName: node
+  linkType: hard
+
 "@types/react-leaflet-markercluster@npm:^3":
   version: 3.0.4
   resolution: "@types/react-leaflet-markercluster@npm:3.0.4"
@@ -5228,6 +5237,7 @@ __metadata:
   resolution: "database@workspace:packages/database"
   dependencies:
     "@prisma/client": "npm:5.12.0-dev.46"
+    "@radix-ui/react-slot": "npm:^1.0.2"
     "@types/node": "npm:^20.11.30"
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"
@@ -6508,6 +6518,7 @@ __metadata:
     "@types/react": "npm:^18.0.37"
     "@types/react-bootstrap": "npm:^0.32.32"
     "@types/react-dom": "npm:^18.0.11"
+    "@types/react-lazyload": "npm:^3"
     "@types/react-router-bootstrap": "npm:^0.26.0"
     "@types/react-router-dom": "npm:^5.3.3"
     "@vitejs/plugin-react": "npm:^4.2.1"
@@ -6543,6 +6554,8 @@ __metadata:
     postcss: "npm:^8.4.35"
     prettier: "npm:latest"
     prettier-config-custom: "workspace:*"
+    priority-queue: "npm:^0.2.1"
+    priority-queue-typescript: "npm:^1.0.1"
     queue-typescript: "npm:^1.0.1"
     radix-ui: "npm:^1.0.1"
     react: "npm:^18.2.0"
@@ -6551,6 +6564,7 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-hook-form: "npm:^7.51.2"
     react-icons: "npm:^5.0.1"
+    react-lazyload: "npm:^3.2.1"
     react-leaflet: "npm:^4.2.1"
     react-leaflet-cluster: "npm:^2.1.0"
     react-resizable-panels: "npm:^2.0.16"
@@ -9373,6 +9387,20 @@ __metadata:
   languageName: node
   linkType: hard
 
+"priority-queue-typescript@npm:^1.0.1":
+  version: 1.0.1
+  resolution: "priority-queue-typescript@npm:1.0.1"
+  checksum: 8ccb83ac02f6dde0e49d0a0087da92b20c8d62c3f454e93b387b12ce7a842c8c043417b1ca999b410f49ddfc46624a44074b2b631d33e75ca42b3f1d5b05e992
+  languageName: node
+  linkType: hard
+
+"priority-queue@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "priority-queue@npm:0.2.1"
+  checksum: 8110cb805d77fcfe0dd8c04128d0a134c75995729c2afdb192e5e8b03e4c5b7d0eb29253808a24c8bedf49a5b649202d612f272091685c60f07d14e916bc2421
+  languageName: node
+  linkType: hard
+
 "prisma@npm:4.15.0":
   version: 4.15.0
   resolution: "prisma@npm:4.15.0"
@@ -9754,6 +9782,16 @@ __metadata:
   version: 18.2.0
   resolution: "react-is@npm:18.2.0"
   checksum: 200cd65bf2e0be7ba6055f647091b725a45dd2a6abef03bf2380ce701fd5edccee40b49b9d15edab7ac08a762bf83cb4081e31ec2673a5bfb549a36ba21570df
+  languageName: node
+  linkType: hard
+
+"react-lazyload@npm:^3.2.1":
+  version: 3.2.1
+  resolution: "react-lazyload@npm:3.2.1"
+  peerDependencies:
+    react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  checksum: 1ddbe02b0d2df307fa942a8cc923bcd14b4362f8d1bb46cf2dad6baf22c2bb6b1a39b271a9d36a86a4ce6dde228b2c6cda6915d18600735db1fda3d4301680ef
   languageName: node
   linkType: hard
 
@@ -10660,6 +10698,7 @@ __metadata:
     "@types/react": "npm:^18.2.73"
     "@types/react-dom": "npm:^18.2.23"
     "@types/react-icons": "npm:^3.0.0"
+    "@types/react-lazyload": "npm:^3"
     "@types/react-leaflet-markercluster": "npm:^3"
     "@types/three": "npm:^0"
     "@vitest/ui": "npm:^0.33.0"
@@ -10682,12 +10721,15 @@ __metadata:
     pathfinding: "npm:^0.4.18"
     prettier: "npm:2.8.8"
     prettier-config-custom: "workspace:*"
+    priority-queue: "npm:^0.2.1"
+    priority-queue-typescript: "npm:^1.0.1"
     prisma: "npm:5.12.0-dev.46"
     queue-typescript: "npm:^1.0.1"
     react: "npm:^18.2.0"
     react-bootstrap: "npm:^2.10.0"
     react-dom: "npm:^18.2.0"
     react-icons: "npm:^5.0.1"
+    react-lazyload: "npm:^3.2.1"
     react-leaflet: "npm:^4.2.1"
     react-leaflet-cluster: "npm:^2.1.0"
     react-leaflet-markercluster: "npm:^3.0.0-rc1"

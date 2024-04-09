@@ -16,6 +16,7 @@ interface nodeTable {
 }
 
 interface edgeTable {
+  eID: string;
   startNodeID: string;
   endNodeID: string;
 }
