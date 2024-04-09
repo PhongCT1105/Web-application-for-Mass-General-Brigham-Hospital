@@ -11,8 +11,11 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
 
-import { Car, Church, FlowerIcon } from "lucide-react";
+import { Badge, Calendar, Church, FlowerIcon, Biohazard } from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
+import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
+import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
+import { SheduleContent } from "@/routes/service-request/RoomScheduleRequestPage.tsx";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -43,9 +46,17 @@ export default function ServiceRequestPage() {
                             <Church className="mr-2 h-4 w-4" />
                             Prayer Request
                           </TabsTrigger>
-                          <TabsTrigger value="Transportation Request">
-                            <Car className="mr-2 h-4 w-4" />
-                            Transportation Request
+                          <TabsTrigger value="Room Schedule Request">
+                            <Calendar className="mr-2 h-4 w-4" />
+                            Room Schedule Request
+                          </TabsTrigger>
+                          <TabsTrigger value="Sanitation Request">
+                            <Biohazard className="mr-2 h-4 w-4" />
+                            Sanitation Request
+                          </TabsTrigger>
+                          <TabsTrigger value="Security Request">
+                            <Badge className="mr-2 h-4 w-4" />
+                            Security Request
                           </TabsTrigger>
                         </TabsList>
                       </div>
@@ -73,7 +84,13 @@ export default function ServiceRequestPage() {
                         <Separator className="my-4" />
                       </TabsContent>
                       <TabsContent
-                        value={"Transportation Request"}
+                        value="Room Schedule Request"
+                        className="w-full flex-col border-none p-0 data-[state=active]:flex"
+                      >
+                        <SheduleContent />
+                      </TabsContent>
+                      <TabsContent
+                        value={"Sanitation Request"}
                         className={
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
@@ -81,14 +98,34 @@ export default function ServiceRequestPage() {
                         <div className="flex items-center justify-between">
                           <div className="space-y-1">
                             <h2 className="text-2xl font-semibold tracking-tight">
-                              Transportation Request
+                              Sanitation Request
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                              Get transportation to a local drop-off point.
+                              Get sanitation services for an Issue.
                             </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
+                        <Sanitation />
+                      </TabsContent>
+                      <TabsContent
+                        value={"Security Request"}
+                        className={
+                          " w-full flex-col border-none p-0 data-[state=active]:flex"
+                        }
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              Security Request
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                              Request Security services and optionally call 911.
+                            </p>
+                          </div>
+                        </div>
+                        <Separator className="my-4" />
+                        <SecurityForm />
                       </TabsContent>
                     </Tabs>
                   </div>

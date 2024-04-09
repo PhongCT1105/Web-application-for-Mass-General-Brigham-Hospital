@@ -4,38 +4,37 @@ import express, { Router } from "express";
 const prisma = new PrismaClient();
 const router: Router = express.Router();
 
+interface nodeTable {
+  nodeID: string;
+  xcoord: number;
+  ycoord: number;
+  floor: string;
+  building: string;
+  nodeType: string;
+  longName: string;
+  shortName: string;
+}
+
+interface edgeTable {
+  eID: string;
+  startNodeID: string;
+  endNodeID: string;
+}
+
 // Node stuff good, just copy the format
-router.post("/nodes", async (req, res) => {
-  console.log("hey this is being called");
+router.post("/node", async (req, res) => {
+  console.log("hey this is being called for node");
 
-  const data: {
-    nodeID: string;
-    xcoord: number;
-    ycoord: number;
-    floor: string;
-    building: string;
-    nodeType: string;
-    longName: string;
-    shortName: string;
-  }[] = req.body;
-  console.log(`BACKEND: ${data}`);
+  const data = req.body;
+  const jsonString = JSON.stringify(data);
+  const nodeData: nodeTable[] = JSON.parse(jsonString);
   try {
-    // Check if file is uploaded
-    // if (!req.file) {
-    //   console.log("no file");
-    //   return res.status(400).json("fun cancelled: no file."); //No file uploaded
-    // }
-
-    // await prisma.edges.deleteMany();
-    // await prisma.nodes.deleteMany();
-
-    // for (let i = 0; i < data.length; i++) {
-    //   await prisma.nodes.create({
-    //     data: data[i],
-    //   });
-    //
-    // }
-    prisma.nodes.createMany({ data, skipDuplicates: true });
+    await prisma.nodes.deleteMany();
+    for (let i = 0; i < nodeData.length; i++) {
+      await prisma.nodes.create({
+        data: nodeData[i],
+      });
+    }
 
     res.status(200).send("CSV data imported successfully.");
   } catch (error) {
@@ -51,22 +50,18 @@ router.get("/clearnodes", async (req, res) => {
   res.status(200).json("Cleared nodes and edges");
 });
 
-router.post("/edges", async (req, res) => {
+router.post("/edge", async (req, res) => {
   console.log("hey this is being called");
-  const data: {
-    eID: string;
-    startNodeID: string;
-    endNodeID: string;
-  }[] = req.body;
-
+  const data = req.body;
+  const jsonString = JSON.stringify(data);
+  const edgeData: edgeTable[] = JSON.parse(jsonString);
   try {
-    //await prisma.edges.deleteMany();
-    for (let i = 0; i < data.length; i++) {
+    await prisma.edges.deleteMany();
+    for (let i = 0; i < edgeData.length; i++) {
       await prisma.edges.create({
-        data: data[i],
+        data: edgeData[i],
       });
     }
-
     res.status(200).send("CSV data imported successfully.");
   } catch (error) {
     console.error("Error processing CSV file:", error);
@@ -74,7 +69,7 @@ router.post("/edges", async (req, res) => {
   }
 });
 
-router.get("/nodes", async (req, res) => {
+router.get("/node", async (req, res) => {
   try {
     const nodes = await prisma.nodes.findMany();
     res.status(200).json(nodes);
@@ -85,7 +80,7 @@ router.get("/nodes", async (req, res) => {
 });
 
 // Fetch edges from the database and send them as a response
-router.get("/edges", async (req, res) => {
+router.get("/edge", async (req, res) => {
   try {
     const edges = await prisma.edges.findMany();
     res.status(200).json(edges);

@@ -111,23 +111,6 @@ async function exportToCsv() {
   fs.writeFileSync("./resources/edges.csv", edgeCSV);
   console.log("Data is saved into './resources/edges.csv'");
 }
-
-/*
-async function importFlower() {
-    await prisma.flower.deleteMany();
-    await prisma.flower.create({
-        data: {
-            name: "Gift of Love",
-        }
-    });
-
-    await prisma.flower.create({
-        data: {
-            name: "Orange Tulips",
-        }
-    });
-
-}
 */
 
 //importFlower();
