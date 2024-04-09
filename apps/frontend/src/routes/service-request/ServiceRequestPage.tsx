@@ -15,8 +15,8 @@ import { Badge, Car, FlowerIcon, PillIcon } from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
-import { DataTable } from "@/routes/request-log/medicine-request/medication-data-table.tsx";
-import { columns } from "@/routes/request-log/medicine-request/columns.tsx";
+import { DataTable } from "@/routes/service-request/medicine-request/medicationREQ-data-table.tsx";
+import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
 import { Medication } from "common/src/interfaces/medicationReq.ts";
 import { pillData } from "common/src/testData.ts";
 import React, { createContext, useContext, useState } from "react";
@@ -64,7 +64,7 @@ export default function ServiceRequestPage() {
                           </TabsTrigger>
                           <TabsTrigger value="Medication Request">
                             <PillIcon className="mr-2 h-4 w-4" />
-                            Prayer Request
+                            Medication Request
                           </TabsTrigger>
                           <TabsTrigger value="Transportation Request">
                             <Car className="mr-2 h-4 w-4" />
@@ -97,14 +97,18 @@ export default function ServiceRequestPage() {
                               Medication Request
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                              Send a prayer to a loved one
+                              By Mina Boktor & Alexander Kraemling
                             </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
-                        <MedicineContext.Provider value={{ data, setData }}>
-                          <DataTable columns={columns} />
-                        </MedicineContext.Provider>
+                        <div className={"p-3"}>
+                          <MedicineContext.Provider value={{ data, setData }}>
+                            <div className={"space-y-4"}>
+                              <DataTable columns={columns} />
+                            </div>
+                          </MedicineContext.Provider>
+                        </div>
                       </TabsContent>
                       <TabsContent
                         value={"Transportation Request"}
