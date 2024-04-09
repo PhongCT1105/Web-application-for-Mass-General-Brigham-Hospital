@@ -87,12 +87,6 @@ export function Header() {
             >
               About Us
             </a>
-            <a
-              href="/map-editor"
-              className=" transition-colors hover:text-yellow-500 text-gray-300"
-            >
-              Map Editor
-            </a>
           </nav>
           <Sheet>
             <SheetTrigger asChild className={"f"}>

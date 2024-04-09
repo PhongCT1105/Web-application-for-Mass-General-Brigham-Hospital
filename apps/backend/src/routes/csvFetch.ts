@@ -4,38 +4,42 @@ import express, { Router } from "express";
 const prisma = new PrismaClient();
 const router: Router = express.Router();
 
+interface nodeTable {
+  nodeID: string;
+  xcoord: number;
+  ycoord: number;
+  floor: string;
+  building: string;
+  nodeType: string;
+  longName: string;
+  shortName: string;
+}
+
+interface edgeTable {
+  edgeID: string;
+  startNodeID: string;
+  endNodeID: string;
+}
+
+function generateEID(edge: edgeTable): string {
+  // Replace this with your own logic to generate eID
+  return `${edge.startNodeID}-${edge.endNodeID}`;
+}
+
 // Node stuff good, just copy the format
 router.post("/node", async (req, res) => {
-  console.log("hey this is being called");
+  console.log("hey this is being called for node");
 
-  const data: {
-    nodeID: string;
-    xcoord: number;
-    ycoord: number;
-    floor: string;
-    building: string;
-    nodeType: string;
-    longName: string;
-    shortName: string;
-  }[] = req.body;
-  console.log(`BACKEND: ${data}`);
+  const data = req.body;
+  const jsonString = JSON.stringify(data);
+  const nodeData: nodeTable[] = JSON.parse(jsonString);
   try {
-    // Check if file is uploaded
-    // if (!req.file) {
-    //   console.log("no file");
-    //   return res.status(400).json("fun cancelled: no file."); //No file uploaded
-    // }
-
-    // await prisma.edges.deleteMany();
-    // await prisma.nodes.deleteMany();
-
-    // for (let i = 0; i < data.length; i++) {
-    //   await prisma.nodes.create({
-    //     data: data[i],
-    //   });
-    //
-    // }
-    prisma.nodes.createMany({ data, skipDuplicates: true });
+    await prisma.nodes.deleteMany();
+    for (let i = 0; i < nodeData.length; i++) {
+      await prisma.nodes.create({
+        data: nodeData[i],
+      });
+    }
 
     res.status(200).send("CSV data imported successfully.");
   } catch (error) {
@@ -53,19 +57,19 @@ router.get("/clearnodes", async (req, res) => {
 
 router.post("/edge", async (req, res) => {
   console.log("hey this is being called");
-  const data: {
-    startNodeID: string;
-    endNodeID: string;
-  }[] = req.body;
-
+  const data = req.body;
+  const jsonString = JSON.stringify(data);
+  const edgeData: edgeTable[] = JSON.parse(jsonString);
   try {
-    //await prisma.edges.deleteMany();
-    for (let i = 0; i < data.length; i++) {
+    await prisma.edges.deleteMany();
+    for (let i = 0; i < edgeData.length; i++) {
       await prisma.edges.create({
-        data: data[i],
+        data: {
+          ...edgeData[i],
+          eID: generateEID(edgeData[i]),
+        },
       });
     }
-
     res.status(200).send("CSV data imported successfully.");
   } catch (error) {
     console.error("Error processing CSV file:", error);
