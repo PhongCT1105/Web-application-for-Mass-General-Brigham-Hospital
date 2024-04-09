@@ -21,9 +21,6 @@ import { priorities, statuses } from "common/src/dataTypes/labels.ts";
 import { Medication } from "common/src/interfaces/medicationReq.ts";
 import { _Medication } from "common/src/interfaces/medicationReq.ts";
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
-// import {.'' medication} from "../data/schema.ts";
-// import {useMedicineData} from "@/App.tsx";
-
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
 }
@@ -32,7 +29,6 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
   const task = _Medication.parse(row.original);
-  // let pills = useContext(PillContext);
   const { data, setData } = useMedicineData();
 
   const handlePropertyChange = (property: string, newValue: string) => {
@@ -61,17 +57,19 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSubTrigger>Priority</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <DropdownMenuRadioGroup value={task.priority}>
-              {priorities.map((priority) => (
-                <DropdownMenuRadioItem
-                  key={priority.value}
-                  value={priority.value}
-                  onClick={() =>
-                    handlePropertyChange("priority", priority.value)
-                  }
-                >
-                  {priority.value}
-                </DropdownMenuRadioItem>
-              ))}
+              {priorities
+                .filter((status) => status.value !== "")
+                .map((priority) => (
+                  <DropdownMenuRadioItem
+                    key={priority.value}
+                    value={priority.value}
+                    onClick={() =>
+                      handlePropertyChange("priority", priority.value)
+                    }
+                  >
+                    {priority.label}
+                  </DropdownMenuRadioItem>
+                ))}
             </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
@@ -80,16 +78,18 @@ export function DataTableRowActions<TData>({
           <DropdownMenuSubTrigger>Status</DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <DropdownMenuRadioGroup value={task.status}>
-              {statuses.map((status) => (
-                <DropdownMenuRadioItem
-                  key={status.value}
-                  id={status.value}
-                  value={status.value}
-                  onClick={() => handlePropertyChange("status", status.value)}
-                >
-                  {status.value}
-                </DropdownMenuRadioItem>
-              ))}
+              {statuses
+                .filter((status) => status.value !== "")
+                .map((status) => (
+                  <DropdownMenuRadioItem
+                    key={status.value}
+                    id={status.value}
+                    value={status.value}
+                    onClick={() => handlePropertyChange("status", status.value)}
+                  >
+                    {status.label}
+                  </DropdownMenuRadioItem>
+                ))}
             </DropdownMenuRadioGroup>
           </DropdownMenuSubContent>
         </DropdownMenuSub>
