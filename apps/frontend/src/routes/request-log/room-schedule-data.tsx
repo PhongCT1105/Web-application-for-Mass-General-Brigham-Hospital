@@ -69,6 +69,7 @@ export const SheduleContent = () => {
   const [selectedPriority, setSelectedPriority] = useState("");
   // const [selectedDate, setSelectedDate] = useState<Date | null>();
   const [submittedForms, setSubmittedForms] = useState<scheduleForm[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const handleFormChange = (
     event:
@@ -104,13 +105,30 @@ export const SheduleContent = () => {
     setSelectedPriority(priority);
   };
 
-  const handleDateChange = (date: Date): void => {
-    console.log(date);
+  const handleStatusChange = (status: string) => {
     setForm((prevState) => ({
       ...prevState,
-      date,
+      status: status,
     }));
+    setSelectedStatus(status);
   };
+
+  const handleDateChange = (date: Date | undefined): void => {
+    console.log(date);
+    if (date !== undefined) {
+      setForm((prevState) => ({
+        ...prevState,
+        date: date,
+      }));
+    }
+  };
+  // }; const handleDateChange = (date: Date): void => {
+  //   console.log(date);
+  //   setForm((prevState) => ({
+  //     ...prevState,
+  //     date,
+  //   }));
+  // };
   const formattedDate = form.date
     ? format(form.date, "MMMM do, yyyy")
     : "Nothing";
@@ -254,7 +272,7 @@ export const SheduleContent = () => {
                     </DropdownMenu>
                   </div>
 
-                  <div className={"ml-4"}>
+                  <div className={"w-1/4 ml-4 "}>
                     <h1 className="w-1/4 text-2xl font-bold">Time</h1>
                     <Input
                       type="time"
@@ -265,42 +283,42 @@ export const SheduleContent = () => {
                     />
                   </div>
 
-                  <div className="w-1/4">
+                  <div className="w-1/4 ml-5">
                     <h1 className="text-2xl font-bold">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
                           id="status"
-                          onClick={() => handlePriorityChange("Low")}
-                          value="Low"
-                          checked={selectedPriority === "Low"}
+                          onClick={() => handleStatusChange("Unassigned")}
+                          value="Unassigned"
+                          checked={selectedStatus === "Unassigned"}
                         />
                         <Label htmlFor="r1">Low</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          id="priority"
-                          onClick={() => handlePriorityChange("Medium")}
-                          value="Medium"
-                          checked={selectedPriority === "Medium"}
+                          id="status"
+                          onClick={() => handleStatusChange("Assigned")}
+                          value="Assigned"
+                          checked={selectedStatus === "Assigned"}
                         />
                         <Label htmlFor="r2">Medium</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          id="priority"
-                          onClick={() => handlePriorityChange("High")}
-                          value="High"
-                          checked={selectedPriority === "High"}
+                          id="status"
+                          onClick={() => handleStatusChange("InProgress")}
+                          value="InProgress"
+                          checked={selectedStatus === "InProgress"}
                         />
                         <Label htmlFor="r3">High</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
-                          id="priority"
-                          onClick={() => handlePriorityChange("Emergency")}
-                          value="Emergency"
-                          checked={selectedPriority === "Emergency"}
+                          id="status"
+                          onClick={() => handleStatusChange("Closed")}
+                          value="Closed"
+                          checked={selectedStatus === "Closed"}
                         />
                         <Label htmlFor="r4">Emergency</Label>
                       </div>
@@ -316,17 +334,6 @@ export const SheduleContent = () => {
                     placeholder="Enter Purpose Here"
                     onChange={handleFormChange}
                     value={form.purpose}
-                  />
-                </div>
-
-                <div>
-                  <h1 className="text-2xl font-bold">Status</h1>
-                  <Input
-                    type="text"
-                    placeholder="Input Status Here"
-                    id="status"
-                    onChange={handleFormChange}
-                    value={form.status}
                   />
                 </div>
 
@@ -362,7 +369,7 @@ export const SheduleContent = () => {
                 date < new Date() || date > new Date("2025-01-01")
               }
               initialFocus
-            ></Calendar>
+            />
           </div>
 
           <h2 className={"pt-10 ml-10"}>You picked {formattedDate}</h2>
