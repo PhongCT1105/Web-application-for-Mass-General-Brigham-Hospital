@@ -33,7 +33,8 @@ export const MapBlock: React.FC = () => {
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<PathfindingStrategy>(new BFSPathfindingStrategy());
   const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
-
+  const [startPoint, setStartPoint] = useState<string>("");
+  const [endPoint, setEndPoint] = useState<string>("");
   const changePathfindingStrategy = (strategy: PathfindingStrategy) => {
     setPathfindingStrategy(strategy);
   };
@@ -47,7 +48,6 @@ export const MapBlock: React.FC = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [hospitalGraph, setHospitalGraph] = useState<Graph>();
-
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
     lowerLevel2: lowerLevelMap2,
@@ -176,36 +176,15 @@ export const MapBlock: React.FC = () => {
       console.error("Start or end node not found in the graph.");
       return;
     }
-    console.log("A path should be created now");
-    const paths: Node[][] = parsePath(
-      pathfindingStrategy.findPath(graph, startNode, endNode),
+
+    const nodes: Node[] = pathfindingStrategy.findPath(
+      graph,
+      startNode,
+      endNode,
     );
 
-    console.log(paths);
-    for (let i = 0; i < paths[0].length - 1; i++) {
-      drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
-    }
-
-    for (let i = 0; i < paths[1].length - 1; i++) {
-      drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
-    }
-
-    for (let i = 0; i < paths[2].length - 1; i++) {
-      drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
-    }
-
-    for (let i = 0; i < paths[3].length - 1; i++) {
-      drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
-    }
-    for (let i = 0; i < paths[4].length - 1; i++) {
-      drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "yellow");
-    }
-    console.log("done :D");
-  }
-
-  function parsePath(nodes: Node[]): Node[][] {
+    // Split the nodes into separate paths for each floor
     const pathsByFloor: { [key: string]: Node[] } = {};
-
     nodes.forEach((node) => {
       if (!pathsByFloor[node.floor]) {
         pathsByFloor[node.floor] = [];
@@ -213,8 +192,39 @@ export const MapBlock: React.FC = () => {
       pathsByFloor[node.floor].push(node);
     });
 
-    return Object.values(pathsByFloor);
+    const floorColorMap: { [key: string]: string } = {
+      "1": "red",
+      "2": "blue",
+      "3": "green",
+      L1: "yellow",
+      L2: "purple",
+      // Add more floors and colors as needed
+    };
+
+    // Draw a path for each floor
+    Object.entries(pathsByFloor).forEach(([floor, nodesOnFloor]) => {
+      // Only draw the path if the current floor matches the floor of the path
+      if (floor === currentFloor) {
+        const color = floorColorMap[floor] || "black"; // Use black as a default color if the floor is not in the color map
+        for (let i = 0; i < nodesOnFloor.length - 1; i++) {
+          drawPath(nodesOnFloor[i].nodeID, nodesOnFloor[i + 1].nodeID, color);
+        }
+      }
+    });
   }
+
+  // function parsePath(nodes: Node[]): Node[][] {
+  //   const pathsByFloor: { [key: string]: Node[] } = {};
+  //
+  //   nodes.forEach((node) => {
+  //     if (!pathsByFloor[node.floor]) {
+  //       pathsByFloor[node.floor] = [];
+  //     }
+  //     pathsByFloor[node.floor].push(node);
+  //   });
+  //
+  //   return Object.values(pathsByFloor);
+  // }
 
   function drawLine(
     startCoordinates: [number, number],
@@ -242,6 +252,8 @@ export const MapBlock: React.FC = () => {
   async function handleSearch(start: string, end: string) {
     console.log(start);
     console.log(end);
+    setStartPoint(start);
+    setEndPoint(end);
     drawFullPath(graph, start, end);
   }
 
@@ -377,6 +389,7 @@ export const MapBlock: React.FC = () => {
       setNodesOnFloor(newNodesOnCurrentFloor);
       addMarkers(map, newNodesOnCurrentFloor);
       displayNodesOnFloor();
+      drawFullPath(newGraph, startPoint, endPoint);
     }
   }
 
