@@ -202,15 +202,11 @@ const CSVTable: React.FC = () => {
       }
 
       console.log(parsedJsonData);
-      const res = await axios.post(
-        "/api/csvFetch/node",
-        JSON.stringify(parsedJsonData),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
+      const res = await axios.post("/api/csvFetch/node", parsedJsonData, {
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+      });
 
       if (res.status == 200) {
         console.log("success");

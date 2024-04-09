@@ -40,6 +40,7 @@
     "@types/react-dom": "^18.2.23",
     "@types/react-lazyload": "^3",
     "@types/react-leaflet-markercluster": "^3",
+    "@types/three": "^0",
     "@vitest/ui": "^0.33.0",
     "eslint": "^8.57.0",
     "eslint-config-custom": "workspace:*",
@@ -59,6 +60,7 @@
     "@fortawesome/react-fontawesome": "^0.2.0",
     "@iconify/icons-lucide": "^1.2.135",
     "@prisma/client": "^5.12.0",
+    "@radix-ui/react-slot": "^1.0.2",
     "@react-leaflet/core": "^2.1.0",
     "@types/csv-parse": "^1.2.2",
     "@types/node": "^20.12.2",
@@ -69,6 +71,9 @@
     "csv-parser": "^3.0.0",
     "dotenv": "^16.4.5",
     "dotenv-cli": "^7.4.0",
+    "embla-carousel": "^8.0.1",
+    "embla-carousel-autoplay": "^8.0.1",
+    "embla-carousel-react": "^8.0.1",
     "install": "^0.13.0",
     "leaflet": "^1.9.4",
     "leaflet.markercluster": "^1.5.3",
@@ -86,6 +91,7 @@
     "react-leaflet": "^4.2.1",
     "react-leaflet-cluster": "^2.1.0",
     "react-leaflet-markercluster": "^3.0.0-rc1",
-    "react-router-dom": "5"
+    "react-router-dom": "5",
+    "three": "^0.163.0"
   }
 }

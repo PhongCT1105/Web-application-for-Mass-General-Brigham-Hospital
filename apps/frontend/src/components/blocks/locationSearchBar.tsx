@@ -12,26 +12,29 @@ import {
   AStarPathfindingStrategy,
 } from "@/util/PathfindingStrategy.tsx";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
+import { HospitalData } from "@/components/blocks/mapBlock.tsx";
 
 interface SearchBarProps {
   locations: string[];
   onSearch: (start: string, end: string) => void;
-  onClear: () => void; // New prop for handling clearing
+  onClear: () => void;
   currentFloor: string;
-  changePathfindingStrategy: (strategy: PathfindingStrategy) => void; // Corrected function signature
+  changePathfindingStrategy: (strategy: PathfindingStrategy) => void;
+  nodesOnFloor: HospitalData[];
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-  locations,
   onSearch,
   onClear,
   changePathfindingStrategy, // New prop
+  nodesOnFloor,
 }) => {
   const [startPoint, setStartPoint] = useState<string>("");
   const [endPoint, setEndPoint] = useState<string>("");
-  const filteredLocations = locations.filter((loc) => {
+  // Filter locations based on the current floor
+  const filteredLocations = nodesOnFloor.filter((node) => {
     // Check if the location is not a hallway and does not start with "Hall"
-    return !loc.includes("Hallway") && !loc.startsWith("Hall");
+    return !node.name.includes("Hallway") && !node.name.startsWith("Hall");
   });
 
   const handleSearch = () => {
@@ -59,10 +62,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             {filteredLocations.map((location, index) => (
               <DropdownMenuRadioItem
                 key={index}
-                value={location}
-                onClick={() => setStartPoint(location)}
+                value={location.name}
+                onClick={() => setStartPoint(location.name)}
               >
-                {location}
+                {location.name}
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuContent>
@@ -77,10 +80,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             {filteredLocations.map((location, index) => (
               <DropdownMenuRadioItem
                 key={index}
-                value={location}
-                onClick={() => setEndPoint(location)}
+                value={location.name}
+                onClick={() => setEndPoint(location.name)}
               >
-                {location}
+                {location.name}
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuContent>

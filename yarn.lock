@@ -2966,6 +2966,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@tweenjs/tween.js@npm:~23.1.1":
+  version: 23.1.1
+  resolution: "@tweenjs/tween.js@npm:23.1.1"
+  checksum: 8833907d9d6adb584879fb743c3d1f6f37ea8a6a2750c06383040cba03cd284a8bbd9f173b50ee7636f56d242e1090b28335b29eb9c44ddf7ca0bb534c4b697e
+  languageName: node
+  linkType: hard
+
 "@types/babel__core@npm:^7.20.5":
   version: 7.20.5
   resolution: "@types/babel__core@npm:7.20.5"
@@ -3494,6 +3501,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/stats.js@npm:*":
+  version: 0.17.3
+  resolution: "@types/stats.js@npm:0.17.3"
+  checksum: 4f84a012f630532877f62959b6335d3fa081ccaac15ce3f1f916741db265bda22b9c927d7efc9cc3389ffd60919a370673cb0b4e7221d580c571031e94b689fd
+  languageName: node
+  linkType: hard
+
 "@types/superagent@npm:*":
   version: 8.1.1
   resolution: "@types/superagent@npm:8.1.1"
@@ -3514,6 +3528,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/three@npm:^0":
+  version: 0.163.0
+  resolution: "@types/three@npm:0.163.0"
+  dependencies:
+    "@tweenjs/tween.js": "npm:~23.1.1"
+    "@types/stats.js": "npm:*"
+    "@types/webxr": "npm:*"
+    fflate: "npm:~0.8.2"
+    meshoptimizer: "npm:~0.18.1"
+  checksum: 81320c03aa89b67601cdc7d0a0dca93cf1d59ff564214859f0f87d0314062e3b7cb02f6d15c245cdae6755d1febc54d23432c25df16ff4aac9c65ba2efd9973d
+  languageName: node
+  linkType: hard
+
 "@types/treeify@npm:^1.0.0":
   version: 1.0.3
   resolution: "@types/treeify@npm:1.0.3"
@@ -3525,6 +3552,13 @@ __metadata:
   version: 3.0.3
   resolution: "@types/warning@npm:3.0.3"
   checksum: 862b71c918283d2ace5cab4e9f0167507a15ee9cf4d46035c858bdd4bf1ee83cbfb42bcfd4da6e7e254a2efa32200b6521f3719c729e39e88e336309d53bb4c4
+  languageName: node
+  linkType: hard
+
+"@types/webxr@npm:*":
+  version: 0.5.15
+  resolution: "@types/webxr@npm:0.5.15"
+  checksum: ae6869345ed6b352d6cb25decad883e56f25bed8a7e16c477e96fac3db0b00fc6e6a9a3d7e0cd17723f763b89fb619c0f83ba628a3cf582dbc8e9710fb0f1567
   languageName: node
   linkType: hard
 
@@ -5203,6 +5237,7 @@ __metadata:
   resolution: "database@workspace:packages/database"
   dependencies:
     "@prisma/client": "npm:5.12.0-dev.46"
+    "@radix-ui/react-slot": "npm:^1.0.2"
     "@types/node": "npm:^20.11.30"
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"
@@ -5505,6 +5540,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"embla-carousel-autoplay@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "embla-carousel-autoplay@npm:8.0.1"
+  peerDependencies:
+    embla-carousel: 8.0.1
+  checksum: 84abd0603c971eff12e5c4506dff4d9a7536c8d900f0da4c359a9999606311c8a10cdd0d4606150d1bd8cf77736dc43e4e193f29dad1744fca49f5a561958792
+  languageName: node
+  linkType: hard
+
 "embla-carousel-react@npm:^8.0.0":
   version: 8.0.0
   resolution: "embla-carousel-react@npm:8.0.0"
@@ -5517,6 +5561,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"embla-carousel-react@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "embla-carousel-react@npm:8.0.1"
+  dependencies:
+    embla-carousel: "npm:8.0.1"
+    embla-carousel-reactive-utils: "npm:8.0.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.1 || ^18.0.0
+  checksum: 7c8201bd50cac1ffa5e80fe84f27228cfcb66cf600e38ec9145fd11488366926d4ba66277c791d82ba761b7bc652434a044ce3af13b65b159afbfc46092a4ee9
+  languageName: node
+  linkType: hard
+
 "embla-carousel-reactive-utils@npm:8.0.0":
   version: 8.0.0
   resolution: "embla-carousel-reactive-utils@npm:8.0.0"
@@ -5526,10 +5582,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"embla-carousel-reactive-utils@npm:8.0.1":
+  version: 8.0.1
+  resolution: "embla-carousel-reactive-utils@npm:8.0.1"
+  peerDependencies:
+    embla-carousel: 8.0.1
+  checksum: 38f24ced814dc7e4eddcda4c64e95c43095183cffca550a8d7942ec3b54b5d5811e121c1bf4508d2d3b856d1b179df2ce90262fa7132a0dbecca2f7038202114
+  languageName: node
+  linkType: hard
+
 "embla-carousel@npm:8.0.0":
   version: 8.0.0
   resolution: "embla-carousel@npm:8.0.0"
   checksum: 762b2a642bb9e698190d5bf32d7a2ec634d264a3da94ef8b3515011c4674f8d5fb3a0db4b6946d6ecbaaf46929c5a20ba9865656006c8514bb88b8a29ddc176c
+  languageName: node
+  linkType: hard
+
+"embla-carousel@npm:8.0.1, embla-carousel@npm:^8.0.1":
+  version: 8.0.1
+  resolution: "embla-carousel@npm:8.0.1"
+  checksum: 1f8f9bb011d2b7ed51a901bfa4cb5236396b3bda0bb2d9ab7e5ac50cf26b0eae3b13f8946c57640910a1785092a40ccb26029ba881c3dfd70a0d681dfa65ec02
   languageName: node
   linkType: hard
 
@@ -6261,6 +6333,13 @@ __metadata:
   version: 0.8.1
   resolution: "fflate@npm:0.8.1"
   checksum: bb66551c98799caaeae678fd0772f725f45cdbd1e2d1ec1027eb916f6f8547668b68aced6684bcdbd9f92766b23245da8a227bf387d2c87f74befc58fbdca13b
+  languageName: node
+  linkType: hard
+
+"fflate@npm:~0.8.2":
+  version: 0.8.2
+  resolution: "fflate@npm:0.8.2"
+  checksum: 2bd26ba6d235d428de793c6a0cd1aaa96a06269ebd4e21b46c8fd1bd136abc631acf27e188d47c3936db090bf3e1ede11d15ce9eae9bffdc4bfe1b9dc66ca9cb
   languageName: node
   linkType: hard
 
@@ -7849,6 +7928,13 @@ __metadata:
   version: 1.4.1
   resolution: "merge2@npm:1.4.1"
   checksum: 7268db63ed5169466540b6fb947aec313200bcf6d40c5ab722c22e242f651994619bcd85601602972d3c85bd2cc45a358a4c61937e9f11a061919a1da569b0c2
+  languageName: node
+  linkType: hard
+
+"meshoptimizer@npm:~0.18.1":
+  version: 0.18.1
+  resolution: "meshoptimizer@npm:0.18.1"
+  checksum: 5cfef6918562b8363a51e92b6eafe81a684fe7b9e31de1c19a6e2068ca8edab745b3e8ef2f0190ecbcc2065134b5dc1de97e4514eb2157914762356c07f93b9f
   languageName: node
   linkType: hard
 
@@ -10602,6 +10688,7 @@ __metadata:
     "@fortawesome/react-fontawesome": "npm:^0.2.0"
     "@iconify/icons-lucide": "npm:^1.2.135"
     "@prisma/client": "npm:^5.12.0"
+    "@radix-ui/react-slot": "npm:^1.0.2"
     "@react-leaflet/core": "npm:^2.1.0"
     "@types/csv-parse": "npm:^1.2.2"
     "@types/leaflet": "npm:^1.9.8"
@@ -10613,12 +10700,16 @@ __metadata:
     "@types/react-icons": "npm:^3.0.0"
     "@types/react-lazyload": "npm:^3"
     "@types/react-leaflet-markercluster": "npm:^3"
+    "@types/three": "npm:^0"
     "@vitest/ui": "npm:^0.33.0"
     "@yarnpkg/pnpify": "npm:^4.0.0-rc.45"
     axios: "npm:^1.6.8"
     csv-parser: "npm:^3.0.0"
     dotenv: "npm:^16.4.5"
     dotenv-cli: "npm:^7.4.0"
+    embla-carousel: "npm:^8.0.1"
+    embla-carousel-autoplay: "npm:^8.0.1"
+    embla-carousel-react: "npm:^8.0.1"
     eslint: "npm:^8.57.0"
     eslint-config-custom: "workspace:*"
     happy-dom: "npm:^10.6.3"
@@ -10643,6 +10734,7 @@ __metadata:
     react-leaflet-cluster: "npm:^2.1.0"
     react-leaflet-markercluster: "npm:^3.0.0-rc1"
     react-router-dom: "npm:5"
+    three: "npm:^0.163.0"
     tsconfig-custom: "workspace:*"
     turbo: "npm:latest"
     typescript: "npm:^5.0.4"
@@ -11063,6 +11155,13 @@ __metadata:
   dependencies:
     any-promise: "npm:^1.0.0"
   checksum: 486e1283a867440a904e36741ff1a177faa827cf94d69506f7e3ae4187b9afdf9ec368b3d8da225c192bfe2eb943f3f0080594156bf39f21b57cd1411e2e7f6d
+  languageName: node
+  linkType: hard
+
+"three@npm:^0.163.0":
+  version: 0.163.0
+  resolution: "three@npm:0.163.0"
+  checksum: caf4b681b62b4367242b88e89299f8f5e728636a38af51ccb56c5814ff9d2a59a8116df3d6851238804b23435b4410ba68ae9e70f7d26791345945c094abf011
   languageName: node
   linkType: hard
 
