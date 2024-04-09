@@ -17,7 +17,7 @@ import {
   PathfindingStrategy,
 } from "@/util/PathfindingStrategy.tsx";
 
-interface HospitalData {
+export interface HospitalData {
   nodeID: string;
   name: string;
   geocode: string;
@@ -36,13 +36,14 @@ export const MapBlock: React.FC = () => {
   const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<PathfindingStrategy>(new BFSPathfindingStrategy());
+  const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
 
   const changePathfindingStrategy = (strategy: PathfindingStrategy) => {
     setPathfindingStrategy(strategy);
   };
 
   const [graph, setGraph] = useState<Graph>(new Graph());
-  const [currentFloor, setCurrentFloor] = useState("lowerLevel1");
+  const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -54,8 +55,8 @@ export const MapBlock: React.FC = () => {
 
   useEffect(() => {
     const preloadedImages = [
-      lowerLevelMap1,
       lowerLevelMap2,
+      lowerLevelMap1,
       theFirstFloor,
       theSecondFloor,
       theThirdFloor,
@@ -68,8 +69,8 @@ export const MapBlock: React.FC = () => {
   }, []);
 
   const drawNodes = async () => {
-    const { data: edgeData } = await axios.get("/api/mapreq/edges");
-    const { data: nodeData } = await axios.get("/api/mapreq/nodes");
+    const { data: edgeData } = await axios.get(`/api/mapreq/edges?=floor=1`);
+    const { data: nodeData } = await axios.get(`/api/mapreq/nodes?=floor=1`);
 
     const stringData: string[] = [];
 
@@ -124,43 +125,20 @@ export const MapBlock: React.FC = () => {
 
     L.imageOverlay(theThirdFloor, bounds).addTo(map);
     L.imageOverlay(theSecondFloor, bounds).addTo(map);
-    L.imageOverlay(theFirstFloor, bounds).addTo(map);
     L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
     L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
+    L.imageOverlay(theFirstFloor, bounds).addTo(map);
 
     map.setMaxBounds(bounds);
 
-    hospitalData.forEach((hospital) => {
-      const customIcon = new Icon({
-        iconUrl: RedDot,
-        iconSize: [12, 12],
-        iconAnchor: [6, 6],
-      });
-      const [lat, lng] = hospital.geocode.split(",").map(parseFloat);
-      const nLat = 3400 - lng;
-      const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
-
-      // Add a click event handler to toggle popup visibility
-      const popupContent = `<b>${hospital.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-      marker.bindPopup(popupContent);
-
-      marker.on("click", function (this: L.Marker) {
-        // Specify the type of 'this' as L.Marker
-        if (!this.isPopupOpen()) {
-          // Check if the popup is not already open
-          this.openPopup(); // Open the popup when the marker is clicked
-        }
-      });
-
-      return () => {
-        map.remove();
-      };
-    });
+    // Print out the nodes on the first floor
+    const nodesOnFirstFloor = hospitalData.filter((node) => node.floor === "1");
+    console.log(nodesOnFirstFloor);
   };
 
   useEffect(() => {
     drawNodes();
-  }, []); // Empty dependency array to ensure it's only called once
+  }, []);
 
   function addToPaths(newPath: Polyline) {
     setPaths((prevPaths) => [...prevPaths, newPath]);
@@ -249,11 +227,63 @@ export const MapBlock: React.FC = () => {
     drawFullPath(graph, start, end);
   }
 
-  function changeFloor(floorName: string) {
+  function clearMarkers() {
     const map = mapRef.current;
     if (!map) return;
 
-    setCurrentFloor(floorName);
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        map.removeLayer(layer);
+      }
+    });
+  }
+
+  function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
+    nodesOnFloor.forEach((node) => {
+      const customIcon = new Icon({
+        iconUrl: RedDot,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
+      });
+      const [lat, lng] = node.geocode.split(",").map(parseFloat);
+      const nLat = 3400 - lng;
+      const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
+
+      // Add a click event handler to toggle popup visibility
+      const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+      marker.bindPopup(popupContent);
+
+      marker.on("click", function (this: L.Marker) {
+        // Specify the type of 'this' as L.Marker
+        if (!this.isPopupOpen()) {
+          // Check if the popup is not already open
+          this.openPopup(); // Open the popup when the marker is clicked
+        }
+      });
+    });
+  }
+
+  async function changeFloor(floorName: string) {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const convertedFloorName =
+      floorName === "lowerLevel2"
+        ? "L2"
+        : floorName === "lowerLevel1"
+          ? "L1"
+          : floorName === "theFirstFloor"
+            ? "1"
+            : floorName === "theSecondFloor"
+              ? "2"
+              : floorName === "theThirdFloor"
+                ? "3"
+                : "";
+
+    setCurrentFloor(convertedFloorName);
+
+    // Remove existing markers from the map
+    clearMarkers();
 
     map.eachLayer((layer) => {
       if (layer instanceof L.ImageOverlay) {
@@ -269,6 +299,58 @@ export const MapBlock: React.FC = () => {
       ];
       L.imageOverlay(initialFloorImage, bounds).addTo(map);
       map.setMaxBounds(bounds);
+
+      // Fetch hospital data and draw nodes
+      const { data: edgeData } = await axios.get(
+        `/api/mapreq/edges?=floor=${convertedFloorName}`,
+      );
+      const { data: nodeData } = await axios.get(
+        `/api/mapreq/nodes?=floor=${convertedFloorName}`,
+      );
+
+      const stringData: string[] = [];
+
+      const newGraph: Graph = new Graph();
+      for (let i = 0; i < nodeData.length; i++) {
+        hospitalData.push({
+          nodeID: nodeData[i].nodeID,
+          name: nodeData[i].longName,
+          geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
+          floor: nodeData[i].floor,
+        });
+        stringData.push(nodeData[i].longName);
+
+        newGraph.addNode(
+          new Node(
+            nodeData[i].nodeID,
+            parseInt(nodeData[i].xcoord),
+            parseInt(nodeData[i].ycoord),
+            nodeData[i].floor,
+            nodeData[i].building,
+            nodeData[i].nodeType,
+            nodeData[i].longName,
+            nodeData[i].shortName,
+            new Set<Node>(),
+          ),
+        );
+      }
+
+      for (let i = 0; i < edgeData.length; i++) {
+        newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
+      }
+      setHospitalDataString(stringData);
+      setGraph(newGraph);
+      hospitalGraph = newGraph;
+
+      console.log(hospitalData);
+      console.log(hospitalGraph);
+
+      // Draw new markers for the selected floor after adding the image overlay
+      const nodesOnCurrentFloor = hospitalData.filter(
+        (node) => node.floor === convertedFloorName,
+      );
+      setNodesOnFloor(nodesOnCurrentFloor);
+      addMarkers(map, nodesOnCurrentFloor);
     }
   }
 
@@ -283,6 +365,7 @@ export const MapBlock: React.FC = () => {
           onClear={clearLines}
           changePathfindingStrategy={changePathfindingStrategy}
           currentFloor={currentFloor}
+          nodesOnFloor={nodesOnFloor}
         />
       </div>
       <div
@@ -307,11 +390,11 @@ export const MapBlock: React.FC = () => {
             color: "black",
           }}
         >
-          <button onClick={() => changeFloor("lowerLevel1")}>
-            Lower Level 1
-          </button>
           <button onClick={() => changeFloor("lowerLevel2")}>
             Lower Level 2
+          </button>
+          <button onClick={() => changeFloor("lowerLevel1")}>
+            Lower Level 1
           </button>
           <button onClick={() => changeFloor("theFirstFloor")}>
             First Floor
