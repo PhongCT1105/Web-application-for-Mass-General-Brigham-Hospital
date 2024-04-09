@@ -1,4 +1,4 @@
-import { priorities, statuses } from "./dataTypes/labels.ts";
+// import { priorities, statuses } from "./dataTypes/labels.ts";
 import { faker } from "@faker-js/faker";
 import { Medication } from "./interfaces/medicationReq.ts";
 export const pillData: Medication[] = Array.from({ length: 100 }, () => ({
@@ -25,8 +25,10 @@ export const pillData: Medication[] = Array.from({ length: 100 }, () => ({
     "Vyvanse",
     "Hydrocodone",
   ]),
-  status: faker.helpers.arrayElement(statuses).value,
-  priority: faker.helpers.arrayElement(priorities).value,
+  // status: faker.helpers.arrayElement(statuses).value,
+  // priority: faker.helpers.arrayElement(priorities).value,
+  status: "",
+  priority: "",
   price: faker.number.float({ min: 1.5, max: 100.99, fractionDigits: 2 }),
   quantity: 0,
 }));
