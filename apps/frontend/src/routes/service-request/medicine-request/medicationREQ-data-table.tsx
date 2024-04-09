@@ -23,7 +23,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@/components/ui/table.tsx";
 
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -39,20 +39,23 @@ import {
   Medication,
   MedicationForm,
 } from "common/src/interfaces/medicationReq.ts";
-// import {useMedicineData} from "@/routes/request-log/RequestLogPage.tsx";
 import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
+import { MedicineFormLogTable } from "@/routes/service-request/medicine-request/tempMedicineLog.tsx";
+import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/tempMedicineCol.tsx";
 interface DataTableProps {
   columns: ColumnDef<Medication>[];
 }
 
 export function DataTable({ columns }: DataTableProps) {
   const now = new Date();
+  const [forms, setForms] = React.useState<MedicationForm[]>([]);
+
   const [submission, setSubmission] = React.useState<Medication[]>([]);
   const [form, setForm] = React.useState<MedicationForm>({
     id: 0,
-    dateSubmitted: now,
+    dateSubmitted: now.toDateString(),
     employee: "",
     location: "",
     medication: [],
@@ -79,9 +82,11 @@ export function DataTable({ columns }: DataTableProps) {
       [event.target.id]: event.target.value,
     }));
   };
+  const { data } = useMedicineData();
 
   const handleSubmit = () => {
     console.log(form);
+    setForms((prevState) => [...prevState, form]);
   };
 
   const [rowSelection, setRowSelection] = React.useState({});
@@ -91,9 +96,6 @@ export function DataTable({ columns }: DataTableProps) {
     [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
-
-  // const pills = useContext(MedicineContext);
-  const { data } = useMedicineData();
   const table = useReactTable({
     data,
     columns,
@@ -170,10 +172,11 @@ export function DataTable({ columns }: DataTableProps) {
         </Table>
       </div>
       <DataTablePagination table={table} />
+
       <Dialog>
         <DialogTrigger asChild className={"w-full"}>
           <Button
-            className={"w-full"}
+            className={"w-full "}
             onClick={() => {
               {
                 table.getRowModel().rows?.length
@@ -195,18 +198,37 @@ export function DataTable({ columns }: DataTableProps) {
         </DialogTrigger>
         <DialogContent>
           <Label>Signature</Label>
-          <Input type={"text"} id={"employee"} onChange={handleFormChange} />
+          <Input
+            type={"text"}
+            id={"employee"}
+            placeholder={"Sign here"}
+            onChange={handleFormChange}
+          />
           <Label>Patient Location</Label>
-          <Input type={"text"} id={"location"} onChange={handleFormChange} />
+          <Input
+            type={"text"}
+            id={"location"}
+            placeholder={"Location"}
+            onChange={handleFormChange}
+          />
           <Label>Patient Name</Label>
-          <Input type={"text"} id={"patient"} onChange={handleFormChange} />
+          <Input
+            type={"text"}
+            id={"patient"}
+            placeholder={"Patient name"}
+            onChange={handleFormChange}
+          />
           <DialogFooter>
             <DialogClose asChild>
-              <Button onClick={handleSubmit}>Submit</Button>
+              <Button className={"w-full"} onClick={handleSubmit}>
+                Submit
+              </Button>
             </DialogClose>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+      <div className={"pb-4"}></div>
+      <MedicineFormLogTable columns={columnsMedicationFormLog} data={forms} />
     </div>
   );
 }

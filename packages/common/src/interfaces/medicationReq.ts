@@ -14,7 +14,7 @@ export const _MedicationForm = z.object({
   employee: z.string(),
   location: z.string(),
   patient: z.string(),
-  dateSubmitted: z.date(),
+  dateSubmitted: z.string(),
 });
 
 export type Medication = z.infer<typeof _Medication>;

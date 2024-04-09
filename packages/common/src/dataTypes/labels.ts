@@ -6,6 +6,7 @@ import {
   CircleIcon,
   CrossCircledIcon,
   ExclamationTriangleIcon,
+  InfoCircledIcon,
   QuestionMarkCircledIcon,
   StopwatchIcon,
 } from "@radix-ui/react-icons";
@@ -37,6 +38,11 @@ export const statuses = [
     icon: QuestionMarkCircledIcon,
   },
   {
+    value: "",
+    label: "",
+    icon: InfoCircledIcon,
+  },
+  {
     value: "todo",
     label: "Todo",
     icon: CircleIcon,
@@ -63,6 +69,11 @@ export const priorities = [
     label: "Low",
     value: "low",
     icon: ArrowDownIcon,
+  },
+  {
+    label: "",
+    value: "",
+    icon: InfoCircledIcon,
   },
   {
     label: "Medium",
