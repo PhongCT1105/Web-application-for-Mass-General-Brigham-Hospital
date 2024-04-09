@@ -16,8 +16,8 @@ import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
 import { Badge, Car, FlowerIcon, PillIcon } from "lucide-react";
 import { Medication } from "common/src/interfaces/medicationReq.ts";
 import { pillData } from "common/src/testData.ts";
-import { DataTable } from "@/routes/request-log/medicine-request/medication-data-table.tsx";
-import { columns } from "@/routes/request-log/medicine-request/columns.tsx";
+import { DataTable } from "@/routes/service-request/medicine-request/medicationREQ-data-table.tsx";
+import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
 // import { MedicineContext } from "common/src/interfaces/medicationReq.ts";
 
 interface MedicineContextType {
@@ -166,7 +166,7 @@ export const RequestLogPage = () => {
                               Prayer Request
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                              Send a prayer to a loved one
+                              By Mina Boktor & Alexander Kraemling
                             </p>
                           </div>
                         </div>
