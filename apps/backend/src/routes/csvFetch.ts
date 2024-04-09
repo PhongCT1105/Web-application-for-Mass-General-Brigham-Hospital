@@ -16,8 +16,14 @@ interface nodeTable {
 }
 
 interface edgeTable {
+  edgeID: string;
   startNodeID: string;
   endNodeID: string;
+}
+
+function generateEID(edge: edgeTable): string {
+  // Replace this with your own logic to generate eID
+  return `${edge.startNodeID}-${edge.endNodeID}`;
 }
 
 // Node stuff good, just copy the format
@@ -58,7 +64,10 @@ router.post("/edge", async (req, res) => {
     await prisma.edges.deleteMany();
     for (let i = 0; i < edgeData.length; i++) {
       await prisma.edges.create({
-        data: edgeData[i],
+        data: {
+          ...edgeData[i],
+          eID: generateEID(edgeData[i]),
+        },
       });
     }
     res.status(200).send("CSV data imported successfully.");
