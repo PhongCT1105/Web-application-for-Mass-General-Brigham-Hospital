@@ -24,17 +24,18 @@ interface SearchBarProps {
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
+  locations,
   onSearch,
   onClear,
   changePathfindingStrategy, // New prop
-  nodesOnFloor,
+  //nodesOnFloor,
 }) => {
   const [startPoint, setStartPoint] = useState<string>("");
   const [endPoint, setEndPoint] = useState<string>("");
   // Filter locations based on the current floor
-  const filteredLocations = nodesOnFloor.filter((node) => {
+  const filteredLocations = locations.filter((location) => {
     // Check if the location is not a hallway and does not start with "Hall"
-    return !node.name.includes("Hallway") && !node.name.startsWith("Hall");
+    return !location.includes("Hallway") && !location.startsWith("Hall");
   });
 
   const handleSearch = () => {
@@ -62,10 +63,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             {filteredLocations.map((location, index) => (
               <DropdownMenuRadioItem
                 key={index}
-                value={location.name}
-                onClick={() => setStartPoint(location.name)}
+                value={location}
+                onClick={() => setStartPoint(location)}
               >
-                {location.name}
+                {location}
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuContent>
@@ -80,10 +81,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             {filteredLocations.map((location, index) => (
               <DropdownMenuRadioItem
                 key={index}
-                value={location.name}
-                onClick={() => setEndPoint(location.name)}
+                value={location}
+                onClick={() => setEndPoint(location)}
               >
-                {location.name}
+                {location}
               </DropdownMenuRadioItem>
             ))}
           </DropdownMenuContent>

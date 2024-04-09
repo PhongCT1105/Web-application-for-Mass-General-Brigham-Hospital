@@ -53,8 +53,8 @@ export const MapBlock: React.FC = () => {
   } as const;
 
   const loadData = async () => {
-    const { data: edgeData } = await axios.get(`/api/mapreq/edges?=floor=1`);
-    const { data: nodeData } = await axios.get(`/api/mapreq/nodes?=floor=1`);
+    const { data: edgeData } = await axios.get(`/api/mapreq/edges`);
+    const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
 
     const stringData: string[] = [];
 
@@ -88,7 +88,6 @@ export const MapBlock: React.FC = () => {
     for (let i = 0; i < edgeData.length; i++) {
       newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
     }
-
     setHospitalDataString(stringData);
     setHospitalData(newHospitalData);
     setGraph(newGraph);
@@ -280,6 +279,7 @@ export const MapBlock: React.FC = () => {
 
     // Remove existing markers from the map
     clearMarkers();
+    clearLines();
 
     map.eachLayer((layer) => {
       if (layer instanceof L.ImageOverlay) {
@@ -305,6 +305,10 @@ export const MapBlock: React.FC = () => {
       );
 
       const stringData: string[] = [];
+      for (let i = 0; i < nodeData.length; i++) {
+        stringData.push(nodeData[i].longName);
+      }
+
       const hospitalData = [];
 
       const newGraph: Graph = new Graph();
@@ -358,7 +362,7 @@ export const MapBlock: React.FC = () => {
         <SearchBar
           locations={hospitalDataString
             .sort((a, b) => a.localeCompare(b))
-            .filter((str) => str.indexOf("Hallway") === -1)}
+            .filter((str) => str.indexOf("Hall") === -1)}
           onSearch={handleSearch}
           onClear={clearLines}
           changePathfindingStrategy={changePathfindingStrategy}
