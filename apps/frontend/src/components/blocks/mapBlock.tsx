@@ -149,7 +149,7 @@ export const MapBlock: React.FC = () => {
     setPaths((prevPaths) => [...prevPaths, newPath]);
   }
 
-  function drawPath(start: string, end: string) {
+  function drawPath(start: string, end: string, color: string) {
     const startHospital = hospitalData.find((h) => h.nodeID === start);
     const endHospital = hospitalData.find((h) => h.nodeID === end);
     if (!startHospital || !endHospital) {
@@ -165,7 +165,7 @@ export const MapBlock: React.FC = () => {
     const startCoords: [number, number] = [3400 - startLng, startLat];
     const endCoords: [number, number] = [3400 - endLng, endLat];
 
-    drawLine(startCoords, endCoords);
+    drawLine(startCoords, endCoords, color);
   }
 
   function drawFullPath(graph: Graph, start: string, end: string) {
@@ -177,17 +177,29 @@ export const MapBlock: React.FC = () => {
       return;
     }
     console.log("A path should be created now");
-    const nodes: Node[] = pathfindingStrategy.findPath(
-      graph,
-      startNode,
-      endNode,
+    const paths: Node[][] = parsePath(
+      pathfindingStrategy.findPath(graph, startNode, endNode),
     );
 
-    console.log(nodes);
-    for (let i = 0; i < nodes.length - 1; i++) {
-      drawPath(nodes[i].nodeID, nodes[i + 1].nodeID);
+    console.log(paths);
+    for (let i = 0; i < paths[0].length - 1; i++) {
+      drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
     }
-    console.log(parsePath(nodes));
+
+    for (let i = 0; i < paths[1].length - 1; i++) {
+      drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
+    }
+
+    for (let i = 0; i < paths[2].length - 1; i++) {
+      drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
+    }
+
+    for (let i = 0; i < paths[3].length - 1; i++) {
+      drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
+    }
+    for (let i = 0; i < paths[4].length - 1; i++) {
+      drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "yellow");
+    }
     console.log("done :D");
   }
 
@@ -207,12 +219,13 @@ export const MapBlock: React.FC = () => {
   function drawLine(
     startCoordinates: [number, number],
     endCoordinates: [number, number],
+    color: string,
   ) {
     const map = mapRef.current;
     if (!map) return;
 
     const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: "blue",
+      color: color,
       weight: 5,
     }).addTo(map);
     addToPaths(newPath); // Add the new path to the paths list
@@ -289,7 +302,7 @@ export const MapBlock: React.FC = () => {
 
     // Remove existing markers from the map
     clearMarkers();
-    clearLines();
+    // clearLines();
 
     map.eachLayer((layer) => {
       if (layer instanceof L.ImageOverlay) {
