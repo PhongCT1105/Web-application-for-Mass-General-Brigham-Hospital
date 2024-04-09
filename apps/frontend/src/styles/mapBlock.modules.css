@@ -1,3 +1,5 @@
+/* mapBlock.module.css */
+
 .formBlock {
   max-width: 300px;
   background-color: #fff;
@@ -27,4 +29,8 @@
 
 input:nth-child(1) {
   margin-bottom: 10px;
+}
+
+.button {
+  color: black;
 }

@@ -1,6 +1,6 @@
-// import { Graph } from "./graph.tsx";
-// import { BFS } from "./bfs.tsx";
-// import { pathGenerator } from "./pathGenerator.tsx";
+// import { Graph } from "./Graph.tsx";
+// import { BFS } from "./BFS.tsx";
+// import { pathGenerator } from "./PathGenerator.tsx";
 //
 // // building graph
 // const graph = new Graph();
