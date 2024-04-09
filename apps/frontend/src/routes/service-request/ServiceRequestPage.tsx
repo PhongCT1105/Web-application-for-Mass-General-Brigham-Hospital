@@ -11,7 +11,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
 
-import { Badge, Car, Church, FlowerIcon } from "lucide-react";
+import { Badge, Car, Church, FlowerIcon, Biohazard } from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
@@ -50,7 +50,7 @@ export default function ServiceRequestPage() {
                             Transportation Request
                           </TabsTrigger>
                           <TabsTrigger value="Sanitation Request">
-                            <Car className="mr-2 h-4 w-4" />
+                            <Biohazard className="mr-2 h-4 w-4" />
                             Sanitation Request
                           </TabsTrigger>
                           <TabsTrigger value="Security Request">
