@@ -24,6 +24,7 @@ export class AStarPathfindingStrategy implements PathfindingStrategy {
 
 export class DijkstraPathfindingStrategy implements PathfindingStrategy {
   findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+    console.log("I made it here");
     return Dijkstra.run(graph, startNodeID, endNodeID);
   }
 }
