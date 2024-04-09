@@ -305,7 +305,7 @@ export const MapBlock: React.FC = () => {
       );
 
       const stringData: string[] = [];
-      const newHospitalData: HospitalData[] = [];
+      const hospitalData = [];
 
       const newGraph: Graph = new Graph();
       for (let i = 0; i < nodeData.length; i++) {
@@ -339,7 +339,6 @@ export const MapBlock: React.FC = () => {
       setHospitalDataString(stringData);
       setGraph(newGraph);
       setHospitalGraph(newGraph);
-      setHospitalData(newHospitalData);
 
       console.log(hospitalData);
       console.log(hospitalGraph);
