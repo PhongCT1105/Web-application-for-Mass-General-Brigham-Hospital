@@ -10,6 +10,8 @@ import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"
 import CSVTable from "./components/blocks/csvTable.tsx";
 import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
+import MapEditingPage from "@/routes/MapEditingPage.tsx";
+
 function App() {
   const router = createBrowserRouter([
     {
@@ -55,6 +57,11 @@ function App() {
     {
       path: "/sanitation",
       element: <Sanitation />,
+    },
+    {
+      path: "/map-editor",
+      errorElement: <h1>ERROR</h1>,
+      element: <MapEditingPage />,
     },
   ]);
 
