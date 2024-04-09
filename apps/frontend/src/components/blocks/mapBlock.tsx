@@ -93,6 +93,7 @@ export const MapBlock: React.FC = () => {
           nodeData[i].nodeType,
           nodeData[i].longName,
           nodeData[i].shortName,
+          new Set<Node>(),
         ),
       );
     }

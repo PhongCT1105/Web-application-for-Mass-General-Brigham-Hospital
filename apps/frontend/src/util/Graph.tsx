@@ -32,6 +32,7 @@ export class Graph {
     const startNode = this.nodes.get(startNodeID)!;
     const endNode = this.nodes.get(endNodeID)!;
     this.edges.push(new Edge(startNode, endNode));
+    this.addNeighbors(startNodeID, endNodeID);
   }
 
   // Setting neighbors bidirectionally to a node
@@ -53,5 +54,8 @@ export class Graph {
       );
       return;
     }
+
+    sourceNode.neighbors.add(targetNode);
+    targetNode.neighbors.add(sourceNode);
   }
 }
