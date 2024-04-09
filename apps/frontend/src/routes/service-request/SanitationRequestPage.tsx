@@ -16,21 +16,25 @@ import {
   // CardTitle,
 } from "@/components/ui/card";
 
+type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
+type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
+type rTypeOfIssue =
+  | "Spill"
+  | "Leak"
+  | "BodilyFluid"
+  | "FoulOdor"
+  | "Garbage"
+  | "BrokenEquipment"
+  | "Other"
+  | "";
+
 interface Form {
   name: string;
-  severity: "Low" | "Medium" | "High" | "Emergency" | "";
+  severity: rSeverity;
   location: string;
-  typeOfIssue:
-    | "Spill"
-    | "Leak"
-    | "BodilyFluid"
-    | "FoulOdor"
-    | "Garbage"
-    | "BrokenEquipment"
-    | "Other"
-    | "";
+  typeOfIssue: rTypeOfIssue;
   time: string;
-  status: string;
+  status: rStatus;
   description: string;
   comments: string;
 }
@@ -40,6 +44,7 @@ export function Sanitation() {
 
   const [selectedTypeOfIssue, setSelectedTypeOfIssue] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
   const [submittedForms, setSubmittedForms] = useState<Form[]>([]);
 
   const [form, setForm] = useState<Form>({
@@ -93,6 +98,16 @@ export function Sanitation() {
     setSelectedSeverity(severity);
   };
 
+  const handleStatusChange = (
+    status: "Unassigned" | "Assigned" | "InProgress" | "Closed" | "",
+  ) => {
+    setForm((prevState) => ({
+      ...prevState,
+      status: status,
+    }));
+    setSelectedStatus(status);
+  };
+
   const handleSubmit = () => {
     if (
       form.name === "" ||
@@ -129,6 +144,7 @@ export function Sanitation() {
     }));
     setSelectedSeverity("");
     setSelectedTypeOfIssue("");
+    setSelectedStatus("");
   };
 
   return (
@@ -136,13 +152,6 @@ export function Sanitation() {
       <div className="flex items-center justify-center py-12">
         <div className="mx-auto max-w-lg">
           <Card className="w-[400px]">
-            {/*<CardHeader>*/}
-            {/*  <CardTitle>Sanitation Request</CardTitle>*/}
-            {/*  <CardDescription>*/}
-            {/*    Enter the details for your request*/}
-            {/*  </CardDescription>*/}
-            {/*</CardHeader>*/}
-
             <CardContent>
               <div className="space-y-6">
                 <div>
@@ -297,15 +306,46 @@ export function Sanitation() {
                   />
                 </div>
 
-                <h1 className="text-2xl font-bold">Status</h1>
                 <div>
-                  <Input
-                    type="text"
-                    placeholder="Input Status Here"
-                    id="status"
-                    onChange={handleFormChange}
-                    value={form.status}
-                  />
+                  <h1 className="text-2xl font-bold">Status</h1>
+                  <RadioGroup defaultValue="comfortable">
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        id="status"
+                        onClick={() => handleStatusChange("Unassigned")}
+                        value="Unassigned"
+                        checked={selectedStatus === "Unassigned"}
+                      />
+                      <Label htmlFor="r1">Unassigned</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        id="status"
+                        onClick={() => handleStatusChange("Assigned")}
+                        value="Assigned"
+                        checked={selectedStatus === "Assigned"}
+                      />
+                      <Label htmlFor="r2">Assigned</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        id="status"
+                        onClick={() => handleStatusChange("InProgress")}
+                        value="InProgress"
+                        checked={selectedStatus === "InProgress"}
+                      />
+                      <Label htmlFor="r3">In Progress</Label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RadioGroupItem
+                        id="status"
+                        onClick={() => handleStatusChange("Closed")}
+                        value="Closed"
+                        checked={selectedStatus === "Closed"}
+                      />
+                      <Label htmlFor="r4">Closed</Label>
+                    </div>
+                  </RadioGroup>
                 </div>
 
                 <div>
@@ -368,6 +408,10 @@ export function Sanitation() {
                       <div>
                         <span className="font-semibold">Time of Issue:</span>{" "}
                         {form.time}
+                      </div>
+                      <div>
+                        <span className="font-semibold">Status:</span>{" "}
+                        {form.status}
                       </div>
                       <div>
                         <span className="font-semibold">Description:</span>{" "}
