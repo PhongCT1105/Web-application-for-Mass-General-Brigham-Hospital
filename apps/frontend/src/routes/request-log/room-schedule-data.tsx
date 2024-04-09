@@ -111,7 +111,9 @@ export const SheduleContent = () => {
       date,
     }));
   };
-  const formattedDate = form.date ? format(form.date, "MMMM do, yyyy") : "";
+  const formattedDate = form.date
+    ? format(form.date, "MMMM do, yyyy")
+    : "Nothing";
 
   const handleLocationChange = (location: string) => {
     setForm((prevState) => ({
@@ -126,7 +128,7 @@ export const SheduleContent = () => {
       form.priority === "" ||
       form.location === "" ||
       form.purpose === "" ||
-      //form.date === "Pick a date" ||
+      form.date === undefined ||
       form.time === "" ||
       form.status === ""
     ) {
@@ -144,7 +146,7 @@ export const SheduleContent = () => {
 
   return (
     <>
-      <div className="flex  space-y-1">
+      <div className="flex space-y-1">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">
             Room Schedule Request
@@ -157,7 +159,7 @@ export const SheduleContent = () => {
 
       <Separator className="my-4" />
 
-      <div className=" flex flex-row border rounded-md  text mx-10 my-5">
+      <div className=" flex  border rounded-md  text mx-10 my-5">
         <div className="w-3/4 justify-center items-center">
           <Card className="mr-20 border-none">
             <CardHeader>
@@ -180,7 +182,7 @@ export const SheduleContent = () => {
                 </div>
 
                 <div className="flex">
-                  <div className="w-1/3">
+                  <div className="w-1/4">
                     <h1 className="text-2xl font-bold">Priority Level</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
@@ -222,7 +224,7 @@ export const SheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/3 ml-4">
+                  <div className="w-1/4 ml-4">
                     {/*<h1 className="text-2xl font-bold">Location</h1>*/}
                     {/*<Input*/}
                     {/*  type="text"*/}
@@ -253,7 +255,7 @@ export const SheduleContent = () => {
                   </div>
 
                   <div className={"ml-4"}>
-                    <h1 className="text-2xl font-bold">Time</h1>
+                    <h1 className="w-1/4 text-2xl font-bold">Time</h1>
                     <Input
                       type="time"
                       placeholder="Time of Issue"
@@ -261,6 +263,48 @@ export const SheduleContent = () => {
                       onChange={handleFormChange}
                       value={form.time}
                     />
+                  </div>
+
+                  <div className="w-1/4">
+                    <h1 className="text-2xl font-bold">Status</h1>
+                    <RadioGroup defaultValue="comfortable">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="status"
+                          onClick={() => handlePriorityChange("Low")}
+                          value="Low"
+                          checked={selectedPriority === "Low"}
+                        />
+                        <Label htmlFor="r1">Low</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="priority"
+                          onClick={() => handlePriorityChange("Medium")}
+                          value="Medium"
+                          checked={selectedPriority === "Medium"}
+                        />
+                        <Label htmlFor="r2">Medium</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="priority"
+                          onClick={() => handlePriorityChange("High")}
+                          value="High"
+                          checked={selectedPriority === "High"}
+                        />
+                        <Label htmlFor="r3">High</Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="priority"
+                          onClick={() => handlePriorityChange("Emergency")}
+                          value="Emergency"
+                          checked={selectedPriority === "Emergency"}
+                        />
+                        <Label htmlFor="r4">Emergency</Label>
+                      </div>
+                    </RadioGroup>
                   </div>
                 </div>
 
@@ -306,22 +350,22 @@ export const SheduleContent = () => {
           </Card>
         </div>
 
-        <div className=" flex-row items-center mt-5">
-          <h1 className="text-2xl font-bold text-center mt-10">
-            Pick a Date
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{" "}
-          </h1>
-          <Calendar
-            className={"w-full scale-150 mx-20 my-20"}
-            mode="single"
-            selected={form.date}
-            onSelect={handleDateChange}
-            disabled={(date) =>
-              date < new Date() || date > new Date("2025-01-01")
-            }
-            initialFocus
-          ></Calendar>
-          <h2 className={"pt-20"}>You picked {formattedDate}</h2>
+        <div className="w-2/5 items-center bg-secondary">
+          <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
+          <div className="w-full max-w-md md:max-w-none mt-6 items-center">
+            <Calendar
+              className={"w-full transform scale-150 md:ml-40 my-6 md:my-20"}
+              mode="single"
+              selected={form.date}
+              onSelect={handleDateChange}
+              disabled={(date) =>
+                date < new Date() || date > new Date("2025-01-01")
+              }
+              initialFocus
+            ></Calendar>
+          </div>
+
+          <h2 className={"pt-10 ml-10"}>You picked {formattedDate}</h2>
         </div>
       </div>
     </>
