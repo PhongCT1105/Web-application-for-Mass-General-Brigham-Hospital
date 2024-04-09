@@ -48,7 +48,7 @@ export function Header() {
     <div className="flex w-full flex-col">
       <header className="sticky top-0 flex flex-col items-center gap-4 bg-blue-900">
         <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6">
-          <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-md lg:gap-6 text-nowrap">
+          <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
             <a
               href="/login"
               className="flex items-center gap-2 text-lg font-semibold md:text-base"
@@ -63,12 +63,6 @@ export function Header() {
             >
               Home
             </a>
-            {/*<a*/}
-            {/*  href="https://en.wikipedia.org/wiki/Shrek"*/}
-            {/*  className="text-muted-foreground transition-colors hover:text-foreground"*/}
-            {/*>*/}
-            {/*  Navigation*/}
-            {/*</a>*/}
             <a
               href="/service-requests"
               className=" transition-colors hover:text-yellow-500 text-gray-300"
@@ -137,27 +131,11 @@ export function Header() {
                 <Input
                   type="search"
                   placeholder="Search ..."
-                  className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
+                  className="pl-8 sm:w-[300px] md:w-[300px] lg:w-[300px]"
                 />
               </div>
             </form>
             <ModeToggle />
-            {/*<DropdownMenu>*/}
-            {/*  <DropdownMenuTrigger asChild>*/}
-            {/*    <Button variant="secondary" size="icon" className="rounded-full">*/}
-            {/*      <CircleUser className="h-5 w-5" />*/}
-            {/*      <span className="sr-only">Toggle user menu</span>*/}
-            {/*    </Button>*/}
-            {/*  </DropdownMenuTrigger>*/}
-            {/*  <DropdownMenuContent align="end">*/}
-            {/*    <DropdownMenuLabel>Home</DropdownMenuLabel>*/}
-            {/*    <DropdownMenuSeparator />*/}
-            {/*    <DropdownMenuItem>Navigation</DropdownMenuItem>*/}
-            {/*    <DropdownMenuItem>Service Request</DropdownMenuItem>*/}
-            {/*    <DropdownMenuSeparator />*/}
-            {/*    <DropdownMenuItem>About Us</DropdownMenuItem>*/}
-            {/*  </DropdownMenuContent>*/}
-            {/*</DropdownMenu>*/}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button
