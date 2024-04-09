@@ -37,18 +37,18 @@ export interface scheduleForm {
   status: string;
 }
 
-const filteredLocations: string[] = [
-  "location1",
-  "location2",
-  "location3",
-  "location4",
-];
-
 // const FormSchema = z.object({
 //   roomdate: z.date({
 //     required_error: "A date for room booking is required.",
 //   }),
 // });
+
+const locations: string[] = [
+  "location1",
+  "location2",
+  "location3",
+  "location4",
+];
 
 export const SheduleContent = () => {
   const [form, setForm] = useState<scheduleForm>({
@@ -259,7 +259,7 @@ export const SheduleContent = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
-                        {filteredLocations.map((location, index) => (
+                        {locations.map((location, index) => (
                           <DropdownMenuRadioItem
                             key={index}
                             value={location}
@@ -272,7 +272,7 @@ export const SheduleContent = () => {
                     </DropdownMenu>
                   </div>
 
-                  <div className={"w-1/4 ml-4 "}>
+                  <div className={"w-1/6 "}>
                     <h1 className="w-1/4 text-2xl font-bold">Time</h1>
                     <Input
                       type="time"
@@ -283,7 +283,7 @@ export const SheduleContent = () => {
                     />
                   </div>
 
-                  <div className="w-1/4 ml-5">
+                  <div className="w-1/4 ml-12">
                     <h1 className="text-2xl font-bold">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
@@ -293,7 +293,7 @@ export const SheduleContent = () => {
                           value="Unassigned"
                           checked={selectedStatus === "Unassigned"}
                         />
-                        <Label htmlFor="r1">Low</Label>
+                        <Label htmlFor="r1">Unassigned</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -302,7 +302,7 @@ export const SheduleContent = () => {
                           value="Assigned"
                           checked={selectedStatus === "Assigned"}
                         />
-                        <Label htmlFor="r2">Medium</Label>
+                        <Label htmlFor="r2">Assigned</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -311,7 +311,7 @@ export const SheduleContent = () => {
                           value="InProgress"
                           checked={selectedStatus === "InProgress"}
                         />
-                        <Label htmlFor="r3">High</Label>
+                        <Label htmlFor="r3">InProgress</Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -320,7 +320,7 @@ export const SheduleContent = () => {
                           value="Closed"
                           checked={selectedStatus === "Closed"}
                         />
-                        <Label htmlFor="r4">Emergency</Label>
+                        <Label htmlFor="r4">Closed</Label>
                       </div>
                     </RadioGroup>
                   </div>
