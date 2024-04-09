@@ -10,6 +10,7 @@ import {
   BFSPathfindingStrategy,
   PathfindingStrategy,
   AStarPathfindingStrategy,
+  DijkstraPathfindingStrategy,
 } from "@/util/PathfindingStrategy.tsx";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import { HospitalData } from "@/components/blocks/mapBlock.tsx";
@@ -112,7 +113,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             <TabsTrigger
               value="dijkstra"
               onClick={() =>
-                changePathfindingStrategy(new AStarPathfindingStrategy())
+                changePathfindingStrategy(new DijkstraPathfindingStrategy())
               }
             >
               Dijkstra
