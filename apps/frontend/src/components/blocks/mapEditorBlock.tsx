@@ -5,8 +5,8 @@ import lowerLevelMap from "@/assets/lower-level-map.png";
 import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 import axios from "axios";
-import { Graph } from "@/util/graph.tsx";
-import { Node } from "../../util/node.tsx";
+import { Graph } from "@/util/Graph.tsx";
+import { Node } from "../../util/Node.tsx";
 //import { Edge } from "../../util/edge.tsx";
 // import {mapReq} from "common/src/mapReq.ts";
 
