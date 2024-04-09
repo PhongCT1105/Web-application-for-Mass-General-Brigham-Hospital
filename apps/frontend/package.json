@@ -10,8 +10,8 @@
     "preview": "vite preview",
     "lint": "yarn shared:prettierlint && yarn shared:eslint && yarn shared:tslint",
     "lint:fix": "yarn shared:prettierlint:fix && yarn shared:eslint:fix && yarn shared:tslint",
-    "docker:build": "cd $PROJECT_CWD && docker build --target prod-frontend --tag softengd24teamc/softeng-teamc:frontend --platform linux/amd64 .",
-    "docker:upload": "docker push softengd24teamc/softeng-teamc:frontend"
+    "docker:build": "cd $PROJECT_CWD && docker build --target prod-frontend --tag phongthanhcao/softeng-teamc:frontend --platform linux/amd64 .",
+    "docker:upload": "docker push phongthanhcao/softeng-teamc:frontend"
   },
   "dependencies": {
     "@auth0/auth0-react": "^2.1.1",

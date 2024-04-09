@@ -35,15 +35,15 @@ WORKDIR /$WORKDIR
 ARG PRODUCTION_PORT
 
 # Set the environment variable port
+ENV PORT=$PRODUCTION_PORT
 ENV FRONTEND_PORT=$PRODUCTION_PORT
-ENV BACKEND_PORT=$PRODUCTION_PORT
-
+ENV BACKEND_PORT=$PORT
 
 # Set us to production environment
 ENV NODE_ENV=production
 
 # Expose the port
-EXPOSE $PRODUCTION_PORT
+EXPOSE $PORT
 
 
 
@@ -124,6 +124,8 @@ RUN yarn turbo run build
 # This trims out all non-production items
 RUN yarn workspaces focus --all --production
 
+ENV BACKEND_PORT=$PORT
+
 # Use entrypoint (since this contianer should be run as-is)
 # Simply run the migrate:deploy and then deploy
 # Migrate MUST BE DONE AS PART OF THE ENTRYPOINT so that the database is running
@@ -140,10 +142,10 @@ HEALTHCHECK CMD wget --spider localhost:$PORT/healthcheck || bash -c 'kill -s 15
 FROM installer as dev-backend
 WORKDIR /$WORKDIR
 
-ENV BACKEND_PORT=$BACKEND_PORT
+ENV PORT=$BACKEND_PORT
 
 # Expose the port
-EXPOSE $BACKEND_PORT
+EXPOSE $PORT
 
 # Expose the default DEBUGGER port
 EXPOSE 9229
@@ -157,7 +159,7 @@ ENV POSTGRES_PORT=$POSTGRES_PORT
 ENV POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_CONTAINER}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=public"
 
 # Run with CMD, since dev may want to use other commands
-CMD ["yarn", "turbo", "run", "dev:push", "--filter=backend"]
+CMD ["yarn", "turbo", "run", "dev", "--filter=backend"]
 
 
 
@@ -168,10 +170,10 @@ WORKDIR /$WORKDIR
 ARG FRONTEND_PORT
 
 # Port is frontend
-ENV FRONTEND_PORT=$FRONTEND_PORT
+ENV PORT=$FRONTEND_PORT
 
 # Expose the port
-EXPOSE $FRONTEND_PORT
+EXPOSE $PORT
 
 # backend information
 ENV BACKEND_PORT=$BACKEND_PORT
@@ -206,3 +208,48 @@ RUN yarn run build
 
 # Run with CMD, since dev may want to use other commands
 CMD ["yarn", "run", "vitest", "--ui", "--open=false"]
+
+# Development of the backend portion
+FROM installer as public-backend
+WORKDIR /$WORKDIR
+
+ENV PORT=$BACKEND_PORT
+
+# Expose the port
+EXPOSE $PORT
+
+# Expose the default DEBUGGER port
+EXPOSE 9229
+
+# PG User Info
+ENV POSTGRES_USER=$POSTGRES_USER
+ENV POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+ENV POSTGRES_DB=$POSTGRES_DB
+ENV POSTGRES_CONTAINER=$POSTGRES_CONTAINER
+ENV POSTGRES_PORT=$POSTGRES_PORT
+ENV POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_CONTAINER}:${POSTGRES_PORT}/${POSTGRES_DB}?schema=dev"
+
+# Run with CMD, since dev may want to use other commands
+CMD ["yarn", "turbo", "run", "dev", "--filter=backend"]
+
+
+
+# Development of the frontend portion
+FROM installer as public-frontend
+WORKDIR /$WORKDIR
+
+ARG FRONTEND_PORT
+
+# Port is frontend
+ENV PORT=$FRONTEND_PORT
+
+# Expose the port
+EXPOSE $PORT
+
+# backend information
+ENV BACKEND_PORT=$BACKEND_PORT
+ARG BACKEND_SOURCE
+ENV BACKEND_SOURCE=$BACKEND_SOURCE
+
+# Run with CMD, since dev may want to use other commands
+CMD ["yarn", "turbo", "run", "dev", "--filter=frontend"]
