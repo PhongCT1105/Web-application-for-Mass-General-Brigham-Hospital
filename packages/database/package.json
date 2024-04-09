@@ -18,6 +18,7 @@
   },
   "scripts": {
     "lint": "dotenv -e ${PROJECT_CWD}/.env -- yarn shared:prettierlint && dotenv -e ${PROJECT_CWD}/.env -- prisma validate && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:eslint && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:tslint",
+    "lint:fix": "dotenv -e ${PROJECT_CWD}/.env -- yarn shared:prettierlint:fix && dotenv -e ${PROJECT_CWD}/.env -- prisma format && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:eslint:fix && dotenv -e ${PROJECT_CWD}/.env -- yarn shared:tslint",
     "build": "yarn -T run pnpify prisma generate",
     "build:dev": "yarn -T run pnpify prisma generate",
     "migrate:dev": "prisma migrate dev --skip-generate",
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "@prisma/client": "5.12.0-dev.46",
+    "@radix-ui/react-slot": "^1.0.2",
     "fs": "^0.0.1-security",
     "prisma": "4.15.0"
   }

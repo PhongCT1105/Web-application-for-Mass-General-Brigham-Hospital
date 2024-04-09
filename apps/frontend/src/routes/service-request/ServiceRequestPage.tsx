@@ -11,7 +11,7 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
 
-import { Badge, Car, FlowerIcon, PillIcon } from "lucide-react";
+import { Badge, FlowerIcon, PillIcon, Calendar, Biohazard } from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
@@ -20,6 +20,7 @@ import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
 import { Medication } from "common/src/interfaces/medicationReq.ts";
 import { pillData } from "common/src/testData.ts";
 import React, { createContext, useContext, useState } from "react";
+import { SheduleContent } from "@/routes/service-request/RoomScheduleRequestPage.tsx";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -66,12 +67,12 @@ export default function ServiceRequestPage() {
                             <PillIcon className="mr-2 h-4 w-4" />
                             Medication Request
                           </TabsTrigger>
-                          <TabsTrigger value="Transportation Request">
-                            <Car className="mr-2 h-4 w-4" />
-                            Transportation Request
+                          <TabsTrigger value="Room Schedule Request">
+                            <Calendar className="mr-2 h-4 w-4" />
+                            Room Schedule Request
                           </TabsTrigger>
                           <TabsTrigger value="Sanitation Request">
-                            <Car className="mr-2 h-4 w-4" />
+                            <Biohazard className="mr-2 h-4 w-4" />
                             Sanitation Request
                           </TabsTrigger>
                           <TabsTrigger value="Security Request">
@@ -111,22 +112,10 @@ export default function ServiceRequestPage() {
                         </div>
                       </TabsContent>
                       <TabsContent
-                        value={"Transportation Request"}
-                        className={
-                          " w-full flex-col border-none p-0 data-[state=active]:flex"
-                        }
+                        value="Room Schedule Request"
+                        className="w-full flex-col border-none p-0 data-[state=active]:flex"
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
-                              Transportation Request
-                            </h2>
-                            <p className="text-sm text-muted-foreground">
-                              Get transportation to a local drop-off point.
-                            </p>
-                          </div>
-                        </div>
-                        <Separator className="my-4" />
+                        <SheduleContent />
                       </TabsContent>
                       <TabsContent
                         value={"Sanitation Request"}
