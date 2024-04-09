@@ -24,10 +24,6 @@ export interface HospitalData {
   floor: string;
 }
 
-let hospitalGraph = new Graph();
-
-const hospitalData: HospitalData[] = [];
-
 // Define the map component
 export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
@@ -44,6 +40,9 @@ export const MapBlock: React.FC = () => {
 
   const [graph, setGraph] = useState<Graph>(new Graph());
   const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
+  const [isDataLoaded, setIsDataLoaded] = useState(false);
+  const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
+  const [hospitalGraph, setHospitalGraph] = useState<Graph>();
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -53,30 +52,32 @@ export const MapBlock: React.FC = () => {
     theThirdFloor: theThirdFloor,
   } as const;
 
-  useEffect(() => {
-    const preloadedImages = [
-      lowerLevelMap2,
-      lowerLevelMap1,
-      theFirstFloor,
-      theSecondFloor,
-      theThirdFloor,
-    ];
+  // useEffect(() => {
+  //   const preloadedImages = [
+  //     lowerLevelMap2,
+  //     lowerLevelMap1,
+  //     theFirstFloor,
+  //     theSecondFloor,
+  //     theThirdFloor,
+  //   ];
+  //
+  //   preloadedImages.forEach((image) => {
+  //     const img = new Image();
+  //     img.src = image;
+  //   });
+  // }, []);
 
-    preloadedImages.forEach((image) => {
-      const img = new Image();
-      img.src = image;
-    });
-  }, []);
-
-  const drawNodes = async () => {
+  const loadData = async () => {
     const { data: edgeData } = await axios.get(`/api/mapreq/edges?=floor=1`);
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes?=floor=1`);
 
     const stringData: string[] = [];
 
+    const newHospitalData: HospitalData[] = [];
+
     const newGraph: Graph = new Graph();
     for (let i = 0; i < nodeData.length; i++) {
-      hospitalData.push({
+      newHospitalData.push({
         nodeID: nodeData[i].nodeID,
         name: nodeData[i].longName,
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
@@ -102,43 +103,57 @@ export const MapBlock: React.FC = () => {
     for (let i = 0; i < edgeData.length; i++) {
       newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
     }
+
     setHospitalDataString(stringData);
+    setHospitalData(newHospitalData);
     setGraph(newGraph);
-    hospitalGraph = newGraph;
-
-    console.log(hospitalData);
-    console.log(hospitalGraph);
-
-    const map: Map = L.map("map-container", {
-      crs: CRS.Simple,
-      minZoom: -2,
-      maxZoom: 2,
-      zoomControl: true,
-    }).setView([3400, 5000], -2);
-
-    mapRef.current = map;
-
-    const bounds: LatLngBoundsExpression = [
-      [0, 0],
-      [3400, 5000], // change to resolution of the image
-    ];
-
-    L.imageOverlay(theThirdFloor, bounds).addTo(map);
-    L.imageOverlay(theSecondFloor, bounds).addTo(map);
-    L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
-    L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
-    L.imageOverlay(theFirstFloor, bounds).addTo(map);
-
-    map.setMaxBounds(bounds);
-
-    // Print out the nodes on the first floor
-    const nodesOnFirstFloor = hospitalData.filter((node) => node.floor === "1");
-    console.log(nodesOnFirstFloor);
+    setHospitalGraph(newGraph);
   };
 
+  // const drawNodes = () => {
+  //
+  // };
+
   useEffect(() => {
-    drawNodes();
-  }, []);
+    console.log("useEffect is running");
+    if (!isDataLoaded) {
+      loadData().then(() => {
+        setIsDataLoaded(true);
+      });
+    } else {
+      let map: Map | null = mapRef.current;
+      if (!map) {
+        map = L.map("map-container", {
+          crs: CRS.Simple,
+          minZoom: -2,
+          maxZoom: 2,
+          zoomControl: true,
+        }).setView([3400, 5000], -2);
+        mapRef.current = map;
+      }
+
+      const bounds: LatLngBoundsExpression = [
+        [0, 0],
+        [3400, 5000], // change to resolution of the image
+      ];
+
+      L.imageOverlay(theThirdFloor, bounds).addTo(map);
+      L.imageOverlay(theSecondFloor, bounds).addTo(map);
+      L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
+      L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
+      L.imageOverlay(theFirstFloor, bounds).addTo(map);
+
+      map.setMaxBounds(bounds);
+
+      // Print out the nodes on the first floor
+      // Draw new markers for the selected floor after adding the image overlay
+      const newNodesOnCurrentFloor = hospitalData.filter(
+        (node) => node.floor === "1",
+      );
+      setNodesOnFloor(newNodesOnCurrentFloor);
+      addMarkers(map, newNodesOnCurrentFloor);
+    }
+  }, [isDataLoaded, hospitalData]); // Dependency array
 
   function addToPaths(newPath: Polyline) {
     setPaths((prevPaths) => [...prevPaths, newPath]);
@@ -309,9 +324,11 @@ export const MapBlock: React.FC = () => {
       );
 
       const stringData: string[] = [];
+      const newHospitalData: HospitalData[] = [];
 
       const newGraph: Graph = new Graph();
       for (let i = 0; i < nodeData.length; i++) {
+        // works but constantly adds more maps
         hospitalData.push({
           nodeID: nodeData[i].nodeID,
           name: nodeData[i].longName,
@@ -340,17 +357,18 @@ export const MapBlock: React.FC = () => {
       }
       setHospitalDataString(stringData);
       setGraph(newGraph);
-      hospitalGraph = newGraph;
+      setHospitalGraph(newGraph);
+      setHospitalData(newHospitalData);
 
       console.log(hospitalData);
       console.log(hospitalGraph);
 
       // Draw new markers for the selected floor after adding the image overlay
-      const nodesOnCurrentFloor = hospitalData.filter(
+      const newNodesOnCurrentFloor = hospitalData.filter(
         (node) => node.floor === convertedFloorName,
       );
-      setNodesOnFloor(nodesOnCurrentFloor);
-      addMarkers(map, nodesOnCurrentFloor);
+      setNodesOnFloor(newNodesOnCurrentFloor);
+      addMarkers(map, newNodesOnCurrentFloor);
     }
   }
 
