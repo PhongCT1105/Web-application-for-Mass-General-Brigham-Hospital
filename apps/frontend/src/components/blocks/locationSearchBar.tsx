@@ -12,7 +12,7 @@ import {
   AStarPathfindingStrategy,
 } from "@/util/PathfindingStrategy.tsx";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
-import { HospitalData } from "@/components/blocks/mapBlock.tsx";
+//import { HospitalData } from "@/components/blocks/mapBlock.tsx";
 
 interface SearchBarProps {
   locations: string[];
@@ -20,7 +20,7 @@ interface SearchBarProps {
   onClear: () => void;
   currentFloor: string;
   changePathfindingStrategy: (strategy: PathfindingStrategy) => void;
-  nodesOnFloor: HospitalData[];
+  //nodesOnFloor: HospitalData[];
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({

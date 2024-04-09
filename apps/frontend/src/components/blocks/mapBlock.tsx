@@ -38,6 +38,10 @@ export const MapBlock: React.FC = () => {
     setPathfindingStrategy(strategy);
   };
 
+  function displayNodesOnFloor() {
+    console.log("Nodes on current floor:", nodesOnFloor);
+  }
+
   const [graph, setGraph] = useState<Graph>(new Graph());
   const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -95,6 +99,11 @@ export const MapBlock: React.FC = () => {
   };
 
   useEffect(() => {
+    // Before creating the map, check if the browser supports hardware acceleration and enable it if possible
+    if (L.Browser.canvas) {
+      L.Map.prototype.options.preferCanvas = true;
+    }
+
     console.log("useEffect is running");
     if (!isDataLoaded) {
       loadData().then(() => {
@@ -108,6 +117,7 @@ export const MapBlock: React.FC = () => {
           minZoom: -2,
           maxZoom: 2,
           zoomControl: true,
+          preferCanvas: true,
         }).setView([3400, 5000], -2);
         mapRef.current = map;
       }
@@ -353,6 +363,7 @@ export const MapBlock: React.FC = () => {
       );
       setNodesOnFloor(newNodesOnCurrentFloor);
       addMarkers(map, newNodesOnCurrentFloor);
+      displayNodesOnFloor();
     }
   }
 
@@ -360,14 +371,18 @@ export const MapBlock: React.FC = () => {
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div style={{ flex: 1, padding: "10px" }}>
         <SearchBar
-          locations={hospitalDataString
-            .sort((a, b) => a.localeCompare(b))
-            .filter((str) => str.indexOf("Hall") === -1)}
+          locations={Array.from(
+            new Set(
+              hospitalDataString
+                .sort((a, b) => a.localeCompare(b))
+                .filter((str) => str.indexOf("Hall") === -1),
+            ),
+          )}
           onSearch={handleSearch}
           onClear={clearLines}
           changePathfindingStrategy={changePathfindingStrategy}
           currentFloor={currentFloor}
-          nodesOnFloor={nodesOnFloor}
+          //nodesOnFloor={nodesOnFloor}
         />
       </div>
       <div
