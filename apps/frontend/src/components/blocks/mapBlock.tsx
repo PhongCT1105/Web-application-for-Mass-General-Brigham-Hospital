@@ -52,21 +52,6 @@ export const MapBlock: React.FC = () => {
     theThirdFloor: theThirdFloor,
   } as const;
 
-  // useEffect(() => {
-  //   const preloadedImages = [
-  //     lowerLevelMap2,
-  //     lowerLevelMap1,
-  //     theFirstFloor,
-  //     theSecondFloor,
-  //     theThirdFloor,
-  //   ];
-  //
-  //   preloadedImages.forEach((image) => {
-  //     const img = new Image();
-  //     img.src = image;
-  //   });
-  // }, []);
-
   const loadData = async () => {
     const { data: edgeData } = await axios.get(`/api/mapreq/edges?=floor=1`);
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes?=floor=1`);
@@ -109,10 +94,6 @@ export const MapBlock: React.FC = () => {
     setGraph(newGraph);
     setHospitalGraph(newGraph);
   };
-
-  // const drawNodes = () => {
-  //
-  // };
 
   useEffect(() => {
     console.log("useEffect is running");
