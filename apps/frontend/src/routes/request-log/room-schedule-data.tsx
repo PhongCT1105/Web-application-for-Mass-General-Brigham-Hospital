@@ -359,7 +359,7 @@ export const SheduleContent = () => {
 
         <div className="w-2/5 items-center bg-secondary">
           <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
-          <div className="w-full max-w-md md:max-w-none mt-6 items-center">
+          <div className="w-full max-w-md md:max-w-none mt-6 items-center ml-20">
             <Calendar
               className={"w-full transform scale-150 md:ml-40 my-6 md:my-20"}
               mode="single"

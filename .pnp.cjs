@@ -67,6 +67,7 @@ const RAW_RUNTIME_STATE =
           ["@fortawesome/react-fontawesome", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.2.0"],\
           ["@iconify/icons-lucide", "npm:1.2.135"],\
           ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0"],\
+          ["@radix-ui/react-slot", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.0.2"],\
           ["@react-leaflet/core", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["@types/csv-parse", "npm:1.2.2"],\
           ["@types/leaflet", "npm:1.9.8"],\
@@ -84,6 +85,9 @@ const RAW_RUNTIME_STATE =
           ["csv-parser", "npm:3.0.0"],\
           ["dotenv", "npm:16.4.5"],\
           ["dotenv-cli", "npm:7.4.0"],\
+          ["embla-carousel", "npm:8.0.1"],\
+          ["embla-carousel-autoplay", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:8.0.1"],\
+          ["embla-carousel-react", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:8.0.1"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["happy-dom", "npm:10.11.2"],\
@@ -2007,6 +2011,20 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "HARD"\
       }],\
+      ["virtual:ae828db1b270b45ed10b19a39e218ed8f361833098c26869cf9df8803da828a8518d03e368ac6a1a763ad404fdac12a6dc819ba8eb0fd206d81cbdbda097dfb4#npm:1.0.1", {\
+        "packageLocation": "./.yarn/__virtual__/@radix-ui-react-compose-refs-virtual-285d759f56/0/cache/@radix-ui-react-compose-refs-npm-1.0.1-02d1046f7d-2b9a613b6d.zip/node_modules/@radix-ui/react-compose-refs/",\
+        "packageDependencies": [\
+          ["@radix-ui/react-compose-refs", "virtual:ae828db1b270b45ed10b19a39e218ed8f361833098c26869cf9df8803da828a8518d03e368ac6a1a763ad404fdac12a6dc819ba8eb0fd206d81cbdbda097dfb4#npm:1.0.1"],\
+          ["@babel/runtime", "npm:7.24.1"],\
+          ["@types/react", "npm:18.2.73"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }],\
       ["virtual:cf9339f8fcc2367c8e6d3d5f0f0513aed61a8bf4ff96261095117f132d8cfcb587d0c7b5d73e7d1ea04f633e715d09e89290d3d0bd86a0ed5e192a2f991165c1#npm:1.0.1", {\
         "packageLocation": "./.yarn/__virtual__/@radix-ui-react-compose-refs-virtual-af93354c3d/0/cache/@radix-ui-react-compose-refs-npm-1.0.1-02d1046f7d-2b9a613b6d.zip/node_modules/@radix-ui/react-compose-refs/",\
         "packageDependencies": [\
@@ -2903,6 +2921,21 @@ const RAW_RUNTIME_STATE =
           ["@babel/runtime", "npm:7.24.1"],\
           ["@radix-ui/react-compose-refs", "virtual:cf9339f8fcc2367c8e6d3d5f0f0513aed61a8bf4ff96261095117f132d8cfcb587d0c7b5d73e7d1ea04f633e715d09e89290d3d0bd86a0ed5e192a2f991165c1#npm:1.0.1"],\
           ["@types/react", "npm:18.2.48"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.0.2", {\
+        "packageLocation": "./.yarn/__virtual__/@radix-ui-react-slot-virtual-ae828db1b2/0/cache/@radix-ui-react-slot-npm-1.0.2-b9078e9a0b-734866561e.zip/node_modules/@radix-ui/react-slot/",\
+        "packageDependencies": [\
+          ["@radix-ui/react-slot", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.0.2"],\
+          ["@babel/runtime", "npm:7.24.1"],\
+          ["@radix-ui/react-compose-refs", "virtual:ae828db1b270b45ed10b19a39e218ed8f361833098c26869cf9df8803da828a8518d03e368ac6a1a763ad404fdac12a6dc819ba8eb0fd206d81cbdbda097dfb4#npm:1.0.1"],\
+          ["@types/react", "npm:18.2.73"],\
           ["react", "npm:18.2.0"]\
         ],\
         "packagePeers": [\
@@ -7141,6 +7174,35 @@ const RAW_RUNTIME_STATE =
           ["embla-carousel", "npm:8.0.0"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:8.0.1", {\
+        "packageLocation": "./.yarn/cache/embla-carousel-npm-8.0.1-fa1275ba75-1f8f9bb011.zip/node_modules/embla-carousel/",\
+        "packageDependencies": [\
+          ["embla-carousel", "npm:8.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["embla-carousel-autoplay", [\
+      ["npm:8.0.1", {\
+        "packageLocation": "./.yarn/cache/embla-carousel-autoplay-npm-8.0.1-502c653050-84abd0603c.zip/node_modules/embla-carousel-autoplay/",\
+        "packageDependencies": [\
+          ["embla-carousel-autoplay", "npm:8.0.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:8.0.1", {\
+        "packageLocation": "./.yarn/__virtual__/embla-carousel-autoplay-virtual-a79e2882af/0/cache/embla-carousel-autoplay-npm-8.0.1-502c653050-84abd0603c.zip/node_modules/embla-carousel-autoplay/",\
+        "packageDependencies": [\
+          ["embla-carousel-autoplay", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:8.0.1"],\
+          ["@types/embla-carousel", null],\
+          ["embla-carousel", "npm:8.0.1"]\
+        ],\
+        "packagePeers": [\
+          "@types/embla-carousel",\
+          "embla-carousel"\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["embla-carousel-react", [\
@@ -7148,6 +7210,13 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/embla-carousel-react-npm-8.0.0-d972912820-d132e15c47.zip/node_modules/embla-carousel-react/",\
         "packageDependencies": [\
           ["embla-carousel-react", "npm:8.0.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["npm:8.0.1", {\
+        "packageLocation": "./.yarn/cache/embla-carousel-react-npm-8.0.1-db1044dbbe-7c8201bd50.zip/node_modules/embla-carousel-react/",\
+        "packageDependencies": [\
+          ["embla-carousel-react", "npm:8.0.1"]\
         ],\
         "linkType": "SOFT"\
       }],\
@@ -7165,6 +7234,21 @@ const RAW_RUNTIME_STATE =
           "react"\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:8.0.1", {\
+        "packageLocation": "./.yarn/__virtual__/embla-carousel-react-virtual-db302ca672/0/cache/embla-carousel-react-npm-8.0.1-db1044dbbe-7c8201bd50.zip/node_modules/embla-carousel-react/",\
+        "packageDependencies": [\
+          ["embla-carousel-react", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:8.0.1"],\
+          ["@types/react", "npm:18.2.73"],\
+          ["embla-carousel", "npm:8.0.1"],\
+          ["embla-carousel-reactive-utils", "virtual:db302ca672272e1001093c3dd5377828b2bdd599920e30c081e348fea5d9833dd3cfa85fc8eead967ce550b77120f350f7b1c7cab7834efedda4acbb0d63c6e7#npm:8.0.1"],\
+          ["react", "npm:18.2.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/react",\
+          "react"\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["embla-carousel-reactive-utils", [\
@@ -7175,12 +7259,32 @@ const RAW_RUNTIME_STATE =
         ],\
         "linkType": "SOFT"\
       }],\
+      ["npm:8.0.1", {\
+        "packageLocation": "./.yarn/cache/embla-carousel-reactive-utils-npm-8.0.1-7ad55d2b02-38f24ced81.zip/node_modules/embla-carousel-reactive-utils/",\
+        "packageDependencies": [\
+          ["embla-carousel-reactive-utils", "npm:8.0.1"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
       ["virtual:4bc0443433956037ce766ee80d98afb377acea23b61017d318ae164de3f1d4ecc6dc4ecd8de01b129fac0c613827719bcd13edaf5b9278056252914843ae61b4#npm:8.0.0", {\
         "packageLocation": "./.yarn/__virtual__/embla-carousel-reactive-utils-virtual-35858860bf/0/cache/embla-carousel-reactive-utils-npm-8.0.0-e1bfe669d7-a257aad5c1.zip/node_modules/embla-carousel-reactive-utils/",\
         "packageDependencies": [\
           ["embla-carousel-reactive-utils", "virtual:4bc0443433956037ce766ee80d98afb377acea23b61017d318ae164de3f1d4ecc6dc4ecd8de01b129fac0c613827719bcd13edaf5b9278056252914843ae61b4#npm:8.0.0"],\
           ["@types/embla-carousel", null],\
           ["embla-carousel", "npm:8.0.0"]\
+        ],\
+        "packagePeers": [\
+          "@types/embla-carousel",\
+          "embla-carousel"\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["virtual:db302ca672272e1001093c3dd5377828b2bdd599920e30c081e348fea5d9833dd3cfa85fc8eead967ce550b77120f350f7b1c7cab7834efedda4acbb0d63c6e7#npm:8.0.1", {\
+        "packageLocation": "./.yarn/__virtual__/embla-carousel-reactive-utils-virtual-cc66edd0d1/0/cache/embla-carousel-reactive-utils-npm-8.0.1-7ad55d2b02-38f24ced81.zip/node_modules/embla-carousel-reactive-utils/",\
+        "packageDependencies": [\
+          ["embla-carousel-reactive-utils", "virtual:db302ca672272e1001093c3dd5377828b2bdd599920e30c081e348fea5d9833dd3cfa85fc8eead967ce550b77120f350f7b1c7cab7834efedda4acbb0d63c6e7#npm:8.0.1"],\
+          ["@types/embla-carousel", null],\
+          ["embla-carousel", "npm:8.0.1"]\
         ],\
         "packagePeers": [\
           "@types/embla-carousel",\
@@ -13199,6 +13303,7 @@ const RAW_RUNTIME_STATE =
           ["@fortawesome/react-fontawesome", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.2.0"],\
           ["@iconify/icons-lucide", "npm:1.2.135"],\
           ["@prisma/client", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.12.0"],\
+          ["@radix-ui/react-slot", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.0.2"],\
           ["@react-leaflet/core", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["@types/csv-parse", "npm:1.2.2"],\
           ["@types/leaflet", "npm:1.9.8"],\
@@ -13216,6 +13321,9 @@ const RAW_RUNTIME_STATE =
           ["csv-parser", "npm:3.0.0"],\
           ["dotenv", "npm:16.4.5"],\
           ["dotenv-cli", "npm:7.4.0"],\
+          ["embla-carousel", "npm:8.0.1"],\
+          ["embla-carousel-autoplay", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:8.0.1"],\
+          ["embla-carousel-react", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:8.0.1"],\
           ["eslint", "npm:8.57.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["happy-dom", "npm:10.11.2"],\
