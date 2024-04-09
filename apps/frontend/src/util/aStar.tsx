@@ -1,7 +1,6 @@
 import { Graph } from "./Graph.tsx";
 import { Node } from "@/util/Node.tsx";
 //import { Node } from "./Node.tsx";
-//import { Queue } from "queue-typescript";
 
 export class aStar {
   // run will perform all the logic of the A* implementation
@@ -15,10 +14,10 @@ export class aStar {
     const endNode = graph.nodes.get(endNodeID)!;
 
     // setting up open, cameFrom, costs
-    const open: Node[] = [];
     const cameFrom = new Map<string, string>();
     const gCost = new Map<Node, number>();
     const fCost = new Map<Node, number>();
+    const open: Node[] = [];
     open.push(startNode);
 
     // initializing startNodeID, path is not found
@@ -55,6 +54,7 @@ export class aStar {
           fCost.set(neighNode, newCost + this.calcDist(neighNode, endNode));
           cameFrom.set(neighNode.nodeID, curr.nodeID);
           console.log("added node");
+          open.push(neighNode);
         }
       }
     }

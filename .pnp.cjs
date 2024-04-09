@@ -95,6 +95,8 @@ const RAW_RUNTIME_STATE =
           ["pathfinding", "npm:0.4.18"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["priority-queue", "npm:0.2.1"],\
+          ["priority-queue-typescript", "npm:1.0.1"],\
           ["prisma", "npm:5.12.0-dev.46"],\
           ["queue-typescript", "npm:1.0.1"],\
           ["react", "npm:18.2.0"],\
@@ -8149,6 +8151,8 @@ const RAW_RUNTIME_STATE =
           ["postcss", "npm:8.4.35"],\
           ["prettier", "npm:3.2.4"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["priority-queue", "npm:0.2.1"],\
+          ["priority-queue-typescript", "npm:1.0.1"],\
           ["queue-typescript", "npm:1.0.1"],\
           ["radix-ui", "virtual:d3996bc66f5a97675d735c6457b44af0f25df32a5e5981f61ff7f22e93004839ccc5d56298eff651f971a908820429de35800a3f2669be95e1c0f6bb82e8a700#npm:1.0.1"],\
           ["react", "npm:18.2.0"],\
@@ -11382,6 +11386,24 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["priority-queue", [\
+      ["npm:0.2.1", {\
+        "packageLocation": "./.yarn/cache/priority-queue-npm-0.2.1-ff58f51877-8110cb805d.zip/node_modules/priority-queue/",\
+        "packageDependencies": [\
+          ["priority-queue", "npm:0.2.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["priority-queue-typescript", [\
+      ["npm:1.0.1", {\
+        "packageLocation": "./.yarn/cache/priority-queue-typescript-npm-1.0.1-e45beb303c-8ccb83ac02.zip/node_modules/priority-queue-typescript/",\
+        "packageDependencies": [\
+          ["priority-queue-typescript", "npm:1.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["prisma", [\
       ["npm:4.15.0", {\
         "packageLocation": "./.yarn/unplugged/prisma-npm-4.15.0-4c274529fd/node_modules/prisma/",\
@@ -13197,6 +13219,8 @@ const RAW_RUNTIME_STATE =
           ["pathfinding", "npm:0.4.18"],\
           ["prettier", "npm:2.8.8"],\
           ["prettier-config-custom", "workspace:configs/prettier-config-custom"],\
+          ["priority-queue", "npm:0.2.1"],\
+          ["priority-queue-typescript", "npm:1.0.1"],\
           ["prisma", "npm:5.12.0-dev.46"],\
           ["queue-typescript", "npm:1.0.1"],\
           ["react", "npm:18.2.0"],\
