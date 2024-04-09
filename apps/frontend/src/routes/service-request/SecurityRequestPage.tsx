@@ -44,6 +44,8 @@ export const SecurityForm = () => {
     priority: "low",
   });
   const [requestList, setRequestList] = useState<securityRequest[]>([]);
+  const [curPriority, setCurPriority] = useState("low");
+  const [curStatus, setCurStatus] = useState("unassigned");
 
   /**
    * Clear the request when it's submitted.
@@ -57,6 +59,8 @@ export const SecurityForm = () => {
       status: "unassigned",
       priority: "low",
     });
+    setCurStatus("unassigned");
+    setCurPriority("low");
   };
 
   /**
@@ -85,6 +89,7 @@ export const SecurityForm = () => {
       ...prevState,
       status: status,
     }));
+    setCurStatus(status);
   };
 
   /**
@@ -97,6 +102,7 @@ export const SecurityForm = () => {
       ...prevState,
       priority: priority,
     }));
+    setCurPriority(priority);
   };
 
   /**
@@ -191,6 +197,7 @@ export const SecurityForm = () => {
                 <RadioGroupItem
                   value="unassigned"
                   id="unassigned"
+                  checked={curStatus === "unassigned"}
                   onClick={() => handleStatus("unassigned")}
                 />
                 <Label htmlFor="unassigned">Unassigned</Label>
@@ -199,6 +206,7 @@ export const SecurityForm = () => {
                 <RadioGroupItem
                   value="assigned"
                   id="assigned"
+                  checked={curStatus === "assigned"}
                   onClick={() => handleStatus("assigned")}
                 />
                 <Label htmlFor="assigned">Assigned</Label>
@@ -207,6 +215,7 @@ export const SecurityForm = () => {
                 <RadioGroupItem
                   value="inprogress"
                   id="inprogress"
+                  checked={curStatus === "inprogress"}
                   onClick={() => handleStatus("inprogress")}
                 />
                 <Label htmlFor="inprogress">In Progress</Label>
@@ -215,6 +224,7 @@ export const SecurityForm = () => {
                 <RadioGroupItem
                   value="closed"
                   id="closed"
+                  checked={curStatus === "closed"}
                   onClick={() => handleStatus("closed")}
                 />
                 <Label htmlFor="closed">Closed</Label>
@@ -229,6 +239,7 @@ export const SecurityForm = () => {
                 <RadioGroupItem
                   value="low"
                   id="low"
+                  checked={curPriority === "low"}
                   onClick={() => handlePriority("low")}
                 />
                 <Label htmlFor="low">Low</Label>
@@ -237,6 +248,7 @@ export const SecurityForm = () => {
                 <RadioGroupItem
                   value="medium"
                   id="medium"
+                  checked={curPriority === "medium"}
                   onClick={() => handlePriority("medium")}
                 />
                 <Label htmlFor="medium">Medium</Label>
@@ -245,6 +257,7 @@ export const SecurityForm = () => {
                 <RadioGroupItem
                   value="high"
                   id="high"
+                  checked={curPriority === "high"}
                   onClick={() => handlePriority("high")}
                 />
                 <Label htmlFor="high">High</Label>
@@ -253,14 +266,22 @@ export const SecurityForm = () => {
                 <RadioGroupItem
                   value="emergency"
                   id="emergency"
+                  checked={curPriority === "emergency"}
                   onClick={() => handlePriority("emergency")}
                 />
                 <Label htmlFor="emergency">Emergency</Label>
               </div>
             </RadioGroup>
           </div>
-          <CardFooter>
-            <Button className="w-full" onClick={submit}>
+          <CardFooter className={"flex justify-between"}>
+            <Button
+              variant={"destructive"}
+              className="w-1/4"
+              onClick={clearReq}
+            >
+              Clear
+            </Button>
+            <Button className="w-1/2" onClick={submit}>
               {" "}
               Submit Request{" "}
             </Button>

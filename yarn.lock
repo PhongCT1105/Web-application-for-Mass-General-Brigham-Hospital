@@ -5237,6 +5237,7 @@ __metadata:
   resolution: "database@workspace:packages/database"
   dependencies:
     "@prisma/client": "npm:5.12.0-dev.46"
+    "@radix-ui/react-slot": "npm:^1.0.2"
     "@types/node": "npm:^20.11.30"
     eslint: "npm:latest"
     eslint-config-custom: "workspace:*"
