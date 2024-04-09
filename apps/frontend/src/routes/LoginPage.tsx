@@ -21,17 +21,14 @@ export function CarouselDemo() {
   const carouselImages = [carousel1, carousel2, carousel3, carousel4];
 
   return (
-    <Carousel className="ml-14 w-full max-w-carousel mt-carouselOffset mb-carouselOffset  h-[500px]">
+    <Carousel className="ml-14 w-full max-w-carousel mt-carouselOffset mb-carouselOffset h-[500px] relative">
       <CarouselContent>
         {Array.from({ length: 4 }).map((_, index) => (
           <CarouselItem key={index}>
             <div className="p-1">
               <Card>
                 <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <img
-                    src={carouselImages[index]}
-                    className="max-w-full max-h-full"
-                  />
+                  <img src={carouselImages[index]} className="w-full h-full" />
                 </CardContent>
               </Card>
             </div>
@@ -54,8 +51,6 @@ export default function LoginPage() {
           className="lg:w-1/2 lg:p-8 flex justify-center items-center"
           style={{ marginTop: "16vh" }}
         >
-          {" "}
-          {/* Added inline style */}
           <div className="mx-auto w-full flex flex-col justify-center space-y-6 sm:w-[350px]">
             <div className="flex flex-col space-y-2">
               <LoginBlock />
