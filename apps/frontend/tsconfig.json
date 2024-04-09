@@ -11,6 +11,8 @@
     "jsx": "react-jsx",
     "resolveJsonModule": true,
     "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "target": "ES2015",
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }],
