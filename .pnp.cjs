@@ -79,6 +79,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-icons", "npm:3.0.0"],\
           ["@types/react-lazyload", "npm:3.2.3"],\
           ["@types/react-leaflet-markercluster", "npm:3.0.4"],\
+          ["@types/three", "npm:0.163.0"],\
           ["@vitest/ui", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.33.0"],\
           ["@yarnpkg/pnpify", "npm:4.0.1"],\
           ["axios", "npm:1.6.8"],\
@@ -110,6 +111,7 @@ const RAW_RUNTIME_STATE =
           ["react-leaflet-cluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["react-leaflet-markercluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.0.0-rc1"],\
           ["react-router-dom", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.3.4"],\
+          ["three", "npm:0.163.0"],\
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
           ["turbo", "npm:1.11.3"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
@@ -4129,6 +4131,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@tweenjs/tween.js", [\
+      ["npm:23.1.1", {\
+        "packageLocation": "./.yarn/cache/@tweenjs-tween.js-npm-23.1.1-d0829c1a4e-8833907d9d.zip/node_modules/@tweenjs/tween.js/",\
+        "packageDependencies": [\
+          ["@tweenjs/tween.js", "npm:23.1.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/babel__core", [\
       ["npm:7.20.5", {\
         "packageLocation": "./.yarn/cache/@types-babel__core-npm-7.20.5-4d95f75eab-c32838d280.zip/node_modules/@types/babel__core/",\
@@ -4722,6 +4733,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/stats.js", [\
+      ["npm:0.17.3", {\
+        "packageLocation": "./.yarn/cache/@types-stats.js-npm-0.17.3-72645350c6-4f84a012f6.zip/node_modules/@types/stats.js/",\
+        "packageDependencies": [\
+          ["@types/stats.js", "npm:0.17.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/superagent", [\
       ["npm:8.1.1", {\
         "packageLocation": "./.yarn/cache/@types-superagent-npm-8.1.1-01b4c4057b-02b987833c.zip/node_modules/@types/superagent/",\
@@ -4744,6 +4764,20 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/three", [\
+      ["npm:0.163.0", {\
+        "packageLocation": "./.yarn/cache/@types-three-npm-0.163.0-1a50cc84d2-81320c03aa.zip/node_modules/@types/three/",\
+        "packageDependencies": [\
+          ["@types/three", "npm:0.163.0"],\
+          ["@tweenjs/tween.js", "npm:23.1.1"],\
+          ["@types/stats.js", "npm:0.17.3"],\
+          ["@types/webxr", "npm:0.5.15"],\
+          ["fflate", "npm:0.8.2"],\
+          ["meshoptimizer", "npm:0.18.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/treeify", [\
       ["npm:1.0.3", {\
         "packageLocation": "./.yarn/cache/@types-treeify-npm-1.0.3-ef5ef3400e-777e579b30.zip/node_modules/@types/treeify/",\
@@ -4758,6 +4792,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/@types-warning-npm-3.0.3-651ad6a5da-862b71c918.zip/node_modules/@types/warning/",\
         "packageDependencies": [\
           ["@types/warning", "npm:3.0.3"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["@types/webxr", [\
+      ["npm:0.5.15", {\
+        "packageLocation": "./.yarn/cache/@types-webxr-npm-0.5.15-548959ecff-ae6869345e.zip/node_modules/@types/webxr/",\
+        "packageDependencies": [\
+          ["@types/webxr", "npm:0.5.15"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -8041,6 +8084,13 @@ const RAW_RUNTIME_STATE =
           ["fflate", "npm:0.8.1"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:0.8.2", {\
+        "packageLocation": "./.yarn/cache/fflate-npm-0.8.2-5129f303f0-2bd26ba6d2.zip/node_modules/fflate/",\
+        "packageDependencies": [\
+          ["fflate", "npm:0.8.2"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["file-entry-cache", [\
@@ -9848,6 +9898,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/merge2-npm-1.4.1-a2507bd06c-7268db63ed.zip/node_modules/merge2/",\
         "packageDependencies": [\
           ["merge2", "npm:1.4.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["meshoptimizer", [\
+      ["npm:0.18.1", {\
+        "packageLocation": "./.yarn/cache/meshoptimizer-npm-0.18.1-ce62c2344d-5cfef69185.zip/node_modules/meshoptimizer/",\
+        "packageDependencies": [\
+          ["meshoptimizer", "npm:0.18.1"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -13315,6 +13374,7 @@ const RAW_RUNTIME_STATE =
           ["@types/react-icons", "npm:3.0.0"],\
           ["@types/react-lazyload", "npm:3.2.3"],\
           ["@types/react-leaflet-markercluster", "npm:3.0.4"],\
+          ["@types/three", "npm:0.163.0"],\
           ["@vitest/ui", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.33.0"],\
           ["@yarnpkg/pnpify", "npm:4.0.1"],\
           ["axios", "npm:1.6.8"],\
@@ -13346,6 +13406,7 @@ const RAW_RUNTIME_STATE =
           ["react-leaflet-cluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["react-leaflet-markercluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.0.0-rc1"],\
           ["react-router-dom", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.3.4"],\
+          ["three", "npm:0.163.0"],\
           ["tsconfig-custom", "workspace:configs/tsconfig-custom"],\
           ["turbo", "npm:1.11.3"],\
           ["typescript", "patch:typescript@npm%3A5.3.3#optional!builtin<compat/typescript>::version=5.3.3&hash=e012d7"],\
@@ -13833,6 +13894,15 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["thenify-all", "npm:1.6.0"],\
           ["thenify", "npm:3.3.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["three", [\
+      ["npm:0.163.0", {\
+        "packageLocation": "./.yarn/cache/three-npm-0.163.0-65ce8b2883-caf4b681b6.zip/node_modules/three/",\
+        "packageDependencies": [\
+          ["three", "npm:0.163.0"]\
         ],\
         "linkType": "HARD"\
       }]\
