@@ -6513,7 +6513,7 @@ __metadata:
     input-otp: "npm:^1.2.3"
     leaflet: "npm:^1.9.4"
     localforage: "npm:^1.10.0"
-    lucide-react: "npm:^0.363.0"
+    lucide-react: "npm:^0.366.0"
     match-sorter: "npm:^6.3.1"
     multer: "npm:^1.4.5-lts.1"
     next-themes: "npm:^0.3.0"
@@ -7814,12 +7814,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lucide-react@npm:^0.363.0":
-  version: 0.363.0
-  resolution: "lucide-react@npm:0.363.0"
+"lucide-react@npm:^0.366.0":
+  version: 0.366.0
+  resolution: "lucide-react@npm:0.366.0"
   peerDependencies:
     react: ^16.5.1 || ^17.0.0 || ^18.0.0
-  checksum: a007e37428c7f99d5c7431703bd6970ce50c62c4592b0a91badd746bdab8ac578f87a67b9d6193d0d36bf1451c432de91795cbdc535dbcb4943510a1752d1cba
+  checksum: c3c90795e6b5c180f03d7254aa464e27a99611c708c43200694dcd4d2b030d628ec00a3d70200013963056e3bafeb199228b93f70454c6de165f4b5f0a9b6d44
   languageName: node
   linkType: hard
 

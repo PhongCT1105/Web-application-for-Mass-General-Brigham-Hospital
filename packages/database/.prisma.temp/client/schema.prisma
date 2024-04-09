@@ -1,0 +1,70 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider   = "prisma-client-js"
+  output     = "../.prisma/client"
+  engineType = "binary"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL")
+}
+
+// example table used in the express router example
+model HighScore {
+  id    Int      @id @default(autoincrement())
+  time  DateTime
+  score Int
+}
+
+model Nodes {
+  nodeID     String  @id
+  xcoord     Int
+  ycoord     Int
+  floor      String
+  building   String
+  nodeType   String
+  longName   String
+  shortName  String
+  startEdges Edges[] @relation("StartNode")
+  endEdges   Edges[] @relation("EndNode")
+
+  @@unique([xcoord, ycoord, floor])
+}
+
+model Edges {
+  eID         Int    @id @default(autoincrement())
+  startNode   Nodes  @relation("StartNode", fields: [startNodeID], references: [nodeID], onDelete: Cascade)
+  startNodeID String
+  endNode     Nodes  @relation("EndNode", fields: [endNodeID], references: [nodeID], onDelete: Cascade)
+  endNodeID   String
+}
+
+model User {
+  userID   Int    @id @default(autoincrement())
+  username String
+  password String
+  // flowerReq flowerRequest[] @relation("reqUser")
+}
+
+// model Flower {
+//   // fID       Int             @id @default(autoincrement())
+//   name      String          @id
+//   // cost      Float
+//   flowerreq flowerRequest[] @relation("Flowers")
+// }
+
+model flowerRequest {
+  reqID     Int     @id @default(autoincrement())
+  // reqUser User     @relation("reqUser", fields: [userID], references: [userID], onDelete: Cascade)
+  // userID  Int
+  cartItems String //@relation("Flowers")
+  // cartItems String?
+  location  String
+  message   String?
+  recipient String
+  sender    String
+  total     Float
+}
