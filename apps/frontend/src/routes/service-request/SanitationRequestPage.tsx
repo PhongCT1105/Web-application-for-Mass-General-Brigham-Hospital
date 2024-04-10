@@ -10,11 +10,20 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import {
   Card,
   CardContent,
+  CardDescription,
   // CardDescription,
   CardFooter,
+  CardHeader,
+  CardTitle,
   // CardHeader,
   // CardTitle,
 } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -57,6 +66,13 @@ export function Sanitation() {
     description: "",
     comments: "",
   });
+
+  const locations: string[] = [
+    "location1",
+    "location2",
+    "location3",
+    "location4",
+  ];
 
   const handleFormChange = (
     event:
@@ -108,6 +124,13 @@ export function Sanitation() {
     setSelectedStatus(status);
   };
 
+  const handleLocationChange = (location: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      location: location,
+    }));
+  };
+
   const handleSubmit = () => {
     if (
       form.name === "" ||
@@ -126,11 +149,11 @@ export function Sanitation() {
     } else {
       setSubmittedForms([...submittedForms, form]);
       console.log(form);
-      handleClear();
+      handleFormClear();
     }
   };
 
-  const handleClear = () => {
+  const handleFormClear = () => {
     setForm((prevState) => ({
       ...prevState,
       name: "",
@@ -148,24 +171,29 @@ export function Sanitation() {
   };
 
   return (
-    <div className="gap-8">
-      <div className="flex items-center justify-center py-12">
-        <div className="mx-auto max-w-lg">
-          <Card className="w-[400px]">
-            <CardContent>
-              <div className="space-y-6">
-                <div>
-                  <h1 className="mt-4 text-2xl font-bold">Name</h1>
-                  <Input
-                    type="text"
-                    id="name"
-                    placeholder="Enter Your Name Here"
-                    onChange={handleFormChange}
-                    value={form.name}
-                  />
-                </div>
-
-                <div>
+    <div className="flex border rounded-md text mx-10 my-5">
+      <div className="w-3/4 justify-center items-center">
+        <Card className="border-none">
+          <CardHeader>
+            <CardTitle>Request Information</CardTitle>
+            <CardDescription>
+              Enter the details for your request
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-6">
+              <div>
+                <h1 className="text-2xl font-bold">Name</h1>
+                <Input
+                  type="text"
+                  id="name"
+                  placeholder="Enter Your Name Here"
+                  onChange={handleFormChange}
+                  value={form.name}
+                />
+              </div>
+              <div className="flex">
+                <div className="w-1/3 ml-12">
                   <h1 className="text-2xl font-bold">Severity Level</h1>
                   <RadioGroup defaultValue="comfortable">
                     <div className="flex items-center space-x-2">
@@ -215,18 +243,7 @@ export function Sanitation() {
                   </RadioGroup>
                 </div>
 
-                <div>
-                  <h1 className="text-2xl font-bold">Location</h1>
-                  <Input
-                    type="text"
-                    id="location"
-                    placeholder="Enter Location Here"
-                    onChange={handleFormChange}
-                    value={form.location}
-                  />
-                </div>
-
-                <div>
+                <div className="w-1/6 ml-12">
                   <h1 className="text-2xl font-bold">Type of Issue</h1>
                   <RadioGroup defaultValue="comfortable">
                     <div className="flex items-center space-x-2">
@@ -295,18 +312,7 @@ export function Sanitation() {
                   </RadioGroup>
                 </div>
 
-                <div>
-                  <h1 className="text-2xl font-bold">Time of Issue</h1>
-                  <Input
-                    type="time"
-                    placeholder="Time of Issue"
-                    id="time"
-                    onChange={handleFormChange}
-                    value={form.time}
-                  />
-                </div>
-
-                <div>
+                <div className="w-1/4 ml-12">
                   <h1 className="text-2xl font-bold">Status</h1>
                   <RadioGroup defaultValue="comfortable">
                     <div className="flex items-center space-x-2">
@@ -348,7 +354,41 @@ export function Sanitation() {
                   </RadioGroup>
                 </div>
 
-                <div>
+                <div className="w-1/4">
+                  <h1 className="text-2xl font-bold">Location</h1>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline">
+                        {form.location ? form.location : "Select Location"}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
+                      {locations.map((location, index) => (
+                        <DropdownMenuRadioItem
+                          key={index}
+                          value={location}
+                          onClick={() => handleLocationChange(location)}
+                        >
+                          {location}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </div>
+                <div className="w-1/6">
+                  <h1 className="text-2xl font-bold">Time of Issue</h1>
+                  <Input
+                    type="time"
+                    placeholder="Time of Issue"
+                    id="time"
+                    onChange={handleFormChange}
+                    value={form.time}
+                  />
+                </div>
+              </div>
+
+              <div className="flex">
+                <div className="w-1/2 ml-12">
                   <h1 className="text-2xl font-bold">Description of Issue</h1>
                   <Textarea
                     placeholder="Type your description here."
@@ -358,7 +398,7 @@ export function Sanitation() {
                   />
                 </div>
 
-                <div>
+                <div className="w-1/2 ml-12">
                   <h1 className="text-2xl font-bold">
                     Additional Comments/Instructions (optional)
                   </h1>
@@ -370,65 +410,65 @@ export function Sanitation() {
                   />
                 </div>
               </div>
-            </CardContent>
-
-            <CardFooter className="flex justify-between">
-              <Button variant="outline" onClick={handleClear}>
-                Clear
-              </Button>
-              <Button className="p-5" onClick={handleSubmit}>
-                Submit
-              </Button>
-            </CardFooter>
-          </Card>
-
-          <Card className="mt-8 w-[400px]">
-            <div className="bg-gray-4 p-4 rounded-md">
-              <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
-              <ul>
-                {submittedForms.map((form, index) => (
-                  <li key={index} className="mb-4">
-                    <div className="font-semibold">Form {index + 1}:</div>
-                    <div className="ml-2">
-                      <div>
-                        <span className="font-semibold">Name:</span> {form.name}
-                      </div>
-                      <div>
-                        <span className="font-semibold">Severity:</span>{" "}
-                        {form.severity}
-                      </div>
-                      <div>
-                        <span className="font-semibold">Location:</span>{" "}
-                        {form.location}
-                      </div>
-                      <div>
-                        <span className="font-semibold">Type of Issue:</span>{" "}
-                        {form.typeOfIssue}
-                      </div>
-                      <div>
-                        <span className="font-semibold">Time of Issue:</span>{" "}
-                        {form.time}
-                      </div>
-                      <div>
-                        <span className="font-semibold">Status:</span>{" "}
-                        {form.status}
-                      </div>
-                      <div>
-                        <span className="font-semibold">Description:</span>{" "}
-                        {form.description}
-                      </div>
-                      <div>
-                        <span className="font-semibold">Comments:</span>{" "}
-                        {form.comments}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
             </div>
-          </Card>
-          <h2 className="mt-8 text-small ml-4">Alex Shettler and Tracy Yang</h2>
-        </div>
+          </CardContent>
+
+          <CardFooter className="flex justify-between">
+            <Button variant="outline" onClick={handleFormClear}>
+              Clear
+            </Button>
+            <Button className="p-5" onClick={handleSubmit}>
+              Submit
+            </Button>
+          </CardFooter>
+        </Card>
+
+        <Card className="mt-8 w-[400px]">
+          <div className="bg-gray-4 p-4 rounded-md">
+            <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
+            <ul>
+              {submittedForms.map((form, index) => (
+                <li key={index} className="mb-4">
+                  <div className="font-semibold">Form {index + 1}:</div>
+                  <div className="ml-2">
+                    <div>
+                      <span className="font-semibold">Name:</span> {form.name}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Severity:</span>{" "}
+                      {form.severity}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Location:</span>{" "}
+                      {form.location}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Type of Issue:</span>{" "}
+                      {form.typeOfIssue}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Time of Issue:</span>{" "}
+                      {form.time}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Status:</span>{" "}
+                      {form.status}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Description:</span>{" "}
+                      {form.description}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Comments:</span>{" "}
+                      {form.comments}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Card>
+        <h2 className="mt-8 text-small ml-4">Alex Shettler and Tracy Yang</h2>
       </div>
     </div>
   );
