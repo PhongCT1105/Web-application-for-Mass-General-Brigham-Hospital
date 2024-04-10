@@ -27,10 +27,8 @@ export function CarouselDemo() {
           <CarouselItem key={index}>
             <div className="p-1">
               <Card>
-
                 <CardContent className="flex items-center justify-center p-6">
                   <img src={carouselImages[index]} className="w-full h-full" />
-
                 </CardContent>
               </Card>
             </div>

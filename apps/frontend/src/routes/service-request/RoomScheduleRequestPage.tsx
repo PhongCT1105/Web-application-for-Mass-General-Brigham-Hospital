@@ -31,7 +31,7 @@ export interface scheduleForm {
   priority: string;
   location: string;
   date: Date;
-  purpose: string;
+  patientName: string;
   time: string;
   note: string;
   status: string;
@@ -56,7 +56,7 @@ export const SheduleContent = () => {
     priority: "",
     location: "",
     date: new Date(),
-    purpose: "",
+    patientName: "",
     time: "",
     note: "",
     status: "",
@@ -89,7 +89,7 @@ export const SheduleContent = () => {
       name: "",
       priority: "",
       location: "",
-      purpose: "",
+      patientName: "",
       date: new Date(),
       time: "",
       status: "",
@@ -147,7 +147,7 @@ export const SheduleContent = () => {
       form.name === "" ||
       form.priority === "" ||
       form.location === "" ||
-      form.purpose === "" ||
+      form.patientName === "" ||
       form.date === undefined ||
       form.time === "" ||
       form.status === ""
@@ -169,11 +169,9 @@ export const SheduleContent = () => {
       <div className="flex">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">
-            Room Schedule Request
+            Internal Patient Transport
           </h2>
-          <p className="text-sm text-muted-foreground">
-            Book a room for your need
-          </p>
+          <p className="text-sm text-muted-foreground">Transport a patient</p>
         </div>
       </div>
 
@@ -329,13 +327,13 @@ export const SheduleContent = () => {
                 </div>
 
                 <div>
-                  <h1 className="text-2xl font-bold">Purpose</h1>
+                  <h1 className="text-2xl font-bold">Patient Name</h1>
                   <Input
                     type="text"
-                    id="purpose"
-                    placeholder="Enter Purpose Here"
+                    id="patientName"
+                    placeholder="Enter Patient Name Here"
                     onChange={handleFormChange}
-                    value={form.purpose}
+                    value={form.patientName}
                   />
                 </div>
 
@@ -412,8 +410,8 @@ export const SheduleContent = () => {
                       <span className="font-semibold">Time:</span> {form.time}
                     </div>
                     <div>
-                      <span className="font-semibold">Purpose:</span>{" "}
-                      {form.purpose}
+                      <span className="font-semibold">Patient Name:</span>{" "}
+                      {form.patientName}
                     </div>
                     <div>
                       <span className="font-semibold">Note:</span> {form.note}
