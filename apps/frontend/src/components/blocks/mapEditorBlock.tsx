@@ -49,12 +49,9 @@ export const MapEditor: React.FC = () => {
     const { data: edgeData } = await axios.get(`/api/mapreq/edges?=floor=1`);
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes?=floor=1`);
 
-    const stringData: string[] = [];
-
     const newHospitalData: HospitalData[] = [];
 
     const newGraph: Graph = new Graph();
-    const nodeArray: Node[] = [];
     for (let i = 0; i < nodeData.length; i++) {
       newHospitalData.push({
         nodeID: nodeData[i].nodeID,
@@ -63,21 +60,6 @@ export const MapEditor: React.FC = () => {
         yCoord: nodeData[i].ycoord,
         floor: nodeData[i].floor,
       });
-      stringData.push(nodeData[i].longName);
-
-      nodeArray.push(
-        new Node(
-          nodeData[i].nodeID,
-          parseInt(nodeData[i].xcoord),
-          parseInt(nodeData[i].ycoord),
-          nodeData[i].floor,
-          nodeData[i].building,
-          nodeData[i].nodeType,
-          nodeData[i].longName,
-          nodeData[i].shortName,
-          new Set<Node>(),
-        ),
-      );
 
       newGraph.addNode(
         new Node(
