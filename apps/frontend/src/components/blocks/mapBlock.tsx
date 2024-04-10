@@ -47,6 +47,8 @@ export const MapBlock: React.FC = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [hospitalGraph, setHospitalGraph] = useState<Graph>();
+  const [startNodeID, setStartNodeID] = useState("");
+  const [endNodeID, setEndNodeID] = useState("");
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -184,23 +186,33 @@ export const MapBlock: React.FC = () => {
 
     console.log(paths);
 
-    for (let i = 0; i < paths[0].length - 1; i++) {
-      drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
+    if (currentFloor === "L2") {
+      for (let i = 0; i < paths[0].length - 1; i++) {
+        drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
+      }
+    }
+    if (currentFloor === "L1") {
+      for (let i = 0; i < paths[1].length - 1; i++) {
+        drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
+      }
     }
 
-    for (let i = 0; i < paths[1].length - 1; i++) {
-      drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
+    if (currentFloor === "1") {
+      for (let i = 0; i < paths[2].length - 1; i++) {
+        drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
+      }
     }
 
-    for (let i = 0; i < paths[2].length - 1; i++) {
-      drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
+    if (currentFloor === "2") {
+      for (let i = 0; i < paths[3].length - 1; i++) {
+        drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
+      }
     }
 
-    for (let i = 0; i < paths[3].length - 1; i++) {
-      drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
-    }
-    for (let i = 0; i < paths[4].length - 1; i++) {
-      drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
+    if (currentFloor === "3") {
+      for (let i = 0; i < paths[4].length - 1; i++) {
+        drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
+      }
     }
     console.log("done :D");
   }
@@ -258,6 +270,8 @@ export const MapBlock: React.FC = () => {
   async function handleSearch(start: string, end: string) {
     console.log(start);
     console.log(end);
+    setStartNodeID(start);
+    setEndNodeID(end);
     drawFullPath(graph, start, end);
   }
 
@@ -297,7 +311,7 @@ export const MapBlock: React.FC = () => {
     });
   }
 
-  async function changeFloor(floorName: string) {
+  function changeFloor(floorName: string) {
     const map = mapRef.current;
     if (!map) return;
 
@@ -335,54 +349,6 @@ export const MapBlock: React.FC = () => {
       L.imageOverlay(initialFloorImage, bounds).addTo(map);
       map.setMaxBounds(bounds);
 
-      // Fetch hospital data and draw nodes
-      const { data: edgeData } = await axios.get(
-        `/api/mapreq/edges?=floor=${convertedFloorName}`,
-      );
-      const { data: nodeData } = await axios.get(
-        `/api/mapreq/nodes?=floor=${convertedFloorName}`,
-      );
-
-      const stringData: string[] = [];
-      for (let i = 0; i < nodeData.length; i++) {
-        stringData.push(nodeData[i].longName);
-      }
-
-      const hospitalData = [];
-
-      const newGraph: Graph = new Graph();
-      for (let i = 0; i < nodeData.length; i++) {
-        // works but constantly adds more maps
-        hospitalData.push({
-          nodeID: nodeData[i].nodeID,
-          name: nodeData[i].longName,
-          geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
-          floor: nodeData[i].floor,
-        });
-        stringData.push(nodeData[i].longName);
-
-        newGraph.addNode(
-          new Node(
-            nodeData[i].nodeID,
-            parseInt(nodeData[i].xcoord),
-            parseInt(nodeData[i].ycoord),
-            nodeData[i].floor,
-            nodeData[i].building,
-            nodeData[i].nodeType,
-            nodeData[i].longName,
-            nodeData[i].shortName,
-            new Set<Node>(),
-          ),
-        );
-      }
-
-      for (let i = 0; i < edgeData.length; i++) {
-        newGraph.addEdge(edgeData[i].startNodeID, edgeData[i].endNodeID);
-      }
-      setHospitalDataString(stringData);
-      setGraph(newGraph);
-      setHospitalGraph(newGraph);
-
       console.log(hospitalData);
       console.log(hospitalGraph);
 
@@ -390,9 +356,13 @@ export const MapBlock: React.FC = () => {
       const newNodesOnCurrentFloor = hospitalData.filter(
         (node) => node.floor === convertedFloorName,
       );
+
       setNodesOnFloor(newNodesOnCurrentFloor);
       addMarkers(map, newNodesOnCurrentFloor);
       displayNodesOnFloor();
+
+      clearLines();
+      drawFullPath(graph, startNodeID, endNodeID);
     }
   }
 
