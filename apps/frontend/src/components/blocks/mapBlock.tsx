@@ -24,6 +24,12 @@ export interface HospitalData {
   floor: string;
 }
 
+interface FloorButtonProps {
+  name: string;
+  floor: string;
+  changeFloor: (floor: string) => void;
+}
+
 // Define the map component
 export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
@@ -293,6 +299,15 @@ export const MapBlock: React.FC = () => {
     });
   }
 
+  function FloorButton({ name, floor, changeFloor }: FloorButtonProps) {
+    const clearLinesAndChangeFloor = () => {
+      clearLines();
+      changeFloor(floor);
+    };
+
+    return <button onClick={clearLinesAndChangeFloor}>{name}</button>;
+  }
+
   async function changeFloor(floorName: string) {
     const map = mapRef.current;
     if (!map) return;
@@ -433,21 +448,47 @@ export const MapBlock: React.FC = () => {
             color: "black",
           }}
         >
-          <button onClick={() => changeFloor("lowerLevel2")}>
-            Lower Level 2
-          </button>
-          <button onClick={() => changeFloor("lowerLevel1")}>
-            Lower Level 1
-          </button>
-          <button onClick={() => changeFloor("theFirstFloor")}>
-            First Floor
-          </button>
-          <button onClick={() => changeFloor("theSecondFloor")}>
-            Second Floor
-          </button>
-          <button onClick={() => changeFloor("theThirdFloor")}>
-            Third Floor
-          </button>
+          <FloorButton
+            name="Lower Level 2"
+            floor="lowerLevel2"
+            changeFloor={changeFloor}
+          />
+          <FloorButton
+            name="Lower Level 1"
+            floor="lowerLevel1"
+            changeFloor={changeFloor}
+          />
+          <FloorButton
+            name="First Floor"
+            floor="theFirstFloor"
+            changeFloor={changeFloor}
+          />
+          <FloorButton
+            name="Second Floor"
+            floor="theSecondFloor"
+            changeFloor={changeFloor}
+          />
+          <FloorButton
+            name="Third Floor"
+            floor="theThirdFloor"
+            changeFloor={changeFloor}
+          />
+          {/*<button*/}
+          {/*    onClick={() => changeFloor("lowerLevel2")}>*/}
+          {/*  Lower Level 2*/}
+          {/*</button>*/}
+          {/*<button onClick={() => changeFloor("lowerLevel1")}>*/}
+          {/*  Lower Level 1*/}
+          {/*</button>*/}
+          {/*<button onClick={() => changeFloor("theFirstFloor")}>*/}
+          {/*  First Floor*/}
+          {/*</button>*/}
+          {/*<button onClick={() => changeFloor("theSecondFloor")}>*/}
+          {/*  Second Floor*/}
+          {/*</button>*/}
+          {/*<button onClick={() => changeFloor("theThirdFloor")}>*/}
+          {/*  Third Floor*/}
+          {/*</button>*/}
         </div>
       </div>
     </div>
