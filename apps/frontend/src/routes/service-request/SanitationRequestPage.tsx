@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,7 +24,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
-import { HospitalData } from "@/components/blocks/mapBlock.tsx";
+import axios from "axios";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -49,8 +49,6 @@ interface Form {
   comments: string;
 }
 
-const nodesOnFloor: HospitalData[] = [];
-
 export function Sanitation() {
   const { toast } = useToast();
 
@@ -59,13 +57,47 @@ export function Sanitation() {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [submittedForms, setSubmittedForms] = useState<Form[]>([]);
 
-  const [startPoint, setStartPoint] = useState("");
+  const [locations, setLocationsTo] = useState<string[]>([]);
 
-  const filteredLocations = nodesOnFloor.filter((node) => {
-    return !node.name.includes("Hallway") && !node.name.startsWith("Hall");
-  });
-  console.log("filtered locations:");
-  console.log(nodesOnFloor);
+  // Get locations from database
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/mapreq/nodes");
+        const rawData = response.data;
+
+        const extractedLocations = rawData.map(
+          (item: {
+            nodeID: string;
+            xcoord: number;
+            ycoord: number;
+            floor: string;
+            building: string;
+            nodeType: string;
+            longName: string;
+            shortName: string;
+          }) => item.longName,
+        );
+        const filteredLocations = extractedLocations.filter(
+          (location: string) => {
+            return (
+              !location.includes("Hallway") && !location.startsWith("Hall")
+            );
+          },
+        );
+        // alphabetizing location list
+        filteredLocations.sort((a: string, b: string) => a.localeCompare(b));
+        // set locations to filtered alphabetized location list
+        setLocationsTo(filteredLocations);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const [form, setForm] = useState<Form>({
     name: "",
@@ -128,13 +160,12 @@ export function Sanitation() {
     setSelectedStatus(status);
   };
 
-  // const handleLocationChange = (location: string) => {
-  //     setForm((prevState) => ({
-  //         ...prevState,
-  //         location: location,
-  //     }));
-  //     setLocation(location);
-  // };
+  const handleLocationChange = (location: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      location: location,
+    }));
+  };
 
   const handleSubmit = () => {
     if (
@@ -367,17 +398,17 @@ export function Sanitation() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline">
-                          {startPoint ? startPoint : "Select Location"}
+                          {form.location ? form.location : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
-                        {filteredLocations.map((location, index) => (
+                      <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                        {locations.map((location, index) => (
                           <DropdownMenuRadioItem
                             key={index}
-                            value={location.name}
-                            onClick={() => setStartPoint(location.name)}
+                            value={location}
+                            onClick={() => handleLocationChange(location)}
                           >
-                            {location.name}
+                            {location}
                           </DropdownMenuRadioItem>
                         ))}
                       </DropdownMenuContent>
@@ -440,7 +471,7 @@ export function Sanitation() {
 
         <div className="">
           <div>
-            <Card className="mt-8 w-[400px]">
+            <Card className="mt-8 w-[400px] mb-8 ml-8">
               <div className="bg-gray-4 p-4 rounded-md">
                 <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
                 <ul>
