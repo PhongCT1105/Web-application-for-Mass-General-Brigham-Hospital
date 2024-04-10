@@ -67,9 +67,9 @@ export default function ServiceRequestPage() {
                             <PillIcon className="mr-2 h-4 w-4" />
                             Medication Request
                           </TabsTrigger>
-                          <TabsTrigger value="Room Schedule Request">
+                          <TabsTrigger value="Patient Transport Request">
                             <Calendar className="mr-2 h-4 w-4" />
-                            Room Schedule Request
+                            Patient Transport Request
                           </TabsTrigger>
                           <TabsTrigger value="Sanitation Request">
                             <Biohazard className="mr-2 h-4 w-4" />
@@ -112,7 +112,7 @@ export default function ServiceRequestPage() {
                         </div>
                       </TabsContent>
                       <TabsContent
-                        value="Room Schedule Request"
+                        value="Patient Transport Request"
                         className="w-full flex-col border-none p-0 data-[state=active]:flex"
                       >
                         <SheduleContent />
