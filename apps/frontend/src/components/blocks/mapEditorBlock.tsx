@@ -5,6 +5,7 @@ import L, {
   LatLngBoundsExpression,
   LatLngExpression,
   Map,
+  Polyline,
 } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
@@ -30,9 +31,11 @@ export interface HospitalData {
 // Define the map component
 export const MapEditor: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
+  const [paths, setPaths] = useState<Polyline[]>([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [hospitalGraph, setHospitalGraph] = useState<Graph>();
+  //const [edges, setEdges] = useState<>();
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -133,10 +136,10 @@ export const MapEditor: React.FC = () => {
       // Print out the nodes on the first floor
       // Draw new markers for the selected floor after adding the image overlay
       const newNodesOnCurrentFloor = hospitalData.filter(
-        (node) => node.floor === "1",
+        (node) => node.floor == "1",
       );
 
-      addMarkers(map, newNodesOnCurrentFloor);
+      addMarkers(map!, newNodesOnCurrentFloor);
       //drawLine(newNodesOnCurrentFloor, hospitalGraph!);
     }
   }, [isDataLoaded, hospitalData, hospitalGraph]); // Dependency array
@@ -152,15 +155,16 @@ export const MapEditor: React.FC = () => {
     });
   }
 
-  // function clearLines() {
-  //     const map = mapRef.current;
-  //     if (!map || paths.length === 0) return;
-  //
-  //     paths.forEach((path) => path.removeFrom(map));
-  //     setPaths([]);
-  // }
+  function clearLines() {
+    const map = mapRef.current;
+    if (!map || paths.length === 0) return;
+
+    paths.forEach((path) => path.removeFrom(map));
+    setPaths([]);
+  }
 
   function drawLine(hospitalData: HospitalData[], hospitalGraph: Graph) {
+    //clearLines();
     const map = mapRef.current;
     if (!map) return;
 
@@ -177,24 +181,37 @@ export const MapEditor: React.FC = () => {
       const startCoordinates: LatLngExpression = [nLat, lat];
       console.log("Node: " + startHospital.nodeID);
 
-      startNode.neighbors.forEach((endNode: Node) => {
-        const endHospital = hospitalData.find(
-          (h) => h.nodeID === endNode.nodeID,
-        )!;
-        if (endHospital.floor == startHospital.floor) {
-          const lat = endHospital.xCoord;
-          const lng = endHospital.yCoord;
-          const nLat = 3400 - lng;
-          const endCoordinates: LatLngExpression = [nLat, lat];
+      const neighborArray = startNode.neighbors;
 
-          const newPath = L.polyline([startCoordinates, endCoordinates], {
-            color: "blue",
-            weight: 5,
-          });
-          newPath.addTo(map);
+      neighborArray.forEach((endNode) => {
+        const endHospital = hospitalData.find(
+          (h) => h.nodeID == endNode.nodeID,
+        )!;
+
+        if (!endHospital) {
+          console.log("Error eorror eoorrroo");
+        } else {
+          console.log(endHospital);
+          if (endHospital.floor == startHospital.floor) {
+            const lat = endHospital.xCoord;
+            const lng = endHospital.yCoord;
+            const nLat = 3400 - lng;
+            const endCoordinates: LatLngExpression = [nLat, lat];
+
+            const newPath = L.polyline([startCoordinates, endCoordinates], {
+              color: "blue",
+              weight: 5,
+            });
+            newPath.addTo(map);
+            addToPaths(newPath); // Add the new path to the paths list
+          }
         }
       });
     });
+  }
+
+  function addToPaths(newPath: Polyline) {
+    setPaths((prevPaths) => [...prevPaths, newPath]);
   }
 
   function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
@@ -227,7 +244,7 @@ export const MapEditor: React.FC = () => {
     });
   }
 
-  async function changeFloor(floorName: string) {
+  function changeFloor(floorName: string) {
     const map = mapRef.current;
     if (!map) return;
 
@@ -246,12 +263,7 @@ export const MapEditor: React.FC = () => {
 
     // Remove existing markers from the map
     clearMarkers();
-
-    map.eachLayer((layer) => {
-      if (layer instanceof L.ImageOverlay) {
-        map.removeLayer(layer);
-      }
-    });
+    clearLines();
 
     const initialFloorImage = floorMaps[floorName];
     if (initialFloorImage) {
