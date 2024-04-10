@@ -89,7 +89,7 @@ export const FlowerContent = () => {
     setForm((prev) => ({
       ...prev,
       cartItems: cartItems, // Assuming cartItems are unchanged
-      total: prev.total, // Assuming total is unchanged
+      total: totalCost, // Assuming total is unchanged
       priority: prev.priority,
       status: prev.status,
       [id]: value,
