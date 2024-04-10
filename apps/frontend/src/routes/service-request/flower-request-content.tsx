@@ -224,10 +224,18 @@ export const FlowerContent = () => {
                             value={form.priority}
                             onChange={handleForm}
                           >
-                            <option value="emergency">Emergency</option>
-                            <option value="high">High</option>
-                            <option value="medium">Medium</option>
-                            <option value="low">Low</option>
+                            <option id="emergency" value="emergency">
+                              Emergency
+                            </option>
+                            <option id="high" value="high">
+                              High
+                            </option>
+                            <option id="medium" value="medium">
+                              Medium
+                            </option>
+                            <option id="low" value="low">
+                              Low
+                            </option>
                           </select>
                           <Label htmlFor="Priority" className="text-right">
                             Status:
@@ -240,10 +248,18 @@ export const FlowerContent = () => {
                             value={form.status}
                             onChange={handleForm}
                           >
-                            <option value="unassigned">Unassigned</option>
-                            <option value="assigned">Assigned</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="closed">Closed</option>
+                            <option id="unassigned" value="unassigned">
+                              Unassigned
+                            </option>
+                            <option id="assigned" value="assigned">
+                              Assigned
+                            </option>
+                            <option id="in-progress" value="in-progress">
+                              In Progress
+                            </option>
+                            <option id="closed" value="closed">
+                              Closed
+                            </option>
                           </select>
                         </div>
                         <div
@@ -276,8 +292,8 @@ export const FlowerContent = () => {
                 </TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[50px]"></TableHead>
-                    <TableHead> Name</TableHead>
+                    <TableHead className="w-20"></TableHead>
+                    <TableHead className={" w-40"}> Name</TableHead>
                     <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -293,13 +309,13 @@ export const FlowerContent = () => {
                             );
                           }}
                           className={
-                            "text-center flex flex-col font-bold text-lg"
+                            "text-center flex flex-col font-bold text-lg w-10"
                           }
                         >
                           <X />
                         </Button>
                       </TableCell>
-                      <TableCell className={" text-nowrap"}>
+                      <TableCell className={" text-nowrap w-40"}>
                         {item.name}
                       </TableCell>
                       <TableCell className="text-center items-end">

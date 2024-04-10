@@ -1,9 +1,9 @@
+import React from "react";
 import { Header } from "@/components/blocks/header.tsx";
 import { cartItem } from "@/routes/service-request/flower-request-content.tsx";
 import { createContext, useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { LogPageData } from "@/routes/request-log/log-page-data.tsx";
-import React from "react";
 import { Separator } from "@/components/ui/separator.tsx";
 import {
   Tabs,
@@ -11,9 +11,7 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
-import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
-import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
-import { Badge, Car, FlowerIcon, PillIcon } from "lucide-react";
+import { Badge, Biohazard, Calendar, FlowerIcon, PillIcon } from "lucide-react";
 import { Medication } from "common/src/interfaces/medicationReq.ts";
 import { pillData } from "common/src/testData.ts";
 import { DataTable } from "@/routes/service-request/medicine-request/medicationREQ-data-table.tsx";
@@ -131,16 +129,16 @@ export const RequestLogPage = () => {
                             <FlowerIcon className="mr-2 h-4 w-4" />
                             Flower Request
                           </TabsTrigger>
-                          <TabsTrigger value="Medicine Request">
+                          <TabsTrigger value="Medication Request">
                             <PillIcon className="mr-2 h-4 w-4" />
-                            Medicine Request
+                            Medication Request
                           </TabsTrigger>
-                          <TabsTrigger value="Transportation Request">
-                            <Car className="mr-2 h-4 w-4" />
-                            Transportation Request
+                          <TabsTrigger value="Patient Transport Request">
+                            <Calendar className="mr-2 h-4 w-4" />
+                            Patient Transport Request
                           </TabsTrigger>
                           <TabsTrigger value="Sanitation Request">
-                            <Car className="mr-2 h-4 w-4" />
+                            <Biohazard className="mr-2 h-4 w-4" />
                             Sanitation Request
                           </TabsTrigger>
                           <TabsTrigger value="Security Request">
@@ -210,7 +208,6 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
-                        <Sanitation />
                       </TabsContent>
                       <TabsContent
                         value={"Security Request"}
@@ -229,7 +226,6 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
-                        <SecurityForm />
                       </TabsContent>
                     </Tabs>
                   </div>
