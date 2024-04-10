@@ -262,7 +262,7 @@ export const SheduleContent = () => {
                 </div>
 
                 <div className="flex">
-                  <div className="w-1/4">
+                  <div className="w-1/5">
                     <h1 className="text-2xl font-bold">Priority Level</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
@@ -304,9 +304,9 @@ export const SheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/4 mr-4">
+                  <div className="w-1/3 mr-2">
                     <h1 className="text-2xl font-bold">Location</h1>
-                    <h2>Form: </h2>
+                    <h2 className={"text-sm"}>From: </h2>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline">
@@ -327,7 +327,7 @@ export const SheduleContent = () => {
                         ))}
                       </DropdownMenuContent>
                     </DropdownMenu>
-                    <h2>To: </h2>
+                    <h2 className={"text-sm"}>To: </h2>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline">
