@@ -91,6 +91,7 @@ export const MapBlock: React.FC = () => {
 
     for (let i = 0; i < edgeData.length; i++) {
       newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
+      newGraph.addEdge(edgeData[i].startNodeID, edgeData[i].endNodeID);
     }
     setHospitalDataString(stringData);
     setHospitalData(newHospitalData);
@@ -361,7 +362,7 @@ export const MapBlock: React.FC = () => {
       }
 
       for (let i = 0; i < edgeData.length; i++) {
-        newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
+        newGraph.addEdge(edgeData[i].startNodeID, edgeData[i].endNodeID);
       }
       setHospitalDataString(stringData);
       setGraph(newGraph);

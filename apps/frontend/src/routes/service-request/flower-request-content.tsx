@@ -35,7 +35,11 @@ import {
 } from "@/components/ui/popover";
 
 import { Textarea } from "@/components/ui/textarea.tsx";
-// import {CartTable} from "@/routes/service-request/CartTable.tsx";
+import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
+import ten from "@/assets/discount-tags/ten-percent-discount.webp";
+import twenty from "@/assets/discount-tags/twenty-percent-discount.webp";
+import thirty from "@/assets/discount-tags/thirty-percent-discount.webp";
+
 import {
   Table,
   TableBody,
@@ -59,6 +63,8 @@ export interface requestForm {
   location: string;
   message?: string;
   total: number;
+  priority: string;
+  status: string;
 }
 
 export const FlowerContent = () => {
@@ -70,18 +76,23 @@ export const FlowerContent = () => {
     recipient: "",
     location: "",
     total: totalCost,
+    priority: "",
+    status: "",
   });
 
   const handleForm = (
-    event:
-      | React.ChangeEvent<HTMLInputElement>
-      | React.ChangeEvent<HTMLTextAreaElement>,
+    event: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >, // Add HTMLSelectElement to handle dropdown changes
   ) => {
+    const { id, value } = event.target;
     setForm((prev) => ({
       ...prev,
-      cartItems: cartItems,
-      total: totalCost,
-      [event.target.id]: event.target.value,
+      cartItems: prev.cartItems, // Assuming cartItems are unchanged
+      total: prev.total, // Assuming total is unchanged
+      priority: prev.priority,
+      status: prev.status,
+      [id]: value,
     }));
   };
 
@@ -156,7 +167,7 @@ export const FlowerContent = () => {
                     >
                       Empty cart
                     </Button>
-                    <DialogContent className="sm:max-w-[425px]">
+                    <DialogContent className="sm:max-w-[600px]">
                       <DialogHeader>
                         <DialogTitle>Submission form</DialogTitle>
                         <DialogDescription>
@@ -202,6 +213,38 @@ export const FlowerContent = () => {
                             placeholder="Message"
                             className="col-span-3"
                           />
+                          <Label htmlFor="Priority" className="text-right">
+                            Priority:
+                          </Label>
+                          <select
+                            className={
+                              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            }
+                            id="priority"
+                            value={form.priority}
+                            onChange={handleForm}
+                          >
+                            <option value="emergency">Emergency</option>
+                            <option value="high">High</option>
+                            <option value="medium">Medium</option>
+                            <option value="low">Low</option>
+                          </select>
+                          <Label htmlFor="Priority" className="text-right">
+                            Status:
+                          </Label>
+                          <select
+                            className={
+                              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            }
+                            id="status"
+                            value={form.status}
+                            onChange={handleForm}
+                          >
+                            <option value="unassigned">Unassigned</option>
+                            <option value="assigned">Assigned</option>
+                            <option value="in-progress">In Progress</option>
+                            <option value="closed">Closed</option>
+                          </select>
                         </div>
                         <div
                           className={"flex text-center text-bold item-center"}
@@ -291,28 +334,28 @@ export const FlowerContent = () => {
                 <CardContent className={"relative w-[300px] mt-2"}>
                   {flower.discountAmt === 10 && (
                     <img
-                      src="src/assets/discount-tags/ten-percent-discount.webp"
+                      src={ten}
                       alt="10% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {flower.discountAmt === 20 && (
                     <img
-                      src="src/assets/discount-tags/twenty-percent-discount.webp"
+                      src={twenty}
                       alt="20% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {flower.discountAmt === 30 && (
                     <img
-                      src="src/assets/discount-tags/thirty-percent-discount.webp"
+                      src={thirty}
                       alt="30% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {flower.discountAmt === 50 && (
                     <img
-                      src="src/assets/discount-tags/fifty-percent-discount.png"
+                      src={fiftyPercent}
                       alt="50% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
