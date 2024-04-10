@@ -3,6 +3,7 @@ import "leaflet/dist/leaflet.css";
 import { Header } from "@/components/blocks/header.tsx";
 //import { MapBlock } from "@/components/blocks/mapBlock.tsx";
 import { MapEditor } from "@/components/blocks/mapEditorBlock.tsx";
+//import { MapEditor2 } from "@/components/blocks/mapEditorBlock2.tsx";
 
 // Define the map component
 const MapEditingPage: React.FC = () => {
