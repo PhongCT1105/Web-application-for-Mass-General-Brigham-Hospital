@@ -35,7 +35,11 @@ import {
 } from "@/components/ui/popover";
 
 import { Textarea } from "@/components/ui/textarea.tsx";
-// import {CartTable} from "@/routes/service-request/CartTable.tsx";
+import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
+import ten from "@/assets/discount-tags/ten-percent-discount.webp";
+import twenty from "@/assets/discount-tags/twenty-percent-discount.webp";
+import thirty from "@/assets/discount-tags/thirty-percent-discount.webp";
+
 import {
   Table,
   TableBody,
@@ -330,28 +334,28 @@ export const FlowerContent = () => {
                 <CardContent className={"relative w-[300px] mt-2"}>
                   {flower.discountAmt === 10 && (
                     <img
-                      src="src/assets/discount-tags/ten-percent-discount.webp"
+                      src={ten}
                       alt="10% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {flower.discountAmt === 20 && (
                     <img
-                      src="src/assets/discount-tags/twenty-percent-discount.webp"
+                      src={twenty}
                       alt="20% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {flower.discountAmt === 30 && (
                     <img
-                      src="src/assets/discount-tags/thirty-percent-discount.webp"
+                      src={thirty}
                       alt="30% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {flower.discountAmt === 50 && (
                     <img
-                      src="src/assets/discount-tags/fifty-percent-discount.png"
+                      src={fiftyPercent}
                       alt="50% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
