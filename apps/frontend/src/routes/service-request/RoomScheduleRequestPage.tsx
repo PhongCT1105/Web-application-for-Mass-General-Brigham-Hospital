@@ -315,7 +315,7 @@ export const SheduleContent = () => {
                             : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
+                      <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70  overflow-y-auto">
                         {locationsFrom.map((location, index) => (
                           <DropdownMenuRadioItem
                             key={index}
@@ -336,7 +336,7 @@ export const SheduleContent = () => {
                             : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
+                      <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70  overflow-y-auto">
                         {locationsTo.map((location, index) => (
                           <DropdownMenuRadioItem
                             key={index}
