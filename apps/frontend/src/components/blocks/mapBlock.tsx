@@ -24,12 +24,6 @@ export interface HospitalData {
   floor: string;
 }
 
-interface FloorButtonProps {
-  name: string;
-  floor: string;
-  changeFloor: (floor: string) => void;
-}
-
 // Define the map component
 export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
@@ -39,8 +33,7 @@ export const MapBlock: React.FC = () => {
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<PathfindingStrategy>(new BFSPathfindingStrategy());
   const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
-  const [startPoint, setStartPoint] = useState<string>("");
-  const [endPoint, setEndPoint] = useState<string>("");
+
   const changePathfindingStrategy = (strategy: PathfindingStrategy) => {
     setPathfindingStrategy(strategy);
   };
@@ -54,6 +47,7 @@ export const MapBlock: React.FC = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [hospitalGraph, setHospitalGraph] = useState<Graph>();
+
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
     lowerLevel2: lowerLevelMap2,
@@ -182,61 +176,45 @@ export const MapBlock: React.FC = () => {
       console.error("Start or end node not found in the graph.");
       return;
     }
-
-    const nodes: Node[] = pathfindingStrategy.findPath(
-      graph,
-      startNode,
-      endNode,
+    console.log("A path should be created now");
+    const paths: Node[][] = parsePath(
+      pathfindingStrategy.findPath(graph, startNode, endNode),
     );
 
-    // Split the nodes into separate paths for each floor
-    const pathsByFloor: { [key: string]: Node[] } = {};
-    for (let i = 1; i <= 5; i++) {
-      pathsByFloor[i] = [];
+    console.log(paths);
+    for (let i = 0; i < paths[0].length - 1; i++) {
+      drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
     }
-    nodes.forEach((node) => {
-      pathsByFloor[node.floor].push(node);
-    });
-    console.log(pathsByFloor);
 
-    const floorColorMap: { [key: string]: string } = {
-      "1": "red",
-      "2": "blue",
-      "3": "green",
-      L1: "yellow",
-      L2: "purple",
-      // Add more floors and colors as needed
-    };
+    for (let i = 0; i < paths[1].length - 1; i++) {
+      drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
+    }
 
-    // Draw a path for each floor
-    Object.entries(pathsByFloor).forEach(([floor, nodesOnFloor]) => {
-      console.log("floor");
-      console.log(floor);
-      console.log("current floor");
-      console.log(currentFloor);
-      // Only draw the path if the current floor matches the floor of the path
-      if (floor === currentFloor) {
-        const color = floorColorMap[floor] || "black"; // Use black as a default color if the floor is not in the color map
-        for (let i = 0; i < nodesOnFloor.length - 1; i++) {
-          console.log("we drawing this bitch");
-          drawPath(nodesOnFloor[i].nodeID, nodesOnFloor[i + 1].nodeID, color);
-        }
-      }
-    });
+    for (let i = 0; i < paths[2].length - 1; i++) {
+      drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
+    }
+
+    for (let i = 0; i < paths[3].length - 1; i++) {
+      drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
+    }
+    for (let i = 0; i < paths[4].length - 1; i++) {
+      drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
+    }
+    console.log("done :D");
   }
 
-  // function parsePath(nodes: Node[]): Node[][] {
-  //   const pathsByFloor: { [key: string]: Node[] } = {};
-  //
-  //   nodes.forEach((node) => {
-  //     if (!pathsByFloor[node.floor]) {
-  //       pathsByFloor[node.floor] = [];
-  //     }
-  //     pathsByFloor[node.floor].push(node);
-  //   });
-  //
-  //   return Object.values(pathsByFloor);
-  // }
+  function parsePath(nodes: Node[]): Node[][] {
+    const pathsByFloor: { [key: string]: Node[] } = {};
+
+    nodes.forEach((node) => {
+      if (!pathsByFloor[node.floor]) {
+        pathsByFloor[node.floor] = [];
+      }
+      pathsByFloor[node.floor].push(node);
+    });
+
+    return Object.values(pathsByFloor);
+  }
 
   function drawLine(
     startCoordinates: [number, number],
@@ -264,8 +242,6 @@ export const MapBlock: React.FC = () => {
   async function handleSearch(start: string, end: string) {
     console.log(start);
     console.log(end);
-    setStartPoint(start);
-    setEndPoint(end);
     drawFullPath(graph, start, end);
   }
 
@@ -303,15 +279,6 @@ export const MapBlock: React.FC = () => {
         }
       });
     });
-  }
-
-  function FloorButton({ name, floor, changeFloor }: FloorButtonProps) {
-    const clearLinesAndChangeFloor = () => {
-      clearLines();
-      changeFloor(floor);
-    };
-
-    return <button onClick={clearLinesAndChangeFloor}>{name}</button>;
   }
 
   async function changeFloor(floorName: string) {
@@ -394,7 +361,7 @@ export const MapBlock: React.FC = () => {
       }
 
       for (let i = 0; i < edgeData.length; i++) {
-        newGraph.addEdge(edgeData[i].startNodeID, edgeData[i].endNodeID);
+        newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
       }
       setHospitalDataString(stringData);
       setGraph(newGraph);
@@ -410,7 +377,6 @@ export const MapBlock: React.FC = () => {
       setNodesOnFloor(newNodesOnCurrentFloor);
       addMarkers(map, newNodesOnCurrentFloor);
       displayNodesOnFloor();
-      drawFullPath(newGraph, startPoint, endPoint);
     }
   }
 
@@ -454,47 +420,21 @@ export const MapBlock: React.FC = () => {
             color: "black",
           }}
         >
-          <FloorButton
-            name="Lower Level 2"
-            floor="lowerLevel2"
-            changeFloor={changeFloor}
-          />
-          <FloorButton
-            name="Lower Level 1"
-            floor="lowerLevel1"
-            changeFloor={changeFloor}
-          />
-          <FloorButton
-            name="First Floor"
-            floor="theFirstFloor"
-            changeFloor={changeFloor}
-          />
-          <FloorButton
-            name="Second Floor"
-            floor="theSecondFloor"
-            changeFloor={changeFloor}
-          />
-          <FloorButton
-            name="Third Floor"
-            floor="theThirdFloor"
-            changeFloor={changeFloor}
-          />
-          {/*<button*/}
-          {/*    onClick={() => changeFloor("lowerLevel2")}>*/}
-          {/*  Lower Level 2*/}
-          {/*</button>*/}
-          {/*<button onClick={() => changeFloor("lowerLevel1")}>*/}
-          {/*  Lower Level 1*/}
-          {/*</button>*/}
-          {/*<button onClick={() => changeFloor("theFirstFloor")}>*/}
-          {/*  First Floor*/}
-          {/*</button>*/}
-          {/*<button onClick={() => changeFloor("theSecondFloor")}>*/}
-          {/*  Second Floor*/}
-          {/*</button>*/}
-          {/*<button onClick={() => changeFloor("theThirdFloor")}>*/}
-          {/*  Third Floor*/}
-          {/*</button>*/}
+          <button onClick={() => changeFloor("lowerLevel2")}>
+            Lower Level 2
+          </button>
+          <button onClick={() => changeFloor("lowerLevel1")}>
+            Lower Level 1
+          </button>
+          <button onClick={() => changeFloor("theFirstFloor")}>
+            First Floor
+          </button>
+          <button onClick={() => changeFloor("theSecondFloor")}>
+            Second Floor
+          </button>
+          <button onClick={() => changeFloor("theThirdFloor")}>
+            Third Floor
+          </button>
         </div>
       </div>
     </div>
