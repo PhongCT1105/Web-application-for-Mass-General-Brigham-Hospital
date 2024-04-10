@@ -6,16 +6,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { toast } from "@/components/ui/use-toast.ts";
-// import { z } from "zod";
-// import { useForm } from "react-hook-form";
-// import { zodResolver } from "@hookform/resolvers/zod";
 import { Calendar } from "@/components/ui/calendar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import {
@@ -25,52 +22,120 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { format } from "date-fns";
+import axios from "axios";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table.tsx";
 
 export interface scheduleForm {
   name: string;
   priority: string;
-  location: string;
+  locationFrom: string;
+  locationTo: string;
   date: Date;
-  patientName: string;
+  reason: string;
   time: string;
   note: string;
   status: string;
 }
 
-// const FormSchema = z.object({
-//   roomdate: z.date({
-//     required_error: "A date for room booking is required.",
-//   }),
-// });
-
-const locations: string[] = [
-  "location1",
-  "location2",
-  "location3",
-  "location4",
-];
+// interface nodeTable {
+//   nodeID: string;
+//   xcoord: number;
+//   ycoord: number;
+//   floor: string;
+//   building: string;
+//   nodeType: string;
+//   longName: string;
+//   shortName: string;
+// }
 
 export const SheduleContent = () => {
   const [form, setForm] = useState<scheduleForm>({
     name: "",
     priority: "",
-    location: "",
+    locationFrom: "",
+    locationTo: "",
     date: new Date(),
-    patientName: "",
+    reason: "",
     time: "",
     note: "",
     status: "",
   });
 
-  // const dateForm = useForm<z.infer<typeof FormSchema>>({
-  //   resolver: zodResolver(FormSchema),
-  // });
-
   const [selectedPriority, setSelectedPriority] = useState("");
-  // const [selectedDate, setSelectedDate] = useState<Date | null>();
   const [submittedForms, setSubmittedForms] = useState<scheduleForm[]>([]);
   const [selectedStatus, setSelectedStatus] = useState("");
+  const [locationsFrom, setLocationsFrom] = useState<string[]>([]);
+  const [locationsTo, setLocationsTo] = useState<string[]>([]);
 
+  // Get locations from database
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/mapreq/nodes");
+        const rawData = response.data;
+
+        const extractedLocations = rawData.map(
+          (item: {
+            nodeID: string;
+            xcoord: number;
+            ycoord: number;
+            floor: string;
+            building: string;
+            nodeType: string;
+            longName: string;
+            shortName: string;
+          }) => item.longName,
+        );
+        const filteredLocations = extractedLocations.filter(
+          (location: string) => {
+            return (
+              !location.includes("Hallway") &&
+              !location.startsWith("Hall") &&
+              !location.includes("Restroom") &&
+              !location.includes("Elevator") &&
+              !location.includes("Staircase") &&
+              !location.includes("Stair")
+            );
+          },
+        );
+
+        setLocationsFrom(filteredLocations);
+        setLocationsTo(filteredLocations);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    // Fetch data on component mount
+    fetchData();
+  }, []);
+
+  const handleLocationFromChange = (selectedLocation: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      locationFrom: selectedLocation,
+    }));
+    // setLocationsFrom(selectedLocation);
+  };
+
+  const handleLocationToChange = (selectedLocation: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      locationTo: selectedLocation,
+    }));
+    // setLocationsTo(selectedLocation);
+  };
+
+  //handleFormChange
   const handleFormChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -83,13 +148,15 @@ export const SheduleContent = () => {
     }));
   };
 
+  //Clear and reset the form to default
   const clearForm = () => {
     setForm((prevState) => ({
       ...prevState,
       name: "",
       priority: "",
-      location: "",
-      patientName: "",
+      locationFrom: "",
+      locationTo: "",
+      reason: "",
       date: new Date(),
       time: "",
       status: "",
@@ -99,6 +166,7 @@ export const SheduleContent = () => {
     setSelectedStatus("");
   };
 
+  //handlePriorityChange
   const handlePriorityChange = (priority: string) => {
     setForm((prevState) => ({
       ...prevState,
@@ -107,6 +175,7 @@ export const SheduleContent = () => {
     setSelectedPriority(priority);
   };
 
+  //handleStatusChange
   const handleStatusChange = (status: string) => {
     setForm((prevState) => ({
       ...prevState,
@@ -115,6 +184,7 @@ export const SheduleContent = () => {
     setSelectedStatus(status);
   };
 
+  //handleDateChange
   const handleDateChange = (date: Date | undefined): void => {
     console.log(date);
     if (date !== undefined) {
@@ -124,30 +194,20 @@ export const SheduleContent = () => {
       }));
     }
   };
-  // }; const handleDateChange = (date: Date): void => {
-  //   console.log(date);
-  //   setForm((prevState) => ({
-  //     ...prevState,
-  //     date,
-  //   }));
-  // };
+
+  //convert Date type to String
   const formattedDate = form.date
     ? format(form.date, "MMMM do, yyyy")
     : "Nothing";
 
-  const handleLocationChange = (location: string) => {
-    setForm((prevState) => ({
-      ...prevState,
-      location: location,
-    }));
-  };
-
+  //submit
   const handleSubmit = () => {
     if (
       form.name === "" ||
       form.priority === "" ||
-      form.location === "" ||
-      form.patientName === "" ||
+      form.locationFrom === "" ||
+      form.locationTo === "" ||
+      form.reason === "" ||
       form.date === undefined ||
       form.time === "" ||
       form.status === ""
@@ -171,7 +231,9 @@ export const SheduleContent = () => {
           <h2 className="text-2xl font-semibold tracking-tight">
             Internal Patient Transport
           </h2>
-          <p className="text-sm text-muted-foreground">Transport a patient</p>
+          <p className="text-sm text-muted-foreground">
+            By Trang Tran & Phong Cao
+          </p>
         </div>
       </div>
 
@@ -189,7 +251,7 @@ export const SheduleContent = () => {
             <CardContent>
               <div className="space-y-6">
                 <div>
-                  <h1 className="text-2xl font-bold">Name</h1>
+                  <h1 className="text-2xl font-bold">Patient Name</h1>
                   <Input
                     type="text"
                     id="name"
@@ -242,28 +304,44 @@ export const SheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/4 ml-4">
-                    {/*<h1 className="text-2xl font-bold">Location</h1>*/}
-                    {/*<Input*/}
-                    {/*  type="text"*/}
-                    {/*  id="location"*/}
-                    {/*  placeholder="Enter Location Here"*/}
-                    {/*  onChange={handleFormChange}*/}
-                    {/*  value={form.location}*/}
-                    {/*/>*/}
+                  <div className="w-1/4 mr-4">
                     <h1 className="text-2xl font-bold">Location</h1>
+                    <h2>Form: </h2>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline">
-                          {form.location ? form.location : "Select Location"}
+                          {form.locationFrom
+                            ? form.locationFrom
+                            : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
-                        {locations.map((location, index) => (
+                        {locationsFrom.map((location, index) => (
                           <DropdownMenuRadioItem
                             key={index}
                             value={location}
-                            onClick={() => handleLocationChange(location)}
+                            onClick={() => handleLocationFromChange(location)}
+                          >
+                            {location}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                    <h2>To: </h2>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                          {form.locationTo
+                            ? form.locationTo
+                            : "Select Location"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
+                        {locationsTo.map((location, index) => (
+                          <DropdownMenuRadioItem
+                            key={index}
+                            value={location}
+                            onClick={() => handleLocationToChange(location)}
                           >
                             {location}
                           </DropdownMenuRadioItem>
@@ -327,13 +405,13 @@ export const SheduleContent = () => {
                 </div>
 
                 <div>
-                  <h1 className="text-2xl font-bold">Patient Name</h1>
+                  <h1 className="text-2xl font-bold">Reason</h1>
                   <Input
                     type="text"
-                    id="patientName"
-                    placeholder="Enter Patient Name Here"
+                    id="reason"
+                    placeholder="Enter Reason Here"
                     onChange={handleFormChange}
-                    value={form.patientName}
+                    value={form.reason}
                   />
                 </div>
 
@@ -383,48 +461,41 @@ export const SheduleContent = () => {
         </div>
       </div>
       <div>
-        <Card className="mt-8 w-[400px]">
-          <div className="bg-gray-4 p-4 rounded-md">
-            <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
-            <ul>
-              {submittedForms.map((form, index) => (
-                <li key={index} className="mb-4">
-                  <div className="font-semibold">Form {index + 1}:</div>
-                  <div className="ml-2">
-                    <div>
-                      <span className="font-semibold">Name:</span> {form.name}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Priority:</span>{" "}
-                      {form.priority}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Location:</span>{" "}
-                      {form.location}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Date:</span>{" "}
-                      {formattedDate}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Time:</span> {form.time}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Patient Name:</span>{" "}
-                      {form.patientName}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Note:</span> {form.note}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Status:</span>{" "}
-                      {form.status}
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <Card className={"mx-10 mb-5 mt-[120px]"}>
+          <Table>
+            <TableHeader>
+              <TableRow className={""}>
+                <TableHead className="">Patient Name</TableHead>
+                <TableHead className="">From</TableHead>
+                <TableHead className="">To</TableHead>
+                <TableHead className="">Date</TableHead>
+                <TableHead className="">Time</TableHead>
+                <TableHead className="">Reason</TableHead>
+                <TableHead className="">Note</TableHead>
+                <TableHead className="">Priority</TableHead>
+                <TableHead className="">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {submittedForms.map((request) => {
+                return (
+                  <TableRow>
+                    <TableCell>{request.name}</TableCell>
+                    <TableCell>{request.locationFrom}</TableCell>
+                    <TableCell>{request.locationTo}</TableCell>
+                    <TableCell>
+                      {format(request.date, "MMMM do, yyyy")}
+                    </TableCell>
+                    <TableCell>{request.time}</TableCell>
+                    <TableCell>{request.reason}</TableCell>
+                    <TableCell>{request.note}</TableCell>
+                    <TableCell>{request.priority}</TableCell>
+                    <TableCell>{request.status}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
         </Card>
       </div>
     </>
