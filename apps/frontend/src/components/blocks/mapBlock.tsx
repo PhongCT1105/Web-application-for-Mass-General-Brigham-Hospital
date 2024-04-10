@@ -191,12 +191,13 @@ export const MapBlock: React.FC = () => {
 
     // Split the nodes into separate paths for each floor
     const pathsByFloor: { [key: string]: Node[] } = {};
+    for (let i = 1; i <= 5; i++) {
+      pathsByFloor[i] = [];
+    }
     nodes.forEach((node) => {
-      if (!pathsByFloor[node.floor]) {
-        pathsByFloor[node.floor] = [];
-      }
       pathsByFloor[node.floor].push(node);
     });
+    console.log(pathsByFloor);
 
     const floorColorMap: { [key: string]: string } = {
       "1": "red",
@@ -209,10 +210,15 @@ export const MapBlock: React.FC = () => {
 
     // Draw a path for each floor
     Object.entries(pathsByFloor).forEach(([floor, nodesOnFloor]) => {
+      console.log("floor");
+      console.log(floor);
+      console.log("current floor");
+      console.log(currentFloor);
       // Only draw the path if the current floor matches the floor of the path
       if (floor === currentFloor) {
         const color = floorColorMap[floor] || "black"; // Use black as a default color if the floor is not in the color map
         for (let i = 0; i < nodesOnFloor.length - 1; i++) {
+          console.log("we drawing this bitch");
           drawPath(nodesOnFloor[i].nodeID, nodesOnFloor[i + 1].nodeID, color);
         }
       }
