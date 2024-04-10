@@ -24,6 +24,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
+import { HospitalData } from "@/components/blocks/mapBlock.tsx";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -48,6 +49,8 @@ interface Form {
   comments: string;
 }
 
+const nodesOnFloor: HospitalData[] = [];
+
 export function Sanitation() {
   const { toast } = useToast();
 
@@ -55,6 +58,14 @@ export function Sanitation() {
   const [selectedSeverity, setSelectedSeverity] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [submittedForms, setSubmittedForms] = useState<Form[]>([]);
+
+  const [startPoint, setStartPoint] = useState("");
+
+  const filteredLocations = nodesOnFloor.filter((node) => {
+    return !node.name.includes("Hallway") && !node.name.startsWith("Hall");
+  });
+  console.log("filtered locations:");
+  console.log(nodesOnFloor);
 
   const [form, setForm] = useState<Form>({
     name: "",
@@ -66,13 +77,6 @@ export function Sanitation() {
     description: "",
     comments: "",
   });
-
-  const locations: string[] = [
-    "location1",
-    "location2",
-    "location3",
-    "location4",
-  ];
 
   const handleFormChange = (
     event:
@@ -124,12 +128,13 @@ export function Sanitation() {
     setSelectedStatus(status);
   };
 
-  const handleLocationChange = (location: string) => {
-    setForm((prevState) => ({
-      ...prevState,
-      location: location,
-    }));
-  };
+  // const handleLocationChange = (location: string) => {
+  //     setForm((prevState) => ({
+  //         ...prevState,
+  //         location: location,
+  //     }));
+  //     setLocation(location);
+  // };
 
   const handleSubmit = () => {
     if (
@@ -362,17 +367,17 @@ export function Sanitation() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline">
-                          {form.location ? form.location : "Select Location"}
+                          {startPoint ? startPoint : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
-                        {locations.map((location, index) => (
+                        {filteredLocations.map((location, index) => (
                           <DropdownMenuRadioItem
                             key={index}
-                            value={location}
-                            onClick={() => handleLocationChange(location)}
+                            value={location.name}
+                            onClick={() => setStartPoint(location.name)}
                           >
-                            {location}
+                            {location.name}
                           </DropdownMenuRadioItem>
                         ))}
                       </DropdownMenuContent>
