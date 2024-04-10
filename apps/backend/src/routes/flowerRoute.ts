@@ -16,6 +16,8 @@ interface RequestForm {
   location: string;
   message?: string;
   total: number;
+  priority: string;
+  status: string;
 }
 
 function productsToString(products: cartItem[]): string {
@@ -43,6 +45,8 @@ router.post("/", async (req: Request, res: Response) => {
         recipient: requestForm.recipient,
         sender: requestForm.sender,
         total: requestForm.total,
+        priority: requestForm.priority,
+        status: requestForm.status,
       },
     });
     console.info("Successfully requested flowers");

@@ -67,4 +67,6 @@ model flowerRequest {
   recipient String
   sender    String
   total     Float
+  priority  String
+  status    String
 }
