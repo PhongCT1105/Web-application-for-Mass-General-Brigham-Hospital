@@ -183,6 +183,7 @@ export const MapBlock: React.FC = () => {
     );
 
     console.log(paths);
+
     for (let i = 0; i < paths[0].length - 1; i++) {
       drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
     }
@@ -207,13 +208,27 @@ export const MapBlock: React.FC = () => {
   function parsePath(nodes: Node[]): Node[][] {
     const pathsByFloor: { [key: string]: Node[] } = {};
 
+    for (let i = 0; i < 5; i++) {
+      pathsByFloor[i] = [];
+    }
     nodes.forEach((node) => {
-      if (!pathsByFloor[node.floor]) {
-        pathsByFloor[node.floor] = [];
-      }
-      pathsByFloor[node.floor].push(node);
+      const floorToIndex =
+        node.floor === "L2"
+          ? "0"
+          : node.floor === "L1"
+            ? "1"
+            : node.floor === "1"
+              ? "2"
+              : node.floor === "2"
+                ? "3"
+                : node.floor === "3"
+                  ? "4"
+                  : "";
+
+      pathsByFloor[floorToIndex].push(node);
     });
 
+    console.log(Object.values(pathsByFloor));
     return Object.values(pathsByFloor);
   }
 
