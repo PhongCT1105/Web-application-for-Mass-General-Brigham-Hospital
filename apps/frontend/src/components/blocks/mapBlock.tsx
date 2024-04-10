@@ -38,6 +38,10 @@ export const MapBlock: React.FC = () => {
     setPathfindingStrategy(strategy);
   };
 
+  function displayNodesOnFloor() {
+    console.log("Nodes on current floor:", nodesOnFloor);
+  }
+
   const [graph, setGraph] = useState<Graph>(new Graph());
   const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
@@ -53,8 +57,8 @@ export const MapBlock: React.FC = () => {
   } as const;
 
   const loadData = async () => {
-    const { data: edgeData } = await axios.get(`/api/mapreq/edges?=floor=1`);
-    const { data: nodeData } = await axios.get(`/api/mapreq/nodes?=floor=1`);
+    const { data: edgeData } = await axios.get(`/api/mapreq/edges`);
+    const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
 
     const stringData: string[] = [];
 
@@ -87,8 +91,8 @@ export const MapBlock: React.FC = () => {
 
     for (let i = 0; i < edgeData.length; i++) {
       newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
+      newGraph.addEdge(edgeData[i].startNodeID, edgeData[i].endNodeID);
     }
-
     setHospitalDataString(stringData);
     setHospitalData(newHospitalData);
     setGraph(newGraph);
@@ -96,6 +100,11 @@ export const MapBlock: React.FC = () => {
   };
 
   useEffect(() => {
+    // Before creating the map, check if the browser supports hardware acceleration and enable it if possible
+    if (L.Browser.canvas) {
+      L.Map.prototype.options.preferCanvas = true;
+    }
+
     console.log("useEffect is running");
     if (!isDataLoaded) {
       loadData().then(() => {
@@ -109,6 +118,7 @@ export const MapBlock: React.FC = () => {
           minZoom: -2,
           maxZoom: 2,
           zoomControl: true,
+          preferCanvas: true,
         }).setView([3400, 5000], -2);
         mapRef.current = map;
       }
@@ -140,7 +150,7 @@ export const MapBlock: React.FC = () => {
     setPaths((prevPaths) => [...prevPaths, newPath]);
   }
 
-  function drawPath(start: string, end: string) {
+  function drawPath(start: string, end: string, color: string) {
     const startHospital = hospitalData.find((h) => h.nodeID === start);
     const endHospital = hospitalData.find((h) => h.nodeID === end);
     if (!startHospital || !endHospital) {
@@ -156,7 +166,7 @@ export const MapBlock: React.FC = () => {
     const startCoords: [number, number] = [3400 - startLng, startLat];
     const endCoords: [number, number] = [3400 - endLng, endLat];
 
-    drawLine(startCoords, endCoords);
+    drawLine(startCoords, endCoords, color);
   }
 
   function drawFullPath(graph: Graph, start: string, end: string) {
@@ -168,17 +178,29 @@ export const MapBlock: React.FC = () => {
       return;
     }
     console.log("A path should be created now");
-    const nodes: Node[] = pathfindingStrategy.findPath(
-      graph,
-      startNode,
-      endNode,
+    const paths: Node[][] = parsePath(
+      pathfindingStrategy.findPath(graph, startNode, endNode),
     );
 
-    console.log(nodes);
-    for (let i = 0; i < nodes.length - 1; i++) {
-      drawPath(nodes[i].nodeID, nodes[i + 1].nodeID);
+    console.log(paths);
+    for (let i = 0; i < paths[0].length - 1; i++) {
+      drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
     }
-    console.log(parsePath(nodes));
+
+    for (let i = 0; i < paths[1].length - 1; i++) {
+      drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
+    }
+
+    for (let i = 0; i < paths[2].length - 1; i++) {
+      drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
+    }
+
+    for (let i = 0; i < paths[3].length - 1; i++) {
+      drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
+    }
+    for (let i = 0; i < paths[4].length - 1; i++) {
+      drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
+    }
     console.log("done :D");
   }
 
@@ -198,12 +220,13 @@ export const MapBlock: React.FC = () => {
   function drawLine(
     startCoordinates: [number, number],
     endCoordinates: [number, number],
+    color: string,
   ) {
     const map = mapRef.current;
     if (!map) return;
 
     const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: "blue",
+      color: color,
       weight: 5,
     }).addTo(map);
     addToPaths(newPath); // Add the new path to the paths list
@@ -280,6 +303,7 @@ export const MapBlock: React.FC = () => {
 
     // Remove existing markers from the map
     clearMarkers();
+    // clearLines();
 
     map.eachLayer((layer) => {
       if (layer instanceof L.ImageOverlay) {
@@ -305,6 +329,10 @@ export const MapBlock: React.FC = () => {
       );
 
       const stringData: string[] = [];
+      for (let i = 0; i < nodeData.length; i++) {
+        stringData.push(nodeData[i].longName);
+      }
+
       const hospitalData = [];
 
       const newGraph: Graph = new Graph();
@@ -349,6 +377,7 @@ export const MapBlock: React.FC = () => {
       );
       setNodesOnFloor(newNodesOnCurrentFloor);
       addMarkers(map, newNodesOnCurrentFloor);
+      displayNodesOnFloor();
     }
   }
 
@@ -356,14 +385,18 @@ export const MapBlock: React.FC = () => {
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div style={{ flex: 1, padding: "10px" }}>
         <SearchBar
-          locations={hospitalDataString
-            .sort((a, b) => a.localeCompare(b))
-            .filter((str) => str.indexOf("Hallway") === -1)}
+          locations={Array.from(
+            new Set(
+              hospitalDataString
+                .sort((a, b) => a.localeCompare(b))
+                .filter((str) => str.indexOf("Hall") === -1),
+            ),
+          )}
           onSearch={handleSearch}
           onClear={clearLines}
           changePathfindingStrategy={changePathfindingStrategy}
           currentFloor={currentFloor}
-          nodesOnFloor={nodesOnFloor}
+          //nodesOnFloor={nodesOnFloor}
         />
       </div>
       <div

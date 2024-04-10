@@ -3,7 +3,7 @@
 import { Header } from "@/components/blocks/header.tsx";
 import { LoginBlock } from "@/components/blocks/loginBlock.tsx";
 import * as React from "react";
-import carousel1 from "@/assets/hero.jpg";
+import carousel1 from "@/assets/hero2.png";
 import carousel2 from "@/assets/carousel2.png";
 import carousel3 from "@/assets/carousel3.png";
 import carousel4 from "@/assets/carousel4.png";
@@ -27,11 +27,8 @@ export function CarouselDemo() {
           <CarouselItem key={index}>
             <div className="p-1">
               <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-6">
-                  <img
-                    src={carouselImages[index]}
-                    className="max-w-full max-h-full"
-                  />
+                <CardContent className="flex items-center justify-center p-6">
+                  <img src={carouselImages[index]} className="w-full h-full" />
                 </CardContent>
               </Card>
             </div>

@@ -35,7 +35,11 @@ import {
 } from "@/components/ui/popover";
 
 import { Textarea } from "@/components/ui/textarea.tsx";
-// import {CartTable} from "@/routes/service-request/CartTable.tsx";
+import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
+import ten from "@/assets/discount-tags/ten-percent-discount.webp";
+import twenty from "@/assets/discount-tags/twenty-percent-discount.webp";
+import thirty from "@/assets/discount-tags/thirty-percent-discount.webp";
+
 import {
   Table,
   TableBody,
@@ -84,8 +88,8 @@ export const FlowerContent = () => {
     const { id, value } = event.target;
     setForm((prev) => ({
       ...prev,
-      cartItems: prev.cartItems, // Assuming cartItems are unchanged
-      total: prev.total, // Assuming total is unchanged
+      cartItems: cartItems, // Assuming cartItems are unchanged
+      total: totalCost, // Assuming total is unchanged
       priority: prev.priority,
       status: prev.status,
       [id]: value,
@@ -220,10 +224,18 @@ export const FlowerContent = () => {
                             value={form.priority}
                             onChange={handleForm}
                           >
-                            <option value="emergency">Emergency</option>
-                            <option value="high">High</option>
-                            <option value="medium">Medium</option>
-                            <option value="low">Low</option>
+                            <option id="emergency" value="emergency">
+                              Emergency
+                            </option>
+                            <option id="high" value="high">
+                              High
+                            </option>
+                            <option id="medium" value="medium">
+                              Medium
+                            </option>
+                            <option id="low" value="low">
+                              Low
+                            </option>
                           </select>
                           <Label htmlFor="Priority" className="text-right">
                             Status:
@@ -236,10 +248,18 @@ export const FlowerContent = () => {
                             value={form.status}
                             onChange={handleForm}
                           >
-                            <option value="unassigned">Unassigned</option>
-                            <option value="assigned">Assigned</option>
-                            <option value="in-progress">In Progress</option>
-                            <option value="closed">Closed</option>
+                            <option id="unassigned" value="unassigned">
+                              Unassigned
+                            </option>
+                            <option id="assigned" value="assigned">
+                              Assigned
+                            </option>
+                            <option id="in-progress" value="in-progress">
+                              In Progress
+                            </option>
+                            <option id="closed" value="closed">
+                              Closed
+                            </option>
                           </select>
                         </div>
                         <div
@@ -272,8 +292,8 @@ export const FlowerContent = () => {
                 </TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[50px]"></TableHead>
-                    <TableHead> Name</TableHead>
+                    <TableHead className="w-20"></TableHead>
+                    <TableHead className={" w-40"}> Name</TableHead>
                     <TableHead className="text-right">Amount</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -289,13 +309,13 @@ export const FlowerContent = () => {
                             );
                           }}
                           className={
-                            "text-center flex flex-col font-bold text-lg"
+                            "text-center flex flex-col font-bold text-lg w-10"
                           }
                         >
                           <X />
                         </Button>
                       </TableCell>
-                      <TableCell className={" text-nowrap"}>
+                      <TableCell className={" text-nowrap w-40"}>
                         {item.name}
                       </TableCell>
                       <TableCell className="text-center items-end">
@@ -330,28 +350,28 @@ export const FlowerContent = () => {
                 <CardContent className={"relative w-[300px] mt-2"}>
                   {flower.discountAmt === 10 && (
                     <img
-                      src="src/assets/discount-tags/ten-percent-discount.webp"
+                      src={ten}
                       alt="10% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {flower.discountAmt === 20 && (
                     <img
-                      src="src/assets/discount-tags/twenty-percent-discount.webp"
+                      src={twenty}
                       alt="20% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {flower.discountAmt === 30 && (
                     <img
-                      src="src/assets/discount-tags/thirty-percent-discount.webp"
+                      src={thirty}
                       alt="30% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {flower.discountAmt === 50 && (
                     <img
-                      src="src/assets/discount-tags/fifty-percent-discount.png"
+                      src={fiftyPercent}
                       alt="50% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
