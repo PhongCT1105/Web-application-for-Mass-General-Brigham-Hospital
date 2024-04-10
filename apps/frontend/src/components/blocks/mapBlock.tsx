@@ -194,35 +194,31 @@ export const MapBlock: React.FC = () => {
 
     // console.log(paths);
 
-    if (currentFloor === "L2") {
+    if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
-        console.log("L2 ne");
         drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
       }
     }
-    if (currentFloor === "L1") {
-      console.log("L1 ne");
+
+    if (currentFloor === "L1" && paths[1].length > 1) {
       for (let i = 0; i < paths[1].length - 1; i++) {
         drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
       }
     }
 
-    if (currentFloor === "1") {
-      clearLines();
+    if (currentFloor === "1" && paths[2].length > 1) {
       for (let i = 0; i < paths[2].length - 1; i++) {
         drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
       }
     }
 
-    if (currentFloor === "2") {
-      clearLines();
+    if (currentFloor === "2" && paths[3].length > 1) {
       for (let i = 0; i < paths[3].length - 1; i++) {
         drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
       }
     }
 
-    if (currentFloor === "3") {
-      clearLines();
+    if (currentFloor === "3" && paths[4].length > 1) {
       for (let i = 0; i < paths[4].length - 1; i++) {
         drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
       }
