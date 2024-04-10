@@ -88,8 +88,8 @@ export const FlowerContent = () => {
     const { id, value } = event.target;
     setForm((prev) => ({
       ...prev,
-      cartItems: prev.cartItems, // Assuming cartItems are unchanged
-      total: prev.total, // Assuming total is unchanged
+      cartItems: cartItems, // Assuming cartItems are unchanged
+      total: totalCost, // Assuming total is unchanged
       priority: prev.priority,
       status: prev.status,
       [id]: value,
