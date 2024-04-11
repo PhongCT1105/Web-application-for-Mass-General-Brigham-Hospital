@@ -16,7 +16,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { HeaderHome } from "@/components/blocks/headerHome.tsx";
+import { Header } from "@/components/blocks/header.tsx";
 
 export function CarouselDemo() {
   const carouselImages = [carousel1, carousel2, carousel3, carousel4];
@@ -49,7 +49,7 @@ export function CarouselDemo() {
 export default function LoginPage() {
   return (
     <>
-      <HeaderHome />
+      <Header />
       <div className="container relative h-[700px] lg:max-w-none lg:px-0 w-full flex flex-col lg:flex-row">
         <CarouselDemo />
         <div

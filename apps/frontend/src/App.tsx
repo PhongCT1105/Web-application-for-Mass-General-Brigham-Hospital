@@ -11,6 +11,7 @@ import CSVTable from "./components/blocks/csvTable.tsx";
 import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
+import StartPage from "@/routes/StartPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -21,7 +22,7 @@ function App() {
       children: [
         {
           path: "",
-          element: <LoginPage />,
+          element: <StartPage />,
         },
       ],
     },
