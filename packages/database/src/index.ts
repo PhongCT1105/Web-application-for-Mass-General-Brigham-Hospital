@@ -1,85 +1,85 @@
 export * from "../.prisma/client";
-
-import { PrismaClient } from "../.prisma/client";
-import fs from "fs";
-const prisma = new PrismaClient();
-
-async function readCsvFile() {
-  // CLear table
-  await prisma.edges.deleteMany();
-  await prisma.nodes.deleteMany();
-
-  //---------------NODE---------------
-  const nodesCSV = fs.readFileSync("./resources/allNodes.csv", "utf8");
-  const nodesData: string[] = nodesCSV.trim().split("\n").slice(1);
-  const nodes = nodesData.map((nodesData) => {
-    const [
-      nodeID,
-      xcoord,
-      ycoord,
-      floor,
-      building,
-      nodeType,
-      longName,
-      shortName,
-    ] = nodesData.split(",");
-    return {
-      nodeID,
-      xcoord: parseInt(xcoord),
-      ycoord: parseInt(ycoord),
-      floor,
-      building,
-      nodeType,
-      longName,
-      shortName,
-    };
-  });
-
-  //Insert nodes into database
-  await prisma.nodes.createMany({
-    data: nodes,
-  });
-
-  //Print out the nodes data from the database
-  /*
-    console.log("Nodes Table: ");
-    nodes.forEach(node => {
-        console.log(`${node.nodeID} | ${node.xcoord} | ${node.ycoord} | ${node.floor} | ${node.building} |  ${node.nodeType} | ${node.longName} | ${node.shortName}`);
-    });
-    */
-
-  //---------------EDGE---------------
-  const edgesCSV = fs.readFileSync("./resources/allEdges.csv", "utf8");
-  const edgesData: string[] = edgesCSV
-    .trim()
-    .replace(/\r/g, "")
-    .split("\n")
-    .slice(1);
-  const edges = edgesData.map((edge) => {
-    const [eID, startNodeID, endNodeID] = edge.split(",");
-    return { eID, startNodeID, endNodeID };
-  });
-
-  // Insert edge into database
-  await prisma.edges.createMany({
-    data: edges,
-  });
-
-  //Print out the edges data from the database
-  /*
-    console.log("Edges Table: ");
-    edges.forEach(edge => {
-        console.log(`${edge.startNodeID} | ${edge.endNodeID}`);
-    });
-    */
-
-  await prisma.user.create({
-    data: {
-      username: "admin",
-      password: "admin",
-    },
-  });
-}
+//
+// import { PrismaClient } from "../.prisma/client";
+// import fs from "fs";
+// const prisma = new PrismaClient();
+//
+// async function readCsvFile() {
+//   // CLear table
+//   await prisma.edges.deleteMany();
+//   await prisma.nodes.deleteMany();
+//
+//   //---------------NODE---------------
+//   const nodesCSV = fs.readFileSync("./resources/allNodes.csv", "utf8");
+//   const nodesData: string[] = nodesCSV.trim().split("\n").slice(1);
+//   const nodes = nodesData.map((nodesData) => {
+//     const [
+//       nodeID,
+//       xcoord,
+//       ycoord,
+//       floor,
+//       building,
+//       nodeType,
+//       longName,
+//       shortName,
+//     ] = nodesData.split(",");
+//     return {
+//       nodeID,
+//       xcoord: parseInt(xcoord),
+//       ycoord: parseInt(ycoord),
+//       floor,
+//       building,
+//       nodeType,
+//       longName,
+//       shortName,
+//     };
+//   });
+//
+//   //Insert nodes into database
+//   await prisma.nodes.createMany({
+//     data: nodes,
+//   });
+//
+//   //Print out the nodes data from the database
+//   /*
+//     console.log("Nodes Table: ");
+//     nodes.forEach(node => {
+//         console.log(`${node.nodeID} | ${node.xcoord} | ${node.ycoord} | ${node.floor} | ${node.building} |  ${node.nodeType} | ${node.longName} | ${node.shortName}`);
+//     });
+//     */
+//
+//   //---------------EDGE---------------
+//   const edgesCSV = fs.readFileSync("./resources/allEdges.csv", "utf8");
+//   const edgesData: string[] = edgesCSV
+//     .trim()
+//     .replace(/\r/g, "")
+//     .split("\n")
+//     .slice(1);
+//   const edges = edgesData.map((edge) => {
+//     const [eID, startNodeID, endNodeID] = edge.split(",");
+//     return { eID, startNodeID, endNodeID };
+//   });
+//
+//   // Insert edge into database
+//   await prisma.edges.createMany({
+//     data: edges,
+//   });
+//
+//   //Print out the edges data from the database
+//   /*
+//     console.log("Edges Table: ");
+//     edges.forEach(edge => {
+//         console.log(`${edge.startNodeID} | ${edge.endNodeID}`);
+//     });
+//     */
+//
+//   await prisma.user.create({
+//     data: {
+//       username: "admin",
+//       password: "admin",
+//     },
+//   });
+// }
 
 /*
 async function exportToCsv() {
@@ -114,5 +114,5 @@ async function exportToCsv() {
 */
 
 //importFlower();
-readCsvFile();
+// readCsvFile();
 //exportToCsv();
