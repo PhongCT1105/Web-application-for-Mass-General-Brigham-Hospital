@@ -28,7 +28,11 @@ export function CarouselDemo() {
             <div className="p-1">
               <Card>
                 <CardContent className="flex items-center justify-center p-6">
-                  <img src={carouselImages[index]} className="w-full h-full" />
+                  <img
+                    src={carouselImages[index]}
+                    className="w-full h-full"
+                    alt={"carousel"}
+                  />
                 </CardContent>
               </Card>
             </div>
