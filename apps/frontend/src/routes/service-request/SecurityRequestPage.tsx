@@ -128,7 +128,7 @@ export const SecurityForm = () => {
 
   return (
     <>
-      <Card className={" "}>
+      <Card className={" flex flex-col border rounded-md text mx-10 my-5"}>
         {/*<CardHeader>*/}
         {/*  <CardTitle className={"text-3xl text-center"}>*/}
         {/*    Request Security*/}
@@ -141,8 +141,8 @@ export const SecurityForm = () => {
           <div className="flex w-full gap-10 items-start">
             <div className="flex flex-col w-full gap-2">
               {/* Name Input */}
-              <div className="grid gap-2 mt-6">
-                <Label htmlFor="ename">Employee Name:</Label>
+              <div className="grid gap-2">
+                <h1 className="text-2xl font-bold my-2 mt-6">Employee Name:</h1>
                 <Input
                   id="ename"
                   type="text"
@@ -154,7 +154,10 @@ export const SecurityForm = () => {
               </div>
               {/* Location Input */}
               <div className="grid gap-2 mt-6">
-                <Label htmlFor="location">Location to request for:</Label>
+                <h1 className="text-2xl font-bold ">
+                  Location to request for:
+                </h1>
+                {/*<Label htmlFor="location">Location to request for:</Label>*/}
                 <Input
                   id="location"
                   placeholder={"Location"}
@@ -166,7 +169,10 @@ export const SecurityForm = () => {
               </div>
               {/* Threat Input Radio? Probably*/}
               <div className="grid gap-2 mt-6">
-                <Label htmlFor="situation">Describe the situation:</Label>
+                <h1 className="text-2xl font-bold ">
+                  Location to request for:
+                </h1>
+                {/*<Label htmlFor="situation">Describe the situation:</Label>*/}
                 <Input
                   id="situation"
                   placeholder={"Description"}
@@ -195,7 +201,8 @@ export const SecurityForm = () => {
             <div className="flex flex-col w-full gap-6 justify-center mt-6">
               {/* Assignment Input */}
               <div className={"grid gap-4"}>
-                <Label htmlFor="status">Request Status:</Label>
+                <h1 className="text-2xl font-bold ">Request Status:</h1>
+                {/*<Label htmlFor="status">Request Status:</Label>*/}
                 <RadioGroup
                   id={"status"}
                   defaultValue="unassigned"
@@ -243,7 +250,8 @@ export const SecurityForm = () => {
             {/* Priority Input */}
 
             <div className={"grid gap-4 justify-start w-full mt-6"}>
-              <Label htmlFor="priority">Request Priority:</Label>
+              <h1 className="text-2xl font-bold ">Request Priority:</h1>
+              {/*<Label htmlFor="priority">Request Priority:</Label>*/}
               <RadioGroup
                 className={"gap-4"}
                 id={"priority"}
