@@ -1,4 +1,4 @@
-// AboutUsPage.js
+import "../styles/example.route.css";
 import "../styles/globals.css";
 import { Header } from "@/components/blocks/header.tsx";
 import wongAsters from "@/assets/wongSunFlower.png";
