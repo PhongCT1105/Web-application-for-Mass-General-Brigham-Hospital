@@ -77,7 +77,7 @@ export const MapEditor: React.FC = () => {
     }
 
     for (let i = 0; i < edgeData.length; i++) {
-      newGraph.addEdge(edgeData[i].startNodeID, edgeData[i].endNodeID);
+      newGraph.addEdge(edgeData[i].startNode, edgeData[i].endNode);
     }
 
     setHospitalData(newHospitalData);
