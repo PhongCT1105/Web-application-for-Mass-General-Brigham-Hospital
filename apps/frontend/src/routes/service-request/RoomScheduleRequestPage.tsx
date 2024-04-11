@@ -1,10 +1,10 @@
 import {
   Card,
   CardContent,
-  CardDescription,
+  // CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
+  // CardHeader,
+  // CardTitle,
 } from "@/components/ui/card.tsx";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
@@ -242,14 +242,14 @@ export const SheduleContent = () => {
       <div className=" flex  border rounded-md  text mx-10 my-5">
         <div className="w-3/4 justify-center items-center">
           <Card className=" border-none">
-            <CardHeader>
-              <CardTitle>Request Information</CardTitle>
-              <CardDescription>
-                Enter the details for your request
-              </CardDescription>
-            </CardHeader>
+            {/*<CardHeader>*/}
+            {/*  /!*<CardTitle>Request Information</CardTitle>*!/*/}
+            {/*  /!*<CardDescription>*!/*/}
+            {/*  /!*  Enter the details for your request*!/*/}
+            {/*  /!*</CardDescription>*!/*/}
+            {/*</CardHeader>*/}
             <CardContent>
-              <div className="space-y-6">
+              <div className="space-y-6 mt-6">
                 <div>
                   <h1 className="text-2xl font-bold">Patient Name</h1>
                   <Input
@@ -262,7 +262,7 @@ export const SheduleContent = () => {
                 </div>
 
                 <div className="flex">
-                  <div className="w-1/5">
+                  <div className="w-1/4">
                     <h1 className="text-2xl font-bold">Priority Level</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">

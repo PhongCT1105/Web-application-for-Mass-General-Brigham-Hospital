@@ -10,10 +10,10 @@ import { useToast } from "@/components/ui/use-toast.ts";
 import {
   Card,
   CardContent,
-  CardDescription,
+  // CardDescription,
   CardFooter,
-  CardHeader,
-  CardTitle,
+  // CardHeader,
+  // CardTitle,
 } from "@/components/ui/card";
 import {
   DropdownMenu,
@@ -205,19 +205,19 @@ export function Sanitation() {
 
   return (
     <>
-      <div className="flex border rounded-md text mx-10 my-5">
-        <div className="w-3/4 justify-center items-center">
+      <div className="flex flex-col border rounded-md text mx-10 my-5">
+        <div className=" justify-center items-center">
           <Card className="border-none">
-            <CardHeader>
-              <CardTitle>Request Information</CardTitle>
-              <CardDescription>
-                Enter the details for your request
-              </CardDescription>
-            </CardHeader>
+            {/*<CardHeader>*/}
+            {/*  <CardTitle>Request Information</CardTitle>*/}
+            {/*  <CardDescription>*/}
+            {/*    Enter the details for your request*/}
+            {/*  </CardDescription>*/}
+            {/*</CardHeader>*/}
             <CardContent>
               <div className="space-y-6">
-                <div className="w-1/4 ml-12">
-                  <h1 className="text-2xl font-bold my-2">Name</h1>
+                <div className="w-1/4">
+                  <h1 className="text-2xl font-bold my-2 mt-6">Name</h1>
                   <Input
                     type="text"
                     id="name"
@@ -227,7 +227,7 @@ export function Sanitation() {
                   />
                 </div>
                 <div className="flex">
-                  <div className="w-1/3 ml-12">
+                  <div className="w-1/3 ">
                     <h1 className="text-2xl font-bold my-2">Severity Level</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
@@ -411,8 +411,10 @@ export function Sanitation() {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <div className="w-1/6">
-                    <h1 className="text-2xl font-bold my-2">Time of Issue</h1>
+                  <div className="">
+                    <h1 className="text-2xl font-bold my-2 whitespace-nowrap">
+                      Time of Issue
+                    </h1>
                     <Input
                       type="time"
                       placeholder="Time of Issue"
