@@ -16,6 +16,7 @@ import {
   BFSPathfindingStrategy,
   PathfindingStrategy,
 } from "@/util/PathfindingStrategy.tsx";
+import { Button } from "@/components/ui/button";
 
 export interface HospitalData {
   nodeID: string;
@@ -92,8 +93,8 @@ export const MapBlock: React.FC = () => {
     }
 
     for (let i = 0; i < edgeData.length; i++) {
-      newGraph.addNeighbors(edgeData[i].startNodeID, edgeData[i].endNodeID);
-      newGraph.addEdge(edgeData[i].startNodeID, edgeData[i].endNodeID);
+      newGraph.addNeighbors(edgeData[i].startNode, edgeData[i].endNode);
+      newGraph.addEdge(edgeData[i].startNode, edgeData[i].endNode);
     }
     setHospitalDataString(stringData);
     setHospitalData(newHospitalData);
@@ -416,21 +417,36 @@ export const MapBlock: React.FC = () => {
             color: "black",
           }}
         >
-          <button onClick={() => changeFloor("lowerLevel2")}>
+          <Button
+            className="bg-white text-black"
+            onClick={() => changeFloor("lowerLevel2")}
+          >
             Lower Level 2
-          </button>
-          <button onClick={() => changeFloor("lowerLevel1")}>
+          </Button>
+          <Button
+            className="bg-white text-black"
+            onClick={() => changeFloor("lowerLevel1")}
+          >
             Lower Level 1
-          </button>
-          <button onClick={() => changeFloor("theFirstFloor")}>
+          </Button>
+          <Button
+            className="bg-white text-black"
+            onClick={() => changeFloor("theFirstFloor")}
+          >
             First Floor
-          </button>
-          <button onClick={() => changeFloor("theSecondFloor")}>
+          </Button>
+          <Button
+            className="bg-white text-black"
+            onClick={() => changeFloor("theSecondFloor")}
+          >
             Second Floor
-          </button>
-          <button onClick={() => changeFloor("theThirdFloor")}>
+          </Button>
+          <Button
+            className="bg-white text-black"
+            onClick={() => changeFloor("theThirdFloor")}
+          >
             Third Floor
-          </button>
+          </Button>
         </div>
       </div>
     </div>
