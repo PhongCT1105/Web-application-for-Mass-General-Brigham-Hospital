@@ -371,7 +371,9 @@ export const MapBlock: React.FC = () => {
       addMarkers(map, newNodesOnCurrentFloor);
       displayNodesOnFloor();
 
+      // Moved the drawing of lines after updating the current floor
       clearLines();
+      displayNodesOnFloor();
       drawFullPath(graph, startNodeID, endNodeID, convertedFloorName);
     }
   }

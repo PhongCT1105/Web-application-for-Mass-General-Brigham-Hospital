@@ -44,7 +44,7 @@ export default function ServiceRequestPage() {
 
   return (
     <div className={" scrollbar-hide"}>
-      <Header />
+      <Header highlighted={"/service-requests"} />
       <div className="hidden md:block">
         <div className="border-t">
           <div className="bg-background">

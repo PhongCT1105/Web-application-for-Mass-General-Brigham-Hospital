@@ -6,7 +6,7 @@ import { Header } from "@/components/blocks/header.tsx";
 export default function AboutUsPage() {
   return (
     <>
-      <Header />
+      <Header highlighted={"/about-us"} />
     </>
   );
 }

@@ -43,7 +43,11 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/modeToggle.tsx";
 
-export function Header() {
+interface HeaderProps {
+  highlighted?: string; // Assuming highlightColor is a string
+}
+
+export function Header({ highlighted }: HeaderProps) {
   return (
     <div className="flex w-full flex-col">
       <header className="sticky top-0 flex flex-col items-center gap-4 bg-blue-900">
@@ -59,33 +63,33 @@ export function Header() {
             </a>
             <a
               href="/home"
-              className="transition-colors hover:text-yellow-500 text-gray-300"
+              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/home" ? "text-yellow-500 " : "text-gray-300"}`}
             >
               Home
             </a>
             <a
               href="/service-requests"
-              className=" transition-colors hover:text-yellow-500 text-gray-300"
+              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/service-requests" ? "text-yellow-500 " : "text-gray-300"}`}
             >
               Service Requests
             </a>
             <a
-              href="csv-table"
-              className=" transition-colors hover:text-yellow-500 text-gray-300"
+              href="/csv-table"
+              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/csv-table" ? "text-yellow-500" : "text-gray-300"}`}
             >
               CSV Table
             </a>
             <a
-              href="/about-us"
-              className=" transition-colors hover:text-yellow-500 text-gray-300"
-            >
-              About Us
-            </a>
-            <a
               href="/map-editor"
-              className=" transition-colors hover:text-yellow-500 text-gray-300"
+              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
             >
               Map Editor
+            </a>
+            <a
+              href="/about-us"
+              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
+            >
+              About Us
             </a>
           </nav>
           <Sheet>

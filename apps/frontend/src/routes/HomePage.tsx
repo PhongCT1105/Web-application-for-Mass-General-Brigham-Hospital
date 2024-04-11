@@ -7,7 +7,7 @@ import { MapBlock } from "@/components/blocks/mapBlock.tsx";
 const HomePage: React.FC = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <Header /> {/* Add the Header component */}
+      <Header highlighted={"/home"} /> {/* Add the Header component */}
       <MapBlock />
     </div>
   );
