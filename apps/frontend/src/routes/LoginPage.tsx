@@ -1,6 +1,6 @@
 // import "../styles/example.route.css";
 // import "../styles/globals.css";
-import { Header } from "@/components/blocks/header.tsx";
+// import { Header } from "@/components/blocks/header.tsx";
 import { LoginBlock } from "@/components/blocks/loginBlock.tsx";
 import * as React from "react";
 import carousel1 from "@/assets/hero2.png";
@@ -16,6 +16,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { Header } from "@/components/blocks/header.tsx";
 
 export function CarouselDemo() {
   const carouselImages = [carousel1, carousel2, carousel3, carousel4];
@@ -48,7 +49,7 @@ export function CarouselDemo() {
 export default function LoginPage() {
   return (
     <>
-      <Header highlighted={"/login"} />
+      <Header />
       <div className="container relative h-[700px] lg:max-w-none lg:px-0 w-full flex flex-col lg:flex-row">
         <CarouselDemo />
         <div

@@ -1,7 +1,7 @@
 import React from "react";
 import "leaflet/dist/leaflet.css";
-import { Header } from "@/components/blocks/header.tsx";
 import { MapBlock } from "@/components/blocks/mapBlock.tsx";
+import { Header } from "@/components/blocks/header.tsx";
 
 // Define the map component
 const HomePage: React.FC = () => {

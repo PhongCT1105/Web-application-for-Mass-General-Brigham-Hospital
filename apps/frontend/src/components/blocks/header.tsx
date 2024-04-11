@@ -54,7 +54,7 @@ export function Header({ highlighted }: HeaderProps) {
         <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6">
           <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
             <a
-              href="/login"
+              href=""
               className="flex items-center gap-2 text-lg font-semibold md:text-base"
             >
               <img src={Logo} alt={"brigham logo"} className={"w-10"} />
