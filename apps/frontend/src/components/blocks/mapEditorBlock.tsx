@@ -46,7 +46,7 @@ export const MapEditor: React.FC = () => {
   } as const;
 
   const loadData = async () => {
-    const { data: edgeData } = await axios.get(`/api/mapreq/edges?=floor=1`);
+    const { data: edgeData } = await axios.get(`/api/mapreq/edges?`);
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes?=floor=1`);
 
     const newHospitalData: HospitalData[] = [];
@@ -77,7 +77,7 @@ export const MapEditor: React.FC = () => {
     }
 
     for (let i = 0; i < edgeData.length; i++) {
-      newGraph.addEdge(edgeData[i].startNodeID, edgeData[i].endNodeID);
+      newGraph.addEdge(edgeData[i].startNode, edgeData[i].endNode);
     }
 
     setHospitalData(newHospitalData);
