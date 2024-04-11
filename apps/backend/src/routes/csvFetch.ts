@@ -16,9 +16,9 @@ interface nodeTable {
 }
 
 interface edgeTable {
-  eID: string;
-  startNodeID: string;
-  endNodeID: string;
+  edgeID: string;
+  startNode: string;
+  endNode: string;
 }
 
 // Node stuff good, just copy the format

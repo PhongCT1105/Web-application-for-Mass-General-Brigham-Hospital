@@ -213,24 +213,34 @@ const CSVTable: React.FC = () => {
       }
     } else if (selectedFile.name.toLowerCase().includes("edge")) {
       const redefinedJsonData = jsonData as {
-        startNodeID: string;
-        endNodeID: string;
+        edgeID: string;
+        startNode: string;
+        endNode: string;
       }[];
 
       const parsedJsonData = [];
 
       for (let i = 0; i < jsonData.length; i++) {
         parsedJsonData.push({
-          startNodeID: redefinedJsonData[i].startNodeID,
-          endNodeID: redefinedJsonData[i].endNodeID,
+          edgeID: redefinedJsonData[i].edgeID,
+          startNode: redefinedJsonData[i].startNode,
+          endNode: redefinedJsonData[i].endNode,
         });
       }
 
-      const res = await axios.post("/api/csvFetch/edge", parsedJsonData, {
-        headers: {
-          "Content-Type": "application/json",
+      //console.log(JSON.parse(JSON.stringify(parsedJsonData)));
+      console.log(parsedJsonData);
+
+      const res = await axios.post(
+        "/api/csvFetch/edge",
+        //JSON.parse(JSON.stringify(parsedJsonData)),
+        parsedJsonData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
         },
-      });
+      );
       if (res.status == 200) {
         console.log("success");
         setJsonData(jsonData);
