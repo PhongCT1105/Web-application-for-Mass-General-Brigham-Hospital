@@ -171,7 +171,9 @@ export const SheduleContent = () => {
           <h2 className="text-2xl font-semibold tracking-tight">
             Internal Patient Transport
           </h2>
-          <p className="text-sm text-muted-foreground">Transport a patient</p>
+          <p className="text-sm text-muted-foreground">
+            By Trang Tran and Phong Cao
+          </p>
         </div>
       </div>
 

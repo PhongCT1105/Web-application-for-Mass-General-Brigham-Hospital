@@ -9,7 +9,7 @@ import { MapEditor } from "@/components/blocks/mapEditorBlock.tsx";
 const MapEditingPage: React.FC = () => {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <Header /> {/* Add the Header component */}
+      <Header highlighted={"/map-editor"} /> {/* Add the Header component */}
       <MapEditor />
     </div>
   );

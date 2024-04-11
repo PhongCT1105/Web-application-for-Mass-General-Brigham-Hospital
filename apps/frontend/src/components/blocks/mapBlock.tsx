@@ -275,16 +275,16 @@ export const MapBlock: React.FC = () => {
     drawFullPath(graph, start, end);
   }
 
-  function clearMarkers() {
-    const map = mapRef.current;
-    if (!map) return;
-
-    map.eachLayer((layer) => {
-      if (layer instanceof L.Marker) {
-        map.removeLayer(layer);
-      }
-    });
-  }
+  // function clearMarkers() {
+  //   const map = mapRef.current;
+  //   if (!map) return;
+  //
+  //   map.eachLayer((layer) => {
+  //     if (layer instanceof L.Marker) {
+  //       map.removeLayer(layer);
+  //     }
+  //   });
+  // }
 
   function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
     nodesOnFloor.forEach((node) => {
@@ -331,7 +331,7 @@ export const MapBlock: React.FC = () => {
     setCurrentFloor(convertedFloorName);
 
     // Remove existing markers from the map
-    clearMarkers();
+    // clearMarkers();
     // clearLines();
 
     map.eachLayer((layer) => {
@@ -359,10 +359,11 @@ export const MapBlock: React.FC = () => {
 
       setNodesOnFloor(newNodesOnCurrentFloor);
       addMarkers(map, newNodesOnCurrentFloor);
-      displayNodesOnFloor();
 
+      // Moved the drawing of lines after updating the current floor
       clearLines();
       drawFullPath(graph, startNodeID, endNodeID);
+      displayNodesOnFloor();
     }
   }
 

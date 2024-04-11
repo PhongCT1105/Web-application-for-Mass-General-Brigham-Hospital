@@ -248,7 +248,7 @@ const CSVTable: React.FC = () => {
 
   return (
     <div className={"scrollbar"}>
-      <Header />
+      <Header highlighted={"/csv-table"} />
       <div className="hidden md:block">
         <div className="border-t">
           <div className="bg-background">

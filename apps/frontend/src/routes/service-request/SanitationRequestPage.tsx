@@ -373,7 +373,7 @@ export function Sanitation() {
             </CardContent>
 
             <CardFooter className="flex justify-between">
-              <Button variant="outline" onClick={handleClear}>
+              <Button variant="destructive" onClick={handleClear}>
                 Clear
               </Button>
               <Button className="p-5" onClick={handleSubmit}>

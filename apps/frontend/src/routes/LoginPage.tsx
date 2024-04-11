@@ -44,7 +44,7 @@ export function CarouselDemo() {
 export default function LoginPage() {
   return (
     <>
-      <Header />
+      <Header highlighted={"/login"} />
       <div className="container relative h-[700px] lg:max-w-none lg:px-0 w-full flex flex-col lg:flex-row">
         <CarouselDemo />
         <div
