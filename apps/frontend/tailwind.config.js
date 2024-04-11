@@ -30,6 +30,7 @@ module.exports = {
         carousel: "45vw",
         carouselOffset: "5vh",
         carouselButton: "13vh",
+        aboutUsOffset: "4000px",
       },
       colors: {
         border: "hsl(var(--border))",
