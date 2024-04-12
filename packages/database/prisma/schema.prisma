@@ -93,3 +93,15 @@ model securityRequest {
   priority  String
 }
 
+model internalTransportRequest {
+  reqID        Int      @id @default(autoincrement())
+  name         String
+  priority     String
+  locationFrom String
+  locationTo   String
+  date         DateTime
+  reason       String
+  time         String
+  note         String
+  status       String
+}
