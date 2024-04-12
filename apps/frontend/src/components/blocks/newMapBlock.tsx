@@ -1,3 +1,5 @@
+/* eslint-disable*/
+
 import React, { useEffect, useRef, useState } from "react";
 import L, { CRS, Icon, LatLngBoundsExpression, Map, Polyline } from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -8,10 +10,11 @@ import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
-import { SearchBar } from "@/components/blocks/locationSearchBar";
+//import { SearchBar } from "@/components/blocks/locationSearchBar";
+import { NewSearchBar } from "@/components/blocks/newLocationSearchBar.tsx";
 import axios from "axios";
-import { Graph } from "@/util/Graph.tsx";
-import { Node } from "../../util/Node.tsx";
+// import { Graph } from "@/util/Graph.tsx";
+// import { Node } from "../../util/Node.tsx";
 import {
   BFSPathfindingStrategy,
   PathfindingStrategy,
@@ -25,28 +28,40 @@ export interface HospitalData {
   floor: string;
 }
 
+interface longNameByID {
+  longName: string;
+  nodeID: string;
+  // [longName: string]: string;
+}
+// interface longNameByID {
+//     [longName: string]: string;
+// }
+
+// setSearch(longnameByID)
+//
+// dropwprknevldkfjn
+//         map(nodeID => {
+//             <button>{nodeID.longName}</button>
+//         })
+
 // Define the map component
-export const MapBlock: React.FC = () => {
+export const NewMapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   const [paths, setPaths] = useState<Polyline[]>([]);
-  const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
+  //const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<PathfindingStrategy>(new BFSPathfindingStrategy());
-  const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
 
+  const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
   const changePathfindingStrategy = (strategy: PathfindingStrategy) => {
     setPathfindingStrategy(strategy);
   };
-
   function displayNodesOnFloor() {
     console.log("Nodes on current floor:", nodesOnFloor);
   }
-
-  const [graph, setGraph] = useState<Graph>(new Graph());
   const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-  const [hospitalGraph, setHospitalGraph] = useState<Graph>();
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
 
@@ -59,17 +74,10 @@ export const MapBlock: React.FC = () => {
   } as const;
 
   const loadData = async () => {
-    const { data: edgeData } = await axios.get(`/api/mapreq/edges`);
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
-
-    console.log(edgeData);
-    console.log(nodeData);
-
-    const stringData: string[] = [];
 
     const newHospitalData: HospitalData[] = [];
 
-    const newGraph: Graph = new Graph();
     for (let i = 0; i < nodeData.length; i++) {
       newHospitalData.push({
         nodeID: nodeData[i].nodeID,
@@ -77,31 +85,8 @@ export const MapBlock: React.FC = () => {
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
         floor: nodeData[i].floor,
       });
-      stringData.push(nodeData[i].longName);
-
-      newGraph.addNode(
-        new Node(
-          nodeData[i].nodeID,
-          parseInt(nodeData[i].xcoord),
-          parseInt(nodeData[i].ycoord),
-          nodeData[i].floor,
-          nodeData[i].building,
-          nodeData[i].nodeType,
-          nodeData[i].longName,
-          nodeData[i].shortName,
-          new Set<Node>(),
-        ),
-      );
     }
-
-    for (let i = 0; i < edgeData.length; i++) {
-      //newGraph.addNeighbors(edgeData[i].startNode, edgeData[i].endNode);
-      newGraph.addEdge(edgeData[i].startNode, edgeData[i].endNode);
-    }
-    setHospitalDataString(stringData);
     setHospitalData(newHospitalData);
-    setGraph(newGraph);
-    setHospitalGraph(newGraph);
   };
 
   useEffect(() => {
@@ -151,122 +136,122 @@ export const MapBlock: React.FC = () => {
     }
   }, [isDataLoaded, hospitalData]); // Dependency array
 
-  function addToPaths(newPath: Polyline) {
-    setPaths((prevPaths) => [...prevPaths, newPath]);
-  }
+  // function addToPaths(newPath: Polyline) {
+  //     setPaths((prevPaths) => [...prevPaths, newPath]);
+  // }
 
-  function drawPath(start: string, end: string, color: string) {
-    const startHospital = hospitalData.find((h) => h.nodeID === start);
-    const endHospital = hospitalData.find((h) => h.nodeID === end);
-    if (!startHospital || !endHospital) {
-      console.error("Start or end location not found in hospital data.");
-      return;
-    }
-    setCurrentFloor(currentFloor);
+  // function drawPath(start: string, end: string, color: string) {
+  //     const startHospital = hospitalData.find((h) => h.nodeID === start);
+  //     const endHospital = hospitalData.find((h) => h.nodeID === end);
+  //     if (!startHospital || !endHospital) {
+  //         console.error("Start or end location not found in hospital data.");
+  //         return;
+  //     }
+  //     setCurrentFloor(currentFloor);
+  //
+  //     const [startLat, startLng] = startHospital.geocode
+  //         .split(",")
+  //         .map(parseFloat);
+  //     const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
+  //     console.log("drawPath o day neeeeeeeeeeeeeeeeee");
+  //     const startCoords: [number, number] = [3400 - startLng, startLat];
+  //     const endCoords: [number, number] = [3400 - endLng, endLat];
+  //
+  //     drawLine(startCoords, endCoords, color);
+  // }
 
-    const [startLat, startLng] = startHospital.geocode
-      .split(",")
-      .map(parseFloat);
-    const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
-    console.log("drawPath o day neeeeeeeeeeeeeeeeee");
-    const startCoords: [number, number] = [3400 - startLng, startLat];
-    const endCoords: [number, number] = [3400 - endLng, endLat];
+  // function drawFullPath(
+  //     graph: Graph,
+  //     start: string,
+  //     end: string,
+  //     currentFloor: string,
+  // ) {
+  //     const startNode = graph.getNodeID(start);
+  //     const endNode = graph.getNodeID(end);
+  //     clearLines();
+  //     setCurrentFloor(currentFloor);
+  //
+  //     if (!startNode || !endNode) {
+  //         console.error("Start or end node not found in the graph.");
+  //         return;
+  //     }
+  //     console.log("A path should be created now");
+  //     const paths: Node[][] = parsePath(
+  //         pathfindingStrategy.findPath(graph, startNode, endNode),
+  //     );
+  //
+  //     if (currentFloor === "L2" && paths[0].length > 1) {
+  //         for (let i = 0; i < paths[0].length - 1; i++) {
+  //             drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
+  //         }
+  //     }
+  //
+  //     if (currentFloor === "L1" && paths[1].length > 1) {
+  //         for (let i = 0; i < paths[1].length - 1; i++) {
+  //             drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
+  //         }
+  //     }
+  //
+  //     if (currentFloor === "1" && paths[2].length > 1) {
+  //         for (let i = 0; i < paths[2].length - 1; i++) {
+  //             drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
+  //         }
+  //     }
+  //
+  //     if (currentFloor === "2" && paths[3].length > 1) {
+  //         for (let i = 0; i < paths[3].length - 1; i++) {
+  //             drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
+  //         }
+  //     }
+  //
+  //     if (currentFloor === "3" && paths[4].length > 1) {
+  //         for (let i = 0; i < paths[4].length - 1; i++) {
+  //             drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
+  //         }
+  //     }
+  //     console.log("done :D");
+  // }
 
-    drawLine(startCoords, endCoords, color);
-  }
+  // function parsePath(nodes: Node[]): Node[][] {
+  //     const pathsByFloor: { [key: string]: Node[] } = {};
+  //
+  //     for (let i = 0; i < 5; i++) {
+  //         pathsByFloor[i] = [];
+  //     }
+  //     nodes.forEach((node) => {
+  //         const floorToIndex =
+  //             node.floor === "L2"
+  //                 ? "0"
+  //                 : node.floor === "L1"
+  //                     ? "1"
+  //                     : node.floor === "1"
+  //                         ? "2"
+  //                         : node.floor === "2"
+  //                             ? "3"
+  //                             : node.floor === "3"
+  //                                 ? "4"
+  //                                 : "";
+  //
+  //         pathsByFloor[floorToIndex].push(node);
+  //     });
+  //
+  //     return Object.values(pathsByFloor);
+  // }
 
-  function drawFullPath(
-    graph: Graph,
-    start: string,
-    end: string,
-    currentFloor: string,
-  ) {
-    const startNode = graph.getNodeID(start);
-    const endNode = graph.getNodeID(end);
-    clearLines();
-    setCurrentFloor(currentFloor);
-
-    if (!startNode || !endNode) {
-      console.error("Start or end node not found in the graph.");
-      return;
-    }
-    console.log("A path should be created now");
-    const paths: Node[][] = parsePath(
-      pathfindingStrategy.findPath(graph, startNode, endNode),
-    );
-
-    if (currentFloor === "L2" && paths[0].length > 1) {
-      for (let i = 0; i < paths[0].length - 1; i++) {
-        drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
-      }
-    }
-
-    if (currentFloor === "L1" && paths[1].length > 1) {
-      for (let i = 0; i < paths[1].length - 1; i++) {
-        drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
-      }
-    }
-
-    if (currentFloor === "1" && paths[2].length > 1) {
-      for (let i = 0; i < paths[2].length - 1; i++) {
-        drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
-      }
-    }
-
-    if (currentFloor === "2" && paths[3].length > 1) {
-      for (let i = 0; i < paths[3].length - 1; i++) {
-        drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
-      }
-    }
-
-    if (currentFloor === "3" && paths[4].length > 1) {
-      for (let i = 0; i < paths[4].length - 1; i++) {
-        drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
-      }
-    }
-    console.log("done :D");
-  }
-
-  function parsePath(nodes: Node[]): Node[][] {
-    const pathsByFloor: { [key: string]: Node[] } = {};
-
-    for (let i = 0; i < 5; i++) {
-      pathsByFloor[i] = [];
-    }
-    nodes.forEach((node) => {
-      const floorToIndex =
-        node.floor === "L2"
-          ? "0"
-          : node.floor === "L1"
-            ? "1"
-            : node.floor === "1"
-              ? "2"
-              : node.floor === "2"
-                ? "3"
-                : node.floor === "3"
-                  ? "4"
-                  : "";
-
-      pathsByFloor[floorToIndex].push(node);
-    });
-
-    return Object.values(pathsByFloor);
-  }
-
-  function drawLine(
-    startCoordinates: [number, number],
-    endCoordinates: [number, number],
-    color: string,
-  ) {
-    const map = mapRef.current;
-    if (!map) return;
-
-    const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: color,
-      weight: 5,
-    }).addTo(map);
-    addToPaths(newPath); // Add the new path to the paths list
-  }
+  // function drawLine(
+  //     startCoordinates: [number, number],
+  //     endCoordinates: [number, number],
+  //     color: string,
+  // ) {
+  //     const map = mapRef.current;
+  //     if (!map) return;
+  //
+  //     const newPath = L.polyline([startCoordinates, endCoordinates], {
+  //         color: color,
+  //         weight: 5,
+  //     }).addTo(map);
+  //     addToPaths(newPath); // Add the new path to the paths list
+  // }
 
   function clearLines() {
     const map = mapRef.current;
@@ -276,13 +261,27 @@ export const MapBlock: React.FC = () => {
     setPaths([]);
   }
 
-  async function handleSearch(start: string, end: string) {
-    // console.log(start);
-    // console.log(end);
-    setStartNodeID(start);
-    setEndNodeID(end);
-    drawFullPath(graph, start, end, currentFloor);
-  }
+  // async function handleSearch(start: string, end: string) {
+  //     // console.log(start);
+  //     // console.log(end);
+  //     setStartNodeID(start);
+  //     setEndNodeID(end);
+  // }
+
+  const handleSearch = async () => {
+    //convert strategy name first
+
+    try {
+      const response = await axios.post("/api/search", {
+        strategy: pathfindingStrategy,
+        startNodeID,
+        endNodeID,
+      });
+      // Handle response, update state, etc.
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
 
   function clearMarkers() {
     const map = mapRef.current;
@@ -359,9 +358,6 @@ export const MapBlock: React.FC = () => {
       L.imageOverlay(initialFloorImage, bounds).addTo(map);
       map.setMaxBounds(bounds);
 
-      // console.log(hospitalData);
-      console.log(hospitalGraph);
-
       // Draw new markers for the selected floor after adding the image overlay
       const newNodesOnCurrentFloor = hospitalData.filter(
         (node) => node.floor === convertedFloorName,
@@ -374,21 +370,22 @@ export const MapBlock: React.FC = () => {
       // Moved the drawing of lines after updating the current floor
       clearLines();
       displayNodesOnFloor();
-      drawFullPath(graph, startNodeID, endNodeID, convertedFloorName);
     }
   }
 
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div style={{ flex: 1, padding: "10px" }}>
-        <SearchBar
-          locations={Array.from(
-            new Set(
-              hospitalDataString
-                .sort((a, b) => a.localeCompare(b))
-                .filter((str) => str.indexOf("Hall") === -1),
-            ),
-          )}
+        <NewSearchBar
+          // locations={Array.from(
+          //     new Set(hospitalDataString
+          //             .sort((a, b) => a.localeCompare(b))
+          //             .filter((str) => str.indexOf("Hall") === -1),
+          //         ),
+          // )}
+          locations={hospitalData
+            .map((hospitalData) => hospitalData.name)
+            .filter((longName) => longName.indexOf("Hall") === -1)}
           onSearch={handleSearch}
           onClear={clearLines}
           changePathfindingStrategy={changePathfindingStrategy}

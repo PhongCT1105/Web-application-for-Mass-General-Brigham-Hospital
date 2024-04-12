@@ -8,9 +8,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   BFSPathfindingStrategy,
-  PathfindingStrategy,
   AStarPathfindingStrategy,
   DijkstraPathfindingStrategy,
+  PathfindingStrategy,
 } from "@/util/PathfindingStrategy.tsx";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 
@@ -23,9 +23,9 @@ interface SearchBarProps {
   //nodesOnFloor: HospitalData[];
 }
 
-export const SearchBar: React.FC<SearchBarProps> = ({
+export const NewSearchBar: React.FC<SearchBarProps> = ({
   locations,
-  onSearch,
+  //onSearch,
   onClear,
   changePathfindingStrategy, // New prop
   //nodesOnFloor,
@@ -38,10 +38,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     return !location.includes("Hallway") && !location.startsWith("Hall");
   });
 
-  const handleSearch = () => {
-    onClear();
-    onSearch(startPoint, endPoint);
-  };
+  // const handleSearch = () => {
+  //     onClear();
+  //     onSearch(startPoint, endPoint);
+  // };
 
   const handleClear = () => {
     setStartPoint("");
@@ -146,18 +146,18 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       {/*</div>*/}
 
       <div className="flex mb-4">
-        <button
-          onClick={handleSearch}
-          className="px-8 py-2 bg-blue-500 text-white rounded cursor-pointer mr-2"
-        >
-          Find Path
-        </button>
-        <button
+        {/*<Button*/}
+        {/*    onClick={handleSearch}*/}
+        {/*    className="px-8 py-2 bg-blue-500 text-white rounded cursor-pointer mr-2"*/}
+        {/*>*/}
+        {/*    Find Path*/}
+        {/*</Button>*/}
+        <Button
           onClick={handleClear}
           className="px-8 py-2 bg-red-500 text-white rounded cursor-pointer"
         >
           Clear
-        </button>
+        </Button>
       </div>
     </div>
   );
