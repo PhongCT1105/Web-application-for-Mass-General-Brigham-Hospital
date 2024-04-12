@@ -23,6 +23,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -514,13 +520,33 @@ export function Sanitation() {
                 >
                   Clear
                 </Button>
-                <Button
-                  variant={buttonState}
-                  className="p-5"
-                  onClick={handleSubmit}
-                >
-                  Submit
-                </Button>
+                <TooltipProvider>
+                  {buttonState === "ghost" && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={buttonState}
+                          className="p-5"
+                          onClick={handleSubmit}
+                        >
+                          Submit
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Please fill out all fields</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                  {buttonState !== "ghost" && (
+                    <Button
+                      variant={buttonState}
+                      className="p-5"
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </Button>
+                  )}
+                </TooltipProvider>
               </div>
             </CardFooter>
           </Card>
