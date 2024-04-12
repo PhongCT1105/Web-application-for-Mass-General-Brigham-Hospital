@@ -62,18 +62,21 @@ export function Sanitation() {
     }
   }
 
+  type buttonColor = "ghost" | "default";
+
   const [selectedTypeOfIssue, setSelectedTypeOfIssue] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [submittedForms, setSubmittedForms] = useState<Form[]>([]);
 
   const [locations, setLocationsTo] = useState<string[]>([]);
+  const [buttonState, setButtonState] = useState<buttonColor>("ghost");
 
   // Get locations from database
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("/api/sanitationReq");
+        const response = await axios.get("/api/mapreq/nodes");
         const rawData = response.data;
 
         const extractedLocations = rawData.map(
@@ -113,6 +116,18 @@ export function Sanitation() {
     comments: "",
   });
 
+  const checkEmpty = () => {
+    return (
+      form.name === "" ||
+      form.severity === "" ||
+      form.location === "" ||
+      form.typeOfIssue === "" ||
+      form.time === "" ||
+      form.status === "" ||
+      form.description === ""
+    );
+  };
+
   const handleFormChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -123,6 +138,8 @@ export function Sanitation() {
       ...prevState,
       [id]: value,
     }));
+
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   const handleIssueChange = (
@@ -140,6 +157,7 @@ export function Sanitation() {
       ...prevState,
       typeOfIssue: typeOfIssue,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
     setSelectedTypeOfIssue(typeOfIssue);
   };
 
@@ -150,6 +168,7 @@ export function Sanitation() {
       ...prevState,
       severity: severity,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
     setSelectedSeverity(severity);
   };
 
@@ -160,6 +179,8 @@ export function Sanitation() {
       ...prevState,
       status: status,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
+
     setSelectedStatus(status);
   };
 
@@ -168,6 +189,7 @@ export function Sanitation() {
       ...prevState,
       location: location,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   const handleSubmit = () => {
@@ -190,6 +212,7 @@ export function Sanitation() {
       console.log(form);
       handleFormClear();
       submit().then();
+      setButtonState("ghost");
     }
   };
 
@@ -491,7 +514,11 @@ export function Sanitation() {
                 >
                   Clear
                 </Button>
-                <Button className="p-5" onClick={handleSubmit}>
+                <Button
+                  variant={buttonState}
+                  className="p-5"
+                  onClick={handleSubmit}
+                >
                   Submit
                 </Button>
               </div>
