@@ -53,6 +53,7 @@ router.post("/", async (req: Request, res: Response) => {
     console.info("Successfully requested sanitation services");
     res
       .status(200)
+
       .json({ message: "sanitation service request created successfully" });
   } catch (error) {
     // Log any failures
@@ -63,6 +64,20 @@ router.post("/", async (req: Request, res: Response) => {
 });
 
 router.get("/", async function (flowerReq: Request, res: Response) {
+
+      .json({ message: "Sanitation service request created successfully" });
+  } catch (error) {
+    // Log any failures
+    console.error(`Unable to save sanitation service request ${req}: ${error}`);
+    // Send error
+    res.sendStatus(400);
+    // Don't try to send duplicate statuses
+    return;
+  }
+});
+
+router.get("/", async function (sanitationReq: Request, res: Response) {
+
   const sanitationRequest = await PrismaClient.sanitationRequest.findMany();
   res.send(sanitationRequest);
 });
