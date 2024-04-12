@@ -1,4 +1,5 @@
 import express, { Router, Request, Response } from "express";
+
 import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
@@ -52,7 +53,20 @@ router.post("/", async (req: Request, res: Response) => {
     console.info("Successfully requested sanitation services");
     res
       .status(200)
-      .json({ message: "Sanitation service request created successfully" });
+
+      .json({ message: "sanitation service request created successfully" });
+  } catch (error) {
+    // Log any failures
+    console.error(`Unable to save sanitation service request ${req}: ${error}`);
+    res.sendStatus(400); // Send error
+    return; // Don't try to send duplicate statuses
+  }
+});
+
+router.get("/", async function (req: Request, res: Response) {
+  try {
+    const sanitationRequest = await PrismaClient.sanitationRequest.findMany();
+    res.send(sanitationRequest);
   } catch (error) {
     // Log any failures
     console.error(`Unable to save sanitation service request ${req}: ${error}`);
