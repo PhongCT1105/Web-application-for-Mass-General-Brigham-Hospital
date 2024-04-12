@@ -2,8 +2,9 @@ import { z } from "zod";
 export const ScheduleRoomForm = z.object({
   id: z.number(),
   name: z.string(),
-  location: z.string(),
-  purpose: z.string(),
+  locationFrom: z.string(),
+  locationTo: z.string(),
+  reason: z.string(),
   time: z.string(),
   priority: z.string(),
   status: z.string(),

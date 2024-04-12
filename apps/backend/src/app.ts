@@ -6,6 +6,7 @@ import logger from "morgan";
 import flowerRouter from "./routes/flowerRoute.ts";
 import mapRoute from "./routes/mapRoute.ts";
 import csvFetch from "./routes/csvFetch.ts";
+import transportRoute from "./routes/transportRoute.ts";
 import sanitationRouter from "./routes/sanitationRoute.ts";
 
 const app: Express = express(); // Setup the backend
@@ -29,6 +30,7 @@ app.use(cookieParser()); // Cookie parser
 app.use("/api/flowerReq", flowerRouter);
 app.use("/api/mapreq", mapRoute);
 app.use("/api/csvFetch", csvFetch);
+app.use("/api/transport", transportRoute);
 app.use("/api/sanitationReq", sanitationRouter);
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
