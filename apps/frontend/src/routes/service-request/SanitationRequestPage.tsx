@@ -492,9 +492,9 @@ export function Sanitation() {
                     />
                   </div>
 
-                  <div className="w-1/2 ml-12">
+                  <div className="w-1/2 ml-8">
                     <h1 className="text-4xl font-bold my-2 pb-2">
-                      Additional Comments/Instructions (optional)
+                      Additional Comments (optional)
                     </h1>
                     <Textarea
                       placeholder="Type your instructions here."
@@ -515,7 +515,7 @@ export function Sanitation() {
                 {/* Use space-x-4 for horizontal spacing between buttons */}
                 <Button
                   variant="destructive"
-                  className="mr-20"
+                  className="mr-10"
                   onClick={handleFormClear}
                 >
                   Clear
@@ -553,8 +553,8 @@ export function Sanitation() {
         </div>
       </div>
       <div>
-        <h2 className="text-2xl text-lg font-bold">Submitted Forms:</h2>
-        <Card className={"mx-10 mb-5 mt-[60px]"}>
+        <Label className="text-3xl font-bold ml-10">Submitted Forms:</Label>
+        <Card className={"mx-10 mb-5 mt-5"}>
           <Table>
             <TableHeader>
               <TableRow className={""}>
