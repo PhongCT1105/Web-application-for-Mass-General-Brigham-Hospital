@@ -52,7 +52,7 @@ export function Sanitation() {
 
   async function submit() {
     console.log(form);
-    const res = await axios.post("/api/sanitatationReq", form, {
+    const res = await axios.post("/api/sanitationReq", form, {
       headers: {
         "content-type": "Application/json",
       },
