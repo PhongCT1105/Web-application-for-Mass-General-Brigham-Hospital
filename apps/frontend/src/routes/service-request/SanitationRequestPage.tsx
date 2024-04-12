@@ -196,9 +196,7 @@ export function Sanitation() {
       setSubmittedForms([...submittedForms, form]);
       console.log(form);
       handleFormClear();
-      submit().then(() => {
-        setSubmittedForms([]);
-      });
+      submit().then();
     }
   };
 
