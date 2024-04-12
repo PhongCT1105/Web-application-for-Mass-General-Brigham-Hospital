@@ -7,14 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
-import {
-  Card,
-  CardContent,
-  // CardDescription,
-  CardFooter,
-  // CardHeader,
-  // CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -56,6 +49,18 @@ interface Form {
 
 export function Sanitation() {
   const { toast } = useToast();
+
+  async function submit() {
+    console.log(form);
+    const res = await axios.post("/api/sanitatationReq", form, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    }
+  }
 
   const [selectedTypeOfIssue, setSelectedTypeOfIssue] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState("");
@@ -191,6 +196,9 @@ export function Sanitation() {
       setSubmittedForms([...submittedForms, form]);
       console.log(form);
       handleFormClear();
+      submit().then(() => {
+        setSubmittedForms([]);
+      });
     }
   };
 
