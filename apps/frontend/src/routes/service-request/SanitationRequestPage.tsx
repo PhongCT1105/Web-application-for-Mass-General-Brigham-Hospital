@@ -22,6 +22,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import axios from "axios";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table.tsx";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -463,50 +471,38 @@ export function Sanitation() {
         </div>
       </div>
       <div>
-        <Card className="mt-8 w-[400px] mb-8 ml-8">
-          <div className="bg-gray-4 p-4 rounded-md">
-            <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
-            <ul>
-              {submittedForms.map((form, index) => (
-                <li key={index} className="mb-4">
-                  <div className="font-semibold">Form {index + 1}:</div>
-                  <div className="ml-2">
-                    <div>
-                      <span className="font-semibold">Name:</span> {form.name}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Severity:</span>{" "}
-                      {form.severity}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Location:</span>{" "}
-                      {form.location}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Type of Issue:</span>{" "}
-                      {form.typeOfIssue}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Time of Issue:</span>{" "}
-                      {form.time}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Status:</span>{" "}
-                      {form.status}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Description:</span>{" "}
-                      {form.description}
-                    </div>
-                    <div>
-                      <span className="font-semibold">Comments:</span>{" "}
-                      {form.comments}
-                    </div>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </div>
+        <h2 className="text-lg font-bold">Submitted Forms:</h2>
+        <Card className={"mx-10 mb-5 mt-[60px]"}>
+          <Table>
+            <TableHeader>
+              <TableRow className={""}>
+                <TableHead className="">Name</TableHead>
+                <TableHead className="">Severity</TableHead>
+                <TableHead className="">Issue</TableHead>
+                <TableHead className="">Status</TableHead>
+                <TableHead className="">Location</TableHead>
+                <TableHead className="">Time</TableHead>
+                <TableHead className="">Description</TableHead>
+                <TableHead className="">Comments</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {submittedForms.map((form) => {
+                return (
+                  <TableRow>
+                    <TableCell>{form.name}</TableCell>
+                    <TableCell>{form.severity}</TableCell>
+                    <TableCell>{form.typeOfIssue}</TableCell>
+                    <TableCell>{form.status}</TableCell>
+                    <TableCell>{form.location}</TableCell>
+                    <TableCell>{form.time}</TableCell>
+                    <TableCell>{form.description}</TableCell>
+                    <TableCell>{form.comments}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
         </Card>
       </div>
       <h2 className="mt-8 text-small ml-4">Alex Shettler and Tracy Yang</h2>
