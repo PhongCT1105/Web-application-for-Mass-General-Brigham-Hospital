@@ -84,7 +84,7 @@ model sanitationRequest {
 }
 
 model securityRequest {
-  redID     Int     @id @default(autoincrement())
+  reqID     Int     @id @default(autoincrement())
   ename     String
   location  String
   situation String
