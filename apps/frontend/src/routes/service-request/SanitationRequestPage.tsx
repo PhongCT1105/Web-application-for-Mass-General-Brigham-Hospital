@@ -208,12 +208,6 @@ export function Sanitation() {
       <div className="flex flex-col border rounded-md text mx-10 my-5">
         <div className=" justify-center items-center">
           <Card className="border-none">
-            {/*<CardHeader>*/}
-            {/*  <CardTitle>Request Information</CardTitle>*/}
-            {/*  <CardDescription>*/}
-            {/*    Enter the details for your request*/}
-            {/*  </CardDescription>*/}
-            {/*</CardHeader>*/}
             <CardContent>
               <div className="space-y-6">
                 <div className="w-1/4">
@@ -411,7 +405,7 @@ export function Sanitation() {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <div className="">
+                  <div className="w-1/8 mr-20">
                     <h1 className="text-2xl font-bold my-2 whitespace-nowrap">
                       Time of Issue
                     </h1>
@@ -467,57 +461,53 @@ export function Sanitation() {
             </CardFooter>
           </Card>
         </div>
-
-        <div className="">
-          <div>
-            <Card className="mt-8 w-[400px] mb-8 ml-8">
-              <div className="bg-gray-4 p-4 rounded-md">
-                <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
-                <ul>
-                  {submittedForms.map((form, index) => (
-                    <li key={index} className="mb-4">
-                      <div className="font-semibold">Form {index + 1}:</div>
-                      <div className="ml-2">
-                        <div>
-                          <span className="font-semibold">Name:</span>{" "}
-                          {form.name}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Severity:</span>{" "}
-                          {form.severity}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Location:</span>{" "}
-                          {form.location}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Type of Issue:</span>{" "}
-                          {form.typeOfIssue}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Time of Issue:</span>{" "}
-                          {form.time}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Status:</span>{" "}
-                          {form.status}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Description:</span>{" "}
-                          {form.description}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Comments:</span>{" "}
-                          {form.comments}
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Card>
+      </div>
+      <div>
+        <Card className="mt-8 w-[400px] mb-8 ml-8">
+          <div className="bg-gray-4 p-4 rounded-md">
+            <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
+            <ul>
+              {submittedForms.map((form, index) => (
+                <li key={index} className="mb-4">
+                  <div className="font-semibold">Form {index + 1}:</div>
+                  <div className="ml-2">
+                    <div>
+                      <span className="font-semibold">Name:</span> {form.name}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Severity:</span>{" "}
+                      {form.severity}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Location:</span>{" "}
+                      {form.location}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Type of Issue:</span>{" "}
+                      {form.typeOfIssue}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Time of Issue:</span>{" "}
+                      {form.time}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Status:</span>{" "}
+                      {form.status}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Description:</span>{" "}
+                      {form.description}
+                    </div>
+                    <div>
+                      <span className="font-semibold">Comments:</span>{" "}
+                      {form.comments}
+                    </div>
+                  </div>
+                </li>
+              ))}
+            </ul>
           </div>
-        </div>
+        </Card>
       </div>
       <h2 className="mt-8 text-small ml-4">Alex Shettler and Tracy Yang</h2>
     </>
