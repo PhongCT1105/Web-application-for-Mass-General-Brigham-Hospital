@@ -44,6 +44,7 @@ import { DataTablePagination } from "@/components/table/data-table-pagination.ts
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
 import { MedicineFormLogTable } from "@/routes/service-request/medicine-request/tempMedicineLog.tsx";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/tempMedicineCol.tsx";
+import axios from "axios";
 interface DataTableProps {
   columns: ColumnDef<Medication>[];
 }
@@ -84,9 +85,18 @@ export function DataTable({ columns }: DataTableProps) {
   };
   const { data } = useMedicineData();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log(form);
     setForms((prevState) => [...prevState, form]);
+
+    const res = await axios.post("/api/medicationReq", form, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    }
   };
 
   const [rowSelection, setRowSelection] = React.useState({});

@@ -12,10 +12,15 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
 import { Badge, Biohazard, Calendar, FlowerIcon, PillIcon } from "lucide-react";
-import { Medication } from "common/src/interfaces/medicationReq.ts";
-import { pillData } from "common/src/testData.ts";
-import { DataTable } from "@/routes/service-request/medicine-request/medicationREQ-data-table.tsx";
-import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
+import {
+  Medication,
+  MedicationForm,
+} from "common/src/interfaces/medicationReq.ts";
+// import { pillData } from "common/src/testData.ts";
+// import { DataTable } from "@/routes/service-request/medicine-request/medicationREQ-data-table.tsx";
+// import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
+import { MedicineFormLogTable } from "@/routes/service-request/medicine-request/tempMedicineLog.tsx";
+import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/tempMedicineCol.tsx";
 // import { MedicineContext } from "common/src/interfaces/medicationReq.ts";
 
 interface MedicineContextType {
@@ -70,8 +75,36 @@ export interface RequestFormWID {
 }
 
 export const RequestLogPage = () => {
-  const [cleanedData, setCleanedData] = useState<requestFormWID[]>([]);
-  const [data, setData] = useState<Medication[]>(pillData);
+  const [flowerLog, setFlowerLog] = useState<requestFormWID[]>([]);
+  const [medicineLog, setMedicineLog] = useState<MedicationForm[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/medicationReq");
+        const rawData = res.data;
+         
+        const cleanedData: MedicationForm[] = rawData.map(
+          (item: MedicationForm) => ({
+            id: item.id,
+            medication: item.medication,
+            employee: item.employee,
+            location: item.location,
+            patient: item.patient,
+            dateSubmitted: item.dateSubmitted,
+          }),
+        );
+         
+        setMedicineLog(cleanedData);
+        console.log("successfully got data from get request");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData().then(() => console.log(flowerLog));
+  }, [flowerLog]);
+
+  // <MedicineFormLogTable columns={columnsMedicationFormLog} data={forms} />
 
   useEffect(() => {
     async function fetchData() {
@@ -99,14 +132,14 @@ export const RequestLogPage = () => {
           }),
         );
         /* eslint-enable */
-        setCleanedData(cleanedData);
+        setFlowerLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(cleanedData));
-  }, [cleanedData]);
+    fetchData().then(() => console.log(flowerLog));
+  }, [flowerLog]);
 
   return (
     <div className={" scrollbar-hide"}>
@@ -152,16 +185,16 @@ export const RequestLogPage = () => {
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
-                        <LogPageData data={cleanedData} />
+                        <LogPageData data={flowerLog} />
                       </TabsContent>
                       <TabsContent
-                        value="Medicine Request"
+                        value="Medication Request"
                         className=" flex-col border-none p-0 data-[state=active]:flex"
                       >
                         <div className="flex items-center justify-between">
                           <div className="space-y-1">
                             <h2 className="text-2xl font-semibold tracking-tight">
-                              Prayer Request
+                              Medication Request
                             </h2>
                             <p className="text-sm text-muted-foreground">
                               By Mina Boktor & Alexander Kraemling
@@ -169,6 +202,16 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
+
+                        <MedicineFormLogTable
+                          columns={columnsMedicationFormLog}
+                          data={medicineLog}
+                        />
+
+                        {/*  */}
+                        {/*<MedicineContext.Provider value={{ data, setData }}>*/}
+                        {/*  <DataTable columns={columns} />*/}
+                        {/*</MedicineContext.Provider>*/}
                       </TabsContent>
                       <TabsContent
                         value={"Transportation Request"}
@@ -187,9 +230,6 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
-                        <MedicineContext.Provider value={{ data, setData }}>
-                          <DataTable columns={columns} />
-                        </MedicineContext.Provider>
                       </TabsContent>
                       <TabsContent
                         value={"Sanitation Request"}
