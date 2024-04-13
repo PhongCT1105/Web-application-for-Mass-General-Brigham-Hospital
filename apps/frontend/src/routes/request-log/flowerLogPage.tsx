@@ -26,7 +26,7 @@ interface props {
   data: requestFormWID[];
 }
 
-export const LogPageData = ({ data }: props) => {
+export const FlowerLogPage = ({ data }: props) => {
   return (
     <div className={"my-10 mx-10 border-2 rounded-xl text-nowrap"}>
       <Table>
