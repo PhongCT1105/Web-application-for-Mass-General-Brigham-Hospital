@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import {
   BFSPathfindingStrategy,
+  DFSPathfindingStrategy,
   PathfindingStrategy,
   AStarPathfindingStrategy,
   DijkstraPathfindingStrategy,
@@ -102,6 +103,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               }
             >
               BFS
+            </TabsTrigger>
+            <TabsTrigger
+              value="dfs"
+              onClick={() =>
+                changePathfindingStrategy(new DFSPathfindingStrategy())
+              }
+            >
+              DFS
             </TabsTrigger>
             <TabsTrigger
               value="astar"

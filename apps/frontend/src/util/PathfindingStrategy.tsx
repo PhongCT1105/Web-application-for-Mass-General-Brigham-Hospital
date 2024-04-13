@@ -3,6 +3,7 @@ import { Node } from "@/util/Node.tsx";
 import { BFS } from "@/util/BFS.tsx";
 import { aStar } from "@/util/aStar.tsx";
 import { Dijkstra } from "@/util/Dijkstra.tsx";
+import { DFS } from "@/util/DFS.tsx";
 
 // Define PathfindingStrategy interface
 export interface PathfindingStrategy {
@@ -19,6 +20,12 @@ export class BFSPathfindingStrategy implements PathfindingStrategy {
 export class AStarPathfindingStrategy implements PathfindingStrategy {
   findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
     return aStar.run(graph, startNodeID, endNodeID);
+  }
+}
+
+export class DFSPathfindingStrategy implements PathfindingStrategy {
+  findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+    return DFS.run(graph, startNodeID, endNodeID);
   }
 }
 

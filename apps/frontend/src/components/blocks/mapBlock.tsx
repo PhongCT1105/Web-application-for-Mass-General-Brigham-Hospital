@@ -193,7 +193,7 @@ export const MapBlock: React.FC = () => {
       pathfindingStrategy.findPath(graph, startNode, endNode),
     );
 
-    // console.log(paths);
+    console.log(paths);
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
