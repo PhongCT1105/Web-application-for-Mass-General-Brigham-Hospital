@@ -21,6 +21,8 @@ import {
   TableRow,
 } from "@/components/ui/table.tsx";
 
+import axios from "axios";
+
 type rPriority = "low" | "medium" | "high" | "emergency";
 
 type rStatus = "unassigned" | "assigned" | "inprogress" | "closed";
@@ -118,13 +120,22 @@ export const SecurityForm = () => {
   /**
    * Print the form to the console
    */
-  const submit = () => {
+  async function submit() {
+    console.log(securityRequest);
+    const res = await axios.post("/api/securityReq", securityRequest, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    }
     requestList.push(securityRequest);
     setRequestList([...requestList]);
     //console.log(securityRequest);
     console.log(requestList);
     clearReq();
-  };
+  }
 
   return (
     <>
