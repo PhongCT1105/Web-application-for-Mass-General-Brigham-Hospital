@@ -70,3 +70,38 @@ model flowerRequest {
   priority  String
   status    String
 }
+
+model sanitationRequest {
+  reqId       Int    @id @default(autoincrement())
+  name        String
+  severity    String
+  location    String
+  typeOfIssue String
+  time        String
+  status      String
+  description String
+  comments    String
+}
+
+model securityRequest {
+  reqID     Int     @id @default(autoincrement())
+  ename     String
+  location  String
+  situation String
+  call      Boolean
+  status    String
+  priority  String
+}
+
+model internalTransportRequest {
+  reqID        Int      @id @default(autoincrement())
+  name         String
+  priority     String
+  locationFrom String
+  locationTo   String
+  date         DateTime
+  reason       String
+  time         String
+  note         String
+  status       String
+}

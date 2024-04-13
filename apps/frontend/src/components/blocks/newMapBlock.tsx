@@ -1,6 +1,6 @@
 /* eslint-disable*/
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import L, { CRS, Icon, LatLngBoundsExpression, Map, Polyline } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
@@ -10,16 +10,10 @@ import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
-//import { SearchBar } from "@/components/blocks/locationSearchBar";
 import { NewSearchBar } from "@/components/blocks/newLocationSearchBar.tsx";
 import axios from "axios";
-// import { Graph } from "@/util/Graph.tsx";
-// import { Node } from "../../util/Node.tsx";
-import {
-  BFSPathfindingStrategy,
-  PathfindingStrategy,
-} from "@/util/PathfindingStrategy.tsx";
 import { Button } from "@/components/ui/button";
+import { response } from "express";
 
 export interface HospitalData {
   nodeID: string;
@@ -28,42 +22,28 @@ export interface HospitalData {
   floor: string;
 }
 
-interface longNameByID {
-  longName: string;
-  nodeID: string;
-  // [longName: string]: string;
-}
-// interface longNameByID {
-//     [longName: string]: string;
-// }
-
-// setSearch(longnameByID)
-//
-// dropwprknevldkfjn
-//         map(nodeID => {
-//             <button>{nodeID.longName}</button>
-//         })
+// const buttonContext = createContext()
 
 // Define the map component
 export const NewMapBlock: React.FC = () => {
-  const mapRef = useRef<Map | null>(null);
-  const [paths, setPaths] = useState<Polyline[]>([]);
-  //const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
-  const [pathfindingStrategy, setPathfindingStrategy] =
-    useState<PathfindingStrategy>(new BFSPathfindingStrategy());
-
-  const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
-  const changePathfindingStrategy = (strategy: PathfindingStrategy) => {
-    setPathfindingStrategy(strategy);
+  const changePathfindingStrategy = (strat: string) => {
+    setPathfindingStrategy("BFS");
   };
+
   function displayNodesOnFloor() {
     console.log("Nodes on current floor:", nodesOnFloor);
   }
+
+  const mapRef = useRef<Map | null>(null);
+  const [paths, setPaths] = useState<Polyline[]>([]);
+  const [pathfindingStrategy, setPathfindingStrategy] = useState<string>("BFS");
+  const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
   const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
+  const [isButtonClicked, setIsButtonClicked] = useState(false);
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -161,7 +141,6 @@ export const NewMapBlock: React.FC = () => {
   // }
 
   // function drawFullPath(
-  //     graph: Graph,
   //     start: string,
   //     end: string,
   //     currentFloor: string,
@@ -261,27 +240,52 @@ export const NewMapBlock: React.FC = () => {
     setPaths([]);
   }
 
-  // async function handleSearch(start: string, end: string) {
-  //     // console.log(start);
-  //     // console.log(end);
-  //     setStartNodeID(start);
-  //     setEndNodeID(end);
-  // }
+  async function handleSearch(start: string, end: string) {
+    setStartNodeID((prev) => start);
+    setEndNodeID((prev) => end);
+    const test = {
+      strategy: pathfindingStrategy,
+      start: start,
+      end: end,
+    };
+    console.log(test);
 
-  const handleSearch = async () => {
-    //convert strategy name first
-
-    try {
-      const response = await axios.post("/api/search", {
-        strategy: pathfindingStrategy,
-        startNodeID,
-        endNodeID,
-      });
-      // Handle response, update state, etc.
-    } catch (error) {
-      console.error("Error:", error);
+    const response = await axios.post("/api/search", test, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    // Handle response, update state, etc.
+    console.log(response);
+    if (response.status == 200) {
+      console.log("success");
     }
-  };
+  }
+
+  // const handleSearch = async () => {
+  //   try {
+  //       setPathFinding(() => ({
+  //           strategy: pathfindingStrategy,
+  //           start: startNodeID,
+  //           end: endNodeID,
+  //       }))
+  //       console.log("strat"+pathfindingStrategy);
+  //       console.log("start"+startNodeID);
+  //       console.log("end"+ endNodeID);
+  //       console.log(pathFinding);
+  //     const response = await axios.post("/api/search", pathFinding, {
+  //         headers: {
+  //             "content-type": "Application/json",
+  //         }
+  //     },
+  //     )
+  //     // Handle response, update state, etc.
+  //       console.log(response);
+  //   } catch (error) {
+  //     console.error("Error:", error);
+  //   }
+  //
+  // };
 
   function clearMarkers() {
     const map = mapRef.current;

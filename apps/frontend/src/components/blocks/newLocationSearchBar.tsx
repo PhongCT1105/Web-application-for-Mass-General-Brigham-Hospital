@@ -6,12 +6,6 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  BFSPathfindingStrategy,
-  AStarPathfindingStrategy,
-  DijkstraPathfindingStrategy,
-  PathfindingStrategy,
-} from "@/util/PathfindingStrategy.tsx";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 
 interface SearchBarProps {
@@ -19,13 +13,13 @@ interface SearchBarProps {
   onSearch: (start: string, end: string) => void;
   onClear: () => void;
   currentFloor: string;
-  changePathfindingStrategy: (strategy: PathfindingStrategy) => void;
+  changePathfindingStrategy: (strat: string) => void;
   //nodesOnFloor: HospitalData[];
 }
 
 export const NewSearchBar: React.FC<SearchBarProps> = ({
   locations,
-  //onSearch,
+  onSearch,
   onClear,
   changePathfindingStrategy, // New prop
   //nodesOnFloor,
@@ -38,10 +32,10 @@ export const NewSearchBar: React.FC<SearchBarProps> = ({
     return !location.includes("Hallway") && !location.startsWith("Hall");
   });
 
-  // const handleSearch = () => {
-  //     onClear();
-  //     onSearch(startPoint, endPoint);
-  // };
+  const handleSearch = () => {
+    onClear();
+    onSearch(startPoint, endPoint);
+  };
 
   const handleClear = () => {
     setStartPoint("");
@@ -96,25 +90,19 @@ export const NewSearchBar: React.FC<SearchBarProps> = ({
           <TabsList>
             <TabsTrigger
               value="bfs"
-              onClick={() =>
-                changePathfindingStrategy(new BFSPathfindingStrategy())
-              }
+              onClick={() => changePathfindingStrategy("BFS")}
             >
               BFS
             </TabsTrigger>
             <TabsTrigger
               value="astar"
-              onClick={() =>
-                changePathfindingStrategy(new AStarPathfindingStrategy())
-              }
+              onClick={() => changePathfindingStrategy("AStar")}
             >
               A*
             </TabsTrigger>
             <TabsTrigger
               value="dijkstra"
-              onClick={() =>
-                changePathfindingStrategy(new DijkstraPathfindingStrategy())
-              }
+              onClick={() => changePathfindingStrategy("Dijkstra")}
             >
               Dijkstra
             </TabsTrigger>
@@ -146,12 +134,12 @@ export const NewSearchBar: React.FC<SearchBarProps> = ({
       {/*</div>*/}
 
       <div className="flex mb-4">
-        {/*<Button*/}
-        {/*    onClick={handleSearch}*/}
-        {/*    className="px-8 py-2 bg-blue-500 text-white rounded cursor-pointer mr-2"*/}
-        {/*>*/}
-        {/*    Find Path*/}
-        {/*</Button>*/}
+        <Button
+          onClick={handleSearch}
+          className="px-8 py-2 bg-blue-500 text-white rounded cursor-pointer mr-2"
+        >
+          Find Path
+        </Button>
         <Button
           onClick={handleClear}
           className="px-8 py-2 bg-red-500 text-white rounded cursor-pointer"

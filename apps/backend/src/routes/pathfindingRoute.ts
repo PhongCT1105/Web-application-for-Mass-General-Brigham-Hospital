@@ -12,11 +12,14 @@ import {
 const router: Router = express.Router();
 
 router.get("/", async (req, res) => {
-  const { strategy, start, end } = req.body;
+  //const { strategy, start, end } = req.body;
+  const data: { strategy: string; start: string; end: string } = req.body;
   let searchStrategy;
 
+  console.log(data);
+
   // Choose the strategy based on the provided parameter
-  switch (strategy) {
+  switch (data.strategy) {
     case "BFS":
       searchStrategy = new BFSPathfindingStrategy();
       break;
@@ -32,13 +35,13 @@ router.get("/", async (req, res) => {
     // find start and end ID
     const startNode = await PrismaClient.nodes.findFirst({
       where: {
-        longName: start,
+        longName: data.start,
       },
     });
 
     const endNode = await PrismaClient.nodes.findFirst({
       where: {
-        longName: end,
+        longName: data.end,
       },
     });
 
@@ -77,7 +80,7 @@ router.get("/", async (req, res) => {
       endNodeID,
     );
 
-    res.json(nodeArray);
+    res.status(200).json(nodeArray);
   } catch (error) {
     console.error("Error:", error);
     res.status(400).json({ error: "Pathfinding Error" });
