@@ -1,6 +1,4 @@
-/* eslint-disable*/
-
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import L, { CRS, Icon, LatLngBoundsExpression, Map, Polyline } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
@@ -13,7 +11,6 @@ import "@/styles/mapBlock.modules.css";
 import { NewSearchBar } from "@/components/blocks/newLocationSearchBar.tsx";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-import { response } from "express";
 
 export interface HospitalData {
   nodeID: string;
@@ -22,12 +19,21 @@ export interface HospitalData {
   floor: string;
 }
 
-// const buttonContext = createContext()
+export interface Node {
+  nodeID: string;
+  xcoord: number;
+  ycoord: number;
+  floor: string;
+  building: string;
+  nodeType: string;
+  longName: string;
+  shortName: string;
+}
 
 // Define the map component
 export const NewMapBlock: React.FC = () => {
   const changePathfindingStrategy = (strat: string) => {
-    setPathfindingStrategy("BFS");
+    setPathfindingStrategy(strat);
   };
 
   function displayNodesOnFloor() {
@@ -41,9 +47,7 @@ export const NewMapBlock: React.FC = () => {
   const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-  const [startNodeID, setStartNodeID] = useState("");
-  const [endNodeID, setEndNodeID] = useState("");
-  const [isButtonClicked, setIsButtonClicked] = useState(false);
+  const [searchPath, setSearchPath] = useState<Node[]>([]);
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -116,121 +120,110 @@ export const NewMapBlock: React.FC = () => {
     }
   }, [isDataLoaded, hospitalData]); // Dependency array
 
-  // function addToPaths(newPath: Polyline) {
-  //     setPaths((prevPaths) => [...prevPaths, newPath]);
-  // }
+  function addToPaths(newPath: Polyline) {
+    setPaths((prevPaths) => [...prevPaths, newPath]);
+  }
 
-  // function drawPath(start: string, end: string, color: string) {
-  //     const startHospital = hospitalData.find((h) => h.nodeID === start);
-  //     const endHospital = hospitalData.find((h) => h.nodeID === end);
-  //     if (!startHospital || !endHospital) {
-  //         console.error("Start or end location not found in hospital data.");
-  //         return;
-  //     }
-  //     setCurrentFloor(currentFloor);
-  //
-  //     const [startLat, startLng] = startHospital.geocode
-  //         .split(",")
-  //         .map(parseFloat);
-  //     const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
-  //     console.log("drawPath o day neeeeeeeeeeeeeeeeee");
-  //     const startCoords: [number, number] = [3400 - startLng, startLat];
-  //     const endCoords: [number, number] = [3400 - endLng, endLat];
-  //
-  //     drawLine(startCoords, endCoords, color);
-  // }
+  function drawPath(start: string, end: string, color: string) {
+    const startHospital = hospitalData.find((h) => h.nodeID === start);
+    const endHospital = hospitalData.find((h) => h.nodeID === end);
+    if (!startHospital || !endHospital) {
+      console.error("Start or end location not found in hospital data.");
+      return;
+    }
+    setCurrentFloor(currentFloor);
 
-  // function drawFullPath(
-  //     start: string,
-  //     end: string,
-  //     currentFloor: string,
-  // ) {
-  //     const startNode = graph.getNodeID(start);
-  //     const endNode = graph.getNodeID(end);
-  //     clearLines();
-  //     setCurrentFloor(currentFloor);
-  //
-  //     if (!startNode || !endNode) {
-  //         console.error("Start or end node not found in the graph.");
-  //         return;
-  //     }
-  //     console.log("A path should be created now");
-  //     const paths: Node[][] = parsePath(
-  //         pathfindingStrategy.findPath(graph, startNode, endNode),
-  //     );
-  //
-  //     if (currentFloor === "L2" && paths[0].length > 1) {
-  //         for (let i = 0; i < paths[0].length - 1; i++) {
-  //             drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
-  //         }
-  //     }
-  //
-  //     if (currentFloor === "L1" && paths[1].length > 1) {
-  //         for (let i = 0; i < paths[1].length - 1; i++) {
-  //             drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
-  //         }
-  //     }
-  //
-  //     if (currentFloor === "1" && paths[2].length > 1) {
-  //         for (let i = 0; i < paths[2].length - 1; i++) {
-  //             drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
-  //         }
-  //     }
-  //
-  //     if (currentFloor === "2" && paths[3].length > 1) {
-  //         for (let i = 0; i < paths[3].length - 1; i++) {
-  //             drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
-  //         }
-  //     }
-  //
-  //     if (currentFloor === "3" && paths[4].length > 1) {
-  //         for (let i = 0; i < paths[4].length - 1; i++) {
-  //             drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
-  //         }
-  //     }
-  //     console.log("done :D");
-  // }
+    const [startLat, startLng] = startHospital.geocode
+      .split(",")
+      .map(parseFloat);
+    const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
+    console.log("drawPath o day neeeeeeeeeeeeeeeeee");
+    const startCoords: [number, number] = [3400 - startLng, startLat];
+    const endCoords: [number, number] = [3400 - endLng, endLat];
 
-  // function parsePath(nodes: Node[]): Node[][] {
-  //     const pathsByFloor: { [key: string]: Node[] } = {};
-  //
-  //     for (let i = 0; i < 5; i++) {
-  //         pathsByFloor[i] = [];
-  //     }
-  //     nodes.forEach((node) => {
-  //         const floorToIndex =
-  //             node.floor === "L2"
-  //                 ? "0"
-  //                 : node.floor === "L1"
-  //                     ? "1"
-  //                     : node.floor === "1"
-  //                         ? "2"
-  //                         : node.floor === "2"
-  //                             ? "3"
-  //                             : node.floor === "3"
-  //                                 ? "4"
-  //                                 : "";
-  //
-  //         pathsByFloor[floorToIndex].push(node);
-  //     });
-  //
-  //     return Object.values(pathsByFloor);
-  // }
+    drawLine(startCoords, endCoords, color);
+  }
 
-  // function drawLine(
-  //     startCoordinates: [number, number],
-  //     endCoordinates: [number, number],
-  //     color: string,
-  // ) {
-  //     const map = mapRef.current;
-  //     if (!map) return;
-  //
-  //     const newPath = L.polyline([startCoordinates, endCoordinates], {
-  //         color: color,
-  //         weight: 5,
-  //     }).addTo(map);
-  //     addToPaths(newPath); // Add the new path to the paths list
-  // }
+  function drawFullPath(nodeArray: Node[], currentFloor: string) {
+    clearLines();
+    setCurrentFloor(currentFloor);
+    console.log("A path should be created now");
+
+    const paths: Node[][] = parsePath(nodeArray);
+
+    if (currentFloor === "L2" && paths[0].length > 1) {
+      for (let i = 0; i < paths[0].length - 1; i++) {
+        drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
+      }
+    }
+
+    if (currentFloor === "L1" && paths[1].length > 1) {
+      for (let i = 0; i < paths[1].length - 1; i++) {
+        drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
+      }
+    }
+
+    if (currentFloor === "1" && paths[2].length > 1) {
+      for (let i = 0; i < paths[2].length - 1; i++) {
+        drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
+      }
+    }
+
+    if (currentFloor === "2" && paths[3].length > 1) {
+      for (let i = 0; i < paths[3].length - 1; i++) {
+        drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
+      }
+    }
+
+    if (currentFloor === "3" && paths[4].length > 1) {
+      for (let i = 0; i < paths[4].length - 1; i++) {
+        drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
+      }
+    }
+    console.log("done :D");
+  }
+
+  function parsePath(nodes: Node[]): Node[][] {
+    const pathsByFloor: { [key: string]: Node[] } = {};
+
+    for (let i = 0; i < 5; i++) {
+      pathsByFloor[i] = [];
+    }
+    nodes.forEach((node) => {
+      const floorToIndex =
+        node.floor === "L2"
+          ? "0"
+          : node.floor === "L1"
+            ? "1"
+            : node.floor === "1"
+              ? "2"
+              : node.floor === "2"
+                ? "3"
+                : node.floor === "3"
+                  ? "4"
+                  : "";
+
+      pathsByFloor[floorToIndex].push(node);
+    });
+
+    console.log(pathsByFloor);
+    return Object.values(pathsByFloor);
+  }
+
+  function drawLine(
+    startCoordinates: [number, number],
+    endCoordinates: [number, number],
+    color: string,
+  ) {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const newPath = L.polyline([startCoordinates, endCoordinates], {
+      color: color,
+      weight: 5,
+    }).addTo(map);
+    addToPaths(newPath); // Add the new path to the paths list
+  }
 
   function clearLines() {
     const map = mapRef.current;
@@ -241,8 +234,8 @@ export const NewMapBlock: React.FC = () => {
   }
 
   async function handleSearch(start: string, end: string) {
-    setStartNodeID((prev) => start);
-    setEndNodeID((prev) => end);
+    // setStartNodeID((prev) => start);
+    // setEndNodeID((prev) => end);
     const test = {
       strategy: pathfindingStrategy,
       start: start,
@@ -250,42 +243,32 @@ export const NewMapBlock: React.FC = () => {
     };
     console.log(test);
 
-    const response = await axios.post("/api/search", test, {
+    const { data: response } = await axios.post("/api/search", test, {
       headers: {
         "content-type": "Application/json",
       },
     });
     // Handle response, update state, etc.
     console.log(response);
-    if (response.status == 200) {
-      console.log("success");
-    }
-  }
 
-  // const handleSearch = async () => {
-  //   try {
-  //       setPathFinding(() => ({
-  //           strategy: pathfindingStrategy,
-  //           start: startNodeID,
-  //           end: endNodeID,
-  //       }))
-  //       console.log("strat"+pathfindingStrategy);
-  //       console.log("start"+startNodeID);
-  //       console.log("end"+ endNodeID);
-  //       console.log(pathFinding);
-  //     const response = await axios.post("/api/search", pathFinding, {
-  //         headers: {
-  //             "content-type": "Application/json",
-  //         }
-  //     },
-  //     )
-  //     // Handle response, update state, etc.
-  //       console.log(response);
-  //   } catch (error) {
-  //     console.error("Error:", error);
-  //   }
-  //
-  // };
+    const nodeArray: Node[] = [];
+
+    // convert to Node[]
+    for (let i = 0; i < response.length; i++) {
+      nodeArray.push({
+        nodeID: response[i].nodeID,
+        xcoord: response[i].xcoord,
+        ycoord: response[i].ycoord,
+        floor: response[i].floor,
+        building: response[i].building,
+        nodeType: response[i].nodeType,
+        longName: response[i].longName,
+        shortName: response[i].shortName,
+      });
+    }
+    setSearchPath(nodeArray);
+    drawFullPath(nodeArray, currentFloor);
+  }
 
   function clearMarkers() {
     const map = mapRef.current;
@@ -374,6 +357,7 @@ export const NewMapBlock: React.FC = () => {
       // Moved the drawing of lines after updating the current floor
       clearLines();
       displayNodesOnFloor();
+      drawFullPath(searchPath, convertedFloorName);
     }
   }
 
@@ -381,14 +365,9 @@ export const NewMapBlock: React.FC = () => {
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div style={{ flex: 1, padding: "10px" }}>
         <NewSearchBar
-          // locations={Array.from(
-          //     new Set(hospitalDataString
-          //             .sort((a, b) => a.localeCompare(b))
-          //             .filter((str) => str.indexOf("Hall") === -1),
-          //         ),
-          // )}
           locations={hospitalData
             .map((hospitalData) => hospitalData.name)
+            .sort((a, b) => a.localeCompare(b))
             .filter((longName) => longName.indexOf("Hall") === -1)}
           onSearch={handleSearch}
           onClear={clearLines}

@@ -11,7 +11,7 @@ import {
 
 const router: Router = express.Router();
 
-router.get("/", async (req, res) => {
+router.post("/", async (req, res) => {
   //const { strategy, start, end } = req.body;
   const data: { strategy: string; start: string; end: string } = req.body;
   let searchStrategy;
