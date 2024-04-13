@@ -358,10 +358,10 @@ export const SecurityForm = () => {
               </div>
             </div>
           </div>
-          <CardFooter className={"flex flex-col gap-4"}>
+          <CardFooter className={"flex justify-between"}>
             <Button
               variant={"destructive"}
-              className="w-1/4"
+              className="w-1/7"
               onClick={clearReq}
             >
               Clear
