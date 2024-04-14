@@ -199,5 +199,5 @@ L.LayerGroup.include({
 });
 
 L.LayerGroup.mergeOptions({
-  snakingPause: 200,
+  snakingPause: 0,
 });

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import L, { CRS, Icon, LatLngBoundsExpression, Map, Polyline } from "leaflet";
+import L, { CRS, Icon, LatLngBoundsExpression, Map } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
 import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
@@ -27,6 +27,10 @@ declare module "leaflet" {
     snakeIn: () => void;
   }
 
+  interface LayerGroup {
+    snakeIn: () => void;
+  }
+
   interface PolylineOptions {
     snakingSpeed?: number;
     snakeRepeat?: boolean;
@@ -45,7 +49,6 @@ export interface HospitalData {
 export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   // const [path, setPath] = useState<Polyline | null>(null);
-  const [currentPath, setcurrentPath] = useState<Polyline[]>([]);
   const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<PathfindingStrategy>(new BFSPathfindingStrategy());
@@ -165,10 +168,6 @@ export const MapBlock: React.FC = () => {
     }
   }, [isDataLoaded, hospitalData]); // Dependency array
 
-  function addToPaths(newPath: Polyline) {
-    setcurrentPath((prevPaths) => [...prevPaths, newPath]);
-  }
-
   function drawPath(start: string, end: string) {
     const startHospital = hospitalData.find((h) => h.nodeID === start);
     const endHospital = hospitalData.find((h) => h.nodeID === end);
@@ -186,7 +185,17 @@ export const MapBlock: React.FC = () => {
     const startCoords: [number, number] = [3400 - startLng, startLat];
     const endCoords: [number, number] = [3400 - endLng, endLat];
 
-    drawLine(startCoords, endCoords);
+    const map = mapRef.current;
+    if (!map) return;
+
+    const newPath = L.polyline([startCoords, endCoords], {
+      color: "blue",
+      weight: 5,
+      snakingSpeed: 100,
+      snakeRepeat: false,
+      snakeRepeatDelay: 100,
+    });
+    return newPath;
   }
 
   function placeStartEndMarkers(path: Node[]) {
@@ -227,41 +236,58 @@ export const MapBlock: React.FC = () => {
       pathfindingStrategy.findPath(graph, startNode, endNode),
     );
 
-    // console.log(paths);
+    const map = mapRef.current;
+    if (!map) return;
+
+    const layerGroup = L.layerGroup();
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
-        drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
+        const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
 
       placeStartEndMarkers(paths[0]);
     }
 
     if (currentFloor === "L1" && paths[1].length > 1) {
       for (let i = 0; i < paths[1].length - 1; i++) {
-        drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
+        const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
+
       placeStartEndMarkers(paths[1]);
     }
 
     if (currentFloor === "1" && paths[2].length > 1) {
       for (let i = 0; i < paths[2].length - 1; i++) {
-        drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
+        const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
+
       placeStartEndMarkers(paths[2]);
     }
 
     if (currentFloor === "2" && paths[3].length > 1) {
       for (let i = 0; i < paths[3].length - 1; i++) {
-        drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
+        const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
+
       placeStartEndMarkers(paths[3]);
     }
 
     if (currentFloor === "3" && paths[4].length > 1) {
       for (let i = 0; i < paths[4].length - 1; i++) {
-        drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
+        const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
+
       placeStartEndMarkers(paths[4]);
     }
     console.log("done :D");
@@ -324,31 +350,18 @@ export const MapBlock: React.FC = () => {
     return Object.values(pathsByFloor);
   }
 
-  function drawLine(
-    startCoordinates: [number, number],
-    endCoordinates: [number, number],
-  ) {
+  function clearLines() {
     const map = mapRef.current;
     if (!map) return;
 
-    const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: "blue",
-      weight: 5,
-      snakingSpeed: 50,
-      snakeRepeat: false,
-      snakeRepeatDelay: 100,
-    }).addTo(map);
-    newPath.snakeIn();
-    addToPaths(newPath); // Add the new path to the paths list
-  }
+    // Remove all polyline layers from the map
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Polyline) {
+        map.removeLayer(layer);
+      }
+    });
 
-  function clearLines() {
-    const map = mapRef.current;
-    if (!map || currentPath.length === 0) return;
-
-    currentPath.forEach((path) => path.removeFrom(map));
-    setcurrentPath([]);
-    clearStartEndMarkers();
+    // Reset currentPath state to an empty array
   }
 
   async function handleSearch(start: string, end: string) {
