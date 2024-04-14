@@ -7,7 +7,7 @@ import {
   FlowerSlide,
   SanitationSlide,
   SecuritySlide,
-} from "@/components/blocks/CarouselServiceSlide.tsx";
+} from "@/components/blocks/CarouselServiceSlides.tsx";
 export default function StartPage() {
   return (
     <>
