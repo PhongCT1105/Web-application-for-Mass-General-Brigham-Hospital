@@ -20,6 +20,20 @@ import {
 } from "@/util/PathfindingStrategy.tsx";
 import { Button } from "@/components/ui/button";
 
+import "@/components/blocks/SnakeAnim";
+
+declare module "leaflet" {
+  interface Polyline {
+    snakeIn: () => void;
+  }
+
+  interface PolylineOptions {
+    snakingSpeed?: number;
+    snakeRepeat?: boolean;
+    snakeRepeatDelay?: number;
+  }
+}
+
 export interface HospitalData {
   nodeID: string;
   name: string;
@@ -31,7 +45,7 @@ export interface HospitalData {
 export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   // const [path, setPath] = useState<Polyline | null>(null);
-  const [paths, setPaths] = useState<Polyline[]>([]);
+  const [currentPath, setcurrentPath] = useState<Polyline[]>([]);
   const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<PathfindingStrategy>(new BFSPathfindingStrategy());
@@ -152,7 +166,7 @@ export const MapBlock: React.FC = () => {
   }, [isDataLoaded, hospitalData]); // Dependency array
 
   function addToPaths(newPath: Polyline) {
-    setPaths((prevPaths) => [...prevPaths, newPath]);
+    setcurrentPath((prevPaths) => [...prevPaths, newPath]);
   }
 
   function drawPath(start: string, end: string) {
@@ -219,6 +233,7 @@ export const MapBlock: React.FC = () => {
       for (let i = 0; i < paths[0].length - 1; i++) {
         drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
       }
+
       placeStartEndMarkers(paths[0]);
     }
 
@@ -319,16 +334,20 @@ export const MapBlock: React.FC = () => {
     const newPath = L.polyline([startCoordinates, endCoordinates], {
       color: "blue",
       weight: 5,
+      snakingSpeed: 50,
+      snakeRepeat: false,
+      snakeRepeatDelay: 100,
     }).addTo(map);
+    newPath.snakeIn();
     addToPaths(newPath); // Add the new path to the paths list
   }
 
   function clearLines() {
     const map = mapRef.current;
-    if (!map || paths.length === 0) return;
+    if (!map || currentPath.length === 0) return;
 
-    paths.forEach((path) => path.removeFrom(map));
-    setPaths([]);
+    currentPath.forEach((path) => path.removeFrom(map));
+    setcurrentPath([]);
     clearStartEndMarkers();
   }
 
