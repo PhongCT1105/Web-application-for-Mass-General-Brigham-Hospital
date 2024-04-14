@@ -1,12 +1,26 @@
 import * as React from "react";
 import hero from "@/assets/01_thefirstfloor.png";
 import { HeaderHome } from "@/components/blocks/headerHome.tsx";
+import { HomeCarousel } from "@/components/blocks/HomeCarousel.tsx";
 
+import {
+  FlowerSlide,
+  SanitationSlide,
+  SecuritySlide,
+} from "@/components/blocks/CarouselServiceSlide.tsx";
 export default function StartPage() {
   return (
     <>
       <HeaderHome />
       <div>
+        <HomeCarousel
+          data={[
+            <SecuritySlide />,
+            <FlowerSlide />,
+            <SanitationSlide />,
+            // Add more components here
+          ]}
+        />
         <div className="SecurityRequest w-full h-[800px] absolute">
           <a href="/home">
             <img

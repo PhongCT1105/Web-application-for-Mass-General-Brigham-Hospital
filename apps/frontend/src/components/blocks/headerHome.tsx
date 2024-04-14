@@ -20,7 +20,6 @@ import {
   DropdownMenuLabel,
   DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuSub,
   DropdownMenuSubContent,
   DropdownMenuSubTrigger,
@@ -86,17 +85,14 @@ export function HeaderHome() {
                   <DropdownMenuItem>
                     <User className="mr-2 h-4 w-4" />
                     <span>Profile</span>
-                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <CreditCard className="mr-2 h-4 w-4" />
                     <span>Billing</span>
-                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
                   </DropdownMenuItem>
                   <DropdownMenuItem>
                     <Settings className="mr-2 h-4 w-4" />
                     <span>Settings</span>
-                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                   </DropdownMenuItem>
                   <DropdownMenuItem
                     onClick={() => {
@@ -105,7 +101,6 @@ export function HeaderHome() {
                   >
                     <FolderArchive className="mr-2 h-4 w-4" />
                     <span>Request Logs</span>
-                    <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
@@ -141,14 +136,13 @@ export function HeaderHome() {
                 <DropdownMenuItem>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
-                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </nav>
       </div>
-      <div className="flex text-lg w-full font-medium items-center justify-between w-full">
+      <div className="flex text-lg w-full font-medium items-center justify-between w-full shadow-2xl shadow-black">
         <a
           href="/login"
           className="hover:bg-yellow-500 hover:text-black text-white text-center flex-grow bg-blue-900 inline-block p-3"
