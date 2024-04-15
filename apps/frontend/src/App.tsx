@@ -7,7 +7,7 @@ import LoginPage from "./routes/LoginPage.tsx";
 import HomePage from "./routes/HomePage.tsx"; // Correct import path
 import AboutUsPage from "./routes/AboutUsPage.tsx"; // Correct import path
 import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"; // Correct import path
-import CSVTable from "./components/blocks/csvTable.tsx";
+import CSVTable from "./routes/CSVPage/csvTable.tsx";
 import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
