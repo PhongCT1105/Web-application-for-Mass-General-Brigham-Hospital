@@ -31,6 +31,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 
 export interface scheduleForm {
   name: string;
@@ -73,6 +79,9 @@ export const SheduleContent = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [locationsFrom, setLocationsFrom] = useState<string[]>([]);
   const [locationsTo, setLocationsTo] = useState<string[]>([]);
+  const [buttonState, setButtonState] = useState<buttonColor>("ghost");
+
+  type buttonColor = "ghost" | "default";
 
   // Get locations from database
   useEffect(() => {
@@ -124,7 +133,7 @@ export const SheduleContent = () => {
       ...prevState,
       locationFrom: selectedLocation,
     }));
-    // setLocationsFrom(selectedLocation);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   const handleLocationToChange = (selectedLocation: string) => {
@@ -132,7 +141,7 @@ export const SheduleContent = () => {
       ...prevState,
       locationTo: selectedLocation,
     }));
-    // setLocationsTo(selectedLocation);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   //handleFormChange
@@ -146,6 +155,8 @@ export const SheduleContent = () => {
       ...prevState,
       [id]: value,
     }));
+
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   //Clear and reset the form to default
@@ -173,6 +184,7 @@ export const SheduleContent = () => {
       priority: priority,
     }));
     setSelectedPriority(priority);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   //handleStatusChange
@@ -182,6 +194,7 @@ export const SheduleContent = () => {
       status: status,
     }));
     setSelectedStatus(status);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   //handleDateChange
@@ -199,6 +212,19 @@ export const SheduleContent = () => {
   const formattedDate = form.date
     ? format(form.date, "MMMM do, yyyy")
     : "Nothing";
+
+  const checkEmpty = () => {
+    return (
+      form.name === "" ||
+      form.priority === "" ||
+      form.locationFrom === "" ||
+      form.locationTo === "" ||
+      form.reason === "" ||
+      form.date === undefined ||
+      form.time === "" ||
+      form.status === ""
+    );
+  };
 
   //submit
   const handleSubmit = async () => {
@@ -231,6 +257,7 @@ export const SheduleContent = () => {
       }
 
       clearForm();
+      setButtonState("ghost");
     }
   };
 
@@ -445,9 +472,36 @@ export const SheduleContent = () => {
               >
                 Clear
               </Button>
-              <Button className="p-5" onClick={handleSubmit}>
-                Submit
-              </Button>
+              {/*<Button className="p-5" onClick={handleSubmit}>*/}
+              {/*  Submit*/}
+              {/*</Button>*/}
+              <TooltipProvider>
+                {buttonState === "ghost" && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={buttonState}
+                        className="p-5 border"
+                        onClick={handleSubmit}
+                      >
+                        Submit
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Please fill out all fields</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {buttonState !== "ghost" && (
+                  <Button
+                    variant={buttonState}
+                    className="p-5"
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                )}
+              </TooltipProvider>
             </CardFooter>
           </Card>
         </div>

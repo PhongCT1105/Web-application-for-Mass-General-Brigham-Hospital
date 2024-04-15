@@ -526,7 +526,7 @@ export function Sanitation() {
                       <TooltipTrigger asChild>
                         <Button
                           variant={buttonState}
-                          className="p-5"
+                          className="p-5 border"
                           onClick={handleSubmit}
                         >
                           Submit

@@ -29,6 +29,12 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 
 type rPriority = "low" | "medium" | "high" | "emergency";
 
@@ -57,6 +63,9 @@ export const SecurityForm = () => {
   const [curPriority, setCurPriority] = useState("low");
   const [curStatus, setCurStatus] = useState("unassigned");
   const [locations, setLocations] = useState<string[]>([]);
+  const [buttonState, setButtonState] = useState<buttonColor>("ghost");
+
+  type buttonColor = "ghost" | "default";
 
   /**
    * Clear the request when it's submitted.
@@ -109,12 +118,20 @@ export const SecurityForm = () => {
     fetchData();
   }, []);
 
+  const checkEmpty = () => {
+    return (
+      securityRequest.ename === "" ||
+      securityRequest.location === "" ||
+      securityRequest.situation === ""
+    );
+  };
+
   const handleLocationChange = (selectedLocation: string) => {
     setSecurityRequest((prevState) => ({
       ...prevState,
       location: selectedLocation,
     }));
-    // setLocationsTo(selectedLocation);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -144,6 +161,7 @@ export const SecurityForm = () => {
       status: status,
     }));
     setCurStatus(status);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -157,6 +175,7 @@ export const SecurityForm = () => {
       priority: priority,
     }));
     setCurPriority(priority);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -399,10 +418,29 @@ export const SecurityForm = () => {
             >
               Clear
             </Button>
-            <Button className="w-1/4" onClick={submit}>
-              {" "}
-              Submit Request{" "}
-            </Button>
+            <TooltipProvider>
+              {buttonState === "ghost" && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={buttonState}
+                      className="w-1/4 p-5 border"
+                      onClick={submit}
+                    >
+                      Submit
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Please fill out all fields</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+              {buttonState !== "ghost" && (
+                <Button variant={buttonState} className="p-5" onClick={submit}>
+                  Submit
+                </Button>
+              )}
+            </TooltipProvider>
           </CardFooter>
         </CardContent>
       </Card>
