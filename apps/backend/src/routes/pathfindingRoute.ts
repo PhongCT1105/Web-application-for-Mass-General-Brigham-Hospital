@@ -7,6 +7,7 @@ import express, { Router } from "express";
 import {
   BFSPathfindingStrategy,
   AStarPathfindingStrategy,
+  DFSPathfindingStrategy,
 } from "../util/PathfindingStrategy.ts";
 
 const router: Router = express.Router();
@@ -25,6 +26,9 @@ router.post("/", async (req, res) => {
       break;
     case "AStar":
       searchStrategy = new AStarPathfindingStrategy();
+      break;
+    case "DFS":
+      searchStrategy = new DFSPathfindingStrategy();
       break;
     default:
       return res.status(400).json({ error: "Invalid search strategy" });

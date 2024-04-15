@@ -1,8 +1,9 @@
-import { Graph } from "./Graph.ts";
-import { Node } from "./Node.ts";
+import { Graph } from "./Graph.tsx";
+import { Node } from "./Node.tsx";
 import { BFS } from "./BFS.ts";
 import { aStar } from "./aStar.ts";
-//import { Dijkstra } from "./Dijkstra.ts";
+import { Dijkstra } from "./Dijkstra.ts";
+import { DFS } from "./DFS.ts";
 
 // Define PathfindingStrategy interface
 export interface PathfindingStrategy {
@@ -16,14 +17,23 @@ export class BFSPathfindingStrategy implements PathfindingStrategy {
   }
 }
 
+// Implement A*PathfindingStrategy
 export class AStarPathfindingStrategy implements PathfindingStrategy {
   findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
     return aStar.run(graph, startNodeID, endNodeID);
   }
 }
 
-// export class DijkstraPathfindingStrategy implements PathfindingStrategy {
-//     findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
-//         return Dijkstra.run(graph, startNodeID, endNodeID);
-//     }
-// }
+// Implement DFSPathfindingStrategy
+export class DFSPathfindingStrategy implements PathfindingStrategy {
+  findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+    return DFS.run(graph, startNodeID, endNodeID);
+  }
+}
+
+export class DijkstraPathfindingStrategy implements PathfindingStrategy {
+  findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+    console.log("I made it here");
+    return Dijkstra.run(graph, startNodeID, endNodeID);
+  }
+}
