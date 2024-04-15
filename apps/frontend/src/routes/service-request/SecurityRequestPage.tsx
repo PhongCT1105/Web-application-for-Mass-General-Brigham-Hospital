@@ -199,7 +199,7 @@ export const SecurityForm = () => {
               <h1 className="text-2xl font-bold my-2 mt-6">Name</h1>
               <Input
                 type="text"
-                id="name"
+                id="ename"
                 placeholder="Enter Your Name Here"
                 onChange={handleText}
                 value={securityRequest.ename}
@@ -353,7 +353,7 @@ export const SecurityForm = () => {
                   id="situation"
                   placeholder="Enter Your Name Here"
                   onChange={handleText}
-                  value={securityRequest.ename}
+                  value={securityRequest.situation}
                 ></Textarea>
               </div>
             </div>
