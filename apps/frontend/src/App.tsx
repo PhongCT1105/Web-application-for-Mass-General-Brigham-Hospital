@@ -12,6 +12,7 @@ import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
 import StartPage from "@/routes/StartPage.tsx";
+import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -60,9 +61,14 @@ function App() {
       element: <Sanitation />,
     },
     {
-      path: "/map-editor",
+      path: "/map-editor/map",
       errorElement: <h1>ERROR</h1>,
       element: <MapEditingPage />,
+    },
+    {
+      path: "/map-editor/table",
+      errorElement: <h1>ERROR</h1>,
+      element: <MapEditorTablePage />,
     },
   ]);
 
