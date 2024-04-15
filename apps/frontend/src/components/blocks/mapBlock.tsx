@@ -360,8 +360,7 @@ export const MapBlock: React.FC = () => {
         map.removeLayer(layer);
       }
     });
-
-    // Reset currentPath state to an empty array
+    clearStartEndMarkers();
   }
 
   async function handleSearch(start: string, end: string) {
