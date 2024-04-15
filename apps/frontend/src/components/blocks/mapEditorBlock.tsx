@@ -1,12 +1,5 @@
 // import React, { useEffect, useRef, useState } from "react";
-// import L, {
-//   CRS,
-//   Icon,
-//   LatLngBoundsExpression,
-//   LatLngExpression,
-//   Map,
-//   Polyline,
-// } from "leaflet";
+// import L, { CRS, Icon, LatLngBoundsExpression, LatLngExpression, Map, Polyline } from "leaflet";
 // import "leaflet/dist/leaflet.css";
 // import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
 // import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
@@ -16,26 +9,16 @@
 // import RedDot from "@/assets/red_dot.png";
 // import "@/styles/mapBlock.modules.css";
 // import axios from "axios";
-// import { Graph } from "@/util/Graph.tsx";
-// import { Node } from "../../util/Node.tsx";
-// //import { Edge } from "@/util/Edge.tsx";
-//
-// export interface HospitalData {
-//   nodeID: string;
-//   name: string;
-//   xCoord: number;
-//   yCoord: number;
-//   floor: string;
-// }
+// import { Node } from "../blocks/MapBlock.tsx";
+// import { HospitalData } from "../blocks/MapBlock.tsx"
 //
 // // Define the map component
-// export const MapEditor: React.FC = () => {
+// export const MapEditor = () => {
 //   const mapRef = useRef<Map | null>(null);
 //   const [paths, setPaths] = useState<Polyline[]>([]);
 //   const [isDataLoaded, setIsDataLoaded] = useState(false);
 //   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-//   const [hospitalGraph, setHospitalGraph] = useState<Graph>();
-//   //const [edges, setEdges] = useState<>();
+//   const [edges, setEdges] = useState<string[]>([]);
 //
 //   const floorMaps: { [key: string]: string } = {
 //     lowerLevel1: lowerLevelMap1,
@@ -51,37 +34,20 @@
 //
 //     const newHospitalData: HospitalData[] = [];
 //
-//     const newGraph: Graph = new Graph();
+//     const edgeIDs: string[] = [];
 //     for (let i = 0; i < nodeData.length; i++) {
 //       newHospitalData.push({
-//         nodeID: nodeData[i].nodeID,
-//         name: nodeData[i].longName,
-//         xCoord: nodeData[i].xcoord,
-//         yCoord: nodeData[i].ycoord,
-//         floor: nodeData[i].floor,
+//           nodeID: nodeData[i].nodeID,
+//           name: nodeData[i].longName,
+//           geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
+//           floor: nodeData[i].floor,
 //       });
 //
-//       newGraph.addNode(
-//         new Node(
-//           nodeData[i].nodeID,
-//           parseInt(nodeData[i].xcoord),
-//           parseInt(nodeData[i].ycoord),
-//           nodeData[i].floor,
-//           nodeData[i].building,
-//           nodeData[i].nodeType,
-//           nodeData[i].longName,
-//           nodeData[i].shortName,
-//           new Set<Node>(),
-//         ),
-//       );
-//     }
-//
-//     for (let i = 0; i < edgeData.length; i++) {
-//       newGraph.addEdge(edgeData[i].startNode, edgeData[i].endNode);
-//     }
+//         for (let i = 0; i < edgeData.length; i++) {
+//             edgeIDs.push(edgeData[i].edgeID);
+//         }
 //
 //     setHospitalData(newHospitalData);
-//     setHospitalGraph(newGraph);
 //   };
 //
 //   useEffect(() => {
@@ -124,7 +90,7 @@
 //       addMarkers(map!, newNodesOnCurrentFloor);
 //       //drawLine(newNodesOnCurrentFloor, hospitalGraph!);
 //     }
-//   }, [isDataLoaded, hospitalData, hospitalGraph]); // Dependency array
+//   }, [isDataLoaded, hospitalData]); // Dependency array
 //
 //   function clearMarkers() {
 //     const map = mapRef.current;
@@ -163,9 +129,10 @@
 //       const startCoordinates: LatLngExpression = [nLat, lat];
 //       console.log("Node: " + startHospital.nodeID);
 //
+//       // does not exist without a graph
 //       const neighborArray = startNode.neighbors;
 //
-//       neighborArray.forEach((endNode) => {
+//       neighborArray.forEach((endNode: Node) => {
 //         const endHospital = hospitalData.find(
 //           (h) => h.nodeID == endNode.nodeID,
 //         )!;

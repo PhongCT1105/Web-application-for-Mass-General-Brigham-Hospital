@@ -86,7 +86,7 @@ export const NewSearchBar: React.FC<SearchBarProps> = ({
       </div>
 
       <div className="flex mb-4 flex-col items-center align-content-center">
-        <Tabs defaultValue="bfs" className=" ">
+        <Tabs defaultValue="astar" className=" ">
           <TabsList>
             <TabsTrigger
               value="bfs"
@@ -111,27 +111,6 @@ export const NewSearchBar: React.FC<SearchBarProps> = ({
           {/*<TabsContent value="password">Change your password here.</TabsContent>*/}
         </Tabs>
       </div>
-
-      {/*<div className="flex mb-4">*/}
-      {/*  /!* Button to switch to BFS strategy *!/*/}
-      {/*  <button*/}
-      {/*    onClick={() =>*/}
-      {/*      changePathfindingStrategy(new BFSPathfindingStrategy())*/}
-      {/*    }*/}
-      {/*    className="px-8 py-2 bg-green-500 text-white rounded cursor-pointer mr-2"*/}
-      {/*  >*/}
-      {/*    BFS*/}
-      {/*  </button>*/}
-      {/*  /!* Button to switch to A* strategy *!/*/}
-      {/*  <button*/}
-      {/*    onClick={() =>*/}
-      {/*      changePathfindingStrategy(new AStarPathfindingStrategy())*/}
-      {/*    }*/}
-      {/*    className="px-8 py-2 bg-green-500 text-white rounded cursor-pointer"*/}
-      {/*  >*/}
-      {/*    A**/}
-      {/*  </button>*/}
-      {/*</div>*/}
 
       <div className="flex mb-4">
         <Button

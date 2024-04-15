@@ -7,9 +7,14 @@ router.post("/", async function (req: Request, res: Response) {
 });
 
 router.get("/nodes", async (req, res) => {
-  const data = await client.nodes.findMany();
+  try {
+    const data = await client.nodes.findMany();
 
-  res.status(200).json(data);
+    res.status(200).json(data);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(400).json({ error: "Pathfinding Error" });
+  }
 });
 
 router.get("/nodes/:nodeid", async (req, res) => {
