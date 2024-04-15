@@ -23,6 +23,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -62,12 +68,15 @@ export function Sanitation() {
     }
   }
 
+  type buttonColor = "ghost" | "default";
+
   const [selectedTypeOfIssue, setSelectedTypeOfIssue] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [submittedForms, setSubmittedForms] = useState<Form[]>([]);
 
   const [locations, setLocationsTo] = useState<string[]>([]);
+  const [buttonState, setButtonState] = useState<buttonColor>("ghost");
 
   // Get locations from database
   useEffect(() => {
@@ -88,17 +97,10 @@ export function Sanitation() {
             shortName: string;
           }) => item.longName,
         );
-        const filteredLocations = extractedLocations.filter(
-          (location: string) => {
-            return (
-              !location.includes("Hallway") && !location.startsWith("Hall")
-            );
-          },
-        );
         // alphabetizing location list
-        filteredLocations.sort((a: string, b: string) => a.localeCompare(b));
+        extractedLocations.sort((a: string, b: string) => a.localeCompare(b));
         // set locations to filtered alphabetized location list
-        setLocationsTo(filteredLocations);
+        setLocationsTo(extractedLocations);
 
         console.log("Successfully fetched data from the API.");
       } catch (error) {
@@ -120,6 +122,18 @@ export function Sanitation() {
     comments: "",
   });
 
+  const checkEmpty = () => {
+    return (
+      form.name === "" ||
+      form.severity === "" ||
+      form.location === "" ||
+      form.typeOfIssue === "" ||
+      form.time === "" ||
+      form.status === "" ||
+      form.description === ""
+    );
+  };
+
   const handleFormChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -130,6 +144,8 @@ export function Sanitation() {
       ...prevState,
       [id]: value,
     }));
+
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   const handleIssueChange = (
@@ -147,6 +163,7 @@ export function Sanitation() {
       ...prevState,
       typeOfIssue: typeOfIssue,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
     setSelectedTypeOfIssue(typeOfIssue);
   };
 
@@ -157,6 +174,7 @@ export function Sanitation() {
       ...prevState,
       severity: severity,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
     setSelectedSeverity(severity);
   };
 
@@ -167,6 +185,8 @@ export function Sanitation() {
       ...prevState,
       status: status,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
+
     setSelectedStatus(status);
   };
 
@@ -175,6 +195,7 @@ export function Sanitation() {
       ...prevState,
       location: location,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   const handleSubmit = () => {
@@ -197,6 +218,7 @@ export function Sanitation() {
       console.log(form);
       handleFormClear();
       submit().then();
+      setButtonState("ghost");
     }
   };
 
@@ -219,13 +241,13 @@ export function Sanitation() {
 
   return (
     <>
-      <div className="flex flex-col border rounded-md text mx-10 my-5">
+      <div className="flex flex-col border rounded-md text mx-10 my-5 p-6">
         <div className=" justify-center items-center">
           <Card className="border-none">
             <CardContent>
               <div className="space-y-6">
-                <div className="w-1/4">
-                  <h1 className="text-2xl font-bold my-2 mt-6">Name</h1>
+                <div className="w-1/4 ml-8">
+                  <h1 className="text-4xl font-bold my-2 mt-6 pb-2">Name</h1>
                   <Input
                     type="text"
                     id="name"
@@ -235,8 +257,10 @@ export function Sanitation() {
                   />
                 </div>
                 <div className="flex">
-                  <div className="w-1/3 ">
-                    <h1 className="text-2xl font-bold my-2">Severity Level</h1>
+                  <div className="w-1/3 ml-8 ">
+                    <h1 className="text-4xl font-bold my-2 pb-2">
+                      Severity Level
+                    </h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -245,7 +269,7 @@ export function Sanitation() {
                           value="Low"
                           checked={selectedSeverity === "Low"}
                         />
-                        <Label htmlFor="r1">
+                        <Label htmlFor="r1" className="text-xl">
                           Low: Routine cleaning or maintenance.
                         </Label>
                       </div>
@@ -256,7 +280,7 @@ export function Sanitation() {
                           value="Medium"
                           checked={selectedSeverity === "Medium"}
                         />
-                        <Label htmlFor="r2">
+                        <Label htmlFor="r2" className="text-xl">
                           Medium: Timely attention to prevent risks.
                         </Label>
                       </div>
@@ -267,7 +291,7 @@ export function Sanitation() {
                           value="High"
                           checked={selectedSeverity === "High"}
                         />
-                        <Label htmlFor="r3">
+                        <Label htmlFor="r3" className="text-xl">
                           High: Urgent for safety and functionality.
                         </Label>
                       </div>
@@ -278,7 +302,7 @@ export function Sanitation() {
                           value="Emergency"
                           checked={selectedSeverity === "Emergency"}
                         />
-                        <Label htmlFor="r4">
+                        <Label htmlFor="r4" className="text-xl">
                           Emergency: Immediate action to prevent harm.
                         </Label>
                       </div>
@@ -286,7 +310,9 @@ export function Sanitation() {
                   </div>
 
                   <div className="w-1/6 ml-12">
-                    <h1 className="text-2xl font-bold my-2">Type of Issue</h1>
+                    <h1 className="text-4xl font-bold my-2 pb-2">
+                      Type of Issue
+                    </h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -295,7 +321,9 @@ export function Sanitation() {
                           value="Spill"
                           checked={selectedTypeOfIssue === "Spill"}
                         />
-                        <Label htmlFor="Spill">Spill</Label>
+                        <Label htmlFor="Spill" className="text-xl">
+                          Spill
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -304,7 +332,9 @@ export function Sanitation() {
                           value="Leak"
                           checked={selectedTypeOfIssue === "Leak"}
                         />
-                        <Label htmlFor="Leak">Leak</Label>
+                        <Label htmlFor="Leak" className="text-xl">
+                          Leak
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -313,7 +343,9 @@ export function Sanitation() {
                           value="BodilyFluid"
                           checked={selectedTypeOfIssue === "BodilyFluid"}
                         />
-                        <Label htmlFor="BodilyFluid">Bodily Fluid</Label>
+                        <Label htmlFor="BodilyFluid" className="text-xl">
+                          Bodily Fluid
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -322,7 +354,9 @@ export function Sanitation() {
                           value="FoulOdor"
                           checked={selectedTypeOfIssue === "FoulOdor"}
                         />
-                        <Label htmlFor="FoulOdor">Foul Odor</Label>
+                        <Label htmlFor="FoulOdor" className="text-xl">
+                          Foul Odor
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -331,7 +365,9 @@ export function Sanitation() {
                           value="Garbage"
                           checked={selectedTypeOfIssue === "Garbage"}
                         />
-                        <Label htmlFor="Garbage">Garbage Accumulation</Label>
+                        <Label htmlFor="Garbage" className="text-xl">
+                          Garbage Accumulation
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -340,7 +376,7 @@ export function Sanitation() {
                           value="BrokenEquipment"
                           checked={selectedTypeOfIssue === "BrokenEquipment"}
                         />
-                        <Label htmlFor="BrokenEquipment">
+                        <Label htmlFor="BrokenEquipment" className="text-xl">
                           Broken Equipment
                         </Label>
                       </div>
@@ -351,13 +387,15 @@ export function Sanitation() {
                           value="Other"
                           checked={selectedTypeOfIssue === "Other"}
                         />
-                        <Label htmlFor="Other">Other</Label>
+                        <Label htmlFor="Other" className="text-xl">
+                          Other{" "}
+                        </Label>
                       </div>
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/4 ml-12">
-                    <h1 className="text-2xl font-bold my-2">Status</h1>
+                  <div className="w-1/4 ml-12 pl-20">
+                    <h1 className="text-4xl font-bold my-2 pb-2">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -366,7 +404,9 @@ export function Sanitation() {
                           value="Unassigned"
                           checked={selectedStatus === "Unassigned"}
                         />
-                        <Label htmlFor="r1">Unassigned</Label>
+                        <Label htmlFor="r1" className="text-xl">
+                          Unassigned
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -375,7 +415,9 @@ export function Sanitation() {
                           value="Assigned"
                           checked={selectedStatus === "Assigned"}
                         />
-                        <Label htmlFor="r2">Assigned</Label>
+                        <Label htmlFor="r2" className="text-xl">
+                          Assigned
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -384,7 +426,9 @@ export function Sanitation() {
                           value="InProgress"
                           checked={selectedStatus === "InProgress"}
                         />
-                        <Label htmlFor="r3">In Progress</Label>
+                        <Label htmlFor="r3" className="text-xl">
+                          In Progress
+                        </Label>
                       </div>
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -393,16 +437,18 @@ export function Sanitation() {
                           value="Closed"
                           checked={selectedStatus === "Closed"}
                         />
-                        <Label htmlFor="r4">Closed</Label>
+                        <Label htmlFor="r4" className="text-xl">
+                          Closed
+                        </Label>
                       </div>
                     </RadioGroup>
                   </div>
 
                   <div className="w-1/4">
-                    <h1 className="text-2xl font-bold my-2">Location</h1>
+                    <h1 className="text-4xl font-bold my-2 pb-2">Location</h1>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
+                        <Button variant="outline" className="text-xl">
                           {form.location ? form.location : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
@@ -420,7 +466,7 @@ export function Sanitation() {
                     </DropdownMenu>
                   </div>
                   <div className="w-1/8 mr-20">
-                    <h1 className="text-2xl font-bold my-2 whitespace-nowrap">
+                    <h1 className="text-4xl font-bold my-2 whitespace-nowrap pb-2">
                       Time of Issue
                     </h1>
                     <Input
@@ -434,8 +480,8 @@ export function Sanitation() {
                 </div>
 
                 <div className="flex">
-                  <div className="w-1/2 ml-12">
-                    <h1 className="text-2xl font-bold my-2">
+                  <div className="w-1/2 ml-8">
+                    <h1 className="text-4xl font-bold my-2 pb-2">
                       Description of Issue
                     </h1>
                     <Textarea
@@ -446,9 +492,9 @@ export function Sanitation() {
                     />
                   </div>
 
-                  <div className="w-1/2 ml-12">
-                    <h1 className="text-2xl font-bold my-2">
-                      Additional Comments/Instructions (optional)
+                  <div className="w-1/2 ml-8">
+                    <h1 className="text-4xl font-bold my-2 pb-2">
+                      Additional Comments (optional)
                     </h1>
                     <Textarea
                       placeholder="Type your instructions here."
@@ -461,24 +507,54 @@ export function Sanitation() {
               </div>
             </CardContent>
 
-            <CardFooter className="flex justify-between">
-              <Button
-                variant="destructive"
-                className="mr-20"
-                onClick={handleFormClear}
-              >
-                Clear
-              </Button>
-              <Button className="p-5" onClick={handleSubmit}>
-                Submit
-              </Button>
+            <CardFooter className="flex justify-end">
+              {" "}
+              {/* Use justify-end to align items to the end */}
+              <div className="flex space-x">
+                {" "}
+                {/* Use space-x-4 for horizontal spacing between buttons */}
+                <Button
+                  variant="destructive"
+                  className="mr-10"
+                  onClick={handleFormClear}
+                >
+                  Clear
+                </Button>
+                <TooltipProvider>
+                  {buttonState === "ghost" && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={buttonState}
+                          className="p-5"
+                          onClick={handleSubmit}
+                        >
+                          Submit
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Please fill out all fields</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                  {buttonState !== "ghost" && (
+                    <Button
+                      variant={buttonState}
+                      className="p-5"
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </Button>
+                  )}
+                </TooltipProvider>
+              </div>
             </CardFooter>
           </Card>
         </div>
       </div>
       <div>
-        <h2 className="text-lg font-bold">Submitted Forms:</h2>
-        <Card className={"mx-10 mb-5 mt-[60px]"}>
+        <Label className="text-3xl font-bold ml-10">Submitted Forms:</Label>
+        <Card className={"mx-10 mb-5 mt-5"}>
           <Table>
             <TableHeader>
               <TableRow className={""}>
