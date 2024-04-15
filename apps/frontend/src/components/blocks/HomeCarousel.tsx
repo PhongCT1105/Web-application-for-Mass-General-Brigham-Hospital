@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from "react";
+import React, { ReactElement, useCallback, useEffect, useState } from "react";
 import { BsArrowRightCircleFill, BsArrowLeftCircleFill } from "react-icons/bs";
 
 interface HomeCarouselProps {
@@ -9,28 +9,28 @@ export const HomeCarousel: React.FC<HomeCarouselProps> = ({ data }) => {
   const [slide, setSlide] = useState(0);
 
   // Function to go to the next slide
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setSlide((prevSlide) =>
       prevSlide === data.length - 1 ? 0 : prevSlide + 1,
     );
-  };
+  }, [data.length]);
 
   // Function to go to the previous slide
-  const prevSlide = () => {
+  const prevSlide = useCallback(() => {
     setSlide((prevSlide) =>
       prevSlide === 0 ? data.length - 1 : prevSlide - 1,
     );
-  };
+  }, [data.length]);
 
   // Automatically change slide every 5 seconds
-  // useEffect(() => {
-  //     const interval = setInterval(() => {
-  //         nextSlide();
-  //     }, 5000); // Change slide every 5 seconds (5000 milliseconds)
-  //
-  //     // Clear the interval when the component unmounts
-  //     return () => clearInterval(interval);
-  // }, [data.length]);
+  useEffect(() => {
+    const interval = setInterval(() => {
+      nextSlide();
+    }, 8000);
+
+    // Clear the interval when the component unmounts
+    return () => clearInterval(interval);
+  }, [data.length, nextSlide]);
 
   return (
     <div className="relative flex justify-center align-content-center h-[400px] self-stretch m-0 p-0">

@@ -35,8 +35,8 @@ export function HeaderHome() {
           <a href="/login" className="flex text-lg font-semibold ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="720"
-              height="132"
+              width="600"
+              height="91"
               fill="none"
               viewBox="0 0 1000 99"
             >
