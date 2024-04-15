@@ -9,6 +9,8 @@ import csvFetch from "./routes/csvFetch.ts";
 import transportRoute from "./routes/transportRoute.ts";
 import sanitationRouter from "./routes/sanitationRoute.ts";
 import securityRoute from "./routes/securityRoute.ts";
+import medicationRoute from "./routes/medicationRoute.ts";
+// import m from "./routes/sanitationRoute.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -34,6 +36,8 @@ app.use("/api/csvFetch", csvFetch);
 app.use("/api/transport", transportRoute);
 app.use("/api/sanitationReq", sanitationRouter);
 app.use("/api/securityReq", securityRoute);
+app.use("/api/medicationReq", medicationRoute);
+
 app.use("/healthcheck", (req, res) => {
   res.status(200).send();
 });

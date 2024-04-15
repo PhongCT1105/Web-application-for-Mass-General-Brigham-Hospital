@@ -15,7 +15,7 @@ import { Badge, FlowerIcon, PillIcon, Calendar, Biohazard } from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
-import { DataTable } from "@/routes/service-request/medicine-request/medicationREQ-data-table.tsx";
+import { MedicineRequest } from "@/routes/service-request/medicine-request/medicineRequest.tsx";
 import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
 import { Medication } from "common/src/interfaces/medicationReq.ts";
 import { pillData } from "common/src/testData.ts";
@@ -106,7 +106,7 @@ export default function ServiceRequestPage() {
                         <div className={"p-3"}>
                           <MedicineContext.Provider value={{ data, setData }}>
                             <div className={"space-y-4"}>
-                              <DataTable columns={columns} />
+                              <MedicineRequest columns={columns} />
                             </div>
                           </MedicineContext.Provider>
                         </div>
