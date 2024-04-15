@@ -41,13 +41,13 @@ export default function StartPage() {
       >
         <a href={"#bottom-map"} onClick={scrollToBottom}>
           <div className="text-center h-[25vh] w-[60vw] flex flex-col justify-center items-center">
-            <p className="text-black text-[48px] font-black font-['League Spartan']">
+            <p className="text-black text-[48px] font-['League Spartan']">
               Feeling Lost? Our Map Can Help!
             </p>
-            <p className="text-black text-[24px] font-black font-['League Spartan']">
-              <span>&#x25BC;</span>
-              Scroll down to find your path
-              <span>&#x25BC;</span>
+            <p className="text-black text-[24px] font-['League Spartan']">
+              {/*<span>&#x25BC;</span>*/}
+              Scroll down or click here to find your path
+              {/*<span>&#x25BC;</span>*/}
             </p>
           </div>
         </a>
