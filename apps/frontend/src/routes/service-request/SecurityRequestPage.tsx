@@ -30,10 +30,11 @@ import { Textarea } from "@/components/ui/textarea.tsx";
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { useToast } from "@/components/ui/use-toast.ts";
 
-type rPriority = "low" | "medium" | "high" | "emergency";
+type rPriority = "low" | "medium" | "high" | "emergency" | "";
 
-type rStatus = "unassigned" | "assigned" | "inprogress" | "closed";
+type rStatus = "unassigned" | "assigned" | "inprogress" | "closed" | "";
 
 interface securityRequest {
   ename: string;
@@ -58,6 +59,7 @@ export const SecurityForm = () => {
   const [curStatus, setCurStatus] = useState("unassigned");
 
   const [locations, setLocationsTo] = useState<string[]>([]);
+  const { toast } = useToast();
 
   // Get locations from database
   useEffect(() => {
@@ -182,11 +184,25 @@ export const SecurityForm = () => {
    * Print the form to the console
    */
   const submit = () => {
-    requestList.push(securityRequest);
-    setRequestList([...requestList]);
-    //console.log(securityRequest);
-    console.log(requestList);
-    clearReq();
+    if (
+      securityRequest.ename === "" ||
+      securityRequest.location === "" ||
+      securityRequest.situation === "" ||
+      securityRequest.priority === "" ||
+      securityRequest.status === ""
+    ) {
+      toast({
+        title: "Error",
+        description:
+          "Missing Fields! Please ensure the form is completely filled out.",
+      });
+    } else {
+      requestList.push(securityRequest);
+      setRequestList([...requestList]);
+      //console.log(securityRequest);
+      console.log(requestList);
+      clearReq();
+    }
   };
 
   return (
