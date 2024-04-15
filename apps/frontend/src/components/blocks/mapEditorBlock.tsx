@@ -18,6 +18,8 @@ import "@/styles/mapBlock.modules.css";
 import axios from "axios";
 import { Graph } from "@/util/Graph.tsx";
 import { Node } from "../../util/Node.tsx";
+// import {MapEditorPage} from "@/routes/map-editor/mapEditorPage.tsx";
+// import {Tabs, TabsContent, TabsList, TabsTrigger} from "@/components/ui/tabs.tsx";
 //import { Edge } from "@/util/Edge.tsx";
 
 export interface HospitalData {
@@ -212,8 +214,12 @@ export const MapEditor: React.FC = () => {
       const nLat = 3400 - yCoord;
       const marker = L.marker([nLat, xCoord], { icon: customIcon }).addTo(map);
 
+      // render(
+      //     const thing = <MapContainer center={[xCoord, yCoord]}></MapContainer>;
+      // )
+
       // Add a click event handler to toggle popup visibility
-      const popupContent = `<b>${node.name}</b><br/>Latitude: ${xCoord}, Longitude: ${yCoord}`;
+      const popupContent = `<b>${node.name}</b><br/>Latitude: ${xCoord}, Longitude: ${yCoord}<br/><Button class="">CLICK HERE TO EDIT</Button>`;
       marker.bindPopup(popupContent);
 
       marker.on("click", function (this: L.Marker) {

@@ -1,8 +1,19 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
-import { DataTable } from "@/components/table/data-table.tsx";
-import { edgeColumns, nodeColumns } from "@/routes/map-editor/columns.tsx";
+import React, { createContext, useContext, useEffect, useState } from "react";
+// import { DataTable } from "@/components/table/data-table.tsx";
+import { NodeDataTable } from "@/routes/map-editor/nodes/nodes-table.tsx";
+import { nodeColumns } from "@/routes/map-editor/nodes/nodesData.tsx";
+// import {Table} from "@/routes/map-editor/test.tsx";
+import { edgeColumns } from "@/routes/map-editor/edges/edgeData.tsx";
+import { EdgeDataTable } from "@/routes/map-editor/edges/edge-table.tsx";
+import { Header } from "@/components/blocks/header.tsx";
 
+interface MedicineContextType {
+  nodes: Node[];
+  setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
+  edges: Edge[];
+  setEdges: React.Dispatch<React.SetStateAction<Edge[]>>;
+}
 export interface Node {
   nodeID: string;
   xcoord: number;
@@ -18,8 +29,18 @@ export interface Edge {
   startNode: string;
   endNode: string;
 }
+const GraphContext = createContext<MedicineContextType>({
+  edges: [],
+  nodes: [] as Node[],
+  // eslint-disable-next-line no-empty-function
+  setEdges: () => {},
+  // eslint-disable-next-line no-empty-function
+  setNodes: () => {},
+});
 
-export const MapEditorPage = () => {
+// eslint-disable-next-line react-refresh/only-export-components
+export const useGraphContext = () => useContext(GraphContext);
+export const MapEditorTablePage = () => {
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
 
@@ -59,9 +80,13 @@ export const MapEditorPage = () => {
   }, []);
 
   return (
-    <div className={"p-10 space-y-10"}>
-      <DataTable data={nodes} columns={nodeColumns} />
-      <DataTable data={edges} columns={edgeColumns} />
-    </div>
+    <GraphContext.Provider value={{ nodes, setNodes, setEdges, edges }}>
+      <Header highlighted={"/map-editor"} />
+      <div className={"p-10 space-y-20"}>
+        <NodeDataTable columns={nodeColumns} />
+        <EdgeDataTable columns={edgeColumns} />
+        {/*<Table></Table>*/}
+      </div>
+    </GraphContext.Provider>
   );
 };

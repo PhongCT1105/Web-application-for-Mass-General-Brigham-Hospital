@@ -23,18 +23,19 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-import { DataTablePagination } from "./data-table-pagination";
-// import { DataTableToolbar } from "./data-table-toolbar";
+import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
+import { useState } from "react";
+import {
+  Edge,
+  useGraphContext,
+} from "@/routes/map-editor/mapEditorTablePage.tsx";
+import { Input } from "@/components/ui/input.tsx";
 
-interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
+interface DataTableProps {
+  columns: ColumnDef<Edge>[];
 }
 
-export function DataTable<TData, TValue>({
-  columns,
-  data,
-}: DataTableProps<TData, TValue>) {
+export function EdgeDataTable({ columns }: DataTableProps) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -42,15 +43,47 @@ export function DataTable<TData, TValue>({
     [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
+  const { edges, setEdges } = useGraphContext();
+  const [originalData, setOriginalData] = useState(() => [...edges]);
+  const [editedRows, setEditedRows] = useState({});
 
   const table = useReactTable({
-    data,
+    data: edges,
     columns,
     state: {
       sorting,
       columnVisibility,
       rowSelection,
       columnFilters,
+    },
+    meta: {
+      editedRows,
+      setEditedRows,
+      revertData: (rowIndex: number, revert: boolean) => {
+        if (revert) {
+          setEdges((old) =>
+            old.map((row, index) =>
+              index === rowIndex ? originalData[rowIndex] : row,
+            ),
+          );
+        } else {
+          setOriginalData((old) =>
+            old.map((row, index) =>
+              index === rowIndex ? edges[rowIndex] : row,
+            ),
+          );
+        }
+      },
+      updateData: (rowIndex: number, columnId: string, value: string) => {
+        setEdges((old) =>
+          old.map((row, index) => {
+            if (index === rowIndex) {
+              return { ...old[rowIndex], [columnId]: value };
+            }
+            return row;
+          }),
+        );
+      },
     },
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
@@ -67,6 +100,21 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
+      <div className="flex items-center justify-between">
+        {/* search bar */}
+        <div className="flex flex-1 items-center space-x-2">
+          <Input
+            placeholder="Filter Items..."
+            value={
+              (table.getColumn("startNode")?.getFilterValue() as string) ?? ""
+            }
+            onChange={(event) =>
+              table.getColumn("startNode")?.setFilterValue(event.target.value)
+            }
+            className="h-8 w-[150px] lg:w-[250px]"
+          />
+        </div>
+      </div>
       <div className="rounded-md border">
         <Table>
           <TableHeader>
