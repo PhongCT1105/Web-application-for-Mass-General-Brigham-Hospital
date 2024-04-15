@@ -7,14 +7,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
-import {
-  Card,
-  CardContent,
-  // CardDescription,
-  CardFooter,
-  // CardHeader,
-  // CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,6 +15,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import axios from "axios";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table.tsx";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -48,6 +49,18 @@ interface Form {
 
 export function Sanitation() {
   const { toast } = useToast();
+
+  async function submit() {
+    console.log(form);
+    const res = await axios.post("/api/sanitationReq", form, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    }
+  }
 
   const [selectedTypeOfIssue, setSelectedTypeOfIssue] = useState("");
   const [selectedSeverity, setSelectedSeverity] = useState("");
@@ -183,6 +196,7 @@ export function Sanitation() {
       setSubmittedForms([...submittedForms, form]);
       console.log(form);
       handleFormClear();
+      submit().then();
     }
   };
 
@@ -208,12 +222,6 @@ export function Sanitation() {
       <div className="flex flex-col border rounded-md text mx-10 my-5">
         <div className=" justify-center items-center">
           <Card className="border-none">
-            {/*<CardHeader>*/}
-            {/*  <CardTitle>Request Information</CardTitle>*/}
-            {/*  <CardDescription>*/}
-            {/*    Enter the details for your request*/}
-            {/*  </CardDescription>*/}
-            {/*</CardHeader>*/}
             <CardContent>
               <div className="space-y-6">
                 <div className="w-1/4">
@@ -411,7 +419,7 @@ export function Sanitation() {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <div className="">
+                  <div className="w-1/8 mr-20">
                     <h1 className="text-2xl font-bold my-2 whitespace-nowrap">
                       Time of Issue
                     </h1>
@@ -467,57 +475,41 @@ export function Sanitation() {
             </CardFooter>
           </Card>
         </div>
-
-        <div className="">
-          <div>
-            <Card className="mt-8 w-[400px] mb-8 ml-8">
-              <div className="bg-gray-4 p-4 rounded-md">
-                <h2 className="text-lg font-bold mb-2">Submitted Forms:</h2>
-                <ul>
-                  {submittedForms.map((form, index) => (
-                    <li key={index} className="mb-4">
-                      <div className="font-semibold">Form {index + 1}:</div>
-                      <div className="ml-2">
-                        <div>
-                          <span className="font-semibold">Name:</span>{" "}
-                          {form.name}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Severity:</span>{" "}
-                          {form.severity}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Location:</span>{" "}
-                          {form.location}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Type of Issue:</span>{" "}
-                          {form.typeOfIssue}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Time of Issue:</span>{" "}
-                          {form.time}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Status:</span>{" "}
-                          {form.status}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Description:</span>{" "}
-                          {form.description}
-                        </div>
-                        <div>
-                          <span className="font-semibold">Comments:</span>{" "}
-                          {form.comments}
-                        </div>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Card>
-          </div>
-        </div>
+      </div>
+      <div>
+        <h2 className="text-lg font-bold">Submitted Forms:</h2>
+        <Card className={"mx-10 mb-5 mt-[60px]"}>
+          <Table>
+            <TableHeader>
+              <TableRow className={""}>
+                <TableHead className="">Name</TableHead>
+                <TableHead className="">Severity</TableHead>
+                <TableHead className="">Issue</TableHead>
+                <TableHead className="">Status</TableHead>
+                <TableHead className="">Location</TableHead>
+                <TableHead className="">Time</TableHead>
+                <TableHead className="">Description</TableHead>
+                <TableHead className="">Comments</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {submittedForms.map((form) => {
+                return (
+                  <TableRow>
+                    <TableCell>{form.name}</TableCell>
+                    <TableCell>{form.severity}</TableCell>
+                    <TableCell>{form.typeOfIssue}</TableCell>
+                    <TableCell>{form.status}</TableCell>
+                    <TableCell>{form.location}</TableCell>
+                    <TableCell>{form.time}</TableCell>
+                    <TableCell>{form.description}</TableCell>
+                    <TableCell>{form.comments}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Card>
       </div>
       <h2 className="mt-8 text-small ml-4">Alex Shettler and Tracy Yang</h2>
     </>

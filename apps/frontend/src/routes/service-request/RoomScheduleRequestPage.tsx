@@ -201,7 +201,7 @@ export const SheduleContent = () => {
     : "Nothing";
 
   //submit
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (
       form.name === "" ||
       form.priority === "" ||
@@ -219,7 +219,17 @@ export const SheduleContent = () => {
       });
     } else {
       setSubmittedForms([...submittedForms, form]);
+
       console.log(form);
+      const res = await axios.post("/api/transport", form, {
+        headers: {
+          "content-type": "Application/json",
+        },
+      });
+      if (res.status == 200) {
+        console.log("success");
+      }
+
       clearForm();
     }
   };
