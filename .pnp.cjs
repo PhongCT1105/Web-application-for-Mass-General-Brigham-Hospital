@@ -96,6 +96,7 @@ const RAW_RUNTIME_STATE =
           ["husky", "npm:8.0.3"],\
           ["install", "npm:0.13.0"],\
           ["leaflet", "npm:1.9.4"],\
+          ["leaflet-ant-path", "npm:1.3.0"],\
           ["leaflet.markercluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.5.3"],\
           ["npm", "npm:10.5.0"],\
           ["pathfinding", "npm:0.4.18"],\
@@ -111,6 +112,7 @@ const RAW_RUNTIME_STATE =
           ["react-icons", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.0.1"],\
           ["react-lazyload", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.2.1"],\
           ["react-leaflet", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:4.2.1"],\
+          ["react-leaflet-ant-path", "npm:1.1.0"],\
           ["react-leaflet-cluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["react-leaflet-markercluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.0.0-rc1"],\
           ["react-router-dom", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.3.4"],\
@@ -9524,6 +9526,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["leaflet-ant-path", [\
+      ["npm:1.3.0", {\
+        "packageLocation": "./.yarn/cache/leaflet-ant-path-npm-1.3.0-af9cfb5dfa-42844b38b2.zip/node_modules/leaflet-ant-path/",\
+        "packageDependencies": [\
+          ["leaflet-ant-path", "npm:1.3.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["leaflet.markercluster", [\
       ["npm:1.5.3", {\
         "packageLocation": "./.yarn/cache/leaflet.markercluster-npm-1.5.3-a17883ef0b-28dc441de7.zip/node_modules/leaflet.markercluster/",\
@@ -12375,6 +12386,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["react-leaflet-ant-path", [\
+      ["npm:1.1.0", {\
+        "packageLocation": "./.yarn/cache/react-leaflet-ant-path-npm-1.1.0-d601e9deec-c7b5a12617.zip/node_modules/react-leaflet-ant-path/",\
+        "packageDependencies": [\
+          ["react-leaflet-ant-path", "npm:1.1.0"],\
+          ["prop-types", "npm:15.8.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["react-leaflet-cluster", [\
       ["npm:2.1.0", {\
         "packageLocation": "./.yarn/cache/react-leaflet-cluster-npm-2.1.0-50c6aba72d-14e802fba6.zip/node_modules/react-leaflet-cluster/",\
@@ -13472,6 +13493,7 @@ const RAW_RUNTIME_STATE =
           ["husky", "npm:8.0.3"],\
           ["install", "npm:0.13.0"],\
           ["leaflet", "npm:1.9.4"],\
+          ["leaflet-ant-path", "npm:1.3.0"],\
           ["leaflet.markercluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.5.3"],\
           ["npm", "npm:10.5.0"],\
           ["pathfinding", "npm:0.4.18"],\
@@ -13487,6 +13509,7 @@ const RAW_RUNTIME_STATE =
           ["react-icons", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.0.1"],\
           ["react-lazyload", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.2.1"],\
           ["react-leaflet", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:4.2.1"],\
+          ["react-leaflet-ant-path", "npm:1.1.0"],\
           ["react-leaflet-cluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["react-leaflet-markercluster", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:3.0.0-rc1"],\
           ["react-router-dom", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:5.3.4"],\
