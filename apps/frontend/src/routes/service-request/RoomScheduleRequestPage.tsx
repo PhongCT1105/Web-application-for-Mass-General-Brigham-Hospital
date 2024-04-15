@@ -197,6 +197,10 @@ export const SheduleContent = () => {
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
+  const today: Date = new Date();
+  const yesterday: Date = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
+
   //handleDateChange
   const handleDateChange = (date: Date | undefined): void => {
     console.log(date);
@@ -515,7 +519,7 @@ export const SheduleContent = () => {
               selected={form.date}
               onSelect={handleDateChange}
               disabled={(date) =>
-                date < new Date() || date > new Date("2025-01-01")
+                date <= yesterday || date > new Date("2025-01-01")
               }
               initialFocus
             />
