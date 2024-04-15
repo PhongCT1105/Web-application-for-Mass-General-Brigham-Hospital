@@ -39,7 +39,7 @@ export default function StartPage() {
         className="border-t-4 border-blue-900 bg-gray-200 bg-gray-200 h-full flex flex-col justify-center items-center relative"
         // style={{background: '#009CA6'}}
       >
-        <a href="#bottom-map" onClick={scrollToBottom}>
+        <a href={"#bottom-map"} onClick={scrollToBottom}>
           <div className="text-center h-[25vh] w-[60vw] flex flex-col justify-center items-center">
             <p className="text-black text-[48px] font-black font-['League Spartan']">
               Feeling Lost? Our Map Can Help!
