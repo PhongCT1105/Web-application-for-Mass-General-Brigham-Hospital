@@ -4524,6 +4524,14 @@ const RAW_RUNTIME_STATE =
           ["undici-types", "npm:5.26.5"]\
         ],\
         "linkType": "HARD"\
+      }],\
+      ["npm:20.12.7", {\
+        "packageLocation": "./.yarn/cache/@types-node-npm-20.12.7-3bb3d3303d-b4a28a3b59.zip/node_modules/@types/node/",\
+        "packageDependencies": [\
+          ["@types/node", "npm:20.12.7"],\
+          ["undici-types", "npm:5.26.5"]\
+        ],\
+        "linkType": "HARD"\
       }]\
     ]],\
     ["@types/papaparse", [\
@@ -6578,6 +6586,7 @@ const RAW_RUNTIME_STATE =
           ["common", "workspace:packages/common"],\
           ["@faker-js/faker", "npm:8.4.1"],\
           ["@radix-ui/react-icons", "virtual:281b7ec5658d805f88196484313c874810ad4b28fdb3886a7f2b6292faec9bee3b9a92af4348cfaefb8b484dd7e409e815eac63879fbb0501eb0b5d3afa613d1#npm:1.3.0"],\
+          ["@types/node", "npm:20.12.7"],\
           ["eslint", "npm:8.56.0"],\
           ["eslint-config-custom", "workspace:configs/eslint-config-custom"],\
           ["prettier", "npm:3.2.4"],\

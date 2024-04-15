@@ -18,6 +18,7 @@ import "@/styles/mapBlock.modules.css";
 import axios from "axios";
 import { Graph } from "@/util/Graph.tsx";
 import { Node } from "../../util/Node.tsx";
+// import {MapEditorPage} from "@/routes/map-editor/mapEditorPage.tsx";
 //import { Edge } from "@/util/Edge.tsx";
 
 export interface HospitalData {
@@ -266,46 +267,48 @@ export const MapEditor: React.FC = () => {
   }
 
   return (
-    <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
-      <div
-        id="map-container"
-        style={{
-          flex: 2.5,
-          backgroundColor: "gray-300",
-          position: "relative",
-          zIndex: 0,
-        }}
-      >
+    <>
+      <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
         <div
+          id="map-container"
           style={{
-            position: "absolute",
-            bottom: 10,
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            justifyContent: "space-around",
-            width: "80%",
-            zIndex: 1000,
-            color: "black",
+            flex: 2.5,
+            backgroundColor: "gray-300",
+            position: "relative",
+            zIndex: 0,
           }}
         >
-          <button onClick={() => changeFloor("lowerLevel2")}>
-            Lower Level 2
-          </button>
-          <button onClick={() => changeFloor("lowerLevel1")}>
-            Lower Level 1
-          </button>
-          <button onClick={() => changeFloor("theFirstFloor")}>
-            First Floor
-          </button>
-          <button onClick={() => changeFloor("theSecondFloor")}>
-            Second Floor
-          </button>
-          <button onClick={() => changeFloor("theThirdFloor")}>
-            Third Floor
-          </button>
+          <div
+            style={{
+              position: "absolute",
+              bottom: 10,
+              left: "50%",
+              transform: "translateX(-50%)",
+              display: "flex",
+              justifyContent: "space-around",
+              width: "80%",
+              zIndex: 1000,
+              color: "black",
+            }}
+          >
+            <button onClick={() => changeFloor("lowerLevel2")}>
+              Lower Level 2
+            </button>
+            <button onClick={() => changeFloor("lowerLevel1")}>
+              Lower Level 1
+            </button>
+            <button onClick={() => changeFloor("theFirstFloor")}>
+              First Floor
+            </button>
+            <button onClick={() => changeFloor("theSecondFloor")}>
+              Second Floor
+            </button>
+            <button onClick={() => changeFloor("theThirdFloor")}>
+              Third Floor
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };

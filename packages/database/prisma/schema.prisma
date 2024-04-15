@@ -105,3 +105,23 @@ model internalTransportRequest {
   note         String
   status       String
 }
+
+model medicationInfo {
+  id                  Int                @id @default(autoincrement())
+  name                String
+  priority            String
+  status              String
+  price               Int
+  quantity            Int
+  medicationRequest   medicationRequest? @relation(fields: [medicationRequestId], references: [id])
+  medicationRequestId Int?
+}
+
+model medicationRequest {
+  id            Int              @id @default(autoincrement())
+  employee      String
+  location      String
+  patient       String
+  dateSubmitted String
+  medication    medicationInfo[]
+}

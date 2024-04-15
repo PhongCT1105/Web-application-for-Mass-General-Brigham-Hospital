@@ -1,9 +1,9 @@
 import React from "react";
 import { Header } from "@/components/blocks/header.tsx";
 import { cartItem } from "@/routes/service-request/flower-request-content.tsx";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-import { LogPageData } from "@/routes/request-log/log-page-data.tsx";
+import { FlowerLogPage } from "@/routes/request-log/flowerLogPage.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import {
   Tabs,
@@ -12,25 +12,9 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
 import { Badge, Biohazard, Calendar, FlowerIcon, PillIcon } from "lucide-react";
-import { Medication } from "common/src/interfaces/medicationReq.ts";
-import { pillData } from "common/src/testData.ts";
-import { DataTable } from "@/routes/service-request/medicine-request/medicationREQ-data-table.tsx";
-import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
-// import { MedicineContext } from "common/src/interfaces/medicationReq.ts";
-
-interface MedicineContextType {
-  data: Medication[];
-  setData: React.Dispatch<React.SetStateAction<Medication[]>>;
-}
-
-const MedicineContext = createContext<MedicineContextType>({
-  data: [],
-  // eslint-disable-next-line no-empty-function
-  setData: () => {}, // A dummy function
-});
-// eslint-disable-next-line react-refresh/only-export-components
-export const useMedicineData = () => useContext(MedicineContext);
-
+import { MedicationForm } from "common/src/interfaces/medicationReq.ts";
+import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
+import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
 export interface requestFormWID {
   reqID: number;
   cartItems: cartItem[];
@@ -70,8 +54,32 @@ export interface RequestFormWID {
 }
 
 export const RequestLogPage = () => {
-  const [cleanedData, setCleanedData] = useState<requestFormWID[]>([]);
-  const [data, setData] = useState<Medication[]>(pillData);
+  const [flowerLog, setFlowerLog] = useState<requestFormWID[]>([]);
+  const [medicineLog, setMedicineLog] = useState<MedicationForm[]>([]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/medicationReq");
+        const rawData = res.data;
+        const cleanedData: MedicationForm[] = rawData.map(
+          (item: MedicationForm) => ({
+            id: item.id,
+            medication: item.medication,
+            employee: item.employee,
+            location: item.location,
+            patient: item.patient,
+            dateSubmitted: item.dateSubmitted,
+          }),
+        );
+        setMedicineLog(cleanedData);
+        console.log("successfully got data from get request");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData().then(() => console.log(medicineLog));
+  }, [medicineLog]);
 
   useEffect(() => {
     async function fetchData() {
@@ -99,14 +107,14 @@ export const RequestLogPage = () => {
           }),
         );
         /* eslint-enable */
-        setCleanedData(cleanedData);
+        setFlowerLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(cleanedData));
-  }, [cleanedData]);
+    fetchData().then(() => console.log(flowerLog));
+  }, [flowerLog]);
 
   return (
     <div className={" scrollbar-hide"}>
@@ -152,16 +160,16 @@ export const RequestLogPage = () => {
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
-                        <LogPageData data={cleanedData} />
+                        <FlowerLogPage data={flowerLog} />
                       </TabsContent>
                       <TabsContent
-                        value="Medicine Request"
+                        value="Medication Request"
                         className=" flex-col border-none p-0 data-[state=active]:flex"
                       >
                         <div className="flex items-center justify-between">
                           <div className="space-y-1">
                             <h2 className="text-2xl font-semibold tracking-tight">
-                              Prayer Request
+                              Medication Request
                             </h2>
                             <p className="text-sm text-muted-foreground">
                               By Mina Boktor & Alexander Kraemling
@@ -169,6 +177,10 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
+                        <MedicineFormLogTable
+                          columns={columnsMedicationFormLog}
+                          data={medicineLog}
+                        />
                       </TabsContent>
                       <TabsContent
                         value={"Transportation Request"}
@@ -187,9 +199,6 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
-                        <MedicineContext.Provider value={{ data, setData }}>
-                          <DataTable columns={columns} />
-                        </MedicineContext.Provider>
                       </TabsContent>
                       <TabsContent
                         value={"Sanitation Request"}
