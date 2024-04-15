@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
-import L, { CRS, Icon, LatLngBoundsExpression, Map, Polyline } from "leaflet";
+import L, { CRS, Icon, LatLngBoundsExpression, Map } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
 import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
 import theFirstFloor from "@/assets/01_thefirstfloor.png";
 import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
-import RedDot from "@/assets/red_dot.png";
+import GrayDot from "@/assets/gray-dot.png";
+import GreenStar from "@/assets/start-marker.png";
+import RedStar from "@/assets/end-marker.png";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/locationSearchBar";
 import axios from "axios";
@@ -17,6 +19,24 @@ import {
   PathfindingStrategy,
 } from "@/util/PathfindingStrategy.tsx";
 import { Button } from "@/components/ui/button";
+
+import "@/components/blocks/SnakeAnim";
+
+declare module "leaflet" {
+  interface Polyline {
+    snakeIn: () => void;
+  }
+
+  interface LayerGroup {
+    snakeIn: () => void;
+  }
+
+  interface PolylineOptions {
+    snakingSpeed?: number;
+    snakeRepeat?: boolean;
+    snakeRepeatDelay?: number;
+  }
+}
 
 export interface HospitalData {
   nodeID: string;
@@ -29,7 +49,6 @@ export interface HospitalData {
 export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   // const [path, setPath] = useState<Polyline | null>(null);
-  const [paths, setPaths] = useState<Polyline[]>([]);
   const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<PathfindingStrategy>(new BFSPathfindingStrategy());
@@ -149,11 +168,7 @@ export const MapBlock: React.FC = () => {
     }
   }, [isDataLoaded, hospitalData]); // Dependency array
 
-  function addToPaths(newPath: Polyline) {
-    setPaths((prevPaths) => [...prevPaths, newPath]);
-  }
-
-  function drawPath(start: string, end: string, color: string) {
+  function drawPath(start: string, end: string) {
     const startHospital = hospitalData.find((h) => h.nodeID === start);
     const endHospital = hospitalData.find((h) => h.nodeID === end);
     if (!startHospital || !endHospital) {
@@ -170,7 +185,35 @@ export const MapBlock: React.FC = () => {
     const startCoords: [number, number] = [3400 - startLng, startLat];
     const endCoords: [number, number] = [3400 - endLng, endLat];
 
-    drawLine(startCoords, endCoords, color);
+    const map = mapRef.current;
+    if (!map) return;
+
+    const newPath = L.polyline([startCoords, endCoords], {
+      color: "blue",
+      weight: 5,
+      snakingSpeed: 100,
+      snakeRepeat: false,
+      snakeRepeatDelay: 100,
+    });
+    return newPath;
+  }
+
+  function placeStartEndMarkers(path: Node[]) {
+    const startHospital = hospitalData.find((h) => h.nodeID === path[0].nodeID);
+    const endHospital = hospitalData.find(
+      (h) => h.nodeID === path[path.length - 1].nodeID,
+    );
+
+    if (startHospital && endHospital) {
+      const [startLat, startLng] = startHospital.geocode
+        .split(",")
+        .map(parseFloat);
+      const startCoords: [number, number] = [3400 - startLng, startLat];
+      const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
+      const endCoords: [number, number] = [3400 - endLng, endLat];
+      addStartMarker(startCoords);
+      addEndMarker(endCoords);
+    }
   }
 
   function drawFullPath(
@@ -193,38 +236,91 @@ export const MapBlock: React.FC = () => {
       pathfindingStrategy.findPath(graph, startNode, endNode),
     );
 
-    // console.log(paths);
+    const map = mapRef.current;
+    if (!map) return;
+
+    const layerGroup = L.layerGroup();
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
-        drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID, "red");
+        const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
+
+      placeStartEndMarkers(paths[0]);
     }
 
     if (currentFloor === "L1" && paths[1].length > 1) {
       for (let i = 0; i < paths[1].length - 1; i++) {
-        drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID, "blue");
+        const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
+
+      placeStartEndMarkers(paths[1]);
     }
 
     if (currentFloor === "1" && paths[2].length > 1) {
       for (let i = 0; i < paths[2].length - 1; i++) {
-        drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID, "green");
+        const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
+
+      placeStartEndMarkers(paths[2]);
     }
 
     if (currentFloor === "2" && paths[3].length > 1) {
       for (let i = 0; i < paths[3].length - 1; i++) {
-        drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID, "purple");
+        const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
+
+      placeStartEndMarkers(paths[3]);
     }
 
     if (currentFloor === "3" && paths[4].length > 1) {
       for (let i = 0; i < paths[4].length - 1; i++) {
-        drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID, "orange");
+        const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
+        if (newPath) newPath.addTo(layerGroup);
       }
+      layerGroup.addTo(map).snakeIn();
+
+      placeStartEndMarkers(paths[4]);
     }
     console.log("done :D");
+  }
+
+  function addStartMarker(location: [number, number]) {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const customIcon = new Icon({
+      iconUrl: GreenStar,
+      iconSize: [25, 25],
+      iconAnchor: [12.5, 12.5],
+    });
+    const marker = L.marker(location, { icon: customIcon }).addTo(map);
+
+    // Add a click event handler to toggle popup visibility
+    marker.bindPopup("Start Location");
+  }
+
+  function addEndMarker(location: [number, number]) {
+    const map = mapRef.current;
+    if (!map) return;
+
+    const customIcon = new Icon({
+      iconUrl: RedStar,
+      iconSize: [25, 25],
+      iconAnchor: [12.5, 12.5],
+    });
+    const marker = L.marker(location, { icon: customIcon }).addTo(map);
+
+    // Add a click event handler to toggle popup visibility
+    marker.bindPopup("End Location");
   }
 
   function parsePath(nodes: Node[]): Node[][] {
@@ -254,32 +350,23 @@ export const MapBlock: React.FC = () => {
     return Object.values(pathsByFloor);
   }
 
-  function drawLine(
-    startCoordinates: [number, number],
-    endCoordinates: [number, number],
-    color: string,
-  ) {
+  function clearLines() {
     const map = mapRef.current;
     if (!map) return;
 
-    const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: color,
-      weight: 5,
-    }).addTo(map);
-    addToPaths(newPath); // Add the new path to the paths list
-  }
-
-  function clearLines() {
-    const map = mapRef.current;
-    if (!map || paths.length === 0) return;
-
-    paths.forEach((path) => path.removeFrom(map));
-    setPaths([]);
+    // Remove all polyline layers from the map
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Polyline) {
+        map.removeLayer(layer);
+      }
+    });
+    clearStartEndMarkers();
   }
 
   async function handleSearch(start: string, end: string) {
     // console.log(start);
     // console.log(end);
+    clearStartEndMarkers();
     setStartNodeID(start);
     setEndNodeID(end);
     drawFullPath(graph, start, end, currentFloor);
@@ -296,10 +383,27 @@ export const MapBlock: React.FC = () => {
     });
   }
 
+  function clearStartEndMarkers() {
+    const map = mapRef.current;
+    if (!map) return;
+
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker && layer.options.icon) {
+        const markerIconUrl = layer.options.icon.options.iconUrl;
+        if (
+          markerIconUrl === GreenStar || // Start marker icon URL
+          markerIconUrl === RedStar // End marker icon URL
+        ) {
+          map.removeLayer(layer);
+        }
+      }
+    });
+  }
+
   function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
     nodesOnFloor.forEach((node) => {
       const customIcon = new Icon({
-        iconUrl: RedDot,
+        iconUrl: GrayDot,
         iconSize: [12, 12],
         iconAnchor: [6, 6],
       });

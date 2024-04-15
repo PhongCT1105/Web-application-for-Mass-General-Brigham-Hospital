@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
-import { MedicineFormLogTable } from "@/routes/service-request/medicine-request/tempMedicineLog.tsx";
+import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 export const columnsMedicationFormLog: ColumnDef<MedicationForm>[] = [
   {
     accessorKey: "id",
