@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -23,6 +23,12 @@ import {
 } from "@/components/ui/table.tsx";
 
 import axios from "axios";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 
 type rPriority = "low" | "medium" | "high" | "emergency";
 
@@ -50,6 +56,7 @@ export const SecurityForm = () => {
   const [requestList, setRequestList] = useState<securityRequest[]>([]);
   const [curPriority, setCurPriority] = useState("low");
   const [curStatus, setCurStatus] = useState("unassigned");
+  const [locations, setLocations] = useState<string[]>([]);
 
   /**
    * Clear the request when it's submitted.
@@ -65,6 +72,49 @@ export const SecurityForm = () => {
     });
     setCurStatus("unassigned");
     setCurPriority("low");
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/mapreq/nodes");
+        const rawData = response.data;
+
+        const extractedLocations = rawData.map(
+          (item: {
+            nodeID: string;
+            xcoord: number;
+            ycoord: number;
+            floor: string;
+            building: string;
+            nodeType: string;
+            longName: string;
+            shortName: string;
+          }) => item.longName,
+        );
+        const filteredLocations = extractedLocations.filter(
+          (location: string) => {
+            return !location.startsWith("Hall");
+          },
+        );
+
+        setLocations(filteredLocations);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchData();
+  }, []);
+
+  const handleLocationChange = (selectedLocation: string) => {
+    setSecurityRequest((prevState) => ({
+      ...prevState,
+      location: selectedLocation,
+    }));
+    // setLocationsTo(selectedLocation);
   };
 
   /**
@@ -185,24 +235,42 @@ export const SecurityForm = () => {
                   Location to request for:
                 </h1>
                 {/*<Label htmlFor="location">Location to request for:</Label>*/}
-                <Input
-                  id="location"
-                  placeholder={"Location"}
-                  type="text"
-                  onChange={handleText}
-                  value={securityRequest.location}
-                  required
-                />
+                {/*<Input*/}
+                {/*  id="location"*/}
+                {/*  placeholder={"Location"}*/}
+                {/*  type="text"*/}
+                {/*  onChange={handleText}*/}
+                {/*  value={securityRequest.location}*/}
+                {/*  required*/}
+                {/*/>*/}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                      {securityRequest.location
+                        ? securityRequest.location
+                        : "Select Location"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className=" md:max-h-56 lg:max-h-70  overflow-y-auto">
+                    {locations.map((location, index) => (
+                      <DropdownMenuRadioItem
+                        key={index}
+                        value={location}
+                        onClick={() => handleLocationChange(location)}
+                      >
+                        {location}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
               {/* Threat Input Radio? Probably*/}
               <div className="grid gap-2 mt-6">
-                <h1 className="text-2xl font-bold ">
-                  Location to request for:
-                </h1>
+                <h1 className="text-2xl font-bold ">Situation:</h1>
                 {/*<Label htmlFor="situation">Describe the situation:</Label>*/}
                 <Input
                   id="situation"
-                  placeholder={"Description"}
+                  placeholder={"Describe the situation..."}
                   type="text"
                   onChange={handleText}
                   value={securityRequest.situation}

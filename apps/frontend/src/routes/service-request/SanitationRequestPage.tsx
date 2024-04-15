@@ -246,8 +246,8 @@ export function Sanitation() {
           <Card className="border-none">
             <CardContent>
               <div className="space-y-6">
-                <div className="w-1/4 ml-8">
-                  <h1 className="text-4xl font-bold my-2 mt-6 pb-2">Name</h1>
+                <div className="w-1/4">
+                  <h1 className="text-2xl font-bold ">Name</h1>
                   <Input
                     type="text"
                     id="name"
@@ -257,8 +257,8 @@ export function Sanitation() {
                   />
                 </div>
                 <div className="flex">
-                  <div className="w-1/3 ml-8 ">
-                    <h1 className="text-4xl font-bold my-2 pb-2">
+                  <div className="w-1/3  ">
+                    <h1 className="text-2xl font-bold my-2 pb-2">
                       Severity Level
                     </h1>
                     <RadioGroup defaultValue="comfortable">
@@ -269,7 +269,7 @@ export function Sanitation() {
                           value="Low"
                           checked={selectedSeverity === "Low"}
                         />
-                        <Label htmlFor="r1" className="text-xl">
+                        <Label htmlFor="r1" className=" ">
                           Low: Routine cleaning or maintenance.
                         </Label>
                       </div>
@@ -280,7 +280,7 @@ export function Sanitation() {
                           value="Medium"
                           checked={selectedSeverity === "Medium"}
                         />
-                        <Label htmlFor="r2" className="text-xl">
+                        <Label htmlFor="r1" className=" ">
                           Medium: Timely attention to prevent risks.
                         </Label>
                       </div>
@@ -291,7 +291,7 @@ export function Sanitation() {
                           value="High"
                           checked={selectedSeverity === "High"}
                         />
-                        <Label htmlFor="r3" className="text-xl">
+                        <Label htmlFor="r3" className=" ">
                           High: Urgent for safety and functionality.
                         </Label>
                       </div>
@@ -302,7 +302,7 @@ export function Sanitation() {
                           value="Emergency"
                           checked={selectedSeverity === "Emergency"}
                         />
-                        <Label htmlFor="r4" className="text-xl">
+                        <Label htmlFor="r4" className=" ">
                           Emergency: Immediate action to prevent harm.
                         </Label>
                       </div>
@@ -310,7 +310,7 @@ export function Sanitation() {
                   </div>
 
                   <div className="w-1/6 ml-12">
-                    <h1 className="text-4xl font-bold my-2 pb-2">
+                    <h1 className="text-2xl font-bold my-2 pb-2">
                       Type of Issue
                     </h1>
                     <RadioGroup defaultValue="comfortable">
@@ -321,7 +321,7 @@ export function Sanitation() {
                           value="Spill"
                           checked={selectedTypeOfIssue === "Spill"}
                         />
-                        <Label htmlFor="Spill" className="text-xl">
+                        <Label htmlFor="Spill" className=" ">
                           Spill
                         </Label>
                       </div>
@@ -332,7 +332,7 @@ export function Sanitation() {
                           value="Leak"
                           checked={selectedTypeOfIssue === "Leak"}
                         />
-                        <Label htmlFor="Leak" className="text-xl">
+                        <Label htmlFor="Leak" className=" ">
                           Leak
                         </Label>
                       </div>
@@ -343,7 +343,7 @@ export function Sanitation() {
                           value="BodilyFluid"
                           checked={selectedTypeOfIssue === "BodilyFluid"}
                         />
-                        <Label htmlFor="BodilyFluid" className="text-xl">
+                        <Label htmlFor="BodilyFluid" className=" ">
                           Bodily Fluid
                         </Label>
                       </div>
@@ -354,7 +354,7 @@ export function Sanitation() {
                           value="FoulOdor"
                           checked={selectedTypeOfIssue === "FoulOdor"}
                         />
-                        <Label htmlFor="FoulOdor" className="text-xl">
+                        <Label htmlFor="FoulOdor" className=" ">
                           Foul Odor
                         </Label>
                       </div>
@@ -365,7 +365,7 @@ export function Sanitation() {
                           value="Garbage"
                           checked={selectedTypeOfIssue === "Garbage"}
                         />
-                        <Label htmlFor="Garbage" className="text-xl">
+                        <Label htmlFor="Garbage" className=" ">
                           Garbage Accumulation
                         </Label>
                       </div>
@@ -376,7 +376,7 @@ export function Sanitation() {
                           value="BrokenEquipment"
                           checked={selectedTypeOfIssue === "BrokenEquipment"}
                         />
-                        <Label htmlFor="BrokenEquipment" className="text-xl">
+                        <Label htmlFor="BrokenEquipment" className=" ">
                           Broken Equipment
                         </Label>
                       </div>
@@ -387,15 +387,15 @@ export function Sanitation() {
                           value="Other"
                           checked={selectedTypeOfIssue === "Other"}
                         />
-                        <Label htmlFor="Other" className="text-xl">
+                        <Label htmlFor="Other" className=" ">
                           Other{" "}
                         </Label>
                       </div>
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/4 ml-12 pl-20">
-                    <h1 className="text-4xl font-bold my-2 pb-2">Status</h1>
+                  <div className="w-1/4 pl-20">
+                    <h1 className="text-2xl font-bold my-2 pb-2">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -404,7 +404,7 @@ export function Sanitation() {
                           value="Unassigned"
                           checked={selectedStatus === "Unassigned"}
                         />
-                        <Label htmlFor="r1" className="text-xl">
+                        <Label htmlFor="r1" className=" ">
                           Unassigned
                         </Label>
                       </div>
@@ -415,7 +415,7 @@ export function Sanitation() {
                           value="Assigned"
                           checked={selectedStatus === "Assigned"}
                         />
-                        <Label htmlFor="r2" className="text-xl">
+                        <Label htmlFor="r1" className="">
                           Assigned
                         </Label>
                       </div>
@@ -426,7 +426,7 @@ export function Sanitation() {
                           value="InProgress"
                           checked={selectedStatus === "InProgress"}
                         />
-                        <Label htmlFor="r3" className="text-xl">
+                        <Label htmlFor="r3" className="">
                           In Progress
                         </Label>
                       </div>
@@ -437,7 +437,7 @@ export function Sanitation() {
                           value="Closed"
                           checked={selectedStatus === "Closed"}
                         />
-                        <Label htmlFor="r4" className="text-xl">
+                        <Label htmlFor="r4" className="">
                           Closed
                         </Label>
                       </div>
@@ -445,10 +445,10 @@ export function Sanitation() {
                   </div>
 
                   <div className="w-1/4">
-                    <h1 className="text-4xl font-bold my-2 pb-2">Location</h1>
+                    <h1 className="text-2xl font-bold my-2 pb-2">Location</h1>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="text-xl">
+                        <Button variant="outline" className="">
                           {form.location ? form.location : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
@@ -466,7 +466,7 @@ export function Sanitation() {
                     </DropdownMenu>
                   </div>
                   <div className="w-1/8 mr-20">
-                    <h1 className="text-4xl font-bold my-2 whitespace-nowrap pb-2">
+                    <h1 className="text-2xl font-bold my-2 whitespace-nowrap pb-2">
                       Time of Issue
                     </h1>
                     <Input
@@ -480,8 +480,8 @@ export function Sanitation() {
                 </div>
 
                 <div className="flex">
-                  <div className="w-1/2 ml-8">
-                    <h1 className="text-4xl font-bold my-2 pb-2">
+                  <div className="w-1/2 ">
+                    <h1 className="text-2xl font-bold my-2 pb-2">
                       Description of Issue
                     </h1>
                     <Textarea
@@ -493,7 +493,7 @@ export function Sanitation() {
                   </div>
 
                   <div className="w-1/2 ml-8">
-                    <h1 className="text-4xl font-bold my-2 pb-2">
+                    <h1 className="text-2xl font-bold my-2 pb-2">
                       Additional Comments (optional)
                     </h1>
                     <Textarea

@@ -467,7 +467,7 @@ export const SheduleContent = () => {
             />
           </div>
 
-          <h2 className={"pt-10 ml-10"}>You picked {formattedDate}</h2>
+          <h2 className={"ml-10"}>You picked {formattedDate}</h2>
         </div>
       </div>
       <div>
