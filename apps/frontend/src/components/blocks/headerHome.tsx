@@ -27,9 +27,41 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ModeToggle } from "@/components/modeToggle.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 
 export function HeaderHome() {
-  const { loginWithRedirect, logout } = useAuth0();
+  const {
+    loginWithRedirect,
+    logout,
+    isAuthenticated,
+    isLoading,
+    getAccessTokenSilently,
+  } = useAuth0();
+
+  useEffect(() => {
+    const redirect = async () => {
+      try {
+        await getAccessTokenSilently();
+      } catch (error) {
+        await loginWithRedirect({
+          appState: {
+            returnTo: location.pathname,
+          },
+        });
+      }
+    };
+    if (!isLoading && isAuthenticated) {
+      redirect();
+    }
+  }, [getAccessTokenSilently, isAuthenticated, isLoading, loginWithRedirect]);
+
+  const handleLogin = () => {
+    loginWithRedirect({
+      appState: {
+        returnTo: location.pathname,
+      },
+    });
+  };
 
   const handleLogout = async () => {
     await logout({
@@ -62,21 +94,29 @@ export function HeaderHome() {
             </svg>
           </a>
           <div className={"flex w-full items-center justify-end gap-4 pr-4"}>
-            <a href="/home" className={"hover:text-yellow-500"}>
-              Home
-            </a>
-            <a href="/service-requests" className={"hover:text-yellow-500"}>
-              Service Requests
-            </a>
-            <a href="/csv-table" className={"hover:text-yellow-500"}>
-              CSV Table
-            </a>
-            <a href="/map-editor" className={"hover:text-yellow-500"}>
-              Map Editor
-            </a>
-            <a href="/about-us" className={"hover:text-yellow-500"}>
-              About Us
-            </a>
+            <>
+              <a href="/home" className={"hover:text-yellow-500"}>
+                Home
+              </a>
+            </>
+            {!isAuthenticated && (
+              <>
+                <a href="/service-requests" className={"hover:text-yellow-500"}>
+                  Service Requests
+                </a>
+                <a href="/csv-table" className={"hover:text-yellow-500"}>
+                  CSV Table
+                </a>
+                <a href="/map-editor" className={"hover:text-yellow-500"}>
+                  Map Editor
+                </a>
+              </>
+            )}
+            <>
+              <a href="/about-us" className={"hover:text-yellow-500"}>
+                About Us
+              </a>
+            </>
             <ModeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -123,11 +163,7 @@ export function HeaderHome() {
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                       <DropdownMenuSubContent>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            window.location.href = "/login";
-                          }}
-                        >
+                        <DropdownMenuItem onClick={handleLogin}>
                           <Key className="mr-2 h-4 w-4" />
                           <span>Admin</span>
                         </DropdownMenuItem>

@@ -17,7 +17,7 @@ import Kraemling from "@/assets/headshots/Kraemling.jpg";
 import Shettler from "@/assets/headshots/Shettler.jpg";
 import Owen from "@/assets/headshots/Owen.jpg";
 import WPI_Logo from "@/assets/WPI_Logo.png";
-import Wong from "@/assets/headshots/Wong.jpg";
+import Wong from "@/assets/headshots/Wong.png";
 
 // import wongAsters from "@/assets/wongSunFlower.png";
 // import wongSunflower from "@/assets/wongAsters.png";
