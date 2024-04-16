@@ -15,8 +15,10 @@ import { Badge, Biohazard, Calendar, FlowerIcon, PillIcon } from "lucide-react";
 import { MedicationForm } from "common/src/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
-import { TranportRequestTable } from "@/routes/request-log/transportPatientLogPage.tsx";
+// import { TranportRequestTable } from "@/routes/request-log/transportPatientLogPage.tsx";
 import { ScheduleForm } from "common/src/interfaces/roomScheduleReq.ts";
+import { TransportRequestColumns } from "@/routes/service-request/transportResquest/transportTable.tsx";
+import { DataTable } from "@/components/table/data-table";
 export interface requestFormWID {
   reqID: number;
   cartItems: cartItem[];
@@ -230,7 +232,10 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
-                        <TranportRequestTable data={tranportLog} />
+                        <DataTable
+                          data={tranportLog}
+                          columns={TransportRequestColumns}
+                        />
                       </TabsContent>
                       <TabsContent
                         value={"Sanitation Request"}
