@@ -248,7 +248,6 @@ const CSVTable: React.FC = () => {
     }
   }
 
-   
   const columns: TableColumn[] =
     jsonData && jsonData.length > 0
       ? Object.keys(jsonData[0]).map((header) => ({
