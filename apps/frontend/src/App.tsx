@@ -16,6 +16,7 @@ import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
 import { Navigation } from "@/components/Navigation.tsx";
 import { useNavigate } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
+import ProtectedPage from "@/routes/ProtectedPage.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -53,11 +54,11 @@ function App() {
     {
       path: "/service-requests",
       errorElement: <h1>ERROR</h1>,
-      element: <ServiceRequestPage />,
+      element: <ProtectedPage Page={ServiceRequestPage} />,
     },
     {
       path: "/csv-table",
-      element: <CSVTable />,
+      element: <ProtectedPage Page={CSVTable} />,
     },
     {
       path: "/sanitation",
