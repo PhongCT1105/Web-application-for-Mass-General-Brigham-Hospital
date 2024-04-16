@@ -20,21 +20,26 @@ import {
   TableRow,
 } from "@/components/ui/table.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
+import { Textarea } from "@/components/ui/textarea.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
-import { Textarea } from "@/components/ui/textarea.tsx";
-
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useToast } from "@/components/ui/use-toast.ts";
+import { toast } from "@/components/ui/use-toast.ts";
+
+type rStatus = "unassigned" | "assigned" | "inprogress" | "closed";
 
 type rPriority = "low" | "medium" | "high" | "emergency" | "";
-
-type rStatus = "unassigned" | "assigned" | "inprogress" | "closed" | "";
 
 interface securityRequest {
   ename: string;
@@ -57,11 +62,27 @@ export const SecurityForm = () => {
   const [requestList, setRequestList] = useState<securityRequest[]>([]);
   const [curPriority, setCurPriority] = useState("low");
   const [curStatus, setCurStatus] = useState("unassigned");
+  const [locations, setLocations] = useState<string[]>([]);
+  const [buttonState, setButtonState] = useState<buttonColor>("ghost");
 
-  const [locations, setLocationsTo] = useState<string[]>([]);
-  const { toast } = useToast();
+  type buttonColor = "ghost" | "default";
 
-  // Get locations from database
+  /**
+   * Clear the request when it's submitted.
+   */
+  const clearReq = () => {
+    setSecurityRequest({
+      ename: "",
+      location: "",
+      situation: "",
+      call: false,
+      status: "unassigned",
+      priority: "low",
+    });
+    setCurStatus("unassigned");
+    setCurPriority("low");
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -82,39 +103,35 @@ export const SecurityForm = () => {
         );
         const filteredLocations = extractedLocations.filter(
           (location: string) => {
-            return (
-              !location.includes("Hallway") && !location.startsWith("Hall")
-            );
+            return !location.startsWith("Hall");
           },
         );
-        // alphabetizing location list
-        filteredLocations.sort((a: string, b: string) => a.localeCompare(b));
-        // set locations to filtered alphabetized location list
-        setLocationsTo(filteredLocations);
+
+        setLocations(filteredLocations);
 
         console.log("Successfully fetched data from the API.");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
-
+    // Fetch data on component mount
     fetchData();
   }, []);
 
-  /**
-   * Clear the request when it's submitted.
-   */
-  const clearReq = () => {
-    setSecurityRequest({
-      ename: "",
-      location: "",
-      situation: "",
-      call: false,
-      status: "unassigned",
-      priority: "low",
-    });
-    setCurStatus("unassigned");
-    setCurPriority("low");
+  const checkEmpty = () => {
+    return (
+      securityRequest.ename === "" ||
+      securityRequest.location === "" ||
+      securityRequest.situation === ""
+    );
+  };
+
+  const handleLocation = (selectedLocation: string) => {
+    setSecurityRequest((prevState) => ({
+      ...prevState,
+      location: selectedLocation,
+    }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -144,6 +161,7 @@ export const SecurityForm = () => {
       status: status,
     }));
     setCurStatus(status);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -157,6 +175,7 @@ export const SecurityForm = () => {
       priority: priority,
     }));
     setCurPriority(priority);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -170,26 +189,16 @@ export const SecurityForm = () => {
   };
 
   /**
-   * Get information from the location dropdown
-   * @param location
-   */
-  const handleLocation = (location: string) => {
-    setSecurityRequest((prevState) => ({
-      ...prevState,
-      location: location,
-    }));
-  };
-
-  /**
    * Print the form to the console
    */
-  const submit = () => {
+  async function submit() {
+    console.log(securityRequest);
     if (
       securityRequest.ename === "" ||
       securityRequest.location === "" ||
-      securityRequest.situation === "" ||
-      securityRequest.priority === "" ||
-      securityRequest.status === ""
+      securityRequest.situation === ""
+      // securityRequest.status === "" ||
+      // securityRequest.priority === "" ||
     ) {
       toast({
         title: "Error",
@@ -197,13 +206,21 @@ export const SecurityForm = () => {
           "Missing Fields! Please ensure the form is completely filled out.",
       });
     } else {
+      const res = await axios.post("/api/securityReq", securityRequest, {
+        headers: {
+          "content-type": "Application/json",
+        },
+      });
+      if (res.status == 200) {
+        console.log("success");
+      }
       requestList.push(securityRequest);
       setRequestList([...requestList]);
       //console.log(securityRequest);
       console.log(requestList);
       clearReq();
     }
-  };
+  }
 
   return (
     <>
@@ -382,10 +399,29 @@ export const SecurityForm = () => {
             >
               Clear
             </Button>
-            <Button className="w-1/4" onClick={submit}>
-              {" "}
-              Submit Request{" "}
-            </Button>
+            <TooltipProvider>
+              {buttonState === "ghost" && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={buttonState}
+                      className="w-1/4 p-5 border"
+                      onClick={submit}
+                    >
+                      Submit
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Please fill out all fields</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+              {buttonState !== "ghost" && (
+                <Button variant={buttonState} className="p-5" onClick={submit}>
+                  Submit
+                </Button>
+              )}
+            </TooltipProvider>
           </CardFooter>
         </CardContent>
       </Card>
