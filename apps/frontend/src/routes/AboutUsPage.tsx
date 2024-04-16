@@ -14,7 +14,7 @@ import June from "@/assets/headshots/June.jpg";
 import Tracy from "@/assets/headshots/Tracy.jpg";
 import Sandi from "@/assets/headshots/Sandi.png";
 import Kraemling from "@/assets/headshots/Kraemling.jpg";
-import Shettler from "@/assets/headshots/Shettler.jpg";
+import Shettler from "@/assets/headshots/Shettler.png";
 import Owen from "@/assets/headshots/Owen.jpg";
 import WPI_Logo from "@/assets/WPI_Logo.png";
 import Wong from "@/assets/headshots/Wong.png";

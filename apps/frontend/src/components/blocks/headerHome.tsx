@@ -30,13 +30,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { useEffect } from "react";
 
 export function HeaderHome() {
-  const {
-    loginWithRedirect,
-    logout,
-    isAuthenticated,
-    isLoading,
-    getAccessTokenSilently,
-  } = useAuth0();
+  const { loginWithRedirect, logout } = useAuth0();
+  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
 
   useEffect(() => {
     const redirect = async () => {
@@ -51,7 +46,7 @@ export function HeaderHome() {
       }
     };
     if (!isLoading && isAuthenticated) {
-      redirect();
+      redirect().then();
     }
   }, [getAccessTokenSilently, isAuthenticated, isLoading, loginWithRedirect]);
 
@@ -75,7 +70,7 @@ export function HeaderHome() {
     <div className={"flex flex-col"}>
       <div className="flex gap-4 border-b-4 border-yellow-500 pl-4">
         <nav className="text-lg w-full font-medium flex items-center text-nowrap mt-2">
-          <a href="/login" className="flex text-lg font-semibold ">
+          <a href="/" className="flex text-lg font-semibold ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="600"
@@ -94,11 +89,13 @@ export function HeaderHome() {
             </svg>
           </a>
           <div className={"flex w-full items-center justify-end gap-4 pr-4"}>
-            <>
-              <a href="/home" className={"hover:text-yellow-500"}>
-                Home
-              </a>
-            </>
+            {isAuthenticated && (
+              <>
+                <a href="/home" className={"hover:text-yellow-500"}>
+                  Home
+                </a>
+              </>
+            )}
             {!isAuthenticated && (
               <>
                 <a href="/service-requests" className={"hover:text-yellow-500"}>
@@ -112,11 +109,13 @@ export function HeaderHome() {
                 </a>
               </>
             )}
-            <>
-              <a href="/about-us" className={"hover:text-yellow-500"}>
-                About Us
-              </a>
-            </>
+            {isAuthenticated && (
+              <>
+                <a href="/about-us" className={"hover:text-yellow-500"}>
+                  About Us
+                </a>
+              </>
+            )}
             <ModeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
