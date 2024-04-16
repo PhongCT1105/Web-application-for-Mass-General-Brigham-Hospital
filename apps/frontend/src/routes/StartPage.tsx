@@ -9,7 +9,7 @@ import {
   SecuritySlide,
   MedicationSlide,
 } from "@/components/blocks/CarouselServiceSlides.tsx";
-import { MapBlock } from "@/components/blocks/mapBlock.tsx";
+import { MapBlock } from "@/components/blocks/MapBlock.tsx";
 import { Footer } from "@/components/blocks/Footer.tsx";
 
 export default function StartPage() {
