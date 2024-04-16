@@ -16,6 +16,7 @@ import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 import axios from "axios";
+import { useGraphContext } from "@/context/nodeContext.tsx";
 
 export interface Edge {
   edgeID: string;
@@ -47,37 +48,39 @@ export const MapEditor: React.FC = () => {
     theThirdFloor: theThirdFloor,
   } as const;
 
-  const loadData = async () => {
-    const { data: edgeData } = await axios.get(`/api/mapreq/edges?`);
-    const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
-
-    const newHospitalData: HospitalData[] = [];
-    const edgeIDs: Edge[] = [];
-
-    for (let i = 0; i < nodeData.length; i++) {
-      newHospitalData.push({
-        nodeID: nodeData[i].nodeID,
-        name: nodeData[i].longName,
-        geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
-        floor: nodeData[i].floor,
-      });
-    }
-
-    console.log(edgeData.length);
-
-    for (let i = 0; i < edgeData.length; i++) {
-      edgeIDs.push({
-        edgeID: edgeData[i].edgeID,
-        start: edgeData[i].startNode,
-        end: edgeData[i].endNode,
-      });
-    }
-
-    setEdges(edgeIDs);
-    setHospitalData(newHospitalData);
-  };
+  const { nodes: nodeData } = useGraphContext();
 
   useEffect(() => {
+    const loadData = async () => {
+      const { data: edgeData } = await axios.get(`/api/mapreq/edges?`);
+      //const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
+
+      const newHospitalData: HospitalData[] = [];
+      const edgeIDs: Edge[] = [];
+
+      for (let i = 0; i < nodeData.length; i++) {
+        newHospitalData.push({
+          nodeID: nodeData[i].nodeID,
+          name: nodeData[i].longName,
+          geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
+          floor: nodeData[i].floor,
+        });
+      }
+
+      console.log(edgeData.length);
+
+      for (let i = 0; i < edgeData.length; i++) {
+        edgeIDs.push({
+          edgeID: edgeData[i].edgeID,
+          start: edgeData[i].startNode,
+          end: edgeData[i].endNode,
+        });
+      }
+
+      setEdges(edgeIDs);
+      setHospitalData(newHospitalData);
+    };
+
     console.log("useEffect is running");
     if (!isDataLoaded) {
       loadData().then(() => {
@@ -116,7 +119,7 @@ export const MapEditor: React.FC = () => {
 
       addMarkers(map!, newNodesOnCurrentFloor);
     }
-  }, [isDataLoaded, hospitalData, edges]); // Dependency array
+  }, [isDataLoaded, hospitalData, edges, nodeData]); // Dependency array
 
   function clearMarkers() {
     const map = mapRef.current;
