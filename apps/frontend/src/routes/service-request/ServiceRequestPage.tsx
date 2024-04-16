@@ -20,7 +20,7 @@ import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
 import { Medication } from "common/src/interfaces/medicationReq.ts";
 import { pillData } from "common/src/testData.ts";
 import React, { createContext, useContext, useState } from "react";
-import { SheduleContent } from "@/routes/service-request/RoomScheduleRequestPage.tsx";
+import { SheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
