@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
+import { useToast } from "@/components/ui/use-toast.ts";
 import React, { useState } from "react";
 import {
   Table,
@@ -20,6 +21,8 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
+
+import axios from "axios";
 
 type rPriority = "low" | "medium" | "high" | "emergency";
 
@@ -35,6 +38,7 @@ interface securityRequest {
 }
 
 export const SecurityForm = () => {
+  const { toast } = useToast();
   const [securityRequest, setSecurityRequest] = useState<securityRequest>({
     ename: "",
     location: "",
@@ -118,13 +122,36 @@ export const SecurityForm = () => {
   /**
    * Print the form to the console
    */
-  const submit = () => {
-    requestList.push(securityRequest);
-    setRequestList([...requestList]);
-    //console.log(securityRequest);
-    console.log(requestList);
-    clearReq();
-  };
+  async function submit() {
+    console.log(securityRequest);
+    if (
+      securityRequest.ename === "" ||
+      securityRequest.location === "" ||
+      securityRequest.situation === ""
+      // securityRequest.status === "" ||
+      // securityRequest.priority === "" ||
+    ) {
+      toast({
+        title: "Error",
+        description:
+          "Missing Fields! Please ensure the form is completely filled out.",
+      });
+    } else {
+      const res = await axios.post("/api/securityReq", securityRequest, {
+        headers: {
+          "content-type": "Application/json",
+        },
+      });
+      if (res.status == 200) {
+        console.log("success");
+      }
+      requestList.push(securityRequest);
+      setRequestList([...requestList]);
+      //console.log(securityRequest);
+      console.log(requestList);
+      clearReq();
+    }
+  }
 
   return (
     <>
