@@ -1,14 +1,9 @@
-import { Graph } from "./Graph.tsx";
-import { Node } from "@/util/Node.tsx";
-//import { Node } from "./Node.tsx";
+import { Graph } from "./Graph.ts";
+import { Node } from "./Node.ts";
 
 export class aStar {
   // run will perform all the logic of the A* implementation
   static run(graph: Graph, startNodeID: string, endNodeID: string) {
-    console.log(graph);
-    console.log(startNodeID);
-    console.log(endNodeID);
-
     // translating nodes
     const startNode = graph.nodes.get(startNodeID)!;
     const endNode = graph.nodes.get(endNodeID)!;
@@ -35,25 +30,19 @@ export class aStar {
         fCost.get(node)! < fCost.get(minNode)! ? node : minNode,
       );
 
-      console.log(curr);
-
       if (curr === endNode) {
         aStarFound = true;
       }
 
-      console.log(open);
       open.splice(open.indexOf(curr), 1);
-      console.log(open);
 
       for (const neighNode of curr.neighbors) {
         const newCost = gCost.get(curr)! + this.calcDist(curr, neighNode);
-        console.log(newCost);
 
         if (newCost < gCost.get(neighNode)! ?? Infinity) {
           gCost.set(neighNode, newCost);
           fCost.set(neighNode, newCost + this.calcDist(neighNode, endNode));
           cameFrom.set(neighNode.nodeID, curr.nodeID);
-          console.log("added node");
           open.push(neighNode);
         }
       }

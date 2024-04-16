@@ -2,7 +2,7 @@
  * Class that will handle logic for printing out paths discovered by path finding
  * algorithms. This class may be removed if not needed in future iterations.
  */
-import { Node } from "./Node.tsx";
+import { Node } from "./Node.ts";
 
 export class pathGenerator {
   nodePath: Node[];

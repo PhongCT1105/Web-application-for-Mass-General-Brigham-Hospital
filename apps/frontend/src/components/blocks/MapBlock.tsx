@@ -8,16 +8,12 @@ import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import GrayDot from "@/assets/gray-dot.png";
 import GreenStar from "@/assets/start-marker.png";
+import GreenStar2 from "@/assets/start-marker2.png";
 import RedStar from "@/assets/end-marker.png";
+import RedStar2 from "@/assets/end-marker2.png";
 import "@/styles/mapBlock.modules.css";
-import { SearchBar } from "@/components/blocks/locationSearchBar";
+import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
-import { Graph } from "@/util/Graph.tsx";
-import { Node } from "../../util/Node.tsx";
-import {
-  BFSPathfindingStrategy,
-  PathfindingStrategy,
-} from "@/util/PathfindingStrategy.tsx";
 import { Button } from "@/components/ui/button";
 
 import "@/components/blocks/SnakeAnim";
@@ -45,30 +41,38 @@ export interface HospitalData {
   floor: string;
 }
 
+export interface Node {
+  nodeID: string;
+  xcoord: number;
+  ycoord: number;
+  floor: string;
+  building: string;
+  nodeType: string;
+  longName: string;
+  shortName: string;
+}
+
 // Define the map component
 export const MapBlock: React.FC = () => {
-  const mapRef = useRef<Map | null>(null);
-  // const [path, setPath] = useState<Polyline | null>(null);
-  const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
-  const [pathfindingStrategy, setPathfindingStrategy] =
-    useState<PathfindingStrategy>(new BFSPathfindingStrategy());
-  const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
-
-  const changePathfindingStrategy = (strategy: PathfindingStrategy) => {
-    setPathfindingStrategy(strategy);
+  const changePathfindingStrategy = (strat: string) => {
+    setPathfindingStrategy(strat);
   };
 
   function displayNodesOnFloor() {
     console.log("Nodes on current floor:", nodesOnFloor);
   }
 
-  const [graph, setGraph] = useState<Graph>(new Graph());
+  const mapRef = useRef<Map | null>(null);
+  // const [path, setPath] = useState<Polyline | null>(null);
+  const [pathfindingStrategy, setPathfindingStrategy] =
+    useState<string>("AStar");
+  const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
   const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-  const [hospitalGraph, setHospitalGraph] = useState<Graph>();
-  const [startNodeID, setStartNodeID] = useState("");
-  const [endNodeID, setEndNodeID] = useState("");
+  const [searchPath, setSearchPath] = useState<Node[]>([]);
+  const [startNodeName, setStartNodeName] = useState("");
+  const [endNodeName, setEndNodeName] = useState("");
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -79,14 +83,10 @@ export const MapBlock: React.FC = () => {
   } as const;
 
   const loadData = async () => {
-    const { data: edgeData } = await axios.get(`/api/mapreq/edges`);
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
-
-    const stringData: string[] = [];
 
     const newHospitalData: HospitalData[] = [];
 
-    const newGraph: Graph = new Graph();
     for (let i = 0; i < nodeData.length; i++) {
       newHospitalData.push({
         nodeID: nodeData[i].nodeID,
@@ -94,31 +94,8 @@ export const MapBlock: React.FC = () => {
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
         floor: nodeData[i].floor,
       });
-      stringData.push(nodeData[i].longName);
-
-      newGraph.addNode(
-        new Node(
-          nodeData[i].nodeID,
-          parseInt(nodeData[i].xcoord),
-          parseInt(nodeData[i].ycoord),
-          nodeData[i].floor,
-          nodeData[i].building,
-          nodeData[i].nodeType,
-          nodeData[i].longName,
-          nodeData[i].shortName,
-          new Set<Node>(),
-        ),
-      );
     }
-
-    for (let i = 0; i < edgeData.length; i++) {
-      newGraph.addNeighbors(edgeData[i].startNode, edgeData[i].endNode);
-      newGraph.addEdge(edgeData[i].startNode, edgeData[i].endNode);
-    }
-    setHospitalDataString(stringData);
     setHospitalData(newHospitalData);
-    setGraph(newGraph);
-    setHospitalGraph(newGraph);
   };
 
   useEffect(() => {
@@ -216,30 +193,16 @@ export const MapBlock: React.FC = () => {
     }
   }
 
-  function drawFullPath(
-    graph: Graph,
-    start: string,
-    end: string,
-    currentFloor: string,
-  ) {
-    const startNode = graph.getNodeID(start);
-    const endNode = graph.getNodeID(end);
+  function drawFullPath(nodeArray: Node[], currentFloor: string) {
     clearLines();
     setCurrentFloor(currentFloor);
-
-    if (!startNode || !endNode) {
-      console.error("Start or end node not found in the graph.");
-      return;
-    }
     console.log("A path should be created now");
-    const paths: Node[][] = parsePath(
-      pathfindingStrategy.findPath(graph, startNode, endNode),
-    );
 
     const map = mapRef.current;
     if (!map) return;
 
     const layerGroup = L.layerGroup();
+    const paths: Node[][] = parsePath(nodeArray);
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
@@ -346,7 +309,7 @@ export const MapBlock: React.FC = () => {
       pathsByFloor[floorToIndex].push(node);
     });
 
-    // console.log(Object.values(pathsByFloor));
+    console.log(pathsByFloor);
     return Object.values(pathsByFloor);
   }
 
@@ -364,12 +327,41 @@ export const MapBlock: React.FC = () => {
   }
 
   async function handleSearch(start: string, end: string) {
-    // console.log(start);
-    // console.log(end);
     clearStartEndMarkers();
-    setStartNodeID(start);
-    setEndNodeID(end);
-    drawFullPath(graph, start, end, currentFloor);
+    if (start) setStartNodeName(start);
+    if (end) setEndNodeName(end);
+    const test = {
+      strategy: pathfindingStrategy,
+      start: startNodeName,
+      end: endNodeName,
+    };
+    console.log(test);
+
+    const { data: response } = await axios.post("/api/search", test, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    // Handle response, update state, etc.
+    console.log(response);
+
+    const nodeArray: Node[] = [];
+
+    // convert to Node[]
+    for (let i = 0; i < response.length; i++) {
+      nodeArray.push({
+        nodeID: response[i].nodeID,
+        xcoord: response[i].xcoord,
+        ycoord: response[i].ycoord,
+        floor: response[i].floor,
+        building: response[i].building,
+        nodeType: response[i].nodeType,
+        longName: response[i].longName,
+        shortName: response[i].shortName,
+      });
+    }
+    setSearchPath(nodeArray);
+    drawFullPath(nodeArray, currentFloor);
   }
 
   function clearMarkers() {
@@ -402,27 +394,72 @@ export const MapBlock: React.FC = () => {
 
   function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
     nodesOnFloor.forEach((node) => {
-      const customIcon = new Icon({
-        iconUrl: GrayDot,
-        iconSize: [12, 12],
-        iconAnchor: [6, 6],
-      });
+      const icons = [GrayDot, GreenStar2, RedStar2];
+      let iconIndex = 0;
+
       const [lat, lng] = node.geocode.split(",").map(parseFloat);
       const nLat = 3400 - lng;
-      const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
 
-      // Add a click event handler to toggle popup visibility
+      // Create instances of Icon for each icon URL
+      const iconInstances = icons.map(
+        (url) =>
+          new Icon({
+            iconUrl: url,
+            iconSize: [15, 15],
+            iconAnchor: [7.5, 7.5],
+          }),
+      );
+
+      let clickTimer: ReturnType<typeof setTimeout>; // Explicit type annotation
+      const marker = L.marker([nLat, lat], {
+        icon: iconInstances[iconIndex],
+      }).addTo(map);
+
+      // Add a click event handler to toggle popup visibility and cycle through icons
       const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
       marker.bindPopup(popupContent);
 
-      marker.on("click", function (this: L.Marker) {
-        // Specify the type of 'this' as L.Marker
-        if (!this.isPopupOpen()) {
-          // Check if the popup is not already open
-          this.openPopup(); // Open the popup when the marker is clicked
-        }
+      marker.on("click", function () {
+        clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => {
+          console.log("Setting the start node name to " + node.name);
+          setStartNodeName(node.name);
+          iconIndex = 1; // Set icon to green star for start node
+          marker.setIcon(iconInstances[iconIndex]);
+        }, 300); // Adjust this duration as needed
+      });
+
+      marker.on("dblclick", function (e) {
+        clearTimeout(clickTimer);
+        console.log("Setting the end node name to " + node.name);
+        setEndNodeName(node.name);
+        iconIndex = 2; // Set icon to red star for end nod
+        marker.setIcon(iconInstances[iconIndex]);
+        e.originalEvent.preventDefault(); // Prevent default double-click behavior
       });
     });
+    // nodesOnFloor.forEach((node) => {
+    //   const customIcon = new Icon({
+    //     iconUrl: GrayDot,
+    //     iconSize: [12, 12],
+    //     iconAnchor: [6, 6],
+    //   });
+    //   const [lat, lng] = node.geocode.split(",").map(parseFloat);
+    //   const nLat = 3400 - lng;
+    //   const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
+    //
+    //   // Add a click event handler to toggle popup visibility
+    //   const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+    //   marker.bindPopup(popupContent);
+    //
+    //   marker.on("click", function (this: L.Marker) {
+    //     // Specify the type of 'this' as L.Marker
+    //     if (!this.isPopupOpen()) {
+    //       // Check if the popup is not already open
+    //       this.openPopup(); // Open the popup when the marker is clicked
+    //     }
+    //   });
+    // });
   }
 
   function changeFloor(floorName: string) {
@@ -464,9 +501,6 @@ export const MapBlock: React.FC = () => {
       L.imageOverlay(initialFloorImage, bounds).addTo(map);
       map.setMaxBounds(bounds);
 
-      // console.log(hospitalData);
-      console.log(hospitalGraph);
-
       // Draw new markers for the selected floor after adding the image overlay
       const newNodesOnCurrentFloor = hospitalData.filter(
         (node) => node.floor === convertedFloorName,
@@ -479,7 +513,7 @@ export const MapBlock: React.FC = () => {
       // Moved the drawing of lines after updating the current floor
       clearLines();
       displayNodesOnFloor();
-      drawFullPath(graph, startNodeID, endNodeID, convertedFloorName);
+      drawFullPath(searchPath, convertedFloorName);
     }
   }
 
@@ -487,18 +521,14 @@ export const MapBlock: React.FC = () => {
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div style={{ flex: 1, padding: "10px" }}>
         <SearchBar
-          locations={Array.from(
-            new Set(
-              hospitalDataString
-                .sort((a, b) => a.localeCompare(b))
-                .filter((str) => str.indexOf("Hall") === -1),
-            ),
-          )}
+          locations={hospitalData
+            .map((hospitalData) => hospitalData.name)
+            .sort((a, b) => a.localeCompare(b))
+            .filter((longName) => longName.indexOf("Hall") === -1)}
           onSearch={handleSearch}
           onClear={clearLines}
           changePathfindingStrategy={changePathfindingStrategy}
           currentFloor={currentFloor}
-          //nodesOnFloor={nodesOnFloor}
         />
       </div>
       <div

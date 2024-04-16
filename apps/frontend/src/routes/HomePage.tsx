@@ -1,6 +1,6 @@
 import React from "react";
 import "leaflet/dist/leaflet.css";
-import { MapBlock } from "@/components/blocks/mapBlock.tsx";
+import { MapBlock } from "@/components/blocks/MapBlock.tsx";
 import { Header } from "@/components/blocks/header.tsx";
 
 // Define the map component
