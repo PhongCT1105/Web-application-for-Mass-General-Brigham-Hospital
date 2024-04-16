@@ -16,14 +16,6 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import axios from "axios";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table.tsx";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -551,41 +543,6 @@ export function Sanitation() {
             </CardFooter>
           </Card>
         </div>
-      </div>
-      <div>
-        <Label className="text-3xl font-bold ml-10">Submitted Forms:</Label>
-        <Card className={"mx-10 mb-5 mt-5"}>
-          <Table>
-            <TableHeader>
-              <TableRow className={""}>
-                <TableHead className="">Name</TableHead>
-                <TableHead className="">Severity</TableHead>
-                <TableHead className="">Issue</TableHead>
-                <TableHead className="">Status</TableHead>
-                <TableHead className="">Location</TableHead>
-                <TableHead className="">Time</TableHead>
-                <TableHead className="">Description</TableHead>
-                <TableHead className="">Comments</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {submittedForms.map((form) => {
-                return (
-                  <TableRow>
-                    <TableCell>{form.name}</TableCell>
-                    <TableCell>{form.severity}</TableCell>
-                    <TableCell>{form.typeOfIssue}</TableCell>
-                    <TableCell>{form.status}</TableCell>
-                    <TableCell>{form.location}</TableCell>
-                    <TableCell>{form.time}</TableCell>
-                    <TableCell>{form.description}</TableCell>
-                    <TableCell>{form.comments}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Card>
       </div>
       <h2 className="mt-8 text-small ml-4">Alex Shettler and Tracy Yang</h2>
     </>

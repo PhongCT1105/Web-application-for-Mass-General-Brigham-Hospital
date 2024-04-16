@@ -1,13 +1,12 @@
 import { z } from "zod";
-export const SecurityForm = z.object({
-  id: z.number(),
-  employee: z.string(),
+export const _SecurityForm = z.object({
+  reqID: z.number(),
+  ename: z.string(),
   location: z.string(),
   call: z.boolean(),
   priority: z.string(),
   status: z.string(),
-  description: z.string(),
-  dateSubmitted: z.date(),
+  situation: z.string(),
 });
 
-export type SecurityForm = z.infer<typeof SecurityForm>;
+export type SecurityForm = z.infer<typeof _SecurityForm>;
