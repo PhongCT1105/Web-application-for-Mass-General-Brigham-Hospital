@@ -14,7 +14,10 @@ import {
 import { Badge, Biohazard, Calendar, FlowerIcon, PillIcon } from "lucide-react";
 import { MedicationForm } from "common/src/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
+import { SecurityFormLogTable } from "@/routes/request-log/securityLogPage.tsx";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
+import { columnsSecurityFormLog } from "@/routes/service-request/securityColumns.tsx";
+import { SecurityForm } from "common/src/interfaces/securityReq.ts";
 import { columnsSanitationFormLog } from "@/routes/service-request/SanitationColumns.tsx";
 import { SanitationForm } from "common/src/interfaces/sanitationReq.ts";
 import { ScheduleForm } from "common/src/interfaces/roomScheduleReq.ts";
@@ -58,9 +61,20 @@ export interface RequestFormWID {
   total: number;
 }
 
+interface securityRequest {
+  reqID: number;
+  ename: string;
+  location: string;
+  situation: string;
+  call: boolean;
+  status: string;
+  priority: string;
+}
+
 export const RequestLogPage = () => {
   const [flowerLog, setFlowerLog] = useState<requestFormWID[]>([]);
   const [medicineLog, setMedicineLog] = useState<MedicationForm[]>([]);
+  const [securityLog, setSecurityLog] = useState<SecurityForm[]>([]);
   const [tranportLog, setTransportLog] = useState<ScheduleForm[]>([]);
   const [sanitationLog, setSanitationLog] = useState<SanitationForm[]>([]);
 
@@ -122,6 +136,33 @@ export const RequestLogPage = () => {
     }
     fetchData().then(() => console.log(flowerLog));
   }, [flowerLog]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/securityReq");
+        const rawData = res.data;
+
+        const cleanedData: securityRequest[] = rawData.map(
+          (item: securityRequest) => ({
+            reqID: item.reqID,
+            ename: item.ename,
+            location: item.location,
+            situation: item.situation,
+            call: item.call.toString(),
+            status: item.status,
+            priority: item.priority,
+          }),
+        );
+
+        setSecurityLog(cleanedData);
+        console.log("successfully got data from get request");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData().then(() => console.log(securityLog));
+  }, [securityLog]);
 
   useEffect(() => {
     async function fetchData() {
@@ -305,6 +346,10 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
+                        <SecurityFormLogTable
+                          columns={columnsSecurityFormLog}
+                          data={securityLog}
+                        />
                       </TabsContent>
                     </Tabs>
                   </div>

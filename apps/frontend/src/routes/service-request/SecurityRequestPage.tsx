@@ -11,14 +11,8 @@ import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table.tsx";
+import { useToast } from "@/components/ui/use-toast.ts";
+
 import { Separator } from "@/components/ui/separator.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import {
@@ -35,7 +29,6 @@ import {
 } from "@/components/ui/tooltip.tsx";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { toast } from "@/components/ui/use-toast.ts";
 
 type rStatus = "unassigned" | "assigned" | "inprogress" | "closed";
 
@@ -51,6 +44,7 @@ interface securityRequest {
 }
 
 export const SecurityForm = () => {
+  const { toast } = useToast();
   const [securityRequest, setSecurityRequest] = useState<securityRequest>({
     ename: "",
     location: "",
@@ -197,8 +191,6 @@ export const SecurityForm = () => {
       securityRequest.ename === "" ||
       securityRequest.location === "" ||
       securityRequest.situation === ""
-      // securityRequest.status === "" ||
-      // securityRequest.priority === "" ||
     ) {
       toast({
         title: "Error",
@@ -428,34 +420,6 @@ export const SecurityForm = () => {
             </TooltipProvider>
           </CardFooter>
         </CardContent>
-      </Card>
-      <Card className={"mx-10 mb-5 mt-[120px]"}>
-        <Table>
-          <TableHeader>
-            <TableRow className={""}>
-              <TableHead className="">Name</TableHead>
-              <TableHead className="">Location</TableHead>
-              <TableHead className="">Situation</TableHead>
-              <TableHead className="">Call 911?</TableHead>
-              <TableHead className="">Assignment Status</TableHead>
-              <TableHead className="">Priority</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {requestList.map((request) => {
-              return (
-                <TableRow>
-                  <TableCell>{request.ename}</TableCell>
-                  <TableCell>{request.location}</TableCell>
-                  <TableCell>{request.situation}</TableCell>
-                  <TableCell>{request.call.toString()}</TableCell>
-                  <TableCell>{request.status}</TableCell>
-                  <TableCell>{request.priority}</TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
       </Card>
     </>
   );
