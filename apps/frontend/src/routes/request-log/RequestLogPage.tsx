@@ -126,7 +126,7 @@ export const RequestLogPage = () => {
         const rawData = res.data;
         const cleanedData: ScheduleForm[] = rawData.map(
           (item: ScheduleForm) => ({
-            id: item.id,
+            reqID: item.reqID,
             name: item.name,
             locationFrom: item.locationFrom,
             locationTo: item.locationTo,
