@@ -2,8 +2,8 @@
  * The Graph class uses the node and edge CSV files to generate a Graph object.
  */
 
-import { Node } from "./Node.tsx";
-import { Edge } from "./Edge.tsx";
+import { Node } from "./Node.ts";
+import { Edge } from "./Edge.ts";
 //import * as fs from "fs";
 
 export class Graph {

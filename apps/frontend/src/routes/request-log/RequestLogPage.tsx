@@ -18,6 +18,11 @@ import { SecurityFormLogTable } from "@/routes/request-log/securityLogPage.tsx";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
 import { columnsSecurityFormLog } from "@/routes/service-request/securityColumns.tsx";
 import { SecurityForm } from "common/src/interfaces/securityReq.ts";
+import { columnsSanitationFormLog } from "@/routes/service-request/SanitationColumns.tsx";
+import { SanitationForm } from "common/src/interfaces/sanitationReq.ts";
+import { ScheduleForm } from "common/src/interfaces/roomScheduleReq.ts";
+import { TransportRequestColumns } from "@/routes/service-request/transportResquest/transportTable.tsx";
+import { DataTable } from "@/components/table/data-table.tsx";
 export interface requestFormWID {
   reqID: number;
   cartItems: cartItem[];
@@ -70,6 +75,8 @@ export const RequestLogPage = () => {
   const [flowerLog, setFlowerLog] = useState<requestFormWID[]>([]);
   const [medicineLog, setMedicineLog] = useState<MedicationForm[]>([]);
   const [securityLog, setSecurityLog] = useState<SecurityForm[]>([]);
+  const [tranportLog, setTransportLog] = useState<ScheduleForm[]>([]);
+  const [sanitationLog, setSanitationLog] = useState<SanitationForm[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -157,6 +164,61 @@ export const RequestLogPage = () => {
     fetchData().then(() => console.log(securityLog));
   }, [securityLog]);
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/sanitationReq");
+        const rawData = res.data;
+        const cleanedData: SanitationForm[] = rawData.map(
+          (item: SanitationForm) => ({
+            reqId: item.reqId,
+            name: item.name,
+            location: item.location,
+            time: item.time,
+            typeOfIssue: item.typeOfIssue,
+            severity: item.severity,
+            status: item.status,
+            description: item.description,
+            comments: item.comments,
+          }),
+        );
+        setSanitationLog(cleanedData);
+        console.log("successfully got data from get request");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData().then(() => console.log(sanitationLog));
+  }, [sanitationLog]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/transport");
+        const rawData = res.data;
+        const cleanedData: ScheduleForm[] = rawData.map(
+          (item: ScheduleForm) => ({
+            reqID: item.reqID,
+            name: item.name,
+            locationFrom: item.locationFrom,
+            locationTo: item.locationTo,
+            reason: item.reason,
+            time: item.time,
+            priority: item.priority,
+            status: item.status,
+            note: item.note,
+            date: item.date,
+          }),
+        );
+        setTransportLog(cleanedData);
+        console.log("successfully got data from get request");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData().then(() => console.log(tranportLog));
+  }, [tranportLog]);
+
   return (
     <div className={" scrollbar-hide"}>
       <Header />
@@ -182,7 +244,7 @@ export const RequestLogPage = () => {
                             <PillIcon className="mr-2 h-4 w-4" />
                             Medication Request
                           </TabsTrigger>
-                          <TabsTrigger value="Patient Transport Request">
+                          <TabsTrigger value="Transportation Request">
                             <Calendar className="mr-2 h-4 w-4" />
                             Patient Transport Request
                           </TabsTrigger>
@@ -240,6 +302,10 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
+                        <DataTable
+                          data={tranportLog}
+                          columns={TransportRequestColumns}
+                        />
                       </TabsContent>
                       <TabsContent
                         value={"Sanitation Request"}
@@ -258,6 +324,10 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
+                        <DataTable
+                          columns={columnsSanitationFormLog}
+                          data={sanitationLog}
+                        />
                       </TabsContent>
                       <TabsContent
                         value={"Security Request"}

@@ -21,26 +21,21 @@ export function DataTableToolbar<TData>({
       <div className="flex flex-1 items-center space-x-2">
         <Input
           placeholder="Filter Items..."
-          value={(table.getColumn("reqID")?.getFilterValue() as string) ?? ""}
+          value={
+            (table.getColumn("longName")?.getFilterValue() as string) ?? ""
+          }
           onChange={(event) =>
-            table.getColumn("reqID")?.setFilterValue(event.target.value)
+            table.getColumn("longName")?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />
-        {table.getColumn("status") && (
+        {table.getColumn("id") && (
           <DataTableFacetedFilter
-            column={table.getColumn("status")}
-            title="Status"
+            column={table.getColumn("id")}
+            title="id"
             options={statuses}
           />
         )}
-        {/*  {table.getColumn("label") && (*/}
-        {/*  <DataTableFacetedFilter*/}
-        {/*    column={table.getColumn("label")}*/}
-        {/*    title="Label"*/}
-        {/*    options={labels}*/}
-        {/*  />*/}
-        {/*)}*/}
         {table.getColumn("priority") && (
           <DataTableFacetedFilter
             column={table.getColumn("priority")}

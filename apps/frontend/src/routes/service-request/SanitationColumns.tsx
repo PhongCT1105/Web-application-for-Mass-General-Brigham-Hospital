@@ -1,32 +1,54 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
-import { SecurityForm } from "common/src/interfaces/securityReq.ts";
-
+import { SanitationForm } from "common/src/interfaces/sanitationReq.ts";
+// import { Button } from "@/components/ui/button.tsx";
+// import { DotsHorizontalIcon } from "@radix-ui/react-icons";
+// import {
+//     Dialog,
+//     DialogContent,
+//     DialogHeader,
+//     DialogTitle,
+//     DialogTrigger,
+// } from "@/components/ui/dialog.tsx";
+// import { priorities, statuses } from "common/src/dataTypes/labels.ts";
 //import {SecurityFormLogTable} from "@/routes/request-log/securityLogPage.tsx";
-export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
+export const columnsSanitationFormLog: ColumnDef<SanitationForm>[] = [
   {
-    accessorKey: "reqID",
+    accessorKey: "reqId",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-normal">#{row.getValue("reqID")}</div>
+      <div className="w-[80px] font-normal">#{row.getValue("reqId")}</div>
     ),
-    enableSorting: false,
-    enableHiding: false,
   },
   {
-    accessorKey: "ename",
+    accessorKey: "name",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          {/*{label && <Badge variant="outline">{label.label}</Badge>}*/}
           <span className="max-w-[300px] truncate font-medium">
-            {row.getValue("ename")}
+            {row.getValue("name")}
+          </span>
+        </div>
+      );
+    },
+    enableHiding: false,
+  },
+  {
+    accessorKey: "typeOfIssue",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Type Of Issue" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[300px] truncate font-medium">
+            {row.getValue("typeOfIssue")}
           </span>
         </div>
       );
@@ -50,38 +72,18 @@ export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "call",
+    accessorKey: "severity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Call" />
+      <DataTableColumnHeader column={column} title="Severity" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          {/*{label && <Badge variant="outline">{label.label}</Badge>}*/}
           <span className="max-w-[200px] truncate font-medium">
-            {row.getValue("call")}
+            {row.getValue("severity")}
           </span>
         </div>
       );
-    },
-    enableHiding: false,
-  },
-  {
-    accessorKey: "priority",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Priority" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex w-[100px] items-center">
-          <span className="max-w-[200px] truncate font-medium">
-            {row.getValue("priority")}
-          </span>
-        </div>
-      );
-    },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
     },
   },
   {
@@ -91,33 +93,28 @@ export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex w-[100px] items-center">
+        <div className="flex space-x-2">
           <span className="max-w-[200px] truncate font-medium">
             {row.getValue("status")}
           </span>
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
   },
   {
-    accessorKey: "situation",
+    accessorKey: "time",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Description" />
+      <DataTableColumnHeader column={column} title="Time" />
     ),
     cell: ({ row }) => {
       return (
-        <div className="flex w-[100px] items-center">
-          <span className="max-w-[200px] truncate font-medium">
-            {row.getValue("situation")}
+        <div className="flex space-x-2">
+          <span className="max-w-[100px] truncate font-medium">
+            {row.getValue("time")}
           </span>
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      return value.includes(row.getValue(id));
-    },
+    enableHiding: false,
   },
 ];

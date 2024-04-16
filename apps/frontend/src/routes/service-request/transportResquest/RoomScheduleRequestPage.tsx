@@ -31,6 +31,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 
 export interface scheduleForm {
   name: string;
@@ -73,6 +79,9 @@ export const SheduleContent = () => {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [locationsFrom, setLocationsFrom] = useState<string[]>([]);
   const [locationsTo, setLocationsTo] = useState<string[]>([]);
+  const [buttonState, setButtonState] = useState<buttonColor>("ghost");
+
+  type buttonColor = "ghost" | "default";
 
   // Get locations from database
   useEffect(() => {
@@ -124,7 +133,7 @@ export const SheduleContent = () => {
       ...prevState,
       locationFrom: selectedLocation,
     }));
-    // setLocationsFrom(selectedLocation);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   const handleLocationToChange = (selectedLocation: string) => {
@@ -132,7 +141,7 @@ export const SheduleContent = () => {
       ...prevState,
       locationTo: selectedLocation,
     }));
-    // setLocationsTo(selectedLocation);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   //handleFormChange
@@ -146,6 +155,8 @@ export const SheduleContent = () => {
       ...prevState,
       [id]: value,
     }));
+
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   //Clear and reset the form to default
@@ -173,6 +184,7 @@ export const SheduleContent = () => {
       priority: priority,
     }));
     setSelectedPriority(priority);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   //handleStatusChange
@@ -182,7 +194,12 @@ export const SheduleContent = () => {
       status: status,
     }));
     setSelectedStatus(status);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
+
+  const today: Date = new Date();
+  const yesterday: Date = new Date(today);
+  yesterday.setDate(today.getDate() - 1);
 
   //handleDateChange
   const handleDateChange = (date: Date | undefined): void => {
@@ -199,6 +216,19 @@ export const SheduleContent = () => {
   const formattedDate = form.date
     ? format(form.date, "MMMM do, yyyy")
     : "Nothing";
+
+  const checkEmpty = () => {
+    return (
+      form.name === "" ||
+      form.priority === "" ||
+      form.locationFrom === "" ||
+      form.locationTo === "" ||
+      form.reason === "" ||
+      form.date === undefined ||
+      form.time === "" ||
+      form.status === ""
+    );
+  };
 
   //submit
   const handleSubmit = async () => {
@@ -231,6 +261,7 @@ export const SheduleContent = () => {
       }
 
       clearForm();
+      setButtonState("ghost");
     }
   };
 
@@ -445,9 +476,36 @@ export const SheduleContent = () => {
               >
                 Clear
               </Button>
-              <Button className="p-5" onClick={handleSubmit}>
-                Submit
-              </Button>
+              {/*<Button className="p-5" onClick={handleSubmit}>*/}
+              {/*  Submit*/}
+              {/*</Button>*/}
+              <TooltipProvider>
+                {buttonState === "ghost" && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={buttonState}
+                        className="p-5 border"
+                        onClick={handleSubmit}
+                      >
+                        Submit
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Please fill out all fields</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {buttonState !== "ghost" && (
+                  <Button
+                    variant={buttonState}
+                    className="p-5"
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                )}
+              </TooltipProvider>
             </CardFooter>
           </Card>
         </div>
@@ -461,13 +519,13 @@ export const SheduleContent = () => {
               selected={form.date}
               onSelect={handleDateChange}
               disabled={(date) =>
-                date < new Date() || date > new Date("2025-01-01")
+                date <= yesterday || date > new Date("2025-01-01")
               }
               initialFocus
             />
           </div>
 
-          <h2 className={"pt-10 ml-10"}>You picked {formattedDate}</h2>
+          <h2 className={"ml-10"}>You picked {formattedDate}</h2>
         </div>
       </div>
       <div>
