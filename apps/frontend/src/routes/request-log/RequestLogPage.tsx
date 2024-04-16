@@ -56,6 +56,16 @@ export interface RequestFormWID {
   total: number;
 }
 
+interface securityRequest {
+  reqID: number;
+  ename: string;
+  location: string;
+  situation: string;
+  call: boolean;
+  status: string;
+  priority: string;
+}
+
 export const RequestLogPage = () => {
   const [flowerLog, setFlowerLog] = useState<requestFormWID[]>([]);
   const [medicineLog, setMedicineLog] = useState<MedicationForm[]>([]);
@@ -125,17 +135,9 @@ export const RequestLogPage = () => {
       try {
         const res = await axios.get("/api/securityReq");
         const rawData = res.data;
-         
-        const cleanedData: SecurityForm[] = rawData.map(
-          (item: {
-            reqID: number;
-            ename: string;
-            location: string;
-            situation: string;
-            call: boolean;
-            status: string;
-            priority: string;
-          }) => ({
+
+        const cleanedData: securityRequest[] = rawData.map(
+          (item: securityRequest) => ({
             reqID: item.reqID,
             ename: item.ename,
             location: item.location,
@@ -145,7 +147,7 @@ export const RequestLogPage = () => {
             priority: item.priority,
           }),
         );
-         
+
         setSecurityLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {

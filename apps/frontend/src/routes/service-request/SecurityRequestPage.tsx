@@ -128,8 +128,6 @@ export const SecurityForm = () => {
       securityRequest.ename === "" ||
       securityRequest.location === "" ||
       securityRequest.situation === ""
-      // securityRequest.status === "" ||
-      // securityRequest.priority === "" ||
     ) {
       toast({
         title: "Error",
