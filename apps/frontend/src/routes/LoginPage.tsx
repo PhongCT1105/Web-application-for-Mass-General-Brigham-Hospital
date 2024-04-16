@@ -17,6 +17,7 @@ import {
   CarouselPrevious,
 } from "@/components/ui/carousel";
 import { Header } from "@/components/blocks/header.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function CarouselDemo() {
   const carouselImages = [carousel1, carousel2, carousel3, carousel4];
@@ -47,9 +48,10 @@ export function CarouselDemo() {
 }
 
 export default function LoginPage() {
+  const { isAuthenticated } = useAuth0();
   return (
     <>
-      <Header />
+      {isAuthenticated && <Header />}
       <div className="container relative h-[700px] lg:max-w-none lg:px-0 w-full flex flex-col lg:flex-row">
         <CarouselDemo />
         <div

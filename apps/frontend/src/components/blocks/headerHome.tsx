@@ -26,8 +26,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ModeToggle } from "@/components/modeToggle.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function HeaderHome() {
+  const { loginWithRedirect, logout } = useAuth0();
+
+  const handleLogout = async () => {
+    await logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
+  };
+
   return (
     <div className={"flex flex-col"}>
       <div className="flex gap-4 border-b-4 border-yellow-500 pl-4">
@@ -133,7 +144,7 @@ export function HeaderHome() {
                   </DropdownMenuSub>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
@@ -152,12 +163,24 @@ export function HeaderHome() {
         <a
           href="/login"
           className="hover:bg-yellow-500 hover:text-black text-white text-center flex-grow bg-blue-900 inline-block p-3"
+          onClick={(e) => {
+            e.preventDefault();
+            loginWithRedirect({
+              appState: { targetUrl: "/physician" },
+            });
+          }}
         >
           I'm a physician
         </a>
         <a
           href="/login"
           className="hover:bg-yellow-500 hover:text-black text-white text-center flex-grow bg-blue-900 inline-block p-3"
+          onClick={(e) => {
+            e.preventDefault();
+            loginWithRedirect({
+              appState: { targetUrl: "/admin" },
+            });
+          }}
         >
           I'm an admin
         </a>

@@ -42,7 +42,7 @@ app.use("/healthcheck", function (req: Request, res: Response): void {
     app.use(
       auth({
         audience: "/api",
-        issuerBaseURL: "https://dev-y3oolmq2fczbeey6.us.auth0.com/",
+        issuerBaseURL: "https://dev-jlbrj4wjzo7qtfya.us.auth0.com/",
         tokenSigningAlg: "RS256",
       }),
     );
