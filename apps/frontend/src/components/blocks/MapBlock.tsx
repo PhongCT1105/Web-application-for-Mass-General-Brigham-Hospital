@@ -10,7 +10,7 @@ import GrayDot from "@/assets/gray-dot.png";
 import GreenStar from "@/assets/start-marker.png";
 import RedStar from "@/assets/end-marker.png";
 import "@/styles/mapBlock.modules.css";
-import { NewSearchBar } from "@/components/blocks/newLocationSearchBar.tsx";
+import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 
@@ -51,7 +51,7 @@ export interface Node {
 }
 
 // Define the map component
-export const NewMapBlock: React.FC = () => {
+export const MapBlock: React.FC = () => {
   const changePathfindingStrategy = (strat: string) => {
     setPathfindingStrategy(strat);
   };
@@ -470,7 +470,7 @@ export const NewMapBlock: React.FC = () => {
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div style={{ flex: 1, padding: "10px" }}>
-        <NewSearchBar
+        <SearchBar
           locations={hospitalData
             .map((hospitalData) => hospitalData.name)
             .sort((a, b) => a.localeCompare(b))
