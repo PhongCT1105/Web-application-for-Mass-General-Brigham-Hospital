@@ -10,14 +10,8 @@ import GrayDot from "@/assets/gray-dot.png";
 import GreenStar from "@/assets/start-marker.png";
 import RedStar from "@/assets/end-marker.png";
 import "@/styles/mapBlock.modules.css";
-import { SearchBar } from "@/components/blocks/locationSearchBar";
+import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
-import { Graph } from "@/util/Graph.tsx";
-import { Node } from "../../util/Node.tsx";
-import {
-  BFSPathfindingStrategy,
-  PathfindingStrategy,
-} from "@/util/PathfindingStrategy.tsx";
 import { Button } from "@/components/ui/button";
 
 import "@/components/blocks/SnakeAnim";
@@ -45,30 +39,36 @@ export interface HospitalData {
   floor: string;
 }
 
+export interface Node {
+  nodeID: string;
+  xcoord: number;
+  ycoord: number;
+  floor: string;
+  building: string;
+  nodeType: string;
+  longName: string;
+  shortName: string;
+}
+
 // Define the map component
 export const MapBlock: React.FC = () => {
-  const mapRef = useRef<Map | null>(null);
-  // const [path, setPath] = useState<Polyline | null>(null);
-  const [hospitalDataString, setHospitalDataString] = useState<string[]>([]);
-  const [pathfindingStrategy, setPathfindingStrategy] =
-    useState<PathfindingStrategy>(new BFSPathfindingStrategy());
-  const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
-
-  const changePathfindingStrategy = (strategy: PathfindingStrategy) => {
-    setPathfindingStrategy(strategy);
+  const changePathfindingStrategy = (strat: string) => {
+    setPathfindingStrategy(strat);
   };
 
   function displayNodesOnFloor() {
     console.log("Nodes on current floor:", nodesOnFloor);
   }
 
-  const [graph, setGraph] = useState<Graph>(new Graph());
+  const mapRef = useRef<Map | null>(null);
+  // const [path, setPath] = useState<Polyline | null>(null);
+  const [pathfindingStrategy, setPathfindingStrategy] =
+    useState<string>("AStar");
+  const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
   const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-  const [hospitalGraph, setHospitalGraph] = useState<Graph>();
-  const [startNodeID, setStartNodeID] = useState("");
-  const [endNodeID, setEndNodeID] = useState("");
+  const [searchPath, setSearchPath] = useState<Node[]>([]);
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -79,14 +79,10 @@ export const MapBlock: React.FC = () => {
   } as const;
 
   const loadData = async () => {
-    const { data: edgeData } = await axios.get(`/api/mapreq/edges`);
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
-
-    const stringData: string[] = [];
 
     const newHospitalData: HospitalData[] = [];
 
-    const newGraph: Graph = new Graph();
     for (let i = 0; i < nodeData.length; i++) {
       newHospitalData.push({
         nodeID: nodeData[i].nodeID,
@@ -94,31 +90,8 @@ export const MapBlock: React.FC = () => {
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
         floor: nodeData[i].floor,
       });
-      stringData.push(nodeData[i].longName);
-
-      newGraph.addNode(
-        new Node(
-          nodeData[i].nodeID,
-          parseInt(nodeData[i].xcoord),
-          parseInt(nodeData[i].ycoord),
-          nodeData[i].floor,
-          nodeData[i].building,
-          nodeData[i].nodeType,
-          nodeData[i].longName,
-          nodeData[i].shortName,
-          new Set<Node>(),
-        ),
-      );
     }
-
-    for (let i = 0; i < edgeData.length; i++) {
-      newGraph.addNeighbors(edgeData[i].startNode, edgeData[i].endNode);
-      newGraph.addEdge(edgeData[i].startNode, edgeData[i].endNode);
-    }
-    setHospitalDataString(stringData);
     setHospitalData(newHospitalData);
-    setGraph(newGraph);
-    setHospitalGraph(newGraph);
   };
 
   useEffect(() => {
@@ -216,30 +189,16 @@ export const MapBlock: React.FC = () => {
     }
   }
 
-  function drawFullPath(
-    graph: Graph,
-    start: string,
-    end: string,
-    currentFloor: string,
-  ) {
-    const startNode = graph.getNodeID(start);
-    const endNode = graph.getNodeID(end);
+  function drawFullPath(nodeArray: Node[], currentFloor: string) {
     clearLines();
     setCurrentFloor(currentFloor);
-
-    if (!startNode || !endNode) {
-      console.error("Start or end node not found in the graph.");
-      return;
-    }
     console.log("A path should be created now");
-    const paths: Node[][] = parsePath(
-      pathfindingStrategy.findPath(graph, startNode, endNode),
-    );
 
     const map = mapRef.current;
     if (!map) return;
 
     const layerGroup = L.layerGroup();
+    const paths: Node[][] = parsePath(nodeArray);
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
@@ -346,7 +305,7 @@ export const MapBlock: React.FC = () => {
       pathsByFloor[floorToIndex].push(node);
     });
 
-    // console.log(Object.values(pathsByFloor));
+    console.log(pathsByFloor);
     return Object.values(pathsByFloor);
   }
 
@@ -364,12 +323,40 @@ export const MapBlock: React.FC = () => {
   }
 
   async function handleSearch(start: string, end: string) {
-    // console.log(start);
-    // console.log(end);
-    clearStartEndMarkers();
-    setStartNodeID(start);
-    setEndNodeID(end);
-    drawFullPath(graph, start, end, currentFloor);
+    // setStartNodeID((prev) => start);
+    // setEndNodeID((prev) => end);
+    const test = {
+      strategy: pathfindingStrategy,
+      start: start,
+      end: end,
+    };
+    console.log(test);
+
+    const { data: response } = await axios.post("/api/search", test, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    // Handle response, update state, etc.
+    console.log(response);
+
+    const nodeArray: Node[] = [];
+
+    // convert to Node[]
+    for (let i = 0; i < response.length; i++) {
+      nodeArray.push({
+        nodeID: response[i].nodeID,
+        xcoord: response[i].xcoord,
+        ycoord: response[i].ycoord,
+        floor: response[i].floor,
+        building: response[i].building,
+        nodeType: response[i].nodeType,
+        longName: response[i].longName,
+        shortName: response[i].shortName,
+      });
+    }
+    setSearchPath(nodeArray);
+    drawFullPath(nodeArray, currentFloor);
   }
 
   function clearMarkers() {
@@ -464,9 +451,6 @@ export const MapBlock: React.FC = () => {
       L.imageOverlay(initialFloorImage, bounds).addTo(map);
       map.setMaxBounds(bounds);
 
-      // console.log(hospitalData);
-      console.log(hospitalGraph);
-
       // Draw new markers for the selected floor after adding the image overlay
       const newNodesOnCurrentFloor = hospitalData.filter(
         (node) => node.floor === convertedFloorName,
@@ -479,7 +463,7 @@ export const MapBlock: React.FC = () => {
       // Moved the drawing of lines after updating the current floor
       clearLines();
       displayNodesOnFloor();
-      drawFullPath(graph, startNodeID, endNodeID, convertedFloorName);
+      drawFullPath(searchPath, convertedFloorName);
     }
   }
 
@@ -487,18 +471,14 @@ export const MapBlock: React.FC = () => {
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div style={{ flex: 1, padding: "10px" }}>
         <SearchBar
-          locations={Array.from(
-            new Set(
-              hospitalDataString
-                .sort((a, b) => a.localeCompare(b))
-                .filter((str) => str.indexOf("Hall") === -1),
-            ),
-          )}
+          locations={hospitalData
+            .map((hospitalData) => hospitalData.name)
+            .sort((a, b) => a.localeCompare(b))
+            .filter((longName) => longName.indexOf("Hall") === -1)}
           onSearch={handleSearch}
           onClear={clearLines}
           changePathfindingStrategy={changePathfindingStrategy}
           currentFloor={currentFloor}
-          //nodesOnFloor={nodesOnFloor}
         />
       </div>
       <div

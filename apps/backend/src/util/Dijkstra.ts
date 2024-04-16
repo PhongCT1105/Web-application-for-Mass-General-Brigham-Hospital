@@ -1,5 +1,5 @@
-import { Graph } from "./Graph.tsx";
-import { Node } from "./Node.tsx";
+import { Graph } from "./Graph.ts";
+import { Node } from "./Node.ts";
 
 export class Dijkstra {
   static run(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
