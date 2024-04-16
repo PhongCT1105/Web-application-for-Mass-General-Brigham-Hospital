@@ -42,7 +42,7 @@ const AboutCardFaculty = ({
       <img
         src={Imagepath}
         alt={Name}
-        style={{ height: 250, width: 250 }}
+        style={{ height: 250, width: 250, objectFit: "cover" }}
         onClick={handleOpen}
       />
 
