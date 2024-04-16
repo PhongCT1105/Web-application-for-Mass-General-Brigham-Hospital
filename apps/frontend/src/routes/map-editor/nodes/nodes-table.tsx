@@ -25,11 +25,9 @@ import {
 } from "@/components/ui/table";
 
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
-import {
-  Node,
-  useGraphContext,
-} from "@/routes/map-editor/mapEditorTablePage.tsx";
+import { Node } from "@/routes/map-editor/mapEditorTablePage.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { useGraphContext } from "@/context/nodeContext.tsx";
 // import {Input} from "@/components/ui/input.tsx";
 
 interface DataTableProps {
