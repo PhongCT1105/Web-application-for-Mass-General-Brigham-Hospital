@@ -13,6 +13,7 @@ import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
 import StartPage from "@/routes/StartPage.tsx";
 import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
+import { GraphStateProvider } from "@/context/nodeContext.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -72,7 +73,11 @@ function App() {
     },
   ]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <GraphStateProvider>
+      <RouterProvider router={router} />
+    </GraphStateProvider>
+  );
 
   function Root() {
     return (
