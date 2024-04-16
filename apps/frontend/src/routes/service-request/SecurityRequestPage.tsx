@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Table,
   TableBody,
@@ -23,6 +23,18 @@ import {
 } from "@/components/ui/table.tsx";
 
 import axios from "axios";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 
 type rPriority = "low" | "medium" | "high" | "emergency";
 
@@ -50,6 +62,10 @@ export const SecurityForm = () => {
   const [requestList, setRequestList] = useState<securityRequest[]>([]);
   const [curPriority, setCurPriority] = useState("low");
   const [curStatus, setCurStatus] = useState("unassigned");
+  const [locations, setLocations] = useState<string[]>([]);
+  const [buttonState, setButtonState] = useState<buttonColor>("ghost");
+
+  type buttonColor = "ghost" | "default";
 
   /**
    * Clear the request when it's submitted.
@@ -65,6 +81,57 @@ export const SecurityForm = () => {
     });
     setCurStatus("unassigned");
     setCurPriority("low");
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/mapreq/nodes");
+        const rawData = response.data;
+
+        const extractedLocations = rawData.map(
+          (item: {
+            nodeID: string;
+            xcoord: number;
+            ycoord: number;
+            floor: string;
+            building: string;
+            nodeType: string;
+            longName: string;
+            shortName: string;
+          }) => item.longName,
+        );
+        const filteredLocations = extractedLocations.filter(
+          (location: string) => {
+            return !location.startsWith("Hall");
+          },
+        );
+
+        setLocations(filteredLocations);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchData();
+  }, []);
+
+  const checkEmpty = () => {
+    return (
+      securityRequest.ename === "" ||
+      securityRequest.location === "" ||
+      securityRequest.situation === ""
+    );
+  };
+
+  const handleLocationChange = (selectedLocation: string) => {
+    setSecurityRequest((prevState) => ({
+      ...prevState,
+      location: selectedLocation,
+    }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -94,6 +161,7 @@ export const SecurityForm = () => {
       status: status,
     }));
     setCurStatus(status);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -107,6 +175,7 @@ export const SecurityForm = () => {
       priority: priority,
     }));
     setCurPriority(priority);
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -185,24 +254,42 @@ export const SecurityForm = () => {
                   Location to request for:
                 </h1>
                 {/*<Label htmlFor="location">Location to request for:</Label>*/}
-                <Input
-                  id="location"
-                  placeholder={"Location"}
-                  type="text"
-                  onChange={handleText}
-                  value={securityRequest.location}
-                  required
-                />
+                {/*<Input*/}
+                {/*  id="location"*/}
+                {/*  placeholder={"Location"}*/}
+                {/*  type="text"*/}
+                {/*  onChange={handleText}*/}
+                {/*  value={securityRequest.location}*/}
+                {/*  required*/}
+                {/*/>*/}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                      {securityRequest.location
+                        ? securityRequest.location
+                        : "Select Location"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className=" md:max-h-56 lg:max-h-70  overflow-y-auto">
+                    {locations.map((location, index) => (
+                      <DropdownMenuRadioItem
+                        key={index}
+                        value={location}
+                        onClick={() => handleLocationChange(location)}
+                      >
+                        {location}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
               {/* Threat Input Radio? Probably*/}
               <div className="grid gap-2 mt-6">
-                <h1 className="text-2xl font-bold ">
-                  Location to request for:
-                </h1>
+                <h1 className="text-2xl font-bold ">Situation:</h1>
                 {/*<Label htmlFor="situation">Describe the situation:</Label>*/}
                 <Input
                   id="situation"
-                  placeholder={"Description"}
+                  placeholder={"Describe the situation..."}
                   type="text"
                   onChange={handleText}
                   value={securityRequest.situation}
@@ -331,10 +418,29 @@ export const SecurityForm = () => {
             >
               Clear
             </Button>
-            <Button className="w-1/4" onClick={submit}>
-              {" "}
-              Submit Request{" "}
-            </Button>
+            <TooltipProvider>
+              {buttonState === "ghost" && (
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      variant={buttonState}
+                      className="w-1/4 p-5 border"
+                      onClick={submit}
+                    >
+                      Submit
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Please fill out all fields</p>
+                  </TooltipContent>
+                </Tooltip>
+              )}
+              {buttonState !== "ghost" && (
+                <Button variant={buttonState} className="p-5" onClick={submit}>
+                  Submit
+                </Button>
+              )}
+            </TooltipProvider>
           </CardFooter>
         </CardContent>
       </Card>

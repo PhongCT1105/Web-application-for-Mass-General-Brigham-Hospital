@@ -15,6 +15,8 @@ import { Badge, Biohazard, Calendar, FlowerIcon, PillIcon } from "lucide-react";
 import { MedicationForm } from "common/src/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
+import { TranportRequestTable } from "@/routes/request-log/transportPatientLogPage.tsx";
+import { ScheduleForm } from "common/src/interfaces/roomScheduleReq.ts";
 export interface requestFormWID {
   reqID: number;
   cartItems: cartItem[];
@@ -56,6 +58,7 @@ export interface RequestFormWID {
 export const RequestLogPage = () => {
   const [flowerLog, setFlowerLog] = useState<requestFormWID[]>([]);
   const [medicineLog, setMedicineLog] = useState<MedicationForm[]>([]);
+  const [tranportLog, setTransportLog] = useState<ScheduleForm[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -116,6 +119,34 @@ export const RequestLogPage = () => {
     fetchData().then(() => console.log(flowerLog));
   }, [flowerLog]);
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/transport");
+        const rawData = res.data;
+        const cleanedData: ScheduleForm[] = rawData.map(
+          (item: ScheduleForm) => ({
+            reqID: item.reqID,
+            name: item.name,
+            locationFrom: item.locationFrom,
+            locationTo: item.locationTo,
+            reason: item.reason,
+            time: item.time,
+            priority: item.priority,
+            status: item.status,
+            note: item.note,
+            date: item.date,
+          }),
+        );
+        setTransportLog(cleanedData);
+        console.log("successfully got data from get request");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData().then(() => console.log(tranportLog));
+  }, [tranportLog]);
+
   return (
     <div className={" scrollbar-hide"}>
       <Header />
@@ -141,7 +172,7 @@ export const RequestLogPage = () => {
                             <PillIcon className="mr-2 h-4 w-4" />
                             Medication Request
                           </TabsTrigger>
-                          <TabsTrigger value="Patient Transport Request">
+                          <TabsTrigger value="Transportation Request">
                             <Calendar className="mr-2 h-4 w-4" />
                             Patient Transport Request
                           </TabsTrigger>
@@ -199,6 +230,7 @@ export const RequestLogPage = () => {
                           </div>
                         </div>
                         <Separator className="my-4" />
+                        <TranportRequestTable data={tranportLog} />
                       </TabsContent>
                       <TabsContent
                         value={"Sanitation Request"}
