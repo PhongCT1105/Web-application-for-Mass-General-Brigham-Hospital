@@ -1,22 +1,19 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Header } from "@/components/blocks/header.tsx";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table.tsx";
+// import {Table, TableBody, TableCell, TableHeader, TableRow,} from "@/components/ui/table.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
   Tabs,
+  TabsContent,
   TabsList,
   TabsTrigger,
-  TabsContent,
 } from "@/components/ui/tabs.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import { parse, ParseResult } from "papaparse";
-import axios, { AxiosResponse, AxiosError } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { Input } from "@/components/ui/input.tsx";
+import { DataTable } from "@/components/table/data-table.tsx";
+import { edgeColumns, nodeColumns } from "@/routes/CSVPage/csvColumns.tsx";
 
 interface CSVData {
   [key: string]: string; // Assuming all values in CSV are strings, adjust as needed
@@ -29,8 +26,8 @@ interface TableColumn {
 
 interface Edge {
   edgeID: string;
-  startNodeID: string;
-  endNodeID: string;
+  startNode: string;
+  endNode: string;
   // Other fields as needed
 }
 
@@ -53,7 +50,7 @@ const CSVTable: React.FC = () => {
   const [uploadStatus, setUploadStatus] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [rowsPerPage] = useState<number>(100); // Added back rowsPerPage state
-  const [paginationButtonCount] = useState<number>(5);
+  // const [paginationButtonCount] = useState<number>(5);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
 
@@ -102,6 +99,7 @@ const CSVTable: React.FC = () => {
   const currentNodes = nodes.slice(indexOfFirstRow, indexOfLastRow);
   const currentEdges = edges.slice(indexOfFirstRow, indexOfLastRow);
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const paginate = (pageNumber: number) => {
     setCurrentPage(pageNumber);
   };
@@ -162,6 +160,8 @@ const CSVTable: React.FC = () => {
       reader.readAsText(file);
     });
   };
+
+  //hi
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -248,6 +248,7 @@ const CSVTable: React.FC = () => {
     }
   }
 
+   
   const columns: TableColumn[] =
     jsonData && jsonData.length > 0
       ? Object.keys(jsonData[0]).map((header) => ({
@@ -256,93 +257,157 @@ const CSVTable: React.FC = () => {
         }))
       : [];
 
+  const getType = (columns: TableColumn[]): string => {
+    if (columns.length === 3) {
+      return "Edge";
+    }
+    if (columns.length === 8) {
+      return "Node";
+    }
+    return "";
+  };
+
+  const setData = () => {
+    if (getType(columns) === "Edge") {
+      // let edges: Edge[] = [];
+      // jsonData.map((value) => value);
+      return jsonData.map(
+        (value): Edge => ({
+          edgeID: value.edgeID,
+          startNode: value.startNode,
+          endNode: value.endNode,
+        }),
+      );
+    } else {
+      return jsonData.map(
+        (value): Node => ({
+          nodeID: value.nodeID,
+          xcoord: parseInt(value.xcoord),
+          ycoord: parseInt(value.ycoord),
+          floor: value.floor,
+          building: value.building,
+          nodeType: value.nodeType,
+          longName: value.longName,
+          shortName: value.shortName,
+        }),
+      );
+    }
+  };
+
+  const getTable = () => {
+    const type = getType(columns);
+    if (type === "Edge") {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const edges: Edge[] = setData();
+      return <DataTable columns={edgeColumns} data={edges} />;
+    } else if (type === "Node") {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const nodes: Node[] = setData();
+      return <DataTable columns={nodeColumns} data={nodes} />;
+    } else {
+      return <h2>No valid input detected.</h2>;
+    }
+  };
+
   return (
-    <div className={"scrollbar"}>
+    <div className={"scrollbar "}>
       <Header highlighted={"/csv-table"} />
-      <div className="hidden md:block">
-        <div className="border-t">
+      <div className="hidden md:block p-5">
+        <div className="">
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
-              <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
+              <div className="col-span-4 lg:col-span-5  overflow-x-auto">
                 <Tabs defaultValue="Nodes">
-                  <TabsList>
+                  <TabsList className={"mb-4"}>
                     <TabsTrigger value="Nodes">Nodes</TabsTrigger>
                     <TabsTrigger value="Edges">Edges</TabsTrigger>
                   </TabsList>
+                  <div className="flex items-center justify-between mb-4">
+                    <div className="space-y-1">
+                      <Input type="file" onChange={handleFileUpload} />
+                    </div>
+                    <div className="flex space-x-4">
+                      <Button onClick={exportCSV}>Export CSV</Button>
+                      <form onSubmit={handleSubmit}>
+                        <Button type="submit">Upload</Button>{" "}
+                        {/* Added type="submit" */}
+                      </form>
+                    </div>
+                  </div>
+                  <Separator className="my-4" />
+                  <div className={"mb-5"}>{getTable()}</div>
+                  <Separator className="my-4" />
                   <TabsContent value="Nodes">
-                    {currentNodes.map((node) => (
-                      <div key={node.nodeID}>
-                        <span>{node.nodeID}</span>
-                        <span>{node.nodeType}</span>
-                      </div>
-                    ))}
+                    <DataTable
+                      data={currentNodes}
+                      columns={nodeColumns}
+                    ></DataTable>
+                    {/*{currentNodes.map((node) => (*/}
+                    {/*  <div key={node.nodeID}>*/}
+                    {/*    <span>{node.nodeID}</span>*/}
+                    {/*    <span>{node.nodeType}</span>*/}
+                    {/*  </div>*/}
+                    {/*))}*/}
                   </TabsContent>
                   <TabsContent value="Edges">
-                    {currentEdges.map((edge) => (
-                      <div key={edge.edgeID}>
-                        <span>{edge.edgeID}</span>
-                        <span>{edge.startNodeID}</span>
-                        <span>{edge.endNodeID}</span>
-                      </div>
-                    ))}
+                    <DataTable columns={edgeColumns} data={currentEdges} />
+                    {}
+                    {/*{currentEdges.map((edge) => (*/}
+                    {/*  <div key={edge.edgeID}>*/}
+                    {/*    <span>{edge.edgeID}</span>*/}
+                    {/*    <span>{edge.startNodeID}</span>*/}
+                    {/*    <span>{edge.endNodeID}</span>*/}
+                    {/*  </div>*/}
+                    {/*))}*/}
                   </TabsContent>
                 </Tabs>
-                <Separator className="my-4" />
-                <div className="flex items-center justify-between mb-4">
-                  <div className="space-y-1">
-                    <input type="file" onChange={handleFileUpload} />
-                  </div>
-                  <div className="flex space-x-4">
-                    <Button onClick={exportCSV}>Export CSV</Button>
-                    <form onSubmit={handleSubmit}>
-                      <Button type="submit">Upload</Button>{" "}
-                      {/* Added type="submit" */}
-                    </form>
-                  </div>
-                </div>
-                <Separator className="my-4" />
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      {columns.map((column) => (
-                        <TableCell key={column.dataIndex}>
-                          {column.title}
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {jsonData
-                      .slice(indexOfFirstRow, indexOfLastRow)
-                      .map((row, rowIndex) => (
-                        <TableRow key={rowIndex}>
-                          {columns.map((column) => (
-                            <TableCell key={column.dataIndex}>
-                              {row[column.dataIndex]}
-                            </TableCell>
-                          ))}
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
+                {/*<Separator className="my-4" />*/}
+
+                {/*<DataTable columns={() => getType(columns) === "Edge" ? edgeColumns : nodeColumns} data={setData}/>*/}
+                {/*<Table>*/}
+                {/*    <TableHeader>*/}
+                {/*        <TableRow>*/}
+                {/*            {columns.map((column) => (*/}
+                {/*                <TableCell key={column.dataIndex}>*/}
+                {/*                    {column.title}*/}
+                {/*                </TableCell>*/}
+                {/*            ))}*/}
+                {/*        </TableRow>*/}
+                {/*    </TableHeader>*/}
+                {/*    <TableBody>*/}
+                {/*        {jsonData*/}
+                {/*            .slice(indexOfFirstRow, indexOfLastRow)*/}
+                {/*            .map((row, rowIndex) => (*/}
+                {/*                <TableRow key={rowIndex}>*/}
+                {/*                    {columns.map((column) => (*/}
+                {/*                        <TableCell key={column.dataIndex}>*/}
+                {/*                            {row[column.dataIndex]}*/}
+                {/*                        </TableCell>*/}
+                {/*                    ))}*/}
+                {/*                </TableRow>*/}
+                {/*            ))}*/}
+                {/*    </TableBody>*/}
+                {/*</Table>*/}
                 {/* Pagination */}
-                {jsonData.length > 0 && (
-                  <div className="flex justify-center my-4">
-                    {Array.from({ length: paginationButtonCount }).map(
-                      (_, index) => {
-                        const pageNumber = index + 1;
-                        return (
-                          <Button
-                            key={index}
-                            onClick={() => paginate(pageNumber)}
-                          >
-                            {pageNumber}
-                          </Button>
-                        );
-                      },
-                    )}
-                  </div>
-                )}
+                {/*{jsonData.length > 0 && (*/}
+                {/*    <div className="flex justify-center my-4">*/}
+                {/*        {Array.from({ length: paginationButtonCount }).map(*/}
+                {/*            (_, index) => {*/}
+                {/*                const pageNumber = index + 1;*/}
+                {/*                return (*/}
+                {/*                    <Button*/}
+                {/*                        key={index}*/}
+                {/*                        onClick={() => paginate(pageNumber)}*/}
+                {/*                    >*/}
+                {/*                        {pageNumber}*/}
+                {/*                    </Button>*/}
+                {/*                );*/}
+                {/*            },*/}
+                {/*        )}*/}
+                {/*    </div>*/}
+                {/*)}*/}
               </div>
             </div>
           </div>

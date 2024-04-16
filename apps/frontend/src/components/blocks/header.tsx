@@ -79,12 +79,31 @@ export function Header({ highlighted }: HeaderProps) {
             >
               CSV Table
             </a>
-            <a
-              href="/map-editor"
-              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
-            >
-              Map Editor
-            </a>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
+                >
+                  Map Editor
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-36">
+                <DropdownMenuLabel>Editor View</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuItem
+                    onClick={() => (window.location.href = "/map-editor/map")}
+                  >
+                    Map View
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={() => (window.location.href = "/map-editor/table")}
+                  >
+                    Table View
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+              </DropdownMenuContent>
+            </DropdownMenu>
             <a
               href="/about-us"
               className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}

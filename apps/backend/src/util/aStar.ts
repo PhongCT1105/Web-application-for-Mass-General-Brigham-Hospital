@@ -1,6 +1,5 @@
-import { Graph } from "./Graph.tsx";
-import { Node } from "@/util/Node.tsx";
-//import { Node } from "./Node.tsx";
+import { Graph } from "./Graph.ts";
+import { Node } from "./Node.ts";
 
 export class aStar {
   // run will perform all the logic of the A* implementation
