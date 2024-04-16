@@ -417,7 +417,11 @@ export const SecurityForm = () => {
                 </Tooltip>
               )}
               {buttonState !== "ghost" && (
-                <Button variant={buttonState} className="p-5" onClick={submit}>
+                <Button
+                  variant={buttonState}
+                  className="p-5 w-1/4"
+                  onClick={submit}
+                >
                   Submit
                 </Button>
               )}
