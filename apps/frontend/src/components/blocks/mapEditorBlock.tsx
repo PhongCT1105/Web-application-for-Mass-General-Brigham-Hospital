@@ -16,11 +16,18 @@ import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 import axios from "axios";
-import { HospitalData } from "./newMapBlock.tsx";
 
-export interface Pairs {
-  start: HospitalData;
-  end: HospitalData;
+export interface Edge {
+  edgeID: string;
+  start: string;
+  end: string;
+}
+
+export interface HospitalData {
+  nodeID: string;
+  name: string;
+  geocode: string;
+  floor: string;
 }
 
 // Define the map component
@@ -29,8 +36,8 @@ export const MapEditor: React.FC = () => {
   const [paths, setPaths] = useState<Polyline[]>([]);
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-  const [edges, setEdges] = useState<string[]>([]);
-  //const [pairs, setPairs] = useState<Pairs[]>([]);
+  const [edges, setEdges] = useState<Edge[]>([]);
+  //const [floorEdges, setFloorEdges] = useState<string[][]>([]);
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -45,7 +52,7 @@ export const MapEditor: React.FC = () => {
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
 
     const newHospitalData: HospitalData[] = [];
-    const edgeIDs: string[] = [];
+    const edgeIDs: Edge[] = [];
 
     for (let i = 0; i < nodeData.length; i++) {
       newHospitalData.push({
@@ -54,14 +61,20 @@ export const MapEditor: React.FC = () => {
         geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
         floor: nodeData[i].floor,
       });
-
-      for (let i = 0; i < edgeData.length; i++) {
-        edgeIDs.push(edgeData[i].edgeID);
-      }
-
-      setEdges(edgeIDs);
-      setHospitalData(newHospitalData);
     }
+
+    console.log(edgeData.length);
+
+    for (let i = 0; i < edgeData.length; i++) {
+      edgeIDs.push({
+        edgeID: edgeData[i].edgeID,
+        start: edgeData[i].startNode,
+        end: edgeData[i].endNode,
+      });
+    }
+
+    setEdges(edgeIDs);
+    setHospitalData(newHospitalData);
   };
 
   useEffect(() => {
@@ -126,7 +139,9 @@ export const MapEditor: React.FC = () => {
 
   function findLines(hospitalData: HospitalData[]) {
     for (const edge of edges) {
-      const edgeSplit = edge.split("_", 2);
+      const edgeID = edge.edgeID;
+      //console.log(edgeID);
+      const edgeSplit = edgeID.split("_", 2);
       if (hospitalData.find((h) => h.nodeID == edgeSplit[0])) {
         const startHospital = hospitalData.find(
           (h) => h.nodeID === edgeSplit[0],
