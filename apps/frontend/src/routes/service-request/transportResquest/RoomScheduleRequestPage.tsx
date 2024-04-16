@@ -164,7 +164,7 @@ export const SheduleContent = () => {
     setForm((prevState) => ({
       ...prevState,
       name: "",
-      severity: "",
+      priority: "",
       locationFrom: "",
       locationTo: "",
       reason: "",
@@ -181,7 +181,7 @@ export const SheduleContent = () => {
   const handlePriorityChange = (priority: string) => {
     setForm((prevState) => ({
       ...prevState,
-      severity: priority,
+      priority: priority,
     }));
     setSelectedPriority(priority);
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
