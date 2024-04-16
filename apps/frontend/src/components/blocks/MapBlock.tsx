@@ -15,8 +15,8 @@ import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-
 import "@/components/blocks/SnakeAnim";
+// import { Nodes } from "common/src/interfaces/nodes.ts";
 
 declare module "leaflet" {
   interface Polyline {
@@ -425,6 +425,19 @@ export const MapBlock: React.FC = () => {
           console.log("Setting the start node name to " + node.name);
           setStartNodeName(node.name);
           iconIndex = 1; // Set icon to green star for start node
+
+          // Reset icons of all markers to gray, except for the end node
+          map.eachLayer((layer) => {
+            if (layer instanceof L.Marker && layer.options.icon) {
+              const markerIconUrl = layer.options.icon.options.iconUrl;
+              if (
+                markerIconUrl === GreenStar2 // Start marker icon URL
+              ) {
+                layer.setIcon(iconInstances[0]); // Set icon to gray
+              }
+            }
+          });
+
           marker.setIcon(iconInstances[iconIndex]);
         }, 300); // Adjust this duration as needed
       });
@@ -433,7 +446,20 @@ export const MapBlock: React.FC = () => {
         clearTimeout(clickTimer);
         console.log("Setting the end node name to " + node.name);
         setEndNodeName(node.name);
-        iconIndex = 2; // Set icon to red star for end nod
+        iconIndex = 2; // Set icon to red star for end node
+
+        // Reset icons of all markers to gray, except for the start node
+        map.eachLayer((layer) => {
+          if (layer instanceof L.Marker && layer.options.icon) {
+            const markerIconUrl = layer.options.icon.options.iconUrl;
+            if (
+              markerIconUrl === RedStar2 // End marker icon URL
+            ) {
+              layer.setIcon(iconInstances[0]); // Set icon to gray
+            }
+          }
+        });
+
         marker.setIcon(iconInstances[iconIndex]);
         e.originalEvent.preventDefault(); // Prevent default double-click behavior
       });
