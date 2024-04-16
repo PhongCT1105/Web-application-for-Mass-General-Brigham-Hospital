@@ -8,7 +8,9 @@ import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import GrayDot from "@/assets/gray-dot.png";
 import GreenStar from "@/assets/start-marker.png";
+import GreenStar2 from "@/assets/start-marker2.png";
 import RedStar from "@/assets/end-marker.png";
+import RedStar2 from "@/assets/end-marker2.png";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
@@ -69,6 +71,8 @@ export const MapBlock: React.FC = () => {
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [searchPath, setSearchPath] = useState<Node[]>([]);
+  const [startNodeName, setStartNodeName] = useState("");
+  const [endNodeName, setEndNodeName] = useState("");
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -323,12 +327,13 @@ export const MapBlock: React.FC = () => {
   }
 
   async function handleSearch(start: string, end: string) {
-    // setStartNodeID((prev) => start);
-    // setEndNodeID((prev) => end);
+    clearStartEndMarkers();
+    if (start) setStartNodeName(start);
+    if (end) setEndNodeName(end);
     const test = {
       strategy: pathfindingStrategy,
-      start: start,
-      end: end,
+      start: startNodeName,
+      end: endNodeName,
     };
     console.log(test);
 
@@ -389,27 +394,72 @@ export const MapBlock: React.FC = () => {
 
   function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
     nodesOnFloor.forEach((node) => {
-      const customIcon = new Icon({
-        iconUrl: GrayDot,
-        iconSize: [12, 12],
-        iconAnchor: [6, 6],
-      });
+      const icons = [GrayDot, GreenStar2, RedStar2];
+      let iconIndex = 0;
+
       const [lat, lng] = node.geocode.split(",").map(parseFloat);
       const nLat = 3400 - lng;
-      const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
 
-      // Add a click event handler to toggle popup visibility
+      // Create instances of Icon for each icon URL
+      const iconInstances = icons.map(
+        (url) =>
+          new Icon({
+            iconUrl: url,
+            iconSize: [15, 15],
+            iconAnchor: [7.5, 7.5],
+          }),
+      );
+
+      let clickTimer: ReturnType<typeof setTimeout>; // Explicit type annotation
+      const marker = L.marker([nLat, lat], {
+        icon: iconInstances[iconIndex],
+      }).addTo(map);
+
+      // Add a click event handler to toggle popup visibility and cycle through icons
       const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
       marker.bindPopup(popupContent);
 
-      marker.on("click", function (this: L.Marker) {
-        // Specify the type of 'this' as L.Marker
-        if (!this.isPopupOpen()) {
-          // Check if the popup is not already open
-          this.openPopup(); // Open the popup when the marker is clicked
-        }
+      marker.on("click", function () {
+        clearTimeout(clickTimer);
+        clickTimer = setTimeout(() => {
+          console.log("Setting the start node name to " + node.name);
+          setStartNodeName(node.name);
+          iconIndex = 1; // Set icon to green star for start node
+          marker.setIcon(iconInstances[iconIndex]);
+        }, 300); // Adjust this duration as needed
+      });
+
+      marker.on("dblclick", function (e) {
+        clearTimeout(clickTimer);
+        console.log("Setting the end node name to " + node.name);
+        setEndNodeName(node.name);
+        iconIndex = 2; // Set icon to red star for end nod
+        marker.setIcon(iconInstances[iconIndex]);
+        e.originalEvent.preventDefault(); // Prevent default double-click behavior
       });
     });
+    // nodesOnFloor.forEach((node) => {
+    //   const customIcon = new Icon({
+    //     iconUrl: GrayDot,
+    //     iconSize: [12, 12],
+    //     iconAnchor: [6, 6],
+    //   });
+    //   const [lat, lng] = node.geocode.split(",").map(parseFloat);
+    //   const nLat = 3400 - lng;
+    //   const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
+    //
+    //   // Add a click event handler to toggle popup visibility
+    //   const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+    //   marker.bindPopup(popupContent);
+    //
+    //   marker.on("click", function (this: L.Marker) {
+    //     // Specify the type of 'this' as L.Marker
+    //     if (!this.isPopupOpen()) {
+    //       // Check if the popup is not already open
+    //       this.openPopup(); // Open the popup when the marker is clicked
+    //     }
+    //   });
+    // });
   }
 
   function changeFloor(floorName: string) {
