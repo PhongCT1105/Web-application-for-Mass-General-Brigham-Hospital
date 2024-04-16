@@ -142,7 +142,7 @@ export const RequestLogPage = () => {
             ename: item.ename,
             location: item.location,
             situation: item.situation,
-            call: item.call,
+            call: item.call.toString(),
             status: item.status,
             priority: item.priority,
           }),
