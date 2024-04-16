@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 // Importing different pages and components for routing
 import LoginPage from "./routes/LoginPage.tsx";
 import HomePage from "./routes/HomePage.tsx"; // Correct import path
-import AboutUsPage from "./routes/AboutUsPage.tsx"; // Correct import path
+// import AboutUsPage from "./routes/AboutUsPage.tsx"; // Correct import path
 import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"; // Correct import path
 import CSVTable from "./routes/CSVPage/csvTable.tsx";
 import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
@@ -13,6 +13,9 @@ import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
 import StartPage from "@/routes/StartPage.tsx";
 import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
+import { Navigation } from "@/components/Navigation.tsx";
+import { useNavigate } from "react-router-dom";
+import { Auth0Provider } from "@auth0/auth0-react";
 
 function App() {
   const router = createBrowserRouter([
@@ -45,7 +48,7 @@ function App() {
     {
       path: "/about-us",
       errorElement: <h1>ERROR</h1>,
-      element: <AboutUsPage />,
+      // element: <AboutUsPage />,
     },
     {
       path: "/service-requests",
@@ -75,10 +78,29 @@ function App() {
   return <RouterProvider router={router} />;
 
   function Root() {
+    const navigate = useNavigate();
+    const showNavigation = !location.pathname.startsWith("/directions");
+
     return (
-      <div className="w-full flex flex-col">
-        <Outlet />
-      </div>
+      <Auth0Provider
+        useRefreshTokens
+        cacheLocation="localstorage"
+        domain="dev-jlbrj4wjzo7qtfya.us.auth0.com"
+        clientId="G05wEL2kMXB7UKNbgajmIiy9cGW9RKhx"
+        onRedirectCallback={(appState) => {
+          navigate(appState?.returnTo || window.location.pathname);
+        }}
+        authorizationParams={{
+          redirect_uri: window.location.origin,
+          audience: "/api",
+          scope: "openid profile email offline_access",
+        }}
+      >
+        {showNavigation && <Navigation />}
+        <div className="w-full flex flex-col">
+          <Outlet />
+        </div>
+      </Auth0Provider>
     );
   }
 }
