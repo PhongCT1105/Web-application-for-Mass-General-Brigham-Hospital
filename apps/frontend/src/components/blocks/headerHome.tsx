@@ -107,7 +107,7 @@ export function HeaderHome() {
                 <a href="/csv-table" className={"hover:text-yellow-500"}>
                   CSV Table
                 </a>
-                <a href="/map-editor" className={"hover:text-yellow-500"}>
+                <a href="/map-editor/map" className={"hover:text-yellow-500"}>
                   Map Editor
                 </a>
               </>
