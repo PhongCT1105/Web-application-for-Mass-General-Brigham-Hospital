@@ -7,6 +7,9 @@ import { nodeColumns } from "@/routes/map-editor/nodes/nodesData.tsx";
 import { edgeColumns } from "@/routes/map-editor/edges/edgeData.tsx";
 import { EdgeDataTable } from "@/routes/map-editor/edges/edge-table.tsx";
 import { Header } from "@/components/blocks/header.tsx";
+import { Separator } from "@/components/ui/separator.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { MapIcon } from "lucide-react";
 
 interface MedicineContextType {
   nodes: Node[];
@@ -82,10 +85,36 @@ export const MapEditorTablePage = () => {
   return (
     <GraphContext.Provider value={{ nodes, setNodes, setEdges, edges }}>
       <Header highlighted={"/map-editor"} />
-      <div className={"p-10 space-y-20"}>
-        <NodeDataTable columns={nodeColumns} />
-        <EdgeDataTable columns={edgeColumns} />
-        {/*<Table></Table>*/}
+      <div className=" pl-4 py-6 lg:pl-6">
+        {/*  <div className="space-between flex items-center">*/}
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Map Editor
+            </h2>
+            <p className="text-sm text-muted-foreground">Table View</p>
+          </div>
+          <div className={"flex items-center"}>
+            <Button
+              variant={"outline"}
+              className={"mr-3"}
+              onClick={() => (window.location.href = "/map-editor/map")}
+            >
+              {/*<p className="text-sm text-muted-foreground"> Map View?</p>*/}
+              <MapIcon className={"mr-2"} />
+              Map View
+            </Button>
+          </div>
+        </div>
+        <Separator className="my-4" />
+        <div className={"space-y-5"}>
+          <NodeDataTable columns={nodeColumns} />
+          <Separator className="my-4" />
+
+          <EdgeDataTable columns={edgeColumns} />
+          {/*<Table></Table>*/}
+          {/*</div>*/}
+        </div>
       </div>
     </GraphContext.Provider>
   );
