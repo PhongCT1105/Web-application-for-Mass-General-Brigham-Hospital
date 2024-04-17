@@ -4,10 +4,10 @@
   "pipeline": {
     "dev": {
       "dependsOn": ["database#db:push", "^build:dev"],
-      "env": ["PORT"]
+      "env": ["PORT", "VITETEST"]
     },
     "deploy": {
-      "env": ["PORT"]
+      "env": ["PORT", "VITETEST"]
     }
   }
 }

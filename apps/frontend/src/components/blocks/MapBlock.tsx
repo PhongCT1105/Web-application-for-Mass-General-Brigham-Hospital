@@ -582,19 +582,24 @@ export const MapBlock: React.FC = () => {
   }
 
   return (
-    <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
-      <div style={{ flex: 1, padding: "10px" }}>
-        <SearchBar
-          locations={hospitalData
-            .map((hospitalData) => hospitalData.name)
-            .sort((a, b) => a.localeCompare(b))
-            .filter((longName) => longName.indexOf("Hall") === -1)}
-          onSearch={handleSearch}
-          onClear={clearLines}
-          changePathfindingStrategy={changePathfindingStrategy}
-          currentFloor={currentFloor}
-        />
-      </div>
+    <div
+      // style={{ display: "flex", height: "100%", zIndex: 1 }}
+      className={"flex h-full z-1"}
+    >
+      {/*<div*/}
+      {/*    // style={{ flex: 1, padding: "10px" }}*/}
+      {/*>*/}
+      {/*  <SearchBar*/}
+      {/*    locations={hospitalData*/}
+      {/*      .map((hospitalData) => hospitalData.name)*/}
+      {/*      .sort((a, b) => a.localeCompare(b))*/}
+      {/*      .filter((longName) => longName.indexOf("Hall") === -1)}*/}
+      {/*    onSearch={handleSearch}*/}
+      {/*    onClear={clearLines}*/}
+      {/*    changePathfindingStrategy={changePathfindingStrategy}*/}
+      {/*    currentFloor={currentFloor}*/}
+      {/*  />*/}
+      {/*</div>*/}
       <div
         id="map-container"
         style={{
@@ -604,6 +609,24 @@ export const MapBlock: React.FC = () => {
           zIndex: 0,
         }}
       >
+        <div
+          style={{
+            position: "absolute",
+            zIndex: 1000,
+            marginLeft: 40,
+          }}
+        >
+          <SearchBar
+            locations={hospitalData
+              .map((hospitalData) => hospitalData.name)
+              .sort((a, b) => a.localeCompare(b))
+              .filter((longName) => longName.indexOf("Hall") === -1)}
+            onSearch={handleSearch}
+            onClear={clearLines}
+            changePathfindingStrategy={changePathfindingStrategy}
+            currentFloor={currentFloor}
+          />
+        </div>
         <div
           style={{
             position: "absolute",

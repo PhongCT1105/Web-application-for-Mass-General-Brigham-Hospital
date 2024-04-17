@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Header } from "@/components/blocks/header.tsx";
 // import {Table, TableBody, TableCell, TableHeader, TableRow,} from "@/components/ui/table.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import {
@@ -312,7 +311,6 @@ const CSVTable: React.FC = () => {
 
   return (
     <div className={"scrollbar "}>
-      <Header highlighted={"/csv-table"} />
       <div className="hidden md:block p-5">
         <div className="">
           <div className="bg-background">
