@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -28,6 +28,7 @@ import { DataTablePagination } from "@/components/table/data-table-pagination.ts
 import { Node } from "@/routes/map-editor/mapEditorTablePage.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useGraphContext } from "@/context/nodeContext.tsx";
+import axios from "axios";
 // import {Input} from "@/components/ui/input.tsx";
 
 interface DataTableProps {
@@ -45,6 +46,23 @@ export function NodeDataTable({ columns }: DataTableProps) {
   const { nodes, setNodes } = useGraphContext();
   const [originalData, setOriginalData] = useState(() => [...nodes]);
   const [editedRows, setEditedRows] = useState({});
+
+  useEffect(() => {
+    const handleUpdateNodes = async () => {
+      console.log(nodes);
+      const res = await axios.post("/api/csvFetch/node", nodes, {
+        headers: {
+          "content-type": "Application/json",
+        },
+      });
+      if (res.status == 200) {
+        console.log("success");
+      } else {
+        console.log(res.status);
+      }
+    };
+    handleUpdateNodes();
+  }, [nodes]);
 
   const table = useReactTable({
     data: nodes,
@@ -71,6 +89,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
               index === rowIndex ? nodes[rowIndex] : row,
             ),
           );
+          // handleUpdateNodes().then(() => console.log("use effect just ran"));
         }
       },
       updateData: (rowIndex: number, columnId: string, value: string) => {
@@ -85,8 +104,12 @@ export function NodeDataTable({ columns }: DataTableProps) {
             return row;
           }),
         );
+        // handleUpdateNodes().then(() => console.log("use effect just ran"));
+
+        // handleUpdateNodes().then(() => console.log("Sent nodes to back end."));
       },
     },
+
     enableRowSelection: true,
     onRowSelectionChange: setRowSelection,
     onSortingChange: setSorting,

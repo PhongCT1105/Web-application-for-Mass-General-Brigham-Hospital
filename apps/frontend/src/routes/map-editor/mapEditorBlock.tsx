@@ -17,16 +17,17 @@ import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 //import axios from "axios";
 import { useGraphContext } from "@/context/nodeContext.tsx";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog.tsx";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogTrigger,
+// } from "@/components/ui/dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { NodeDataTable } from "@/routes/map-editor/nodes/nodes-table.tsx";
-import { nodeColumns } from "@/routes/map-editor/nodes/nodesData.tsx";
 import { EditIcon } from "lucide-react";
-import axios from "axios";
+// import { NodeDataTable } from "@/routes/map-editor/nodes/nodes-table.tsx";
+// import { nodeColumns } from "@/routes/map-editor/nodes/nodesData.tsx";
+// import { EditIcon } from "lucide-react";
+// import axios from "axios";
 
 export interface Edge {
   edgeID: string;
@@ -60,17 +61,17 @@ export const MapEditor: React.FC = () => {
 
   const { nodes: nodeData, edges: edgeData } = useGraphContext();
 
-  const handleUpdateNodes = async () => {
-    console.log(nodeData);
-    const res = await axios.post("/api/csvFetch/node", nodeData, {
-      headers: {
-        "content-type": "Application/json",
-      },
-    });
-    if (res.status == 200) {
-      console.log("success");
-    }
-  };
+  // const handleUpdateNodes = async () => {
+  //   console.log(nodeData);
+  //   const res = await axios.post("/api/csvFetch/node", nodeData, {
+  //     headers: {
+  //       "content-type": "Application/json",
+  //     },
+  //   });
+  //   if (res.status == 200) {
+  //     console.log("success");
+  //   }
+  // };
 
   const newHospitalData: HospitalData[] = useMemo(() => {
     return [];
@@ -298,6 +299,7 @@ export const MapEditor: React.FC = () => {
         }}
       >
         <div
+          className={"space-x-2"}
           style={{
             position: "absolute",
             bottom: 100,
@@ -340,19 +342,9 @@ export const MapEditor: React.FC = () => {
           >
             Third Floor
           </Button>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>
-                <EditIcon />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </DialogTrigger>
-            <DialogContent className={"  overflow-y-scroll max-h-screen "}>
-              <NodeDataTable columns={nodeColumns} />
-            </DialogContent>
-          </Dialog>
-          <Button variant={"destructive"} onClick={handleUpdateNodes}>
-            Submit changes to the backend
+          <Button onClick={() => (window.location.href = "/map-editor/table")}>
+            <EditIcon className="mr-2 h-4 w-4" />
+            <span>Table View</span>
           </Button>
         </div>
       </div>

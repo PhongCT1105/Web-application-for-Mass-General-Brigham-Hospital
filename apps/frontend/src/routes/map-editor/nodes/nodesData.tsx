@@ -30,7 +30,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
     },
     id: "xcoord",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="x-cord" />
+      <DataTableColumnHeader column={column} title="x-coord" />
     ),
     meta: {
       type: "number",
@@ -52,7 +52,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
       return originalRow && originalRow.ycoord;
     },
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="y-cord" />
+      <DataTableColumnHeader column={column} title="y-coord" />
     ),
     meta: {
       type: "number",
