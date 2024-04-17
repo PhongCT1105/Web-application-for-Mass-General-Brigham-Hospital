@@ -30,45 +30,45 @@ function App() {
           path: "",
           element: <StartPage />,
         },
+        {
+          path: "/home",
+          errorElement: <h1>ERROR</h1>,
+          element: <HomePage />,
+        },
+        {
+          path: "/login",
+          errorElement: <h1>ERROR</h1>,
+          element: <LoginPage />,
+        },
+        {
+          path: "/request-log-Page",
+          errorElement: <h1>ERROR</h1>,
+          element: <RequestLogPage />,
+        },
+        {
+          path: "/about-us",
+          errorElement: <h1>ERROR</h1>,
+          element: <AboutUsPage />,
+        },
+        {
+          path: "/service-requests",
+          errorElement: <h1>ERROR</h1>,
+          element: <ProtectedPage Page={ServiceRequestPage} />,
+        },
+        {
+          path: "/csv-table",
+          element: <ProtectedPage Page={CSVTable} />,
+        },
+        {
+          path: "/sanitation",
+          element: <Sanitation />,
+        },
+        {
+          path: "/map-editor/map",
+          errorElement: <h1>ERROR</h1>,
+          element: <MapEditingPage />,
+        },
       ],
-    },
-    {
-      path: "/home",
-      errorElement: <h1>ERROR</h1>,
-      element: <HomePage />,
-    },
-    {
-      path: "/login",
-      errorElement: <h1>ERROR</h1>,
-      element: <LoginPage />,
-    },
-    {
-      path: "/request-log-Page",
-      errorElement: <h1>ERROR</h1>,
-      element: <RequestLogPage />,
-    },
-    {
-      path: "/about-us",
-      errorElement: <h1>ERROR</h1>,
-      element: <AboutUsPage />,
-    },
-    {
-      path: "/service-requests",
-      errorElement: <h1>ERROR</h1>,
-      element: <ProtectedPage Page={ServiceRequestPage} />,
-    },
-    {
-      path: "/csv-table",
-      element: <ProtectedPage Page={CSVTable} />,
-    },
-    {
-      path: "/sanitation",
-      element: <Sanitation />,
-    },
-    {
-      path: "/map-editor/map",
-      errorElement: <h1>ERROR</h1>,
-      element: <MapEditingPage />,
     },
   ]);
 
