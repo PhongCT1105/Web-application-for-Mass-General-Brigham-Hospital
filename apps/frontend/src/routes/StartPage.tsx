@@ -8,7 +8,7 @@ import {
   MedicationSlide,
 } from "@/components/blocks/CarouselServiceSlides.tsx";
 import { MapBlock } from "@/components/blocks/MapBlock.tsx";
-// import { Footer } from "@/components/blocks/Footer.tsx";
+import { Footer } from "@/components/blocks/Footer.tsx";
 
 export default function StartPage() {
   const scrollToBottom = () => {
@@ -66,7 +66,7 @@ export default function StartPage() {
         >
           <MapBlock />
         </div>
-        {/*<Footer />*/}
+        <Footer />
       </div>
     </>
   );

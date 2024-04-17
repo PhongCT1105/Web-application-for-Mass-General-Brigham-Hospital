@@ -275,7 +275,7 @@ export function Header({ highlighted }: HeaderProps) {
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={handleLogin}>
                           <User className="mr-2 h-4 w-4" />
-                          <span>Employee</span>
+                          <span>Patient</span>
                         </DropdownMenuItem>
                       </DropdownMenuSubContent>
                     </DropdownMenuPortal>
