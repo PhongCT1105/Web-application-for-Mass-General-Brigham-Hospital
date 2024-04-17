@@ -2,7 +2,7 @@ import "../styles/example.route.css";
 import "../styles/globals.css";
 import AboutBlock from "@/components/blocks/AboutBlock.tsx";
 import AboutBlockFaculty from "@/components/blocks/AboutFacultyBlock.tsx";
-import Ari from "@/assets/headshots/Ari.jpg";
+import Ari from "@/assets/headshots/Ari.png";
 import Katy from "@/assets/headshots/Katy.jpg";
 import Phong from "@/assets/headshots/Phong.png";
 import Lap from "@/assets/headshots/Lap.jpg";

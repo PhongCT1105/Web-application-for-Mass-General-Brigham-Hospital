@@ -25,7 +25,6 @@ interface EditableTableCellProps<TData, TValue>
   getValue: (columnId: string) => string;
 }
 
-// Make the component generic using the defined props
 export function EditableTableCell<TData, TValue>({
   getValue,
   row,
@@ -44,19 +43,21 @@ export function EditableTableCell<TData, TValue>({
   const onBlur = () => {
     tableMeta?.updateData(row.index, column.id, value);
   };
-  // const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //     setValue(e.target.value);
-  //     tableMeta?.updateData(row.index, column.id, e.target.value);
-  // };
+  const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setValue(e.target.value);
+    tableMeta?.updateData(row.index, column.id, e.target.value);
+  };
   if (tableMeta?.editedRows[row.id]) {
     return columnMeta?.type === "select" ? (
-      <></>
+      // <></>
+      <select onChange={onSelectChange} value={initialValue}>
+        {columnMeta?.options?.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
     ) : (
-      // <select onChange={onSelectChange} value={initialValue}>
-      //     {columnMeta?.options?.map((option) => (
-      //         <option key={option.value} value={option.value}>{option.label}</option>
-      //     ))}
-      // </select>
       <Input
         value={value}
         onChange={(e) => setValue(e.target.value)}
