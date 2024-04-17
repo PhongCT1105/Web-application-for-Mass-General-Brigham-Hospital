@@ -12,7 +12,7 @@ import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
 import StartPage from "@/routes/StartPage.tsx";
-import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
+import { GraphStateProvider } from "@/context/nodeContext.tsx";
 import { useNavigate } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import ProtectedPage from "@/routes/ProtectedPage.tsx";
@@ -30,53 +30,53 @@ function App() {
           path: "",
           element: <StartPage />,
         },
-        {
-          path: "/home",
-          errorElement: <h1>ERROR</h1>,
-          element: <HomePage />,
-        },
-        {
-          path: "/login",
-          errorElement: <h1>ERROR</h1>,
-          element: <LoginPage />,
-        },
-        {
-          path: "/request-log-Page",
-          errorElement: <h1>ERROR</h1>,
-          element: <RequestLogPage />,
-        },
-        {
-          path: "/about-us",
-          errorElement: <h1>ERROR</h1>,
-          element: <AboutUsPage />,
-        },
-        {
-          path: "/service-requests",
-          errorElement: <h1>ERROR</h1>,
-          element: <ProtectedPage Page={ServiceRequestPage} />,
-        },
-        {
-          path: "/csv-table",
-          element: <ProtectedPage Page={CSVTable} />,
-        },
-        {
-          path: "/sanitation",
-          element: <Sanitation />,
-        },
-        {
-          path: "/map-editor/map",
-          errorElement: <h1>ERROR</h1>,
-          element: <MapEditingPage />,
-        },
-        {
-          path: "/map-editor/table",
-          errorElement: <h1>ERROR</h1>,
-          element: <MapEditorTablePage />,
-        },
       ],
     },
+    {
+      path: "/home",
+      errorElement: <h1>ERROR</h1>,
+      element: <HomePage />,
+    },
+    {
+      path: "/login",
+      errorElement: <h1>ERROR</h1>,
+      element: <LoginPage />,
+    },
+    {
+      path: "/request-log-Page",
+      errorElement: <h1>ERROR</h1>,
+      element: <RequestLogPage />,
+    },
+    {
+      path: "/about-us",
+      errorElement: <h1>ERROR</h1>,
+      element: <AboutUsPage />,
+    },
+    {
+      path: "/service-requests",
+      errorElement: <h1>ERROR</h1>,
+      element: <ProtectedPage Page={ServiceRequestPage} />,
+    },
+    {
+      path: "/csv-table",
+      element: <ProtectedPage Page={CSVTable} />,
+    },
+    {
+      path: "/sanitation",
+      element: <Sanitation />,
+    },
+    {
+      path: "/map-editor/map",
+      errorElement: <h1>ERROR</h1>,
+      element: <MapEditingPage />,
+    },
   ]);
-  return <RouterProvider router={router} />;
+
+  return (
+    <GraphStateProvider>
+      <RouterProvider router={router} />
+    </GraphStateProvider>
+  );
 
   function Root() {
     const navigate = useNavigate();
