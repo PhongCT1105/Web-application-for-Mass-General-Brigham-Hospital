@@ -17,10 +17,10 @@ import { CircleDot, CirclePlay, EllipsisVertical } from "lucide-react";
 
 // import {Label} from "@/components/ui/label.tsx";
 
-interface changeMarker {
-  start: string;
-  end: string;
-}
+// interface changeMarker {
+//   start: string;
+//   end: string;
+// }
 
 interface SearchBarProps {
   locations: string[];
@@ -29,7 +29,7 @@ interface SearchBarProps {
   currentFloor: string;
   changePathfindingStrategy: (strat: string) => void;
   //nodesOnFloor: HospitalData[];
-  onChange: changeMarker;
+  //onChange: changeMarker;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -38,7 +38,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onClear,
   changePathfindingStrategy, // New prop
   //nodesOnFloor,
-  onChange,
+  //onChange,
 }) => {
   const [startPoint, setStartPoint] = useState<string>("");
   const [endPoint, setEndPoint] = useState<string>("");
@@ -50,8 +50,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleSearch = () => {
     onClear();
-    setStartPoint(onChange.start);
-    setEndPoint(onChange.end);
+    // setStartPoint(onChange.start);
+    // setEndPoint(onChange.end);
     onSearch(startPoint, endPoint);
   };
 
