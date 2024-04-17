@@ -8,15 +8,15 @@ import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import GrayDot from "@/assets/gray-dot.png";
 import GreenStar from "@/assets/start-marker.png";
-import GreenStar2 from "@/assets/start-marker2.png";
+// import GreenStar2 from "@/assets/start-marker2.png";
 import RedStar from "@/assets/end-marker.png";
-import RedStar2 from "@/assets/end-marker2.png";
+// import RedStar2 from "@/assets/end-marker2.png";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
-
 import "@/components/blocks/SnakeAnim";
+// import { Nodes } from "common/src/interfaces/nodes.ts";
 
 declare module "leaflet" {
   interface Polyline {
@@ -426,6 +426,15 @@ export const MapBlock: React.FC = () => {
 
   function clearStartEndMarkers() {
     const map = mapRef.current;
+    const icons = [GrayDot, GreenStar, RedStar];
+    const iconInstances = icons.map(
+      (url) =>
+        new Icon({
+          iconUrl: url,
+          iconSize: [15, 15],
+          iconAnchor: [7.5, 7.5],
+        }),
+    );
     if (!map) return;
 
     map.eachLayer((layer) => {
@@ -435,7 +444,7 @@ export const MapBlock: React.FC = () => {
           markerIconUrl === GreenStar || // Start marker icon URL
           markerIconUrl === RedStar // End marker icon URL
         ) {
-          map.removeLayer(layer);
+          layer.setIcon(iconInstances[0]); // Set icon to gray
         }
       }
     });
@@ -443,7 +452,7 @@ export const MapBlock: React.FC = () => {
 
   function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
     nodesOnFloor.forEach((node) => {
-      const icons = [GrayDot, GreenStar2, RedStar2];
+      const icons = [GrayDot, GreenStar, RedStar];
       let iconIndex = 0;
 
       const [lat, lng] = node.geocode.split(",").map(parseFloat);
@@ -474,6 +483,19 @@ export const MapBlock: React.FC = () => {
           console.log("Setting the start node name to " + node.name);
           setStartNodeName(node.name);
           iconIndex = 1; // Set icon to green star for start node
+
+          // Reset icons of all markers to gray, except for the end node
+          map.eachLayer((layer) => {
+            if (layer instanceof L.Marker && layer.options.icon) {
+              const markerIconUrl = layer.options.icon.options.iconUrl;
+              if (
+                markerIconUrl === GreenStar // Start marker icon URL
+              ) {
+                layer.setIcon(iconInstances[0]); // Set icon to gray
+              }
+            }
+          });
+
           marker.setIcon(iconInstances[iconIndex]);
         }, 300); // Adjust this duration as needed
       });
@@ -482,7 +504,20 @@ export const MapBlock: React.FC = () => {
         clearTimeout(clickTimer);
         console.log("Setting the end node name to " + node.name);
         setEndNodeName(node.name);
-        iconIndex = 2; // Set icon to red star for end nod
+        iconIndex = 2; // Set icon to red star for end node
+
+        // Reset icons of all markers to gray, except for the start node
+        map.eachLayer((layer) => {
+          if (layer instanceof L.Marker && layer.options.icon) {
+            const markerIconUrl = layer.options.icon.options.iconUrl;
+            if (
+              markerIconUrl === RedStar // End marker icon URL
+            ) {
+              layer.setIcon(iconInstances[0]); // Set icon to gray
+            }
+          }
+        });
+
         marker.setIcon(iconInstances[iconIndex]);
         e.originalEvent.preventDefault(); // Prevent default double-click behavior
       });
