@@ -40,9 +40,9 @@ export function EditCellActionButton<TData>({
     <div className="edit-cell-container">
       {meta?.editedRows[row.id] ? (
         <div className="edit-cell ">
-          <Button onClick={setEditedRows} name="cancel">
-            X
-          </Button>
+          {/*<Button onClick={setEditedRows} name="cancel">*/}
+          {/*  X*/}
+          {/*</Button>*/}
           <Button onClick={setEditedRows} name="done">
             ✔
           </Button>

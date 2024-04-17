@@ -1,7 +1,7 @@
 import React from "react";
 import "leaflet/dist/leaflet.css";
 import { Header } from "@/components/blocks/header.tsx";
-import { MapEditor } from "@/components/blocks/mapEditorBlock.tsx";
+import { MapEditor } from "@/routes/map-editor/mapEditorBlock.tsx";
 
 // Define the map component
 const MapEditingPage = () => {

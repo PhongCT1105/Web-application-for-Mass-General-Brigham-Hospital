@@ -70,12 +70,14 @@ export const GraphStateProvider = ({ children }: GraphStateProviderProps) => {
         // Set the state once after the loop
         setEdges(updateEdges);
         setNodes(updatedNodes);
+
+        console.log("Successfully loaded node data");
       } catch (error) {
         console.error("Error loading data:", error);
       }
     };
 
-    loadData().then(() => console.log("succ"));
+    loadData().then(() => console.log("Done."));
   }, []);
 
   return (

@@ -77,7 +77,10 @@ export function NodeDataTable({ columns }: DataTableProps) {
         setNodes((old) =>
           old.map((row, index) => {
             if (index === rowIndex) {
-              return { ...old[rowIndex], [columnId]: value };
+              return {
+                ...old[rowIndex],
+                [columnId]: value,
+              };
             }
             return row;
           }),
@@ -96,7 +99,6 @@ export function NodeDataTable({ columns }: DataTableProps) {
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
-  // console.log(table.);
 
   return (
     <div className="space-y-4">
