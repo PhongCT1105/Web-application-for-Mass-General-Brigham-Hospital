@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import L, {
   CRS,
   Icon,
@@ -17,6 +17,16 @@ import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 //import axios from "axios";
 import { useGraphContext } from "@/context/nodeContext.tsx";
+import {
+  Dialog,
+  DialogContent,
+  DialogTrigger,
+} from "@/components/ui/dialog.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { NodeDataTable } from "@/routes/map-editor/nodes/nodes-table.tsx";
+import { nodeColumns } from "@/routes/map-editor/nodes/nodesData.tsx";
+import { EditIcon } from "lucide-react";
+import axios from "axios";
 
 export interface Edge {
   edgeID: string;
@@ -50,34 +60,50 @@ export const MapEditor: React.FC = () => {
 
   const { nodes: nodeData, edges: edgeData } = useGraphContext();
 
+  const handleUpdateNodes = async () => {
+    console.log(nodeData);
+    const res = await axios.post("/api/csvFetch/node", nodeData, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    }
+  };
+
+  const newHospitalData: HospitalData[] = useMemo(() => {
+    return [];
+  }, []);
+
+  const edgeIDs: Edge[] = useMemo(() => {
+    return [];
+  }, []);
+
+  // const newHospitalData: HospitalData[] = [];
+  // const edgeIDs: Edge[] = [];
+
+  for (const node of nodeData) {
+    newHospitalData.push({
+      nodeID: node.nodeID,
+      name: node.longName,
+      geocode: `${node.xcoord},${node.ycoord}`,
+      floor: node.floor,
+    });
+  }
+
+  for (const edge of edgeData) {
+    edgeIDs.push({
+      edgeID: edge.edgeID,
+      start: edge.startNode,
+      end: edge.endNode,
+    });
+  }
+
   useEffect(() => {
     const loadData = async () => {
-      //const { data: edgeData } = await axios.get(`/api/mapreq/edges?`);
-      //const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
-      const newHospitalData: HospitalData[] = [];
-      const edgeIDs: Edge[] = [];
-      console.log(nodeData);
-      console.log(edgeData);
-
-      for (let i = 0; i < nodeData.length; i++) {
-        newHospitalData.push({
-          nodeID: nodeData[i].nodeID,
-          name: nodeData[i].longName,
-          geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
-          floor: nodeData[i].floor,
-        });
-      }
-
       // console.log(newHospitalData);
       console.log(edgeData.length);
-
-      for (let i = 0; i < edgeData.length; i++) {
-        edgeIDs.push({
-          edgeID: edgeData[i].edgeID,
-          start: edgeData[i].startNode,
-          end: edgeData[i].endNode,
-        });
-      }
       setEdges(edgeIDs);
       setHospitalData(newHospitalData);
     };
@@ -120,7 +146,14 @@ export const MapEditor: React.FC = () => {
 
       addMarkers(map!, newNodesOnCurrentFloor);
     }
-  }, [edgeData, hospitalData, isDataLoaded, nodeData]);
+  }, [
+    hospitalData,
+    nodeData,
+    edgeData,
+    isDataLoaded,
+    edgeIDs,
+    newHospitalData,
+  ]);
 
   function clearMarkers() {
     const map = mapRef.current;
@@ -277,21 +310,50 @@ export const MapEditor: React.FC = () => {
             color: "black",
           }}
         >
-          <button onClick={() => changeFloor("lowerLevel2")}>
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("lowerLevel2")}
+          >
             Lower Level 2
-          </button>
-          <button onClick={() => changeFloor("lowerLevel1")}>
+          </Button>
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("lowerLevel1")}
+          >
             Lower Level 1
-          </button>
-          <button onClick={() => changeFloor("theFirstFloor")}>
+          </Button>
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("theFirstFloor")}
+          >
             First Floor
-          </button>
-          <button onClick={() => changeFloor("theSecondFloor")}>
+          </Button>
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("theSecondFloor")}
+          >
             Second Floor
-          </button>
-          <button onClick={() => changeFloor("theThirdFloor")}>
+          </Button>
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("theThirdFloor")}
+          >
             Third Floor
-          </button>
+          </Button>
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>
+                <EditIcon />
+                <span className="sr-only">Open menu</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent className={"  overflow-y-scroll max-h-screen "}>
+              <NodeDataTable columns={nodeColumns} />
+            </DialogContent>
+          </Dialog>
+          <Button variant={"destructive"} onClick={handleUpdateNodes}>
+            Submit changes to the backend
+          </Button>
         </div>
       </div>
     </div>
