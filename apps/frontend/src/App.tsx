@@ -13,6 +13,11 @@ import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
 import StartPage from "@/routes/StartPage.tsx";
 import { GraphStateProvider } from "@/context/nodeContext.tsx";
+import { useNavigate } from "react-router-dom";
+import { Auth0Provider } from "@auth0/auth0-react";
+import ProtectedPage from "@/routes/ProtectedPage.tsx";
+import { Header } from "@/components/blocks/header.tsx";
+// import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -50,11 +55,11 @@ function App() {
     {
       path: "/service-requests",
       errorElement: <h1>ERROR</h1>,
-      element: <ServiceRequestPage />,
+      element: <ProtectedPage Page={ServiceRequestPage} />,
     },
     {
       path: "/csv-table",
-      element: <CSVTable />,
+      element: <ProtectedPage Page={CSVTable} />,
     },
     {
       path: "/sanitation",
@@ -74,10 +79,30 @@ function App() {
   );
 
   function Root() {
+    const navigate = useNavigate();
+    const showHeader = !location.pathname.startsWith("/directions");
+
     return (
-      <div className="w-full flex flex-col">
-        <Outlet />
-      </div>
+      <Auth0Provider
+        useRefreshTokens
+        cacheLocation="localstorage"
+        domain="dev-jlbrj4wjzo7qtfya.us.auth0.com"
+        clientId="G05wEL2kMXB7UKNbgajmIiy9cGW9RKhx"
+        onRedirectCallback={(appState) => {
+          navigate(appState?.returnTo || window.location.pathname);
+        }}
+        authorizationParams={{
+          redirect_uri: window.location.origin,
+          audience: "/api",
+          scope: "openid profile email offline_access",
+        }}
+      >
+        {showHeader && <Header />}
+        {/*{showHeader && <HeaderHome/>}*/}
+        <div className="w-full flex flex-col">
+          <Outlet />
+        </div>
+      </Auth0Provider>
     );
   }
 }

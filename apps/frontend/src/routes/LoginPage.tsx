@@ -16,7 +16,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
-import { Header } from "@/components/blocks/header.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function CarouselDemo() {
   const carouselImages = [carousel1, carousel2, carousel3, carousel4];
@@ -47,24 +47,26 @@ export function CarouselDemo() {
 }
 
 export default function LoginPage() {
+  const { isAuthenticated } = useAuth0();
   return (
     <>
-      <Header />
-      <div className="container relative h-[700px] lg:max-w-none lg:px-0 w-full flex flex-col lg:flex-row">
-        <CarouselDemo />
-        <div
-          className="lg:w-1/2 lg:p-8 flex justify-center items-center"
-          style={{ marginTop: "16vh" }}
-        >
-          {" "}
-          {/* Added inline style */}
-          <div className="mx-auto w-full flex flex-col justify-center space-y-6 sm:w-[350px]">
-            <div className="flex flex-col space-y-2">
-              <LoginBlock />
+      {isAuthenticated && (
+        <div className="container relative h-[700px] lg:max-w-none lg:px-0 w-full flex flex-col lg:flex-row">
+          <CarouselDemo />
+          <div
+            className="lg:w-1/2 lg:p-8 flex justify-center items-center"
+            style={{ marginTop: "16vh" }}
+          >
+            {" "}
+            {/* Added inline style */}
+            <div className="mx-auto w-full flex flex-col justify-center space-y-6 sm:w-[350px]">
+              <div className="flex flex-col space-y-2">
+                <LoginBlock />
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
     </>
   );
 }
