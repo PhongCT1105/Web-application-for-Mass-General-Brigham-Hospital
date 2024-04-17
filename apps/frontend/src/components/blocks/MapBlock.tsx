@@ -242,8 +242,8 @@ export const MapBlock: React.FC = () => {
       ) {
         addStartMarker(startCoords);
         for (let i = 1; i < currentPath.length - 1; i++) {
-          if (currentPath[i].floor != currentPath[i + 1].floor) {
-            addFloorMarker(currentPath[i + 1].floor, endCoords);
+          if (currentPath[i].floor != currentPath[i - 1].floor) {
+            addFloorMarker(currentPath[i - 1].floor, endCoords);
           }
         }
       } else if (
@@ -405,8 +405,8 @@ export const MapBlock: React.FC = () => {
 
     const customIcon = new Icon({
       iconUrl: FloorIcon,
-      iconSize: [20, 40],
-      iconAnchor: [10, 40],
+      iconSize: [25, 30],
+      iconAnchor: [13, 30],
     });
 
     const marker = L.marker(location, { icon: customIcon }).addTo(map);
@@ -513,7 +513,12 @@ export const MapBlock: React.FC = () => {
         const markerIconUrl = layer.options.icon.options.iconUrl;
         if (
           markerIconUrl === GreenStar || // Start marker icon URL
-          markerIconUrl === RedStar // End marker icon URL
+          markerIconUrl === RedStar || // End marker icon URL
+          markerIconUrl === F3 ||
+          markerIconUrl === F2 ||
+          markerIconUrl === F1 ||
+          markerIconUrl === L1 ||
+          markerIconUrl === L2
         ) {
           map.removeLayer(layer);
         }
