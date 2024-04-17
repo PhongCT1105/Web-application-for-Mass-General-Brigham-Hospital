@@ -25,11 +25,9 @@ import {
 
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 import { useState } from "react";
-import {
-  Edge,
-  useGraphContext,
-} from "@/routes/map-editor/mapEditorTablePage.tsx";
+import { Edge } from "@/routes/map-editor/mapEditorTablePage.tsx";
 import { Input } from "@/components/ui/input.tsx";
+import { useGraphContext } from "@/context/nodeContext.tsx";
 
 interface DataTableProps {
   columns: ColumnDef<Edge>[];

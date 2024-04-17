@@ -26,13 +26,51 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { ModeToggle } from "@/components/modeToggle.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 
 export function HeaderHome() {
+  const { loginWithRedirect, logout } = useAuth0();
+  const { isAuthenticated, isLoading, getAccessTokenSilently } = useAuth0();
+
+  useEffect(() => {
+    const redirect = async () => {
+      try {
+        await getAccessTokenSilently();
+      } catch (error) {
+        await loginWithRedirect({
+          appState: {
+            returnTo: location.pathname,
+          },
+        });
+      }
+    };
+    if (!isLoading && isAuthenticated) {
+      redirect().then();
+    }
+  }, [getAccessTokenSilently, isAuthenticated, isLoading, loginWithRedirect]);
+
+  const handleLogin = () => {
+    loginWithRedirect({
+      appState: {
+        returnTo: location.pathname,
+      },
+    });
+  };
+
+  const handleLogout = async () => {
+    await logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
+  };
+
   return (
     <div className={"flex flex-col"}>
       <div className="flex gap-4 border-b-4 border-yellow-500 pl-4">
         <nav className="text-lg w-full font-medium flex items-center text-nowrap mt-2">
-          <a href="/login" className="flex text-lg font-semibold ">
+          <a href="/" className="flex text-lg font-semibold ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="600"
@@ -51,21 +89,27 @@ export function HeaderHome() {
             </svg>
           </a>
           <div className={"flex w-full items-center justify-end gap-4 pr-4"}>
-            <a href="/home" className={"hover:text-yellow-500"}>
-              Home
-            </a>
-            <a href="/service-requests" className={"hover:text-yellow-500"}>
-              Service Requests
-            </a>
-            <a href="/csv-table" className={"hover:text-yellow-500"}>
-              CSV Table
-            </a>
-            <a href="/map-editor/map" className={"hover:text-yellow-500"}>
-              Map Editor
-            </a>
-            <a href="/about-us" className={"hover:text-yellow-500"}>
-              About Us
-            </a>
+            {!isLoading && isAuthenticated && (
+              <>
+                <a href="/home" className={"hover:text-yellow-500"}>
+                  Home
+                </a>
+                <a href="/service-requests" className={"hover:text-yellow-500"}>
+                  Service Requests
+                </a>
+                <a href="/csv-table" className={"hover:text-yellow-500"}>
+                  CSV Table
+                </a>
+                <a href="/map-editor/map" className={"hover:text-yellow-500"}>
+                  Map Editor
+                </a>
+              </>
+            )}
+            <>
+              <a href="/about-us" className={"hover:text-yellow-500"}>
+                About Us
+              </a>
+            </>
             <ModeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -112,11 +156,7 @@ export function HeaderHome() {
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                       <DropdownMenuSubContent>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            window.location.href = "/login";
-                          }}
-                        >
+                        <DropdownMenuItem onClick={handleLogin}>
                           <Key className="mr-2 h-4 w-4" />
                           <span>Admin</span>
                         </DropdownMenuItem>
@@ -126,14 +166,14 @@ export function HeaderHome() {
                           }}
                         >
                           <User className="mr-2 h-4 w-4" />
-                          <span>Patient</span>
+                          <span>Employee</span>
                         </DropdownMenuItem>
                       </DropdownMenuSubContent>
                     </DropdownMenuPortal>
                   </DropdownMenuSub>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
@@ -144,7 +184,7 @@ export function HeaderHome() {
       </div>
       <div className="flex text-lg w-full font-medium items-center justify-between w-full shadow-2xl shadow-black">
         <a
-          href="/login"
+          href="/home"
           className="hover:bg-yellow-500 hover:text-black text-white text-center flex-grow bg-blue-900 inline-block p-3"
         >
           I'm a patient
@@ -152,12 +192,24 @@ export function HeaderHome() {
         <a
           href="/login"
           className="hover:bg-yellow-500 hover:text-black text-white text-center flex-grow bg-blue-900 inline-block p-3"
+          onClick={(e) => {
+            e.preventDefault();
+            loginWithRedirect({
+              appState: { targetUrl: "/physician" },
+            });
+          }}
         >
-          I'm a physician
+          I'm a employee
         </a>
         <a
           href="/login"
           className="hover:bg-yellow-500 hover:text-black text-white text-center flex-grow bg-blue-900 inline-block p-3"
+          onClick={(e) => {
+            e.preventDefault();
+            loginWithRedirect({
+              appState: { targetUrl: "/admin" },
+            });
+          }}
         >
           I'm an admin
         </a>
