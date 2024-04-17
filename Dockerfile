@@ -116,7 +116,7 @@ ENV POSTGRES_URL="postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@${POSTGRES_
 COPY --from=prod-backend-builder ["/$WORKDIR/out/json", "/$WORKDIR/out/yarn.lock", "/$WORKDIR/out/full", "./"]
 
 # Validate the install
-RUN yarn install --immutable
+RUN yarn install --no-immutable
 
 # Run the build task
 RUN yarn turbo run build
