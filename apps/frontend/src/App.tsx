@@ -16,6 +16,8 @@ import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
 import { useNavigate } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import ProtectedPage from "@/routes/ProtectedPage.tsx";
+import { Header } from "@/components/blocks/header.tsx";
+// import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 
 function App() {
   const router = createBrowserRouter([
@@ -78,6 +80,7 @@ function App() {
 
   function Root() {
     const navigate = useNavigate();
+    const showHeader = !location.pathname.startsWith("/directions");
 
     return (
       <Auth0Provider
@@ -94,6 +97,8 @@ function App() {
           scope: "openid profile email offline_access",
         }}
       >
+        {showHeader && <Header />}
+        {/*{showHeader && <HeaderHome/>}*/}
         <div className="w-full flex flex-col">
           <Outlet />
         </div>

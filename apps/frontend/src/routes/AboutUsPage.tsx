@@ -1,6 +1,5 @@
 import "../styles/example.route.css";
 import "../styles/globals.css";
-import { Header } from "@/components/blocks/header.tsx";
 import AboutBlock from "@/components/blocks/AboutBlock.tsx";
 import AboutBlockFaculty from "@/components/blocks/AboutFacultyBlock.tsx";
 import Ari from "@/assets/headshots/Ari.jpg";
@@ -25,7 +24,6 @@ import Wong from "@/assets/headshots/Wong.png";
 const AboutMePage = () => {
   return (
     <div>
-      <Header />
       <div
         className="about-the-team"
         style={{

@@ -89,15 +89,11 @@ export function HeaderHome() {
             </svg>
           </a>
           <div className={"flex w-full items-center justify-end gap-4 pr-4"}>
-            {isAuthenticated && (
+            {!isLoading && isAuthenticated && (
               <>
                 <a href="/home" className={"hover:text-yellow-500"}>
                   Home
                 </a>
-              </>
-            )}
-            {!isAuthenticated && (
-              <>
                 <a href="/service-requests" className={"hover:text-yellow-500"}>
                   Service Requests
                 </a>
@@ -109,13 +105,11 @@ export function HeaderHome() {
                 </a>
               </>
             )}
-            {isAuthenticated && (
-              <>
-                <a href="/about-us" className={"hover:text-yellow-500"}>
-                  About Us
-                </a>
-              </>
-            )}
+            <>
+              <a href="/about-us" className={"hover:text-yellow-500"}>
+                About Us
+              </a>
+            </>
             <ModeToggle />
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -172,7 +166,7 @@ export function HeaderHome() {
                           }}
                         >
                           <User className="mr-2 h-4 w-4" />
-                          <span>Patient</span>
+                          <span>Employee</span>
                         </DropdownMenuItem>
                       </DropdownMenuSubContent>
                     </DropdownMenuPortal>
@@ -190,7 +184,7 @@ export function HeaderHome() {
       </div>
       <div className="flex text-lg w-full font-medium items-center justify-between w-full shadow-2xl shadow-black">
         <a
-          href="/login"
+          href="/home"
           className="hover:bg-yellow-500 hover:text-black text-white text-center flex-grow bg-blue-900 inline-block p-3"
         >
           I'm a patient
@@ -205,7 +199,7 @@ export function HeaderHome() {
             });
           }}
         >
-          I'm a physician
+          I'm a employee
         </a>
         <a
           href="/login"

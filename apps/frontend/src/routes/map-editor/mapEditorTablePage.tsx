@@ -6,7 +6,6 @@ import { nodeColumns } from "@/routes/map-editor/nodes/nodesData.tsx";
 // import {Table} from "@/routes/map-editor/test.tsx";
 import { edgeColumns } from "@/routes/map-editor/edges/edgeData.tsx";
 import { EdgeDataTable } from "@/routes/map-editor/edges/edge-table.tsx";
-import { Header } from "@/components/blocks/header.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { MapIcon } from "lucide-react";
@@ -84,7 +83,6 @@ export const MapEditorTablePage = () => {
 
   return (
     <GraphContext.Provider value={{ nodes, setNodes, setEdges, edges }}>
-      <Header highlighted={"/map-editor"} />
       <div className=" pl-4 py-6 lg:pl-6">
         {/*  <div className="space-between flex items-center">*/}
         <div className="flex items-center justify-between">
