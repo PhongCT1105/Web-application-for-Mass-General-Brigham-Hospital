@@ -12,7 +12,7 @@ import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
 import StartPage from "@/routes/StartPage.tsx";
-import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
+import { GraphStateProvider } from "@/context/nodeContext.tsx";
 import { useNavigate } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import ProtectedPage from "@/routes/ProtectedPage.tsx";
@@ -68,15 +68,15 @@ function App() {
           errorElement: <h1>ERROR</h1>,
           element: <MapEditingPage />,
         },
-        {
-          path: "/map-editor/table",
-          errorElement: <h1>ERROR</h1>,
-          element: <MapEditorTablePage />,
-        },
       ],
     },
   ]);
-  return <RouterProvider router={router} />;
+
+  return (
+    <GraphStateProvider>
+      <RouterProvider router={router} />
+    </GraphStateProvider>
+  );
 
   function Root() {
     const navigate = useNavigate();

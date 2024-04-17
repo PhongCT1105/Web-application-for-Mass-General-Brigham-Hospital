@@ -125,35 +125,12 @@ export function Header({ highlighted }: HeaderProps) {
                   >
                     CSV Table
                   </a>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button
-                        className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
-                      >
-                        Map Editor
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="w-36">
-                      <DropdownMenuLabel>Editor View</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            (window.location.href = "/map-editor/map")
-                          }
-                        >
-                          Map View
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            (window.location.href = "/map-editor/table")
-                          }
-                        >
-                          Table View
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <a
+                    href={"/map-editor/map"}
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
+                  >
+                    Map Editor
+                  </a>
                 </>
               )}
               <a
@@ -275,7 +252,7 @@ export function Header({ highlighted }: HeaderProps) {
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={handleLogin}>
                           <User className="mr-2 h-4 w-4" />
-                          <span>Patient</span>
+                          <span>Employee</span>
                         </DropdownMenuItem>
                       </DropdownMenuSubContent>
                     </DropdownMenuPortal>

@@ -1,9 +1,9 @@
 import { Node } from "../mapEditorTablePage.tsx";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
 import { ColumnDef } from "@tanstack/react-table";
-// import {EditableTableCell, EditCellActionButton} from "@/routes/map-editor/nodes/nodes-table.tsx";
-import { EditCellActionButton } from "@/components/table/editable-data-table-cell-button.tsx";
+import React from "react";
 import { EditableTableCell } from "@/components/table/editable-data-table-cell-field.tsx";
+import { EditCellActionButton } from "@/components/table/editable-data-table-cell-button.tsx";
 
 export const nodeColumns: ColumnDef<Node>[] = [
   {
@@ -43,7 +43,6 @@ export const nodeColumns: ColumnDef<Node>[] = [
         getValue={row.getValue}
       ></EditableTableCell>
     ),
-    // cell: EditableTableCell,
     enableHiding: false,
   },
   {
@@ -66,7 +65,6 @@ export const nodeColumns: ColumnDef<Node>[] = [
         getValue={row.getValue}
       ></EditableTableCell>
     ),
-    // cell: EditableTableCell,
     enableHiding: false,
   },
   {
