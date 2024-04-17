@@ -300,7 +300,7 @@ export const MapEditor: React.FC = () => {
         <div
           style={{
             position: "absolute",
-            bottom: 10,
+            bottom: 100,
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",
