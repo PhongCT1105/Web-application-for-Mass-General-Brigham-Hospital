@@ -11,14 +11,18 @@ import GreenStar from "@/assets/start-marker.png";
 // import GreenStar2 from "@/assets/start-marker2.png";
 import RedStar from "@/assets/end-marker.png";
 // import RedStar2 from "@/assets/end-marker2.png";
+// import RedStar2 from "@/assets/end-marker2.png";
+import L2 from "@/assets/FloorL2.png";
+import L1 from "@/assets/FloorL1.png";
+import F1 from "@/assets/Floor1.png";
+import F2 from "@/assets/Floor2.png";
+import F3 from "@/assets/Floor3.png";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 
 import "@/components/blocks/SnakeAnim";
-//import {searchPath1} from "@/components/blocks/SearchPath1.tsx";
-// import { Nodes } from "common/src/interfaces/nodes.ts";
 
 declare module "leaflet" {
   interface Polyline {
@@ -129,10 +133,16 @@ export const MapBlock: React.FC = () => {
           crs: CRS.Simple,
           minZoom: -2,
           maxZoom: 2,
-          zoomControl: true,
+          zoomControl: false,
           preferCanvas: true,
         }).setView([3400, 5000], -2);
         mapRef.current = map;
+
+        L.control
+          .zoom({
+            position: "topright",
+          })
+          .addTo(map);
       }
 
       const bounds: LatLngBoundsExpression = [
@@ -140,10 +150,6 @@ export const MapBlock: React.FC = () => {
         [3400, 5000], // change to resolution of the image
       ];
 
-      L.imageOverlay(theThirdFloor, bounds).addTo(map);
-      L.imageOverlay(theSecondFloor, bounds).addTo(map);
-      L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
-      L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
       L.imageOverlay(theFirstFloor, bounds).addTo(map);
 
       map.setMaxBounds(bounds);
@@ -192,7 +198,8 @@ export const MapBlock: React.FC = () => {
     const startHospital = hospitalData.find((h) => h.nodeID === path[0].nodeID);
     const endHospital = hospitalData.find(
       (h) => h.nodeID === path[path.length - 1].nodeID,
-    );
+    )!;
+    const currentPath = searchPath;
 
     if (startHospital && endHospital) {
       const [startLat, startLng] = startHospital.geocode
@@ -201,12 +208,119 @@ export const MapBlock: React.FC = () => {
       const startCoords: [number, number] = [3400 - startLng, startLat];
       const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
       const endCoords: [number, number] = [3400 - endLng, endLat];
-      addStartMarker(startCoords);
-      addEndMarker(endCoords);
+      if (
+        startHospital.name === startNodeName &&
+        endHospital.name === endNodeName
+      ) {
+        addStartMarker(startCoords);
+        addEndMarker(endCoords); // account for going up and down floor  WAHHHH
+        // if any node is elevator/stair
+        for (let i = 1; i < currentPath.length - 1; i++) {
+          if (
+            (currentPath[i].nodeType && currentPath[i + 1].nodeType) ==
+            ("ELEV" || "STAI")
+          ) {
+            let foundStartA = false;
+            let foundEndA = false;
+            for (let i = 1; i < currentPath.length - 1; i++) {
+              if (
+                currentPath[i].floor != currentPath[i + 1].floor &&
+                !foundStartA
+              ) {
+                addFloorMarker(currentPath[i + 1].floor, [
+                  3400 - currentPath[i].ycoord,
+                  currentPath[i].xcoord,
+                ]);
+                foundStartA = true;
+                continue;
+              }
+              if (
+                currentPath[i].floor != currentPath[i + 1].floor &&
+                !foundEndA
+              ) {
+                addFloorMarker(currentPath[i - 1].floor, [
+                  3400 - currentPath[i].ycoord,
+                  currentPath[i].xcoord,
+                ]);
+                foundEndA = true;
+                break;
+              }
+            }
+          }
+        }
+      } else if (
+        startHospital.name === startNodeName &&
+        endHospital.name != endNodeName
+      ) {
+        addStartMarker(startCoords);
+        for (let i = 1; i < currentPath.length - 1; i++) {
+          if (currentPath[i].floor != currentPath[i + 1].floor) {
+            addFloorMarker(currentPath[i + 1].floor, endCoords);
+          }
+        }
+      } else if (
+        startHospital.name != startNodeName &&
+        endHospital.name === endNodeName
+      ) {
+        addEndMarker(endCoords);
+        for (let i = currentPath.length - 1; i > 1; i--) {
+          if (currentPath[i].floor != currentPath[i - 1].floor) {
+            addFloorMarker(currentPath[i].floor, startCoords);
+          }
+        }
+      } else if (
+        startHospital.name != startNodeName &&
+        endHospital.name != endNodeName
+      ) {
+        let foundStartB = false;
+        let foundEndB = false;
+        for (let i = 1; i < currentPath.length - 1; i++) {
+          if (
+            currentPath[i].floor != currentPath[i + 1].floor &&
+            !foundStartB
+          ) {
+            addFloorMarker(currentPath[i - 1].floor, startCoords);
+            foundStartB = true;
+            continue;
+          }
+          if (currentPath[i].floor != currentPath[i + 1].floor && !foundEndB) {
+            addFloorMarker(currentPath[i + 1].floor, endCoords);
+            foundEndB = true;
+            break;
+          }
+        }
+      }
     }
   }
 
-  function drawFullPath(currentFloor: string) {
+  // function drawFullPath(nodeArray: Node[], currentFloor: string) {
+  //     clearLines();
+  //     setCurrentFloor(currentFloor);
+  //     console.log("A path should be created now");
+  //
+  //     const map = mapRef.current;
+  //     if (!map) return;
+  //
+  //     const layerGroup = L.layerGroup();
+  //     let prevNode: Node | null = null;
+  //
+  //     for (const node of nodeArray) {
+  //         if (prevNode && node.floor !== "null" && prevNode.floor !== "null") {
+  //             // Draw path between previous node and current node
+  //             const newPath = drawPath(prevNode.nodeID, node.nodeID);
+  //             if (newPath) newPath.addTo(layerGroup);
+  //         }
+  //
+  //         prevNode = node;
+  //     }
+  //
+  //     layerGroup.addTo(map).snakeIn();
+  //     placeStartEndMarkers(nodeArray.filter(node => node.floor !== "null"));
+  //
+  //     console.log("done :D");
+  // }
+
+  function drawFullPath(nodeArray: Node[], currentFloor: string) {
     clearLines();
     setCurrentFloor(currentFloor);
     console.log("A path should be created now");
@@ -219,54 +333,89 @@ export const MapBlock: React.FC = () => {
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
-        const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[0][i].nodeType;
+        const end = paths[0][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[0]);
     }
 
     if (currentFloor === "L1" && paths[1].length > 1) {
       for (let i = 0; i < paths[1].length - 1; i++) {
-        const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[1][i].nodeType;
+        const end = paths[1][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[1]);
     }
 
     if (currentFloor === "1" && paths[2].length > 1) {
       for (let i = 0; i < paths[2].length - 1; i++) {
-        const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[2][i].nodeType;
+        const end = paths[2][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[2]);
     }
 
     if (currentFloor === "2" && paths[3].length > 1) {
       for (let i = 0; i < paths[3].length - 1; i++) {
-        const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[3][i].nodeType;
+        const end = paths[3][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[3]);
     }
 
     if (currentFloor === "3" && paths[4].length > 1) {
       for (let i = 0; i < paths[4].length - 1; i++) {
-        const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[4][i].nodeType;
+        const end = paths[4][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[4]);
     }
     console.log("done :D");
+  }
+
+  function checkNodeTypes(source: string, target: string): boolean {
+    // make sure to return false if these combos
+    // stair, stair
+    // elevator, elevator
+    // stair, elevator
+    // elevator, stair
+    if (source == "STAI") {
+      if (target == "ELEV" || target == "STAI") {
+        return false;
+      }
+    }
+
+    if (source == "ELEV") {
+      if (target == "ELEV" || target == "STAI") {
+        return false;
+      }
+    }
+    return true;
   }
 
   function addStartMarker(location: [number, number]) {
@@ -297,6 +446,47 @@ export const MapBlock: React.FC = () => {
 
     // Add a click event handler to toggle popup visibility
     marker.bindPopup("End Location");
+  }
+
+  function addFloorMarker(floor: string, location: [number, number]) {
+    const map = mapRef.current;
+    if (!map) return;
+
+    let FloorIcon;
+
+    switch (floor) {
+      case "L1": {
+        FloorIcon = L1;
+        break;
+      }
+      case "L2": {
+        FloorIcon = L2;
+        break;
+      }
+      case "1": {
+        FloorIcon = F1;
+        break;
+      }
+      case "2": {
+        FloorIcon = F2;
+        break;
+      }
+      case "3": {
+        FloorIcon = F3;
+        break;
+      }
+    }
+
+    const customIcon = new Icon({
+      iconUrl: FloorIcon,
+      iconSize: [20, 40],
+      iconAnchor: [10, 40],
+    });
+
+    const marker = L.marker(location, { icon: customIcon }).addTo(map);
+
+    // Add a click event handler to toggle popup visibility
+    marker.bindPopup("Floor Coming From/Going To");
   }
 
   function parsePath(nodes: Node[]): Node[][] {
@@ -621,29 +811,25 @@ export const MapBlock: React.FC = () => {
 
       // Moved the drawing of lines after updating the current floor
       clearLines();
-      drawFullPath(convertedFloorName);
+      drawFullPath(searchPath1, convertedFloorName);
     }
   }
 
   return (
-    <div
-      // style={{ display: "flex", height: "100%", zIndex: 1 }}
-      className={"flex h-[90vh] z-1"}
-    >
-      {/*<div*/}
-      {/*    // style={{ flex: 1, padding: "10px" }}*/}
-      {/*>*/}
-      {/*  <SearchBar*/}
-      {/*    locations={hospitalData*/}
-      {/*      .map((hospitalData) => hospitalData.name)*/}
-      {/*      .sort((a, b) => a.localeCompare(b))*/}
-      {/*      .filter((longName) => longName.indexOf("Hall") === -1)}*/}
-      {/*    onSearch={handleSearch}*/}
-      {/*    onClear={clearLines}*/}
-      {/*    changePathfindingStrategy={changePathfindingStrategy}*/}
-      {/*    currentFloor={currentFloor}*/}
-      {/*  />*/}
-      {/*</div>*/}
+    <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
+      <div style={{ flex: 1, padding: "10px" }}>
+        <SearchBar
+          locations={hospitalData
+            .map((hospitalData) => hospitalData.name)
+            .sort((a, b) => a.localeCompare(b))
+            .filter((longName) => longName.indexOf("Hall") === -1)}
+          onSearch={handleSearch}
+          onClear={clearLines}
+          onChange={changeMarker}
+          changePathfindingStrategy={changePathfindingStrategy}
+          currentFloor={currentFloor}
+        />
+      </div>
       <div
         id="map-container"
         style={{
@@ -651,33 +837,12 @@ export const MapBlock: React.FC = () => {
           backgroundColor: "gray-300",
           position: "relative",
           zIndex: 0,
-          // maxHeight: "90vh", // Adjust 20px to suit your layout
-          overflow: "hidden",
         }}
       >
         <div
           style={{
             position: "absolute",
-            zIndex: 1000,
-            marginLeft: 40,
-          }}
-        >
-          <SearchBar
-            locations={hospitalData
-              .map((hospitalData) => hospitalData.name)
-              .sort((a, b) => a.localeCompare(b))
-              .filter((longName) => longName.indexOf("Hall") === -1)}
-            onSearch={handleSearch}
-            onClear={clearLines}
-            onChange={changeMarker}
-            changePathfindingStrategy={changePathfindingStrategy}
-            currentFloor={currentFloor}
-          />
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            bottom: 20,
+            bottom: 10,
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",
