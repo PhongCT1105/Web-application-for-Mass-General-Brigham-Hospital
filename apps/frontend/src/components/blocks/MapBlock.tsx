@@ -175,7 +175,7 @@ export const MapBlock: React.FC = () => {
     const newPath = L.polyline([startCoords, endCoords], {
       color: "blue",
       weight: 5,
-      snakingSpeed: 100,
+      snakingSpeed: 200,
       snakeRepeat: false,
       snakeRepeatDelay: 100,
     });
@@ -522,8 +522,23 @@ export const MapBlock: React.FC = () => {
 
     const marker = L.marker(location, { icon: customIcon }).addTo(map);
 
+    const convertedFloorName =
+      floor === "L2"
+        ? "lowerLevel2"
+        : floor === "L1"
+          ? "lowerLevel1"
+          : floor === "1"
+            ? "theFirstFloor"
+            : floor === "2"
+              ? "theSecondFloor"
+              : floor === "3"
+                ? "theThirdFloor"
+                : "";
+
     // Add a click event handler to toggle popup visibility
-    marker.bindPopup("Floor Coming From/Going To");
+    marker.on("click", () => {
+      changeFloor(convertedFloorName);
+    });
   }
 
   function parsePath(nodes: Node[]): Node[][] {
