@@ -16,6 +16,7 @@ import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
+//import {searchPath1} from "@/components/blocks/SearchPath1.tsx";
 // import { Nodes } from "common/src/interfaces/nodes.ts";
 
 declare module "leaflet" {
@@ -57,7 +58,7 @@ interface changeMarker {
   end: string;
 }
 
-export let searchPath1: Node[] = [];
+let searchPath1: Node[] = [];
 
 // Define the map component
 export const MapBlock: React.FC = () => {
@@ -338,12 +339,14 @@ export const MapBlock: React.FC = () => {
   }
 
   function handleSearch(start: string, end: string) {
-    clearStartEndMarkers();
+    console.log("startNodeName ==> " + startNodeName);
     const changedMarker: changeMarker = {
       start: startNodeName,
       end: endNodeName,
     };
     setChangeMarker(changedMarker);
+    clearStartEndMarkers();
+
     console.log("start ==>" + start);
 
     // useEffect(() => {
@@ -354,12 +357,27 @@ export const MapBlock: React.FC = () => {
 
     //console.log("startNodeName ==>" + startNodeName);
     //console.log("endNodeName ==>" + endNodeName);
-    const test = {
-      strategy: pathfindingStrategy,
-      start: start,
-      end: end,
+    let test = {
+      strategy: "",
+      start: "",
+      end: "",
     };
-    console.log(test);
+
+    if (start != "" && end != "") {
+      test = {
+        strategy: pathfindingStrategy,
+        start: start,
+        end: end,
+      };
+      console.log(test);
+    } else {
+      test = {
+        strategy: pathfindingStrategy,
+        start: changedMarker.start,
+        end: changedMarker.end,
+      };
+      console.log(test);
+    }
 
     async function path() {
       const { data: response } = await axios.post("/api/search", test, {
