@@ -52,9 +52,12 @@ export interface Node {
   shortName: string;
 }
 
+interface changeMarker {
+  start: string;
+  end: string;
+}
+
 export let searchPath1: Node[] = [];
-// export let start1: string = '';
-// export let end1: string = '';
 
 // Define the map component
 export const MapBlock: React.FC = () => {
@@ -77,6 +80,10 @@ export const MapBlock: React.FC = () => {
   const [searchPath, setSearchPath] = useState<Node[]>([]);
   const [startNodeName, setStartNodeName] = useState("");
   const [endNodeName, setEndNodeName] = useState("");
+  const [changeMarker, setChangeMarker] = useState<changeMarker>({
+    start: "",
+    end: "",
+  });
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -330,66 +337,80 @@ export const MapBlock: React.FC = () => {
     clearStartEndMarkers();
   }
 
-  async function handleSearch(start: string, end: string) {
+  function handleSearch(start: string, end: string) {
     clearStartEndMarkers();
-    console.log("start ==>" + start);
-
-    if (start !== "") setStartNodeName(start);
-    if (end !== "") setEndNodeName(end);
-
-    console.log("startNodeName ==>" + startNodeName);
-    console.log("endNodeName ==>" + endNodeName);
-    const test = {
-      strategy: pathfindingStrategy,
+    const changedMarker: changeMarker = {
       start: startNodeName,
       end: endNodeName,
     };
+    setChangeMarker(changedMarker);
+    console.log("start ==>" + start);
+
+    // useEffect(() => {
+    //   setStartNodeName(start);
+    // }, [start]);
+
+    //if (end !== "") setEndNodeName(end);
+
+    //console.log("startNodeName ==>" + startNodeName);
+    //console.log("endNodeName ==>" + endNodeName);
+    const test = {
+      strategy: pathfindingStrategy,
+      start: start,
+      end: end,
+    };
     console.log(test);
 
-    const { data: response } = await axios.post("/api/search", test, {
-      headers: {
-        "content-type": "Application/json",
-      },
-    });
-    // Handle response, update state, etc.
-    //console.log(response);
-
-    const nodeArray: Node[] = [];
-
-    // convert to Node[]
-    for (let i = 0; i < response.length; i++) {
-      nodeArray.push({
-        nodeID: response[i].nodeID,
-        xcoord: response[i].xcoord,
-        ycoord: response[i].ycoord,
-        floor: response[i].floor,
-        building: response[i].building,
-        nodeType: response[i].nodeType,
-        longName: response[i].longName,
-        shortName: response[i].shortName,
+    async function path() {
+      const { data: response } = await axios.post("/api/search", test, {
+        headers: {
+          "content-type": "Application/json",
+        },
       });
+      // Handle response, update state, etc.
+      //console.log(response);
+
+      const nodeArray: Node[] = [];
+
+      // convert to Node[]
+      for (let i = 0; i < response.length; i++) {
+        nodeArray.push({
+          nodeID: response[i].nodeID,
+          xcoord: response[i].xcoord,
+          ycoord: response[i].ycoord,
+          floor: response[i].floor,
+          building: response[i].building,
+          nodeType: response[i].nodeType,
+          longName: response[i].longName,
+          shortName: response[i].shortName,
+        });
+      }
+      console.log(nodeArray);
+      setSearchPath(nodeArray);
+      searchPath1 = nodeArray;
+      console.log("0 == " + searchPath1);
+      // console.log("1 == " + searchPath1);
+
+      const firstNodeFloor =
+        response[0].floor === "L2"
+          ? "lowerLevel2"
+          : response[0].floor === "L1"
+            ? "lowerLevel1"
+            : response[0].floor === "1"
+              ? "theFirstFloor"
+              : response[0].floor === "2"
+                ? "theSecondFloor"
+                : response[0].floor === "3"
+                  ? "theThirdFloor"
+                  : "";
+
+      //drawFullPath(nodeArray, firstNodeFloor);
+      console.log(firstNodeFloor);
+      console.log(searchPath);
+      changeFloor(firstNodeFloor);
     }
-    console.log(nodeArray);
-    setSearchPath(nodeArray);
-    searchPath1 = nodeArray;
 
-    const firstNodeFloor =
-      response[0].floor === "L2"
-        ? "lowerLevel2"
-        : response[0].floor === "L1"
-          ? "lowerLevel1"
-          : response[0].floor === "1"
-            ? "theFirstFloor"
-            : response[0].floor === "2"
-              ? "theSecondFloor"
-              : response[0].floor === "3"
-                ? "theThirdFloor"
-                : "";
-
-    //drawFullPath(nodeArray, firstNodeFloor);
-    console.log(firstNodeFloor);
-    console.log(searchPath);
-    changeFloor(firstNodeFloor);
+    path().then(() => console.log());
   }
 
   function clearMarkers() {
@@ -465,6 +486,12 @@ export const MapBlock: React.FC = () => {
         marker.setIcon(iconInstances[iconIndex]);
         e.originalEvent.preventDefault(); // Prevent default double-click behavior
       });
+      // const changedMarker: changeMarker = {
+      //   start: startNodeName,
+      //   end: endNodeName,
+      // };
+      // setChangeMarker(changedMarker);
+      //
     });
     // nodesOnFloor.forEach((node) => {
     //   const customIcon = new Icon({
@@ -554,6 +581,7 @@ export const MapBlock: React.FC = () => {
             .filter((longName) => longName.indexOf("Hall") === -1)}
           onSearch={handleSearch}
           onClear={clearLines}
+          onChange={changeMarker}
           changePathfindingStrategy={changePathfindingStrategy}
           currentFloor={currentFloor}
         />
