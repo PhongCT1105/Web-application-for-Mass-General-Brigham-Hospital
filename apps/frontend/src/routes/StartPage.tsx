@@ -1,6 +1,4 @@
 import * as React from "react";
-// import hero from "@/assets/01_thefirstfloor.png";
-import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 import { HomeCarousel } from "@/components/blocks/HomeCarousel.tsx";
 
 import {
@@ -25,7 +23,7 @@ export default function StartPage() {
 
   return (
     <>
-      <HeaderHome />
+      {/*<HeaderHome />*/}
       <HomeCarousel
         data={[
           <SecuritySlide />,

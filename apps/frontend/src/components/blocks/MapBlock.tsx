@@ -15,6 +15,7 @@ import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 import { Button } from "@/components/ui/button";
+
 import "@/components/blocks/SnakeAnim";
 //import {searchPath1} from "@/components/blocks/SearchPath1.tsx";
 // import { Nodes } from "common/src/interfaces/nodes.ts";
@@ -651,7 +652,7 @@ export const MapBlock: React.FC = () => {
         <div
           style={{
             position: "absolute",
-            bottom: 10,
+            bottom: 100,
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",

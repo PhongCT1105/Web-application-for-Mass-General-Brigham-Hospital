@@ -47,9 +47,9 @@ router.post("/", async (req: Request, res: Response) => {
   }
 });
 
-// router.get("/", async function (sanitationReq: Request, res: Response) {
-//   const securityRequest = await PrismaClient.securityRequest.findMany();
-//   res.send(securityRequest);
-// });
+router.get("/", async function (sanitationReq: Request, res: Response) {
+  const securityRequest = await PrismaClient.securityRequest.findMany();
+  res.send(securityRequest);
+});
 
 export default router;
