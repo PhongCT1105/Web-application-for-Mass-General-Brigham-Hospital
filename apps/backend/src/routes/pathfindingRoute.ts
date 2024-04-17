@@ -84,6 +84,7 @@ router.post("/", async (req, res) => {
       endNodeID,
     );
 
+    console.log("Backend response:" + nodeArray);
     res.status(200).json(nodeArray);
   } catch (error) {
     console.error("Error:", error);

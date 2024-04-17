@@ -44,7 +44,6 @@ interface SearchBarProps {
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
-  //hospitalData,
   locations,
   onSearch,
   onClear,
