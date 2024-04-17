@@ -1,5 +1,4 @@
 import React from "react";
-import { Header } from "@/components/blocks/header.tsx";
 import { cartItem } from "@/routes/service-request/flower-request-content.tsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -221,7 +220,6 @@ export const RequestLogPage = () => {
 
   return (
     <div className={" scrollbar-hide"}>
-      <Header />
       <div className="hidden md:block">
         <div className="border-t">
           <div className="bg-background">

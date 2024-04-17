@@ -121,10 +121,16 @@ export const MapBlock: React.FC = () => {
           crs: CRS.Simple,
           minZoom: -2,
           maxZoom: 2,
-          zoomControl: true,
+          zoomControl: false,
           preferCanvas: true,
         }).setView([3400, 5000], -2);
         mapRef.current = map;
+
+        L.control
+          .zoom({
+            position: "topright",
+          })
+          .addTo(map);
       }
 
       const bounds: LatLngBoundsExpression = [
@@ -132,10 +138,6 @@ export const MapBlock: React.FC = () => {
         [3400, 5000], // change to resolution of the image
       ];
 
-      L.imageOverlay(theThirdFloor, bounds).addTo(map);
-      L.imageOverlay(theSecondFloor, bounds).addTo(map);
-      L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
-      L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
       L.imageOverlay(theFirstFloor, bounds).addTo(map);
 
       map.setMaxBounds(bounds);
@@ -181,9 +183,7 @@ export const MapBlock: React.FC = () => {
   }
 
   function placeStartEndMarkers(path: Node[]) {
-    const startHospital = hospitalData.find(
-      (h) => h.nodeID === path[0].nodeID,
-    )!;
+    const startHospital = hospitalData.find((h) => h.nodeID === path[0].nodeID);
     const endHospital = hospitalData.find(
       (h) => h.nodeID === path[path.length - 1].nodeID,
     )!;
@@ -281,6 +281,33 @@ export const MapBlock: React.FC = () => {
     }
   }
 
+  // function drawFullPath(nodeArray: Node[], currentFloor: string) {
+  //     clearLines();
+  //     setCurrentFloor(currentFloor);
+  //     console.log("A path should be created now");
+  //
+  //     const map = mapRef.current;
+  //     if (!map) return;
+  //
+  //     const layerGroup = L.layerGroup();
+  //     let prevNode: Node | null = null;
+  //
+  //     for (const node of nodeArray) {
+  //         if (prevNode && node.floor !== "null" && prevNode.floor !== "null") {
+  //             // Draw path between previous node and current node
+  //             const newPath = drawPath(prevNode.nodeID, node.nodeID);
+  //             if (newPath) newPath.addTo(layerGroup);
+  //         }
+  //
+  //         prevNode = node;
+  //     }
+  //
+  //     layerGroup.addTo(map).snakeIn();
+  //     placeStartEndMarkers(nodeArray.filter(node => node.floor !== "null"));
+  //
+  //     console.log("done :D");
+  // }
+
   function drawFullPath(nodeArray: Node[], currentFloor: string) {
     clearLines();
     setCurrentFloor(currentFloor);
@@ -294,54 +321,89 @@ export const MapBlock: React.FC = () => {
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
-        const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[0][i].nodeType;
+        const end = paths[0][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[0]);
     }
 
     if (currentFloor === "L1" && paths[1].length > 1) {
       for (let i = 0; i < paths[1].length - 1; i++) {
-        const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[1][i].nodeType;
+        const end = paths[1][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[1]);
     }
 
     if (currentFloor === "1" && paths[2].length > 1) {
       for (let i = 0; i < paths[2].length - 1; i++) {
-        const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[2][i].nodeType;
+        const end = paths[2][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[2]);
     }
 
     if (currentFloor === "2" && paths[3].length > 1) {
       for (let i = 0; i < paths[3].length - 1; i++) {
-        const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[3][i].nodeType;
+        const end = paths[3][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[3]);
     }
 
     if (currentFloor === "3" && paths[4].length > 1) {
       for (let i = 0; i < paths[4].length - 1; i++) {
-        const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
-        if (newPath) newPath.addTo(layerGroup);
+        const start = paths[4][i].nodeType;
+        const end = paths[4][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
       }
       layerGroup.addTo(map).snakeIn();
-
       placeStartEndMarkers(paths[4]);
     }
     console.log("done :D");
+  }
+
+  function checkNodeTypes(source: string, target: string): boolean {
+    // make sure to return false if these combos
+    // stair, stair
+    // elevator, elevator
+    // stair, elevator
+    // elevator, stair
+    if (source == "STAI") {
+      if (target == "ELEV" || target == "STAI") {
+        return false;
+      }
+    }
+
+    if (source == "ELEV") {
+      if (target == "ELEV" || target == "STAI") {
+        return false;
+      }
+    }
+    return true;
   }
 
   function addStartMarker(location: [number, number]) {
@@ -647,24 +709,19 @@ export const MapBlock: React.FC = () => {
   }
 
   return (
-    <div
-      // style={{ display: "flex", height: "100%", zIndex: 1 }}
-      className={"flex h-full z-1"}
-    >
-      {/*<div*/}
-      {/*    // style={{ flex: 1, padding: "10px" }}*/}
-      {/*>*/}
-      {/*  <SearchBar*/}
-      {/*    locations={hospitalData*/}
-      {/*      .map((hospitalData) => hospitalData.name)*/}
-      {/*      .sort((a, b) => a.localeCompare(b))*/}
-      {/*      .filter((longName) => longName.indexOf("Hall") === -1)}*/}
-      {/*    onSearch={handleSearch}*/}
-      {/*    onClear={clearLines}*/}
-      {/*    changePathfindingStrategy={changePathfindingStrategy}*/}
-      {/*    currentFloor={currentFloor}*/}
-      {/*  />*/}
-      {/*</div>*/}
+    <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
+      <div style={{ flex: 1, padding: "10px" }}>
+        <SearchBar
+          locations={hospitalData
+            .map((hospitalData) => hospitalData.name)
+            .sort((a, b) => a.localeCompare(b))
+            .filter((longName) => longName.indexOf("Hall") === -1)}
+          onSearch={handleSearch}
+          onClear={clearLines}
+          changePathfindingStrategy={changePathfindingStrategy}
+          currentFloor={currentFloor}
+        />
+      </div>
       <div
         id="map-container"
         style={{
@@ -677,25 +734,7 @@ export const MapBlock: React.FC = () => {
         <div
           style={{
             position: "absolute",
-            zIndex: 1000,
-            marginLeft: 40,
-          }}
-        >
-          <SearchBar
-            locations={hospitalData
-              .map((hospitalData) => hospitalData.name)
-              .sort((a, b) => a.localeCompare(b))
-              .filter((longName) => longName.indexOf("Hall") === -1)}
-            onSearch={handleSearch}
-            onClear={clearLines}
-            changePathfindingStrategy={changePathfindingStrategy}
-            currentFloor={currentFloor}
-          />
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            bottom: 100,
+            bottom: 10,
             left: "50%",
             transform: "translateX(-50%)",
             display: "flex",

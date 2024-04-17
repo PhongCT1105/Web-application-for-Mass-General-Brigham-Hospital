@@ -81,3 +81,10 @@
 .dropdown-menu {
   z-index: 999;
 }
+
+.logo-container {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  padding: 10px;
+}

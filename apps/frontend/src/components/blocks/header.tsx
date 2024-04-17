@@ -42,12 +42,55 @@ import {
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/modeToggle.tsx";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useEffect } from "react";
 
 interface HeaderProps {
   highlighted?: string; // Assuming highlightColor is a string
 }
 
 export function Header({ highlighted }: HeaderProps) {
+  const {
+    loginWithRedirect,
+    isAuthenticated,
+    isLoading,
+    getAccessTokenSilently,
+    logout,
+  } = useAuth0();
+
+  useEffect(() => {
+    const redirect = async () => {
+      try {
+        await getAccessTokenSilently();
+      } catch (error) {
+        await loginWithRedirect({
+          appState: {
+            returnTo: location.pathname,
+          },
+        });
+      }
+    };
+    if (!isLoading && isAuthenticated) {
+      redirect().then();
+    }
+  }, [getAccessTokenSilently, isAuthenticated, isLoading, loginWithRedirect]);
+
+  const handleLogin = () => {
+    loginWithRedirect({
+      appState: {
+        returnTo: location.pathname,
+      },
+    });
+  };
+
+  const handleLogout = async () => {
+    await logout({
+      logoutParams: {
+        returnTo: window.location.origin,
+      },
+    });
+  };
+
   return (
     <div className="flex w-full flex-col">
       <header className="sticky top-0 flex flex-col items-center gap-4 bg-blue-900">
@@ -61,55 +104,65 @@ export function Header({ highlighted }: HeaderProps) {
               <Package className="h-6 w-6" />
               <span className="sr-only">Acme Inc</span>
             </a>
-            <a
-              href="/home"
-              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/home" ? "text-yellow-500 " : "text-gray-300"}`}
-            >
-              Home
-            </a>
-            <a
-              href="/service-requests"
-              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/service-requests" ? "text-yellow-500 " : "text-gray-300"}`}
-            >
-              Service Requests
-            </a>
-            <a
-              href="/csv-table"
-              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/csv-table" ? "text-yellow-500" : "text-gray-300"}`}
-            >
-              CSV Table
-            </a>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button
-                  className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
-                >
-                  Map Editor
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-36">
-                <DropdownMenuLabel>Editor View</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem
-                    onClick={() => (window.location.href = "/map-editor/map")}
+            <div className={"flex w-full items-center justify-end gap-4 pr-4"}>
+              {!isLoading && isAuthenticated && (
+                <>
+                  <a
+                    href="/home"
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/home" ? "text-yellow-500 " : "text-gray-300"}`}
                   >
-                    Map View
-                  </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => (window.location.href = "/map-editor/table")}
+                    Home
+                  </a>
+                  <a
+                    href="/service-requests"
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/service-requests" ? "text-yellow-500 " : "text-gray-300"}`}
                   >
-                    Table View
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-            <a
-              href="/about-us"
-              className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
-            >
-              About Us
-            </a>
+                    Service Requests
+                  </a>
+                  <a
+                    href="/csv-table"
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/csv-table" ? "text-yellow-500" : "text-gray-300"}`}
+                  >
+                    CSV Table
+                  </a>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
+                      >
+                        Map Editor
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="w-36">
+                      <DropdownMenuLabel>Editor View</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            (window.location.href = "/map-editor/map")
+                          }
+                        >
+                          Map View
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            (window.location.href = "/map-editor/table")
+                          }
+                        >
+                          Table View
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                </>
+              )}
+              <a
+                href="/about-us"
+                className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
+              >
+                About Us
+              </a>
+            </div>
           </nav>
           <Sheet>
             <SheetTrigger asChild className={"f"}>
@@ -195,15 +248,17 @@ export function Header({ highlighted }: HeaderProps) {
                     <span>Settings</span>
                     <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
                   </DropdownMenuItem>
-                  <DropdownMenuItem
-                    onClick={() => {
-                      window.location.href = "/request-log-Page";
-                    }}
-                  >
-                    <FolderArchive className="mr-2 h-4 w-4" />
-                    <span>Request Logs</span>
-                    <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>
-                  </DropdownMenuItem>
+                  {!isLoading && isAuthenticated && (
+                    <DropdownMenuItem
+                      onClick={() => {
+                        window.location.href = "/request-log-Page";
+                      }}
+                    >
+                      <FolderArchive className="mr-2 h-4 w-4" />
+                      <span>Request Logs</span>
+                      <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>
+                    </DropdownMenuItem>
+                  )}
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -214,19 +269,11 @@ export function Header({ highlighted }: HeaderProps) {
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                       <DropdownMenuSubContent>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            window.location.href = "/login";
-                          }}
-                        >
+                        <DropdownMenuItem onClick={handleLogin}>
                           <Key className="mr-2 h-4 w-4" />
                           <span>Admin</span>
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => {
-                            window.location.href = "/login";
-                          }}
-                        >
+                        <DropdownMenuItem onClick={handleLogin}>
                           <User className="mr-2 h-4 w-4" />
                           <span>Patient</span>
                         </DropdownMenuItem>
@@ -235,7 +282,7 @@ export function Header({ highlighted }: HeaderProps) {
                   </DropdownMenuSub>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                   <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
@@ -245,73 +292,6 @@ export function Header({ highlighted }: HeaderProps) {
           </div>
         </div>
       </header>
-
-      {/*                 the rest is all a test page, do not fret  */}
-
-      {/*<main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">*/}
-      {/*    <div className="mx-auto grid w-full max-w-6xl gap-2">*/}
-      {/*        <h1 className="text-3xl font-semibold">Settings</h1>*/}
-      {/*    </div>*/}
-      {/*    <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">*/}
-      {/*        <nav className="grid gap-4 text-sm text-muted-foreground">*/}
-      {/*            <a href="https://en.wikipedia.org/wiki/Shrek" className="font-semibold text-primary">*/}
-      {/*                General*/}
-      {/*            </a>*/}
-      {/*            <a href="https://en.wikipedia.org/wiki/Shrek">Security</a>*/}
-      {/*            <a href="https://en.wikipedia.org/wiki/Shrek">Integrations</a>*/}
-      {/*            <a href="https://en.wikipedia.org/wiki/Shrek">Support</a>*/}
-      {/*            <a href="https://en.wikipedia.org/wiki/Shrek">Organizations</a>*/}
-      {/*            <a href="https://en.wikipedia.org/wiki/Shrek">Advanced</a>*/}
-      {/*        </nav>*/}
-      {/*        <div className="grid gap-6">*/}
-      {/*            <Card>*/}
-      {/*                <CardHeader>*/}
-      {/*                    <CardTitle>Store Name</CardTitle>*/}
-      {/*                    <CardDescription>*/}
-      {/*                        Used to identify your store in the marketplace.*/}
-      {/*                    </CardDescription>*/}
-      {/*                </CardHeader>*/}
-      {/*                <CardContent>*/}
-      {/*                    <form>*/}
-      {/*                        <Input placeholder="Store Name" />*/}
-      {/*                    </form>*/}
-      {/*                </CardContent>*/}
-      {/*                <CardFooter className="border-t px-6 py-4">*/}
-      {/*                    <Button>Save</Button>*/}
-      {/*                </CardFooter>*/}
-      {/*            </Card>*/}
-      {/*            <Card>*/}
-      {/*                <CardHeader>*/}
-      {/*                    <CardTitle>Plugins Directory</CardTitle>*/}
-      {/*                    <CardDescription>*/}
-      {/*                        The directory within your project, in which your plugins are*/}
-      {/*                        located.*/}
-      {/*                    </CardDescription>*/}
-      {/*                </CardHeader>*/}
-      {/*                <CardContent>*/}
-      {/*                    <form className="flex flex-col gap-4">*/}
-      {/*                        <Input*/}
-      {/*                            placeholder="Project Name"*/}
-      {/*                            defaultValue="/FlowerRequestPage/plugins"*/}
-      {/*                        />*/}
-      {/*                        <div className="flex items-center space-x-2">*/}
-      {/*                            <Checkbox id="include" defaultChecked />*/}
-      {/*                            <label*/}
-      {/*                                htmlFor="include"*/}
-      {/*                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"*/}
-      {/*                            >*/}
-      {/*                                Allow administrators to change the directory.*/}
-      {/*                            </label>*/}
-      {/*                        </div>*/}
-      {/*                    </form>*/}
-      {/*                </CardContent>*/}
-      {/*                <CardFooter className="border-t px-6 py-4">*/}
-      {/*                    <Button>Save</Button>*/}
-      {/*                </CardFooter>*/}
-      {/*            </Card>*/}
-      {/*        </div>*/}
-      {/*    </div>*/}
-      {/*</main>*/}
     </div>
   );
 }

@@ -1,7 +1,6 @@
 // "use client";
 
 import "../../styles/globals.css";
-import { Header } from "@/components/blocks/header.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 // import { Sidebar } from "@/components/blocks/sidebar.tsx";
 import {
@@ -44,7 +43,6 @@ export default function ServiceRequestPage() {
 
   return (
     <div className={" scrollbar-hide"}>
-      <Header highlighted={"/service-requests"} />
       <div className="hidden md:block">
         <div className="border-t">
           <div className="bg-background">
