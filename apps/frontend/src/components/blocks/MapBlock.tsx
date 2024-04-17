@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import L, { CRS, Icon, LatLngBoundsExpression, Map } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
@@ -55,11 +61,35 @@ export interface Node {
 }
 
 interface changeMarker {
-  start: string;
-  end: string;
+  startNodeName: string;
+  endNodeName: string;
+  startNodeID: string;
+  endNodeID: string;
+  setStartNodeName: React.Dispatch<React.SetStateAction<string>>;
+  setEndNodeName: React.Dispatch<React.SetStateAction<string>>;
+  setStartNodeID: React.Dispatch<React.SetStateAction<string>>;
+  setEndNodeID: React.Dispatch<React.SetStateAction<string>>;
 }
 
-let searchPath1: Node[] = [];
+const SearchContext = createContext<changeMarker>({
+  startNodeName: "",
+  endNodeName: "",
+  startNodeID: "",
+  endNodeID: "",
+  // eslint-disable-next-line no-empty-function
+  setStartNodeName: () => {},
+  // eslint-disable-next-line no-empty-function
+  setEndNodeName: () => {},
+  // eslint-disable-next-line no-empty-function
+  setStartNodeID: () => {},
+  // eslint-disable-next-line no-empty-function
+  setEndNodeID: () => {},
+});
+
+// eslint-disable-next-line
+export const useSearchContext = () => useContext(SearchContext);
+
+//let searchPath1: Node[] = [];
 
 // Define the map component
 export const MapBlock: React.FC = () => {
@@ -82,10 +112,13 @@ export const MapBlock: React.FC = () => {
   const [searchPath, setSearchPath] = useState<Node[]>([]);
   const [startNodeName, setStartNodeName] = useState("");
   const [endNodeName, setEndNodeName] = useState("");
-  const [changeMarker, setChangeMarker] = useState<changeMarker>({
-    start: "",
-    end: "",
-  });
+  const [startNodeID, setStartNodeID] = useState("");
+  const [endNodeID, setEndNodeID] = useState("");
+
+  // const [changeMarker, setChangeMarker] = useState<changeMarker>({
+  //   start: "",
+  //   end: "",
+  // });
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -206,7 +239,7 @@ export const MapBlock: React.FC = () => {
     }
   }
 
-  function drawFullPath(currentFloor: string) {
+  function drawFullPath(nodeArray: Node[], currentFloor: string) {
     clearLines();
     setCurrentFloor(currentFloor);
     console.log("A path should be created now");
@@ -215,7 +248,7 @@ export const MapBlock: React.FC = () => {
     if (!map) return;
 
     const layerGroup = L.layerGroup();
-    const paths: Node[][] = parsePath(searchPath1);
+    const paths: Node[][] = parsePath(nodeArray);
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
@@ -339,46 +372,34 @@ export const MapBlock: React.FC = () => {
     clearStartEndMarkers();
   }
 
-  function handleSearch(start: string, end: string) {
-    console.log("startNodeName ==> " + startNodeName);
-    const changedMarker: changeMarker = {
-      start: startNodeName,
-      end: endNodeName,
-    };
-    setChangeMarker(changedMarker);
-    clearStartEndMarkers();
-
-    console.log("start ==>" + start);
+  function handleSearch(startID: string, endID: string) {
+    //console.log("startNodeName ==> " + startNodeName);
+    // const changedMarker: changeMarker = {
+    //   start: startNodeName,
+    //   end: endNodeName,
+    // };
+    // setChangeMarker(changedMarker);
+    // clearStartEndMarkers();
 
     // useEffect(() => {
     //   setStartNodeName(start);
     // }, [start]);
 
-    //if (end !== "") setEndNodeName(end);
+    console.log("startNodeName ==>" + startNodeName);
+    console.log("endNodeName ==>" + endNodeName);
+    console.log(startID + endID);
+    // let test = {
+    //   strategy: "",
+    //   start: "",
+    //   end: "",
+    // };
 
-    //console.log("startNodeName ==>" + startNodeName);
-    //console.log("endNodeName ==>" + endNodeName);
-    let test = {
-      strategy: "",
-      start: "",
-      end: "",
+    const test = {
+      strategy: pathfindingStrategy,
+      start: startID,
+      end: endID,
     };
-
-    if (start != "" && end != "") {
-      test = {
-        strategy: pathfindingStrategy,
-        start: start,
-        end: end,
-      };
-      console.log(test);
-    } else {
-      test = {
-        strategy: pathfindingStrategy,
-        start: changedMarker.start,
-        end: changedMarker.end,
-      };
-      console.log(test);
-    }
+    console.log(test);
 
     async function path() {
       const { data: response } = await axios.post("/api/search", test, {
@@ -406,8 +427,9 @@ export const MapBlock: React.FC = () => {
       }
       console.log(nodeArray);
       setSearchPath(nodeArray);
-      searchPath1 = nodeArray;
-      console.log("0 == " + searchPath1);
+      setSearchPath(nodeArray);
+      // searchPath1 = nodeArray;
+      // console.log("0 == " + searchPath1);
       // console.log("1 == " + searchPath1);
 
       const firstNodeFloor =
@@ -426,7 +448,7 @@ export const MapBlock: React.FC = () => {
       //drawFullPath(nodeArray, firstNodeFloor);
       console.log(firstNodeFloor);
       console.log(searchPath);
-      changeFloor(firstNodeFloor);
+      changeFloor(nodeArray, firstNodeFloor);
     }
 
     path().then(() => console.log());
@@ -497,10 +519,21 @@ export const MapBlock: React.FC = () => {
       marker.bindPopup(popupContent);
 
       marker.on("click", function () {
+        // delete the existing lines
+        const map = mapRef.current;
+        if (!map) return;
+
+        // Remove all polyline layers from the map
+        map.eachLayer((layer) => {
+          if (layer instanceof L.Polyline) {
+            map.removeLayer(layer);
+          }
+        });
         clearTimeout(clickTimer);
         clickTimer = setTimeout(() => {
           console.log("Setting the start node name to " + node.name);
           setStartNodeName(node.name);
+          setStartNodeID(node.nodeID);
           iconIndex = 1; // Set icon to green star for start node
 
           // Reset icons of all markers to gray, except for the end node
@@ -520,9 +553,20 @@ export const MapBlock: React.FC = () => {
       });
 
       marker.on("dblclick", function (e) {
+        // delete the existing lines
+        const map = mapRef.current;
+        if (!map) return;
+
+        // Remove all polyline layers from the map
+        map.eachLayer((layer) => {
+          if (layer instanceof L.Polyline) {
+            map.removeLayer(layer);
+          }
+        });
         clearTimeout(clickTimer);
         console.log("Setting the end node name to " + node.name);
         setEndNodeName(node.name);
+        setEndNodeID(node.nodeID);
         iconIndex = 2; // Set icon to red star for end node
 
         // Reset icons of all markers to gray, except for the start node
@@ -545,7 +589,6 @@ export const MapBlock: React.FC = () => {
       //   end: endNodeName,
       // };
       // setChangeMarker(changedMarker);
-      //
     });
     // nodesOnFloor.forEach((node) => {
     //   const customIcon = new Icon({
@@ -571,7 +614,7 @@ export const MapBlock: React.FC = () => {
     // });
   }
 
-  function changeFloor(floorName: string) {
+  function changeFloor(arrayNode: Node[], floorName: string) {
     const map = mapRef.current;
     if (!map) return;
 
@@ -621,104 +664,124 @@ export const MapBlock: React.FC = () => {
 
       // Moved the drawing of lines after updating the current floor
       clearLines();
-      drawFullPath(convertedFloorName);
+      drawFullPath(arrayNode, convertedFloorName);
     }
   }
 
   return (
-    <div
-      // style={{ display: "flex", height: "100%", zIndex: 1 }}
-      className={"flex h-[90vh] z-1"}
+    <SearchContext.Provider
+      value={{
+        startNodeName,
+        endNodeName,
+        startNodeID,
+        endNodeID,
+        setStartNodeName,
+        setEndNodeName,
+        setStartNodeID,
+        setEndNodeID,
+      }}
     >
-      {/*<div*/}
-      {/*    // style={{ flex: 1, padding: "10px" }}*/}
-      {/*>*/}
-      {/*  <SearchBar*/}
-      {/*    locations={hospitalData*/}
-      {/*      .map((hospitalData) => hospitalData.name)*/}
-      {/*      .sort((a, b) => a.localeCompare(b))*/}
-      {/*      .filter((longName) => longName.indexOf("Hall") === -1)}*/}
-      {/*    onSearch={handleSearch}*/}
-      {/*    onClear={clearLines}*/}
-      {/*    changePathfindingStrategy={changePathfindingStrategy}*/}
-      {/*    currentFloor={currentFloor}*/}
-      {/*  />*/}
-      {/*</div>*/}
       <div
-        id="map-container"
-        style={{
-          flex: 2.5,
-          backgroundColor: "gray-300",
-          position: "relative",
-          zIndex: 0,
-          // maxHeight: "90vh", // Adjust 20px to suit your layout
-          overflow: "hidden",
-        }}
+        // style={{ display: "flex", height: "100%", zIndex: 1 }}
+        className={"flex h-[90vh] z-1"}
       >
+        {/*<div*/}
+        {/*    // style={{ flex: 1, padding: "10px" }}*/}
+        {/*>*/}
+        {/*  <SearchBar*/}
+        {/*    locations={hospitalData*/}
+        {/*      .map((hospitalData) => hospitalData.name)*/}
+        {/*      .sort((a, b) => a.localeCompare(b))*/}
+        {/*      .filter((longName) => longName.indexOf("Hall") === -1)}*/}
+        {/*    onSearch={handleSearch}*/}
+        {/*    onClear={clearLines}*/}
+        {/*    changePathfindingStrategy={changePathfindingStrategy}*/}
+        {/*    currentFloor={currentFloor}*/}
+        {/*  />*/}
+        {/*</div>*/}
         <div
+          id="map-container"
           style={{
-            position: "absolute",
-            zIndex: 1000,
-            marginLeft: 40,
+            flex: 2.5,
+            backgroundColor: "gray-300",
+            position: "relative",
+            zIndex: 0,
+            // maxHeight: "90vh", // Adjust 20px to suit your layout
+            overflow: "hidden",
           }}
         >
-          <SearchBar
-            locations={hospitalData
-              .map((hospitalData) => hospitalData.name)
-              .sort((a, b) => a.localeCompare(b))
-              .filter((longName) => longName.indexOf("Hall") === -1)}
-            onSearch={handleSearch}
-            onClear={clearLines}
-            onChange={changeMarker}
-            changePathfindingStrategy={changePathfindingStrategy}
-            currentFloor={currentFloor}
-          />
-        </div>
-        <div
-          style={{
-            position: "absolute",
-            bottom: 20,
-            left: "50%",
-            transform: "translateX(-50%)",
-            display: "flex",
-            justifyContent: "space-around",
-            width: "80%",
-            zIndex: 1000,
-            color: "black",
-          }}
-        >
-          <Button
-            className="bg-white text-black"
-            onClick={() => changeFloor("lowerLevel2")}
+          <div
+            style={{
+              position: "absolute",
+              zIndex: 1000,
+              marginLeft: 40,
+            }}
           >
-            Lower Level 2
-          </Button>
-          <Button
-            className="bg-white text-black"
-            onClick={() => changeFloor("lowerLevel1")}
+            <SearchBar
+              // locations={hospitalData
+              //   .map((hospitalData) => hospitalData.name)
+              //   .sort((a, b) => a.localeCompare(b))
+              //   .filter((longName) => longName.indexOf("Hall") === -1)}
+              locations={hospitalData
+                .filter((hospital) => !hospital.name.includes("Hall"))
+                .map((hospital) => ({
+                  nodeID: hospital.nodeID,
+                  longName: hospital.name,
+                }))
+                .sort((a, b) => a.longName.localeCompare(b.longName))}
+              onSearch={handleSearch}
+              onClear={clearLines}
+              //onChange={changeMarker}
+              changePathfindingStrategy={changePathfindingStrategy}
+              currentFloor={currentFloor}
+            />
+          </div>
+          <div
+            style={{
+              position: "absolute",
+              bottom: 20,
+              left: "50%",
+              transform: "translateX(-50%)",
+              display: "flex",
+              justifyContent: "space-around",
+              width: "80%",
+              zIndex: 1000,
+              color: "black",
+            }}
           >
-            Lower Level 1
-          </Button>
-          <Button
-            className="bg-white text-black"
-            onClick={() => changeFloor("theFirstFloor")}
-          >
-            First Floor
-          </Button>
-          <Button
-            className="bg-white text-black"
-            onClick={() => changeFloor("theSecondFloor")}
-          >
-            Second Floor
-          </Button>
-          <Button
-            className="bg-white text-black"
-            onClick={() => changeFloor("theThirdFloor")}
-          >
-            Third Floor
-          </Button>
+            <Button
+              className="bg-white text-black"
+              onClick={() => changeFloor(searchPath, "lowerLevel2")}
+            >
+              Lower Level 2
+            </Button>
+            <Button
+              className="bg-white text-black"
+              onClick={() => changeFloor(searchPath, "lowerLevel1")}
+            >
+              Lower Level 1
+            </Button>
+            <Button
+              className="bg-white text-black"
+              onClick={() => changeFloor(searchPath, "theFirstFloor")}
+            >
+              First Floor
+            </Button>
+            <Button
+              className="bg-white text-black"
+              onClick={() => changeFloor(searchPath, "theSecondFloor")}
+            >
+              Second Floor
+            </Button>
+            <Button
+              className="bg-white text-black"
+              onClick={() => changeFloor(searchPath, "theThirdFloor")}
+            >
+              Third Floor
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </SearchContext.Provider>
   );
 };
