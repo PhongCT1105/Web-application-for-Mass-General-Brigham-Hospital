@@ -178,7 +178,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
       <DataTableColumnHeader column={column} title="Long Name" />
     ),
     cell: ({ row }) => (
-      <div className="w-[100px] font-normal">#{row.getValue("longName")}</div>
+      <div className="w-[100px] font-normal">{row.getValue("longName")}</div>
     ),
     enableHiding: false,
     meta: {
