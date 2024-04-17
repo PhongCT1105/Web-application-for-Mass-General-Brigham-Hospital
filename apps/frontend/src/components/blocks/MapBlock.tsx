@@ -244,8 +244,11 @@ export const MapBlock: React.FC = () => {
       ) {
         addStartMarker(startCoords);
         for (let i = 1; i < currentPath.length - 1; i++) {
-          if (currentPath[i].floor != currentPath[i - 1].floor) {
-            addFloorMarker(currentPath[i - 1].floor, endCoords);
+          if (
+            currentPath[i].floor != currentPath[i + 1].floor &&
+            currentPath[i].nodeID == endHospital.nodeID
+          ) {
+            addFloorMarker(currentPath[i + 1].floor, endCoords);
           }
         }
       } else if (
@@ -253,9 +256,18 @@ export const MapBlock: React.FC = () => {
         endHospital.name === endNodeName
       ) {
         addEndMarker(endCoords);
+        for (let i = path.length - 1; i > 1; i--) {
+          if (
+            currentPath[i].floor != currentPath[i - 1].floor &&
+            currentPath[i].nodeID == startHospital.nodeID
+          ) {
+            addFloorMarker(currentPath[i - 1].floor, startCoords);
+          }
+        }
+
         for (let i = currentPath.length - 1; i > 1; i--) {
           if (currentPath[i].floor != currentPath[i - 1].floor) {
-            addFloorMarker(currentPath[i].floor, startCoords);
+            addFloorMarker(currentPath[i - 1].floor, startCoords);
           }
         }
       } else if (
