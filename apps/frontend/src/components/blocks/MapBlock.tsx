@@ -52,6 +52,10 @@ export interface Node {
   shortName: string;
 }
 
+export let searchPath1: Node[] = [];
+// export let start1: string = '';
+// export let end1: string = '';
+
 // Define the map component
 export const MapBlock: React.FC = () => {
   const changePathfindingStrategy = (strat: string) => {
@@ -193,7 +197,7 @@ export const MapBlock: React.FC = () => {
     }
   }
 
-  function drawFullPath(nodeArray: Node[], currentFloor: string) {
+  function drawFullPath(currentFloor: string) {
     clearLines();
     setCurrentFloor(currentFloor);
     console.log("A path should be created now");
@@ -202,7 +206,7 @@ export const MapBlock: React.FC = () => {
     if (!map) return;
 
     const layerGroup = L.layerGroup();
-    const paths: Node[][] = parsePath(nodeArray);
+    const paths: Node[][] = parsePath(searchPath1);
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
@@ -328,8 +332,13 @@ export const MapBlock: React.FC = () => {
 
   async function handleSearch(start: string, end: string) {
     clearStartEndMarkers();
-    if (start) setStartNodeName(start);
-    if (end) setEndNodeName(end);
+    console.log("start ==>" + start);
+
+    if (start !== "") setStartNodeName(start);
+    if (end !== "") setEndNodeName(end);
+
+    console.log("startNodeName ==>" + startNodeName);
+    console.log("endNodeName ==>" + endNodeName);
     const test = {
       strategy: pathfindingStrategy,
       start: startNodeName,
@@ -343,7 +352,7 @@ export const MapBlock: React.FC = () => {
       },
     });
     // Handle response, update state, etc.
-    console.log(response);
+    //console.log(response);
 
     const nodeArray: Node[] = [];
 
@@ -360,8 +369,27 @@ export const MapBlock: React.FC = () => {
         shortName: response[i].shortName,
       });
     }
+    console.log(nodeArray);
     setSearchPath(nodeArray);
-    drawFullPath(nodeArray, currentFloor);
+    searchPath1 = nodeArray;
+
+    const firstNodeFloor =
+      response[0].floor === "L2"
+        ? "lowerLevel2"
+        : response[0].floor === "L1"
+          ? "lowerLevel1"
+          : response[0].floor === "1"
+            ? "theFirstFloor"
+            : response[0].floor === "2"
+              ? "theSecondFloor"
+              : response[0].floor === "3"
+                ? "theThirdFloor"
+                : "";
+
+    //drawFullPath(nodeArray, firstNodeFloor);
+    console.log(firstNodeFloor);
+    console.log(searchPath);
+    changeFloor(firstNodeFloor);
   }
 
   function clearMarkers() {
@@ -512,8 +540,7 @@ export const MapBlock: React.FC = () => {
 
       // Moved the drawing of lines after updating the current floor
       clearLines();
-      displayNodesOnFloor();
-      drawFullPath(searchPath, convertedFloorName);
+      drawFullPath(convertedFloorName);
     }
   }
 
