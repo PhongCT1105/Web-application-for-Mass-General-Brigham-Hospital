@@ -96,7 +96,7 @@ export const MapBlock: React.FC = () => {
   } as const;
 
   const loadData = async () => {
-    const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
+    const { data: nodeData } = await axios.get(`/api/mapreq/nodes`);
 
     const newHospitalData: HospitalData[] = [];
 
