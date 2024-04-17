@@ -40,7 +40,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
         table={table}
         column={column}
         row={row}
-        getValue={row.getValue}
+        getValue={row.getValue("xcoord")}
       ></EditableTableCell>
     ),
     enableHiding: false,
@@ -62,7 +62,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
         table={table}
         column={column}
         row={row}
-        getValue={row.getValue}
+        getValue={row.getValue("ycoord")}
       ></EditableTableCell>
     ),
     enableHiding: false,
@@ -150,7 +150,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
         table={table}
         column={column}
         row={row}
-        getValue={row.getValue}
+        getValue={row.getValue("longName")}
       />
     ),
     // cell: EditableTableCell,

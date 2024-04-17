@@ -61,7 +61,9 @@ export function NodeDataTable({ columns }: DataTableProps) {
         console.log(res.status);
       }
     };
-    handleUpdateNodes();
+    handleUpdateNodes().then(() =>
+      console.log("Update nodes request sent to database."),
+    );
   }, [nodes]);
 
   const table = useReactTable({
@@ -89,10 +91,13 @@ export function NodeDataTable({ columns }: DataTableProps) {
               index === rowIndex ? nodes[rowIndex] : row,
             ),
           );
-          // handleUpdateNodes().then(() => console.log("use effect just ran"));
         }
       },
-      updateData: (rowIndex: number, columnId: string, value: string) => {
+      updateData: (
+        rowIndex: number,
+        columnId: string,
+        value: string | number,
+      ) => {
         setNodes((old) =>
           old.map((row, index) => {
             if (index === rowIndex) {
@@ -104,9 +109,6 @@ export function NodeDataTable({ columns }: DataTableProps) {
             return row;
           }),
         );
-        // handleUpdateNodes().then(() => console.log("use effect just ran"));
-
-        // handleUpdateNodes().then(() => console.log("Sent nodes to back end."));
       },
     },
 

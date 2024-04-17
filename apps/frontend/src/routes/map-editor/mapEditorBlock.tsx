@@ -13,21 +13,12 @@ import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
 import theFirstFloor from "@/assets/01_thefirstfloor.png";
 import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
-import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 //import axios from "axios";
 import { useGraphContext } from "@/context/nodeContext.tsx";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogTrigger,
-// } from "@/components/ui/dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { EditIcon } from "lucide-react";
-// import { NodeDataTable } from "@/routes/map-editor/nodes/nodes-table.tsx";
-// import { nodeColumns } from "@/routes/map-editor/nodes/nodesData.tsx";
-// import { EditIcon } from "lucide-react";
-// import axios from "axios";
+import GrayDot from "@/assets/gray-dot.png";
 
 export interface Edge {
   edgeID: string;
@@ -212,8 +203,8 @@ export const MapEditor: React.FC = () => {
     const endCoordinates: LatLngExpression = [nLat, lat];
 
     const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: "blue",
-      weight: 5,
+      color: "red",
+      weight: 3,
     });
     newPath.addTo(map);
     addToPaths(newPath); // Add the new path to the paths list
@@ -226,7 +217,7 @@ export const MapEditor: React.FC = () => {
   function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
     nodesOnFloor.forEach((node) => {
       const customIcon = new Icon({
-        iconUrl: RedDot,
+        iconUrl: GrayDot,
         iconSize: [12, 12],
         iconAnchor: [6, 6],
       });

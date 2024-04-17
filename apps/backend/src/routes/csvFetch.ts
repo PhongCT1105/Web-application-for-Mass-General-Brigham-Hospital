@@ -68,7 +68,11 @@ router.post("/node", async (req, res) => {
           where: {
             nodeID: node.nodeID,
           },
-          data: node,
+          data: {
+            ...node,
+            ycoord: parseInt(String(node.ycoord)),
+            xcoord: parseInt(String(node.xcoord)),
+          },
         });
       } else {
         // If node doesn't exist, create it

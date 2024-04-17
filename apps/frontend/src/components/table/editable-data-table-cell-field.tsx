@@ -4,7 +4,11 @@ import { Column, Row, Table } from "@tanstack/react-table";
 
 interface TableMeta {
   editedRows: Record<string, boolean>;
-  updateData: (rowIndex: number, columnId: string, value: string) => void;
+  updateData: (
+    rowIndex: number,
+    columnId: string,
+    value: string | number,
+  ) => void;
 }
 
 interface Option {
@@ -22,7 +26,8 @@ interface EditableTableCellProps<TData, TValue>
   table: Table<TData>;
   column: Column<TData, TValue>;
   row: Row<TData>;
-  getValue: (columnId: string) => string;
+  // getValue: (columnId: string) => string | number;
+  getValue: string | number;
 }
 
 export function EditableTableCell<TData, TValue>({
@@ -31,7 +36,7 @@ export function EditableTableCell<TData, TValue>({
   column,
   table,
 }: EditableTableCellProps<TData, TValue>) {
-  const initialValue = getValue(column.id);
+  const initialValue = getValue;
   // table.options.meta.updateData;
   const columnMeta = column?.columnDef.meta as ColumnMeta;
   const tableMeta = table?.options?.meta as TableMeta;
