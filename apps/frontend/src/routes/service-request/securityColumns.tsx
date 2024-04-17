@@ -1,7 +1,7 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
-import { SecurityForm } from "common/src/interfaces/securityReq.ts";
+import { SecurityForm } from "@/interfaces/securityReq.ts";
 
 //import {SecurityFormLogTable} from "@/routes/request-log/securityLogPage.tsx";
 export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [

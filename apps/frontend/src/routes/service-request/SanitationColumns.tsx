@@ -1,7 +1,7 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
-import { SanitationForm } from "common/src/interfaces/sanitationReq.ts";
+import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 // import { Button } from "@/components/ui/button.tsx";
 // import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 // import {

@@ -1,6 +1,6 @@
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
 import { ColumnDef } from "@tanstack/react-table";
-import { ScheduleForm } from "common/src/interfaces/roomScheduleReq.ts";
+import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 import {
   Dialog,
   DialogContent,
