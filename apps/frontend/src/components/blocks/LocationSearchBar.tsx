@@ -10,7 +10,8 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import {
   Card,
   CardContent,
-  CardDescription,
+  // CardDescription,
+  CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { CircleDot, CirclePlay, EllipsisVertical } from "lucide-react";
@@ -92,17 +93,19 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div
-      className="flex flex-col items-center bg-transparent p-4 w-[25vw] min-w-[300px]
+      className="flex flex-col items-center bg-transparent p-4 w-[350px]
 "
     >
-      <Card className={"p-3 w-full"}>
-        <CardTitle
-        // className={"text-4xl font-semibold"}
-        >
-          Directions
-        </CardTitle>
+      <Card className={"w-full "}>
+        <CardHeader>
+          <CardTitle
+          // className={"text-4xl font-semibold"}
+          >
+            Directions
+          </CardTitle>
+        </CardHeader>
         <CardContent>
-          <CardDescription className={"py-2"}></CardDescription>
+          {/*<CardDescription className={""}></CardDescription>*/}
           <div className="flex flex-col mb-4 ">
             {/*<Label className={""}>*/}
             {/*    <div className={"ml-7 p-1"}>*/}
@@ -111,8 +114,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             <div className={"flex gap-2 items-center ml-[1.5px]"}>
               <CirclePlay />
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className={"w-full justify-start"}>
+                <DropdownMenuTrigger asChild className={"h-full"}>
+                  <Button
+                    variant="outline"
+                    className={"w-full  text-wrap justify-start"}
+                  >
                     {startPoint ? startPoint : "Select start location"}
                   </Button>
                 </DropdownMenuTrigger>
@@ -149,8 +155,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             <div className={"flex gap-2 items-center ml-[1.5px]"}>
               <CircleDot />
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className={"w-full justify-start"}>
+                <DropdownMenuTrigger asChild className={"h-full"}>
+                  <Button
+                    variant="outline"
+                    className={"w-full text-wrap justify-start"}
+                  >
                     {endPoint ? endPoint : "Select end location"}
                   </Button>
                 </DropdownMenuTrigger>
