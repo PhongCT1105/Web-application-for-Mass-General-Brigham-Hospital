@@ -7,7 +7,9 @@ import {
   SecuritySlide,
   MedicationSlide,
 } from "@/components/blocks/CarouselServiceSlides.tsx";
-import { MapBlock } from "@/components/blocks/MapBlock.tsx";
+// import { MapBlock } from "@/components/blocks/MapBlock.tsx";
+// import securityGuard from "@/assets/cops.jpg";
+import mapPic from "@/assets/01_thefirstfloor.png";
 // import { Footer } from "@/components/blocks/Footer.tsx";
 
 export default function StartPage() {
@@ -30,7 +32,12 @@ export default function StartPage() {
               id="bottom-map"
               className="flex flex-col h-[90vh] w-[90vw] justify-center relative"
             >
-              <MapBlock />
+              {/*<MapBlock />*/}
+              <img
+                className="absolute inset-0 w-full object-cover object-top"
+                src={mapPic}
+                alt="Map Hero"
+              />
               <div className="absolute inset-0 flex flex-col justify-start items-center">
                 <div className="text-center">
                   <p className="text-black text-[48px] font-['League Spartan']">
