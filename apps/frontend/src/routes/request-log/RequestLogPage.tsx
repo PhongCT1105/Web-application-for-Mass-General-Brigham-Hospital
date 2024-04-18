@@ -11,15 +11,15 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
 import { Badge, Biohazard, Calendar, FlowerIcon, PillIcon } from "lucide-react";
-import { MedicationForm } from "common/src/interfaces/medicationReq.ts";
+import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 import { SecurityFormLogTable } from "@/routes/request-log/securityLogPage.tsx";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
 import { columnsSecurityFormLog } from "@/routes/service-request/securityColumns.tsx";
-import { SecurityForm } from "common/src/interfaces/securityReq.ts";
+import { SecurityForm } from "@/interfaces/securityReq.ts";
 import { columnsSanitationFormLog } from "@/routes/service-request/SanitationColumns.tsx";
-import { SanitationForm } from "common/src/interfaces/sanitationReq.ts";
-import { ScheduleForm } from "common/src/interfaces/roomScheduleReq.ts";
+import { SanitationForm } from "@/interfaces/sanitationReq.ts";
+import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 import { TransportRequestColumns } from "@/routes/service-request/transportResquest/transportTable.tsx";
 import { DataTable } from "@/components/table/data-table.tsx";
 export interface requestFormWID {

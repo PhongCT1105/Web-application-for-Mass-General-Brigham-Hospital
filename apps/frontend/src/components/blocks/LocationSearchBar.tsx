@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -10,26 +10,37 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import {
   Card,
   CardContent,
-  CardDescription,
+  // CardDescription,
+  CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { CircleDot, CirclePlay, EllipsisVertical } from "lucide-react";
+// import { Node } from "@/context/nodeContext.tsx";
+import { useSearchContext } from "@/components/blocks/MapBlock.tsx";
 
 // import {Label} from "@/components/ui/label.tsx";
 
-// interface changeMarker {
-//   start: string;
-//   end: string;
-// }
+interface changeMarker {
+  start: string;
+  end: string;
+  setStart: React.Dispatch<React.SetStateAction<string>>;
+  setEnd: React.Dispatch<React.SetStateAction<string>>;
+}
+
+interface locationData {
+  nodeID: string;
+  longName: string;
+}
 
 interface SearchBarProps {
-  locations: string[];
+  locations: locationData[];
+  //hospitalData: HospitalData[];
   onSearch: (start: string, end: string) => void;
   onClear: () => void;
   currentFloor: string;
   changePathfindingStrategy: (strat: string) => void;
   //nodesOnFloor: HospitalData[];
-  //onChange: changeMarker;
+  onChange?: changeMarker;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -42,18 +53,36 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const [startPoint, setStartPoint] = useState<string>("");
   const [endPoint, setEndPoint] = useState<string>("");
+  const [startPointID, setStartPointID] = useState<string>("");
+  const [endPointID, setEndPointID] = useState<string>("");
+  const { startNodeName, endNodeName, startNodeID, endNodeID } =
+    useSearchContext();
   // Filter locations based on the current floor
-  const filteredLocations = locations.filter((location) => {
-    // Check if the location is not a hallway and does not start with "Hall"
-    return !location.includes("Hallway") && !location.startsWith("Hall");
-  });
+  const filteredLocations: string[] = locations
+    .filter((location) => {
+      // Check if the location is not a hallway and does not start with "Hall"
+      return (
+        !location.longName.includes("Hallway") &&
+        !location.longName.startsWith("Hall")
+      );
+    })
+    .map((location) => location.longName);
 
   const handleSearch = () => {
     onClear();
-    // setStartPoint(onChange.start);
-    // setEndPoint(onChange.end);
-    onSearch(startPoint, endPoint);
+    console.log("startSearch === " + startPoint);
+    console.log("endSearch === " + endPoint);
+    //setStartPoint(onChange.start);
+    //setEndPoint(onChange.end);
+    onSearch(startPointID, endPointID);
   };
+
+  useEffect(() => {
+    setStartPoint(startNodeName);
+    setEndPoint(endNodeName);
+    setStartPointID(startNodeID);
+    setEndPointID(endNodeID);
+  }, [startNodeName, endNodeName, startNodeID, endNodeID]);
 
   const handleClear = () => {
     setStartPoint("");
@@ -63,17 +92,19 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div
-      className="flex flex-col items-center bg-transparent p-4 w-[25vw] min-w-[300px]
+      className="flex flex-col items-center bg-transparent p-4 w-[350px]
 "
     >
-      <Card className={"p-3 w-full"}>
-        <CardTitle
-        // className={"text-4xl font-semibold"}
-        >
-          Directions
-        </CardTitle>
+      <Card className={"w-full "}>
+        <CardHeader>
+          <CardTitle
+          // className={"text-4xl font-semibold"}
+          >
+            Directions
+          </CardTitle>
+        </CardHeader>
         <CardContent>
-          <CardDescription className={"py-2"}></CardDescription>
+          {/*<CardDescription className={""}></CardDescription>*/}
           <div className="flex flex-col mb-4 ">
             {/*<Label className={""}>*/}
             {/*    <div className={"ml-7 p-1"}>*/}
@@ -82,8 +113,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             <div className={"flex gap-2 items-center ml-[1.5px]"}>
               <CirclePlay />
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className={"w-full justify-start"}>
+                <DropdownMenuTrigger asChild className={"h-full"}>
+                  <Button
+                    variant="outline"
+                    className={"w-full  text-wrap justify-start"}
+                  >
                     {startPoint ? startPoint : "Select start location"}
                   </Button>
                 </DropdownMenuTrigger>
@@ -92,7 +126,18 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                     <DropdownMenuRadioItem
                       key={index}
                       value={location}
-                      onClick={() => setStartPoint(location)}
+                      onClick={() => {
+                        const selectedLocationData = locations.find(
+                          (loc) => loc.longName === location,
+                        );
+                        // Check if locationData object is found
+                        if (selectedLocationData) {
+                          // Set the startPoint to the nodeID associated with the selected location
+                          setStartPoint(selectedLocationData.longName);
+                          // Optionally, set the startPointID to the nodeID
+                          setStartPointID(selectedLocationData.nodeID);
+                        }
+                      }}
                     >
                       {location}
                     </DropdownMenuRadioItem>
@@ -109,8 +154,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             <div className={"flex gap-2 items-center ml-[1.5px]"}>
               <CircleDot />
               <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline" className={"w-full justify-start"}>
+                <DropdownMenuTrigger asChild className={"h-full"}>
+                  <Button
+                    variant="outline"
+                    className={"w-full text-wrap justify-start"}
+                  >
                     {endPoint ? endPoint : "Select end location"}
                   </Button>
                 </DropdownMenuTrigger>
@@ -119,7 +167,18 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                     <DropdownMenuRadioItem
                       key={index}
                       value={location}
-                      onClick={() => setEndPoint(location)}
+                      onClick={() => {
+                        const selectedLocationData = locations.find(
+                          (loc) => loc.longName === location,
+                        );
+                        // Check if locationData object is found
+                        if (selectedLocationData) {
+                          // Set the startPoint to the nodeID associated with the selected location
+                          setEndPoint(selectedLocationData.longName);
+                          // Optionally, set the startPointID to the nodeID
+                          setEndPointID(selectedLocationData.nodeID);
+                        }
+                      }}
                     >
                       {location}
                     </DropdownMenuRadioItem>

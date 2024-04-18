@@ -37,13 +37,13 @@ router.post("/", async (req, res) => {
     // find start and end ID
     const startNode = await PrismaClient.nodes.findFirst({
       where: {
-        longName: data.start,
+        nodeID: data.start,
       },
     });
 
     const endNode = await PrismaClient.nodes.findFirst({
       where: {
-        longName: data.end,
+        nodeID: data.end,
       },
     });
 

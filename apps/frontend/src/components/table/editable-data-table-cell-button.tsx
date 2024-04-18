@@ -9,8 +9,6 @@ interface TableMeta<TData> {
   updateData: (rowIndex: number, columnId: string, value: string) => void;
   setEditedRows: React.Dispatch<React.SetStateAction<NonNullable<unknown>>>;
   revertData: (rowIndex: number, revert: boolean) => void;
-  // getCoreRowModel: (table: Table<any>) => () => RowModel<any>
-  // Include other properties or methods if necessary
 }
 
 interface EditableTableCellProps<TData>
@@ -23,7 +21,6 @@ export function EditCellActionButton<TData>({
   table,
 }: EditableTableCellProps<TData>) {
   const meta = table?.options?.meta as TableMeta<TData>;
-  // console.log(row); // Log the structure of Node object
 
   const setEditedRows = (e: React.MouseEvent<HTMLButtonElement>) => {
     const elName = e.currentTarget.name;

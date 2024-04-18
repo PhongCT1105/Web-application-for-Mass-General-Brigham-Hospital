@@ -13,20 +13,12 @@ import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
 import theFirstFloor from "@/assets/01_thefirstfloor.png";
 import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
-import RedDot from "@/assets/red_dot.png";
 import "@/styles/mapBlock.modules.css";
 //import axios from "axios";
 import { useGraphContext } from "@/context/nodeContext.tsx";
-import {
-  Dialog,
-  DialogContent,
-  DialogTrigger,
-} from "@/components/ui/dialog.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { NodeDataTable } from "@/routes/map-editor/nodes/nodes-table.tsx";
-import { nodeColumns } from "@/routes/map-editor/nodes/nodesData.tsx";
 import { EditIcon } from "lucide-react";
-import axios from "axios";
+import GrayDot from "@/assets/gray-dot.png";
 
 export interface Edge {
   edgeID: string;
@@ -60,17 +52,17 @@ export const MapEditor: React.FC = () => {
 
   const { nodes: nodeData, edges: edgeData } = useGraphContext();
 
-  const handleUpdateNodes = async () => {
-    console.log(nodeData);
-    const res = await axios.post("/api/csvFetch/node", nodeData, {
-      headers: {
-        "content-type": "Application/json",
-      },
-    });
-    if (res.status == 200) {
-      console.log("success");
-    }
-  };
+  // const handleUpdateNodes = async () => {
+  //   console.log(nodeData);
+  //   const res = await axios.post("/api/csvFetch/node", nodeData, {
+  //     headers: {
+  //       "content-type": "Application/json",
+  //     },
+  //   });
+  //   if (res.status == 200) {
+  //     console.log("success");
+  //   }
+  // };
 
   const newHospitalData: HospitalData[] = useMemo(() => {
     return [];
@@ -130,10 +122,6 @@ export const MapEditor: React.FC = () => {
         [3400, 5000], // change to resolution of the image
       ];
 
-      L.imageOverlay(theThirdFloor, bounds).addTo(map);
-      L.imageOverlay(theSecondFloor, bounds).addTo(map);
-      L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
-      L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
       L.imageOverlay(theFirstFloor, bounds).addTo(map);
 
       map.setMaxBounds(bounds);
@@ -211,8 +199,8 @@ export const MapEditor: React.FC = () => {
     const endCoordinates: LatLngExpression = [nLat, lat];
 
     const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: "blue",
-      weight: 5,
+      color: "red",
+      weight: 3,
     });
     newPath.addTo(map);
     addToPaths(newPath); // Add the new path to the paths list
@@ -225,7 +213,7 @@ export const MapEditor: React.FC = () => {
   function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
     nodesOnFloor.forEach((node) => {
       const customIcon = new Icon({
-        iconUrl: RedDot,
+        iconUrl: GrayDot,
         iconSize: [12, 12],
         iconAnchor: [6, 6],
       });
@@ -298,6 +286,7 @@ export const MapEditor: React.FC = () => {
         }}
       >
         <div
+          className={"space-x-2"}
           style={{
             position: "absolute",
             bottom: 100,
@@ -340,19 +329,9 @@ export const MapEditor: React.FC = () => {
           >
             Third Floor
           </Button>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button>
-                <EditIcon />
-                <span className="sr-only">Open menu</span>
-              </Button>
-            </DialogTrigger>
-            <DialogContent className={"  overflow-y-scroll max-h-screen "}>
-              <NodeDataTable columns={nodeColumns} />
-            </DialogContent>
-          </Dialog>
-          <Button variant={"destructive"} onClick={handleUpdateNodes}>
-            Submit changes to the backend
+          <Button onClick={() => (window.location.href = "/map-editor/table")}>
+            <EditIcon className="mr-2 h-4 w-4" />
+            <span>Table View</span>
           </Button>
         </div>
       </div>

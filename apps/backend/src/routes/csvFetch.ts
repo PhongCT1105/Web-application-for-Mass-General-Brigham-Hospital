@@ -22,6 +22,26 @@ interface edgeTable {
 }
 
 // Node stuff good, just copy the format
+// router.post("/node", async (req, res) => {
+//   console.log("hey this is being called for node");
+//
+//   const data = req.body;
+//   const jsonString = JSON.stringify(data);
+//   const nodeData: nodeTable[] = JSON.parse(jsonString);
+//   try {
+//     await prisma.nodes.deleteMany();
+//     for (let i = 0; i < nodeData.length; i++) {
+//       await prisma.nodes.create({
+//         data: nodeData[i],
+//       });
+//     }
+//
+//     res.status(200).send("CSV data imported successfully.");
+//   } catch (error) {
+//     console.error("Error processing CSV file:", error);
+//     res.status(400).send("Bad request");
+//   }
+// });
 router.post("/node", async (req, res) => {
   console.log("hey this is being called for node");
 
@@ -29,16 +49,42 @@ router.post("/node", async (req, res) => {
   const jsonString = JSON.stringify(data);
   const nodeData: nodeTable[] = JSON.parse(jsonString);
   try {
-    await prisma.nodes.deleteMany();
+    // Don't delete edges here
+    // await prisma.nodes.deleteMany();
+
+    // Iterate over nodeData and create or update nodes
     for (let i = 0; i < nodeData.length; i++) {
-      await prisma.nodes.create({
-        data: nodeData[i],
+      const node = nodeData[i];
+      // Find existing node by nodeID
+      const existingNode = await prisma.nodes.findUnique({
+        where: {
+          nodeID: node.nodeID,
+        },
       });
+
+      if (existingNode) {
+        // If node exists, update it
+        await prisma.nodes.update({
+          where: {
+            nodeID: node.nodeID,
+          },
+          data: {
+            ...node,
+            ycoord: parseInt(String(node.ycoord)),
+            xcoord: parseInt(String(node.xcoord)),
+          },
+        });
+      } else {
+        // If node doesn't exist, create it
+        await prisma.nodes.create({
+          data: node,
+        });
+      }
     }
 
-    res.status(200).send("CSV data imported successfully.");
+    res.status(200).send("Node data imported successfully.");
   } catch (error) {
-    console.error("Error processing CSV file:", error);
+    console.error("Error processing node data:", error);
     res.status(400).send("Bad request");
   }
 });

@@ -5,7 +5,7 @@ import { Checkbox } from "@/components/ui/checkbox.tsx";
 import { priorities, statuses } from "common/src/dataTypes/labels.ts";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
 import { DataTableRowActions } from "@/components/table/data-table-row-actions.tsx";
-import { Medication } from "common/src/interfaces/medicationReq.ts";
+import { Medication } from "@/interfaces/medicationReq.ts";
 import { Input } from "@/components/ui/input.tsx";
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
 import {

@@ -3,7 +3,7 @@ import PrismaClient from "../bin/database-connection.ts";
 import {
   Medication,
   MedicationForm,
-} from "common/src/interfaces/medicationReq.ts";
+} from "../../../frontend/src/interfaces/medicationReq.ts";
 
 const router: Router = express.Router();
 router.post("/", async function (req: Request, res: Response) {
