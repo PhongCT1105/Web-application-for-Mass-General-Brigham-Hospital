@@ -116,7 +116,7 @@ export const MapBlock: React.FC = () => {
   const [endNodeName, setEndNodeName] = useState("");
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
-
+  // setCurrentFloor("F1");
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
     lowerLevel2: lowerLevelMap2,
