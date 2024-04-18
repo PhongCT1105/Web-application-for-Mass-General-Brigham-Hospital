@@ -206,34 +206,38 @@ export const MapBlock: React.FC = () => {
         addEndMarker(endCoords); // account for going up and down floor  WAHHHH
         // if any node is elevator/stair
         for (let i = 1; i < currentPath.length - 1; i++) {
-          if (
-            (currentPath[i].nodeType && currentPath[i + 1].nodeType) ==
-            ("ELEV" || "STAI")
-          ) {
-            let foundStartA = false;
-            let foundEndA = false;
-            for (let i = 1; i < currentPath.length - 1; i++) {
-              if (
-                currentPath[i].floor != currentPath[i + 1].floor &&
-                !foundStartA
-              ) {
-                addFloorMarker(currentPath[i + 1].floor, [
-                  3400 - currentPath[i].ycoord,
-                  currentPath[i].xcoord,
-                ]);
-                foundStartA = true;
-                continue;
-              }
-              if (
-                currentPath[i].floor != currentPath[i + 1].floor &&
-                !foundEndA
-              ) {
-                addFloorMarker(currentPath[i - 1].floor, [
-                  3400 - currentPath[i].ycoord,
-                  currentPath[i].xcoord,
-                ]);
-                foundEndA = true;
-                break;
+          if (currentPath[i] && currentPath[i + 1]) {
+            if (
+              (currentPath[i].nodeType && currentPath[i + 1].nodeType) ===
+              ("ELEV" || "STAI")
+            ) {
+              let foundStartA = false;
+              let foundEndA = false;
+              for (let i = 1; i < currentPath.length - 1; i++) {
+                if (currentPath[i] && currentPath[i + 1]) {
+                  if (
+                    currentPath[i].floor != currentPath[i + 1].floor &&
+                    !foundStartA
+                  ) {
+                    addFloorMarker(currentPath[i + 1].floor, [
+                      3400 - currentPath[i].ycoord,
+                      currentPath[i].xcoord,
+                    ]);
+                    foundStartA = true;
+                    continue;
+                  }
+                  if (
+                    currentPath[i].floor != currentPath[i + 1].floor &&
+                    !foundEndA
+                  ) {
+                    addFloorMarker(currentPath[i - 1].floor, [
+                      3400 - currentPath[i].ycoord,
+                      currentPath[i].xcoord,
+                    ]);
+                    foundEndA = true;
+                    break;
+                  }
+                }
               }
             }
           }
@@ -244,11 +248,13 @@ export const MapBlock: React.FC = () => {
       ) {
         addStartMarker(startCoords);
         for (let i = 1; i < currentPath.length - 1; i++) {
-          if (
-            currentPath[i].floor != currentPath[i + 1].floor &&
-            currentPath[i].nodeID == endHospital.nodeID
-          ) {
-            addFloorMarker(currentPath[i + 1].floor, endCoords);
+          if (currentPath[i] && currentPath[i + 1]) {
+            if (
+              currentPath[i].floor != currentPath[i + 1].floor &&
+              currentPath[i].nodeID === endHospital.nodeID
+            ) {
+              addFloorMarker(currentPath[i + 1].floor, endCoords);
+            }
           }
         }
       } else if (
@@ -257,17 +263,21 @@ export const MapBlock: React.FC = () => {
       ) {
         addEndMarker(endCoords);
         for (let i = path.length - 1; i > 1; i--) {
-          if (
-            currentPath[i].floor != currentPath[i - 1].floor &&
-            currentPath[i].nodeID == startHospital.nodeID
-          ) {
-            addFloorMarker(currentPath[i - 1].floor, startCoords);
+          if (currentPath[i] && currentPath[i + 1]) {
+            if (
+              currentPath[i].floor != currentPath[i - 1].floor &&
+              currentPath[i].nodeID === startHospital.nodeID
+            ) {
+              addFloorMarker(currentPath[i - 1].floor, startCoords);
+            }
           }
         }
 
         for (let i = currentPath.length - 1; i > 1; i--) {
-          if (currentPath[i].floor != currentPath[i - 1].floor) {
-            addFloorMarker(currentPath[i - 1].floor, startCoords);
+          if (currentPath[i] && currentPath[i + 1]) {
+            if (currentPath[i].floor != currentPath[i - 1].floor) {
+              addFloorMarker(currentPath[i - 1].floor, startCoords);
+            }
           }
         }
       } else if (
@@ -277,18 +287,23 @@ export const MapBlock: React.FC = () => {
         let foundStartB = false;
         let foundEndB = false;
         for (let i = 1; i < currentPath.length - 1; i++) {
-          if (
-            currentPath[i].floor != currentPath[i + 1].floor &&
-            !foundStartB
-          ) {
-            addFloorMarker(currentPath[i - 1].floor, startCoords);
-            foundStartB = true;
-            continue;
-          }
-          if (currentPath[i].floor != currentPath[i + 1].floor && !foundEndB) {
-            addFloorMarker(currentPath[i + 1].floor, endCoords);
-            foundEndB = true;
-            break;
+          if (currentPath[i] && currentPath[i + 1]) {
+            if (
+              currentPath[i].floor != currentPath[i + 1].floor &&
+              !foundStartB
+            ) {
+              addFloorMarker(currentPath[i - 1].floor, startCoords);
+              foundStartB = true;
+              continue;
+            }
+            if (
+              currentPath[i].floor != currentPath[i + 1].floor &&
+              !foundEndB
+            ) {
+              addFloorMarker(currentPath[i + 1].floor, endCoords);
+              foundEndB = true;
+              break;
+            }
           }
         }
       }
@@ -378,14 +393,14 @@ export const MapBlock: React.FC = () => {
     // elevator, elevator
     // stair, elevator
     // elevator, stair
-    if (source == "STAI") {
-      if (target == "ELEV" || target == "STAI") {
+    if (source === "STAI") {
+      if (target === "ELEV" || target === "STAI") {
         return false;
       }
     }
 
-    if (source == "ELEV") {
-      if (target == "ELEV" || target == "STAI") {
+    if (source === "ELEV") {
+      if (target === "ELEV" || target === "STAI") {
         return false;
       }
     }
@@ -773,7 +788,6 @@ export const MapBlock: React.FC = () => {
 
       // Moved the drawing of lines after updating the current floor
       clearLines();
-      displayNodesOnFloor();
       drawFullPath(searchPath, convertedFloorName);
     }
   }

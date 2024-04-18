@@ -1,9 +1,14 @@
 import { Graph } from "./Graph.ts";
 import { Node } from "./Node.ts";
+import { PathfindingStrategy } from "./PathfindingStrategy.ts";
 
-export class aStar {
+export class aStar implements PathfindingStrategy {
+  findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+    return this.run(graph, startNodeID, endNodeID);
+  }
+
   // run will perform all the logic of the A* implementation
-  static run(graph: Graph, startNodeID: string, endNodeID: string) {
+  run(graph: Graph, startNodeID: string, endNodeID: string) {
     // translating nodes
     const startNode = graph.nodes.get(startNodeID)!;
     const endNode = graph.nodes.get(endNodeID)!;
@@ -56,7 +61,7 @@ export class aStar {
     return this.reconstructPath(cameFrom, endNodeID, graph);
   }
 
-  static calcDist(currNode: Node, goalNode: Node): number {
+  calcDist(currNode: Node, goalNode: Node): number {
     return Math.hypot(
       goalNode.xcoord - currNode.xcoord,
       goalNode.ycoord - currNode.ycoord,
@@ -64,7 +69,7 @@ export class aStar {
   }
 
   // reconstructPath will take in relevant parameters and return an array of Nodes
-  static reconstructPath(
+  reconstructPath(
     cameFrom: Map<string, string>,
     endNodeID: string,
     graph: Graph,
