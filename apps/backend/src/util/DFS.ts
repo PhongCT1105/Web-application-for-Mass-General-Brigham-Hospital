@@ -1,8 +1,13 @@
 import { Graph } from "./Graph";
 import { Node } from "./Node.ts";
+import { PathfindingStrategy } from "./PathfindingStrategy.ts";
 
-export class DFS {
-  static run(graph: Graph, startNodeID: string, endNodeID: string) {
+export class DFS implements PathfindingStrategy {
+  findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+    return this.run(graph, startNodeID, endNodeID);
+  }
+
+  run(graph: Graph, startNodeID: string, endNodeID: string) {
     // setting up
     let visited: Node[] = [];
     let pathFound = false;
@@ -23,11 +28,7 @@ export class DFS {
     return visited;
   }
 
-  static dfsRecursive(
-    currentNode: Node,
-    endNode: Node,
-    visited: Node[],
-  ): Node[] {
+  dfsRecursive(currentNode: Node, endNode: Node, visited: Node[]): Node[] {
     visited.push(currentNode);
 
     if (currentNode === endNode) {

@@ -1,9 +1,14 @@
 import { Graph } from "./Graph.tsx";
 import { Node } from "./Node.tsx";
 import { Queue } from "queue-typescript";
+import { PathfindingStrategy } from "./PathfindingStrategy.ts";
 
-export class BFS {
-  static run(graph: Graph, startNodeID: string, endNodeID: string) {
+export class BFS implements PathfindingStrategy {
+  findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+    return this.run(graph, startNodeID, endNodeID);
+  }
+
+  run(graph: Graph, startNodeID: string, endNodeID: string) {
     // setting up queue, visited, and parent
     const visited: Set<Node> = new Set();
     const queue = new Queue<Node>();
@@ -56,7 +61,7 @@ export class BFS {
     return this.reconstructPath(parentMap, startNodeID, endNodeID, graph);
   }
 
-  static reconstructPath(
+  reconstructPath(
     parentMap: Map<Node, Node>,
     startNodeID: string,
     endNodeID: string,
