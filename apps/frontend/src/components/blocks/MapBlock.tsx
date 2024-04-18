@@ -159,10 +159,15 @@ export const MapBlock: React.FC = () => {
           crs: CRS.Simple,
           minZoom: -2,
           maxZoom: 2,
-          zoomControl: true,
+          zoomControl: false,
           preferCanvas: true,
         }).setView([3400, 5000], -2);
         mapRef.current = map;
+        L.control
+          .zoom({
+            position: "topright",
+          })
+          .addTo(map);
       }
 
       const bounds: LatLngBoundsExpression = [
@@ -939,27 +944,19 @@ export const MapBlock: React.FC = () => {
           <div
             style={{
               position: "absolute",
-              zIndex: 1000,
-              marginLeft: 40,
-            }}
-          ></div>
-          <div
-            style={{
-              position: "absolute",
               top: "67%", // Position at the vertical center of the page
-              left: "50%",
+              left: "90%",
               transform: "translate(0%, -100%)", // Center horizontally and vertically
               display: "flex",
               flexDirection: "column-reverse",
               justifyContent: "center",
               alignItems: "center",
-              width: "87%",
               zIndex: 1000,
               color: "black",
             }}
           >
             <div
-              className={`w-[80px] h-[80px] relative  ${currentFloor === "L2" ? "mt-8" : "hover:mr-4"}`}
+              className={`w-[80px] h-[80px] ${currentFloor === "L2" ? "mt-8" : ""}`}
               style={{ marginBottom: "-15px" }}
             >
               <button
@@ -978,7 +975,7 @@ export const MapBlock: React.FC = () => {
               </button>
             </div>
             <div
-              className={`w-[80px] h-[80px] relative  ${currentFloor === "L1" ? "mt-8" : "hover:mr-4"}`}
+              className={`w-[80px] h-[80px] relative ${currentFloor === "L1" ? "mt-8" : ""}`}
               style={{ marginBottom: "-15px" }}
             >
               <button
@@ -997,7 +994,7 @@ export const MapBlock: React.FC = () => {
               </button>
             </div>
             <div
-              className={`w-[80px] h-[80px] relative  ${currentFloor === "1" ? "mt-8" : "hover:mr-4"}`}
+              className={`w-[80px] h-[80px] relative ${currentFloor === "1" ? "mt-8" : ""}`}
               style={{ marginBottom: "-15px" }}
             >
               <button
@@ -1016,7 +1013,7 @@ export const MapBlock: React.FC = () => {
               </button>
             </div>
             <div
-              className={`w-[80px] h-[80px] relative  ${currentFloor === "2" ? "mt-8" : "hover:mr-4"}`}
+              className={`w-[80px] h-[80px] relative ${currentFloor === "2" ? "mt-8" : ""}`}
               style={{ marginBottom: "-15px" }}
             >
               <button
@@ -1035,7 +1032,7 @@ export const MapBlock: React.FC = () => {
               </button>
             </div>
             <div
-              className={`w-[80px] h-[80px] relative  ${currentFloor === "3" ? "mt-8" : "hover:mr-4"}`}
+              className={`w-[80px] h-[80px] relative  ${currentFloor === "3" ? "mt-8" : ""}`}
               style={{ marginBottom: "-15px" }}
             >
               <button
