@@ -331,7 +331,7 @@ export const MapEditor: React.FC = () => {
               onClick={() => changeFloor("lowerLevel2")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -354,7 +354,7 @@ export const MapEditor: React.FC = () => {
               onClick={() => changeFloor("lowerLevel1")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -377,7 +377,7 @@ export const MapEditor: React.FC = () => {
               onClick={() => changeFloor("theFirstFloor")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -396,7 +396,7 @@ export const MapEditor: React.FC = () => {
               onClick={() => changeFloor("theSecondFloor")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -415,7 +415,7 @@ export const MapEditor: React.FC = () => {
               onClick={() => changeFloor("theThirdFloor")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}

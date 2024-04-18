@@ -964,7 +964,7 @@ export const MapBlock: React.FC = () => {
                 onClick={() => changeFloor(searchPath, "lowerLevel2")}
               >
                 <div
-                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
                 >
                   <div
                     className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -983,7 +983,7 @@ export const MapBlock: React.FC = () => {
                 onClick={() => changeFloor(searchPath, "lowerLevel1")}
               >
                 <div
-                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
                 >
                   <div
                     className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -1002,7 +1002,7 @@ export const MapBlock: React.FC = () => {
                 onClick={() => changeFloor(searchPath, "theFirstFloor")}
               >
                 <div
-                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
                 >
                   <div
                     className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -1021,7 +1021,7 @@ export const MapBlock: React.FC = () => {
                 onClick={() => changeFloor(searchPath, "theSecondFloor")}
               >
                 <div
-                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
                 >
                   <div
                     className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -1040,7 +1040,7 @@ export const MapBlock: React.FC = () => {
                 onClick={() => changeFloor(searchPath, "theThirdFloor")}
               >
                 <div
-                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
                 >
                   <div
                     className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -1057,7 +1057,7 @@ export const MapBlock: React.FC = () => {
             {/*        onClick={() => changeFloor("lowerLevel2")}*/}
             {/*    >*/}
             {/*        <div*/}
-            {/*            className="absolute w-20 h-20 transform rotate-45 origin-bottom-left bg-blue-200 hover:bg-yellow-500">*/}
+            {/*            className="absolute w-20 h-20 transform rotate-45  bg-blue-200 hover:bg-yellow-500">*/}
             {/*            <div className={"-rotate-45 text-xl font-medium text-center w-full h-full"}>F2</div>*/}
             {/*        </div>*/}
             {/*    </Button>*/}
@@ -1068,7 +1068,7 @@ export const MapBlock: React.FC = () => {
             {/*        onClick={() => changeFloor("lowerLevel2")}*/}
             {/*    >*/}
             {/*        <div*/}
-            {/*            className="absolute w-20 h-20 transform rotate-45 origin-bottom-left bg-blue-200 hover:bg-yellow-500">*/}
+            {/*            className="absolute w-20 h-20 transform rotate-45  bg-blue-200 hover:bg-yellow-500">*/}
             {/*            <div className={"-rotate-45 text-xl font-medium text-center w-full h-full"}>F3</div>*/}
             {/*        </div>*/}
             {/*    </Button>*/}
@@ -1083,7 +1083,7 @@ export const MapBlock: React.FC = () => {
             {/*            style={{*/}
             {/*                backgroundColor: "#6FA7FF",*/}
             {/*            }}*/}
-            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 origin-bottom-left"></div>*/}
+            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
             {/*    </div>*/}
             {/*    /!*Lower Level 1*!/*/}
             {/*</Button>*/}
@@ -1096,7 +1096,7 @@ export const MapBlock: React.FC = () => {
             {/*            style={{*/}
             {/*                backgroundColor: "#277BFF",*/}
             {/*            }}*/}
-            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 origin-bottom-left"></div>*/}
+            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
             {/*    </div>*/}
             {/*    /!*First Floor*!/*/}
             {/*</Button>*/}
@@ -1109,7 +1109,7 @@ export const MapBlock: React.FC = () => {
             {/*            style={{*/}
             {/*                backgroundColor: "#0056DE",*/}
             {/*            }}*/}
-            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 origin-bottom-left"></div>*/}
+            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
             {/*    </div>*/}
             {/*    /!*Second Floor*!/*/}
             {/*</Button>*/}
@@ -1122,7 +1122,7 @@ export const MapBlock: React.FC = () => {
             {/*            style={{*/}
             {/*                backgroundColor: "#003A96",*/}
             {/*            }}*/}
-            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 origin-bottom-left"></div>*/}
+            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
             {/*    </div>*/}
             {/*    /!*Third Floor*!/*/}
             {/*</Button>*/}
