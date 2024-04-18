@@ -1,9 +1,11 @@
 import {
   CircleUser,
   CreditCard,
+  EditIcon,
   FolderArchive,
   Key,
   LogOut,
+  MapIcon,
   Package,
   Search,
   Settings,
@@ -43,7 +45,7 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/modeToggle.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useEffect } from "react";
+import React, { useEffect } from "react";
 
 interface HeaderProps {
   highlighted?: string; // Assuming highlightColor is a string
@@ -125,12 +127,37 @@ export function Header({ highlighted }: HeaderProps) {
                   >
                     CSV Table
                   </a>
-                  <a
-                    href={"/map-editor/map"}
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
-                  >
-                    Map Editor
-                  </a>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
+                      >
+                        Map Editor
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuLabel>Editor View</DropdownMenuLabel>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            (window.location.href = "/map-editor/table")
+                          }
+                        >
+                          <EditIcon className="mr-2 h-4 w-4" />
+                          <span>Table View</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            (window.location.href = "/map-editor/map")
+                          }
+                        >
+                          <MapIcon className="mr-2 h-4 w-4" />
+                          <span>Map View</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </>
               )}
               <a

@@ -1,7 +1,7 @@
 import express, { Router, Request, Response } from "express";
 // import { Flower, flowerRequest } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-import { ScheduleForm } from "common/src/interfaces/roomScheduleReq.ts";
+import { ScheduleForm } from "../../../frontend/src/interfaces/roomScheduleReq.ts";
 
 const router: Router = express.Router();
 

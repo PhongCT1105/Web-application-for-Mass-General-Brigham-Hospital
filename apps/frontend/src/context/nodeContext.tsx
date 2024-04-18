@@ -2,7 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 // import App from "@/App.tsx";
 import axios from "axios";
 
-interface MedicineContextType {
+interface GraphContextType {
   nodes: Node[];
   setNodes: React.Dispatch<React.SetStateAction<Node[]>>;
   edges: Edge[];
@@ -23,7 +23,7 @@ export interface Edge {
   startNode: string;
   endNode: string;
 }
-const GraphContext = createContext<MedicineContextType>({
+const GraphContext = createContext<GraphContextType>({
   edges: [],
   nodes: [] as Node[],
   // eslint-disable-next-line no-empty-function
@@ -46,14 +46,17 @@ export const GraphStateProvider = ({ children }: GraphStateProviderProps) => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const { data: nodeData } = await axios.get(`/api/mapreq/nodes?`);
-        const { data: edgeData } = await axios.get(`/api/mapreq/edges?`);
+        const { data: nodeData } = await axios.get("/api/mapreq/nodes?");
+        const { data: edgeData } = await axios.get("/api/mapreq/edges?");
 
         const updateEdges = edgeData.map((edgeItem: Edge) => ({
           edgeID: edgeItem.edgeID,
           startNode: edgeItem.startNode,
           endNode: edgeItem.endNode,
         }));
+        setEdges(updateEdges);
+        console.log("Successfully loaded edge data");
+        console.log(edgeData);
 
         // Accumulate changes in a temporary array
         const updatedNodes = nodeData.map((nodeItem: Node) => ({
@@ -67,11 +70,9 @@ export const GraphStateProvider = ({ children }: GraphStateProviderProps) => {
           shortName: nodeItem.shortName,
         }));
 
-        // Set the state once after the loop
-        setEdges(updateEdges);
         setNodes(updatedNodes);
-
         console.log("Successfully loaded node data");
+        console.log(nodeData);
       } catch (error) {
         console.error("Error loading data:", error);
       }

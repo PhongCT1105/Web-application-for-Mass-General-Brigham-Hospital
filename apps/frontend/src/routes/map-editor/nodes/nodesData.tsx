@@ -30,7 +30,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
     },
     id: "xcoord",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="x-cord" />
+      <DataTableColumnHeader column={column} title="x-coord" />
     ),
     meta: {
       type: "number",
@@ -40,7 +40,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
         table={table}
         column={column}
         row={row}
-        getValue={row.getValue}
+        getValue={row.getValue("xcoord")}
       ></EditableTableCell>
     ),
     enableHiding: false,
@@ -52,7 +52,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
       return originalRow && originalRow.ycoord;
     },
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="y-cord" />
+      <DataTableColumnHeader column={column} title="y-coord" />
     ),
     meta: {
       type: "number",
@@ -62,7 +62,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
         table={table}
         column={column}
         row={row}
-        getValue={row.getValue}
+        getValue={row.getValue("ycoord")}
       ></EditableTableCell>
     ),
     enableHiding: false,
@@ -150,7 +150,7 @@ export const nodeColumns: ColumnDef<Node>[] = [
         table={table}
         column={column}
         row={row}
-        getValue={row.getValue}
+        getValue={row.getValue("longName")}
       />
     ),
     // cell: EditableTableCell,

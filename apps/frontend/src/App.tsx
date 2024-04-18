@@ -17,6 +17,7 @@ import { useNavigate } from "react-router-dom";
 import { Auth0Provider } from "@auth0/auth0-react";
 import ProtectedPage from "@/routes/ProtectedPage.tsx";
 import { Header } from "@/components/blocks/header.tsx";
+import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
 // import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 
 function App() {
@@ -67,6 +68,11 @@ function App() {
           path: "/map-editor/map",
           errorElement: <h1>ERROR</h1>,
           element: <MapEditingPage />,
+        },
+        {
+          path: "/map-editor/table",
+          errorElement: <h1>ERROR</h1>,
+          element: <MapEditorTablePage />,
         },
       ],
     },

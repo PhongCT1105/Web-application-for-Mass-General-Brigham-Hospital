@@ -16,8 +16,8 @@ import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
 import { MedicineRequest } from "@/routes/service-request/medicine-request/medicineRequest.tsx";
 import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
-import { Medication } from "common/src/interfaces/medicationReq.ts";
-import { pillData } from "common/src/testData.ts";
+import { Medication } from "@/interfaces/medicationReq.ts";
+import { pillData } from "@/interfaces/dataTypes/testData.ts";
 import React, { createContext, useContext, useState } from "react";
 import { SheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
 

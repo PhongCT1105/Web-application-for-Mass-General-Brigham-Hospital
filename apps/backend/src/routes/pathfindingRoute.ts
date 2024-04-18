@@ -4,11 +4,9 @@ import { Node } from "../util/Node.ts";
 import PrismaClient from "../bin/database-connection.ts";
 import express, { Router } from "express";
 
-import {
-  BFSPathfindingStrategy,
-  AStarPathfindingStrategy,
-  DFSPathfindingStrategy,
-} from "../util/PathfindingStrategy.ts";
+import { aStar } from "../util/aStar.ts";
+import { BFS } from "../util/BFS.ts";
+import { DFS } from "../util/DFS.ts";
 
 const router: Router = express.Router();
 
@@ -22,13 +20,13 @@ router.post("/", async (req, res) => {
   // Choose the strategy based on the provided parameter
   switch (data.strategy) {
     case "BFS":
-      searchStrategy = new BFSPathfindingStrategy();
+      searchStrategy = new BFS();
       break;
     case "AStar":
-      searchStrategy = new AStarPathfindingStrategy();
+      searchStrategy = new aStar();
       break;
     case "DFS":
-      searchStrategy = new DFSPathfindingStrategy();
+      searchStrategy = new DFS();
       break;
     default:
       return res.status(400).json({ error: "Invalid search strategy" });
@@ -39,13 +37,13 @@ router.post("/", async (req, res) => {
     // find start and end ID
     const startNode = await PrismaClient.nodes.findFirst({
       where: {
-        longName: data.start,
+        nodeID: data.start,
       },
     });
 
     const endNode = await PrismaClient.nodes.findFirst({
       where: {
-        longName: data.end,
+        nodeID: data.end,
       },
     });
 

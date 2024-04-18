@@ -17,9 +17,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import { priorities, statuses } from "common/src/dataTypes/labels.ts";
-import { Medication } from "common/src/interfaces/medicationReq.ts";
-import { _Medication } from "common/src/interfaces/medicationReq.ts";
+import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
+import { Medication } from "@/interfaces/medicationReq.ts";
+import { _Medication } from "@/interfaces/medicationReq.ts";
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
 interface DataTableRowActionsProps<TData> {
   row: Row<TData>;
