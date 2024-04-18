@@ -1,6 +1,6 @@
 // import { priorities, statuses } from "./dataTypes/labels.ts";
 import { faker } from "@faker-js/faker";
-import { Medication } from "../../../apps/frontend/src/interfaces/medicationReq.ts";
+import { Medication } from "../medicationReq.ts";
 // import fs from "fs";
 // import path from "path";
 // import { priorities, statuses } from "./dataTypes/labels.ts";

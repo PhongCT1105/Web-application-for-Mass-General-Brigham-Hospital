@@ -1,6 +1,6 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
-import { priorities, statuses } from "common/src/dataTypes/labels.ts";
+import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
 import { Medication, MedicationForm } from "@/interfaces/medicationReq.ts";
 import { Button } from "@/components/ui/button.tsx";
