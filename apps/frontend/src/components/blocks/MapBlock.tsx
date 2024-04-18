@@ -20,7 +20,6 @@ import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
-
 import "@/components/blocks/SnakeAnim";
 
 declare module "leaflet" {
@@ -172,14 +171,13 @@ export const MapBlock: React.FC = () => {
     const map = mapRef.current;
     if (!map) return;
 
-    const newPath = L.polyline([startCoords, endCoords], {
+    return L.polyline([startCoords, endCoords], {
       color: "blue",
       weight: 5,
       snakingSpeed: 200,
       snakeRepeat: false,
       snakeRepeatDelay: 100,
     });
-    return newPath;
   }
 
   function placeStartEndMarkers(path: Node[]) {
@@ -830,7 +828,7 @@ export const MapBlock: React.FC = () => {
           }}
         >
           <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "L2" ? "" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "L2" ? "mt-8" : "hover:mr-4"}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
@@ -849,7 +847,7 @@ export const MapBlock: React.FC = () => {
             </button>
           </div>
           <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "L1" ? "" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "L1" ? "mt-8" : "hover:mr-4"}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
@@ -868,7 +866,7 @@ export const MapBlock: React.FC = () => {
             </button>
           </div>
           <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "1" ? "" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "1" ? "mt-8" : "hover:mr-4"}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
@@ -887,7 +885,7 @@ export const MapBlock: React.FC = () => {
             </button>
           </div>
           <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "2" ? "" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "2" ? "mt-8" : "hover:mr-4"}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
@@ -906,7 +904,7 @@ export const MapBlock: React.FC = () => {
             </button>
           </div>
           <div
-            className={`w-[80px] h-[80px] relative ${currentFloor === "2" ? "" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "3" ? "mt-8" : "hover:mr-4"}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
@@ -914,7 +912,7 @@ export const MapBlock: React.FC = () => {
               onClick={() => changeFloor("theThirdFloor")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-900 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
