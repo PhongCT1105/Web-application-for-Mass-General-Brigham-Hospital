@@ -63,10 +63,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   return (
     <div
-      className="flex flex-col items-center bg-transparent p-4 w-[25vw] min-w-[300px]
+      className="flex flex-col items-center bg-transparent p-4 w-[25vw] min-w-[300px] h-[88vh]
 "
     >
-      <Card className={"p-3 w-full"}>
+      <Card className={"p-3 w-full shadow"}>
         <CardTitle
         // className={"text-4xl font-semibold"}
         >
