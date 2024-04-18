@@ -41,6 +41,7 @@ export const MapEditor: React.FC = () => {
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
   //const [floorEdges, setFloorEdges] = useState<string[][]>([]);
+  const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -238,7 +239,6 @@ export const MapEditor: React.FC = () => {
   function changeFloor(floorName: string) {
     const map = mapRef.current;
     if (!map) return;
-
     const convertedFloorName =
       floorName === "lowerLevel2"
         ? "L2"
@@ -251,7 +251,7 @@ export const MapEditor: React.FC = () => {
               : floorName === "theThirdFloor"
                 ? "3"
                 : "";
-
+    setCurrentFloor(convertedFloorName);
     // Remove existing markers from the map
     clearMarkers();
     clearLines();
@@ -286,54 +286,181 @@ export const MapEditor: React.FC = () => {
         }}
       >
         <div
-          className={"space-x-2"}
+          className={"w-full h-full relative"}
+          style={{
+            zIndex: 1000,
+          }}
+        >
+          <Button
+            className={
+              "absolute bottom-0 right-0 mr-10 mb-8 rounded-full w-20 h-20"
+            }
+            onClick={() => (window.location.href = "/map-editor/table")}
+          >
+            <EditIcon className="h-8 w-8" />
+            {/*<span>Table View</span>*/}
+          </Button>
+        </div>
+        <div
           style={{
             position: "absolute",
-            bottom: 100,
+            top: "67%", // Position at the vertical center of the page
             left: "50%",
-            transform: "translateX(-50%)",
+            transform: "translate(0%, -100%)", // Center horizontally and vertically
             display: "flex",
-            justifyContent: "space-around",
-            width: "80%",
+            flexDirection: "column-reverse",
+            justifyContent: "center",
+            alignItems: "center",
+            width: "87%",
             zIndex: 1000,
             color: "black",
           }}
         >
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("lowerLevel2")}
+          <div
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "L2" ? "mt-8" : "hover:mr-4"}`}
+            style={{ marginBottom: "-15px" }}
           >
-            Lower Level 2
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("lowerLevel1")}
+            <button
+              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+              onClick={() => changeFloor("lowerLevel2")}
+            >
+              <div
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
+              >
+                <div
+                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                >
+                  L2
+                </div>
+              </div>
+            </button>
+          </div>
+          <div
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "L1" ? "mt-8" : "hover:mr-4"}`}
+            style={{ marginBottom: "-15px" }}
           >
-            Lower Level 1
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("theFirstFloor")}
+            <button
+              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+              onClick={() => changeFloor("lowerLevel1")}
+            >
+              <div
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
+              >
+                <div
+                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                >
+                  L1
+                </div>
+              </div>
+            </button>
+          </div>
+          <div
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "1" ? "mt-8" : "hover:mr-4"}`}
+            style={{ marginBottom: "-15px" }}
           >
-            First Floor
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("theSecondFloor")}
+            <button
+              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+              onClick={() => changeFloor("theFirstFloor")}
+            >
+              <div
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
+              >
+                <div
+                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                >
+                  F1
+                </div>
+              </div>
+            </button>
+          </div>
+          <div
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "2" ? "mt-8" : "hover:mr-4"}`}
+            style={{ marginBottom: "-15px" }}
           >
-            Second Floor
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("theThirdFloor")}
+            <button
+              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+              onClick={() => changeFloor("theSecondFloor")}
+            >
+              <div
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
+              >
+                <div
+                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                >
+                  F2
+                </div>
+              </div>
+            </button>
+          </div>
+          <div
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "3" ? "mt-8" : "hover:mr-4"}`}
+            style={{ marginBottom: "-15px" }}
           >
-            Third Floor
-          </Button>
-          <Button onClick={() => (window.location.href = "/map-editor/table")}>
-            <EditIcon className="mr-2 h-4 w-4" />
-            <span>Table View</span>
-          </Button>
+            <button
+              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+              onClick={() => changeFloor("theThirdFloor")}
+            >
+              <div
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
+              >
+                <div
+                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                >
+                  F3
+                </div>
+              </div>
+            </button>
+          </div>
         </div>
+        {/*<div*/}
+        {/*  className={"space-x-2"}*/}
+        {/*  style={{*/}
+        {/*    position: "absolute",*/}
+        {/*    bottom: 100,*/}
+        {/*    left: "50%",*/}
+        {/*    transform: "translateX(-50%)",*/}
+        {/*    display: "flex",*/}
+        {/*    justifyContent: "space-around",*/}
+        {/*    width: "80%",*/}
+        {/*    zIndex: 1000,*/}
+        {/*    color: "black",*/}
+        {/*  }}*/}
+        {/*>*/}
+        {/*  <Button*/}
+        {/*    variant={"secondary"}*/}
+        {/*    onClick={() => changeFloor("lowerLevel2")}*/}
+        {/*  >*/}
+        {/*    Lower Level 2*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant={"secondary"}*/}
+        {/*    onClick={() => changeFloor("lowerLevel1")}*/}
+        {/*  >*/}
+        {/*    Lower Level 1*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant={"secondary"}*/}
+        {/*    onClick={() => changeFloor("theFirstFloor")}*/}
+        {/*  >*/}
+        {/*    First Floor*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant={"secondary"}*/}
+        {/*    onClick={() => changeFloor("theSecondFloor")}*/}
+        {/*  >*/}
+        {/*    Second Floor*/}
+        {/*  </Button>*/}
+        {/*  <Button*/}
+        {/*    variant={"secondary"}*/}
+        {/*    onClick={() => changeFloor("theThirdFloor")}*/}
+        {/*  >*/}
+        {/*    Third Floor*/}
+        {/*  </Button>*/}
+        {/*  <Button onClick={() => (window.location.href = "/map-editor/table")}>*/}
+        {/*    <EditIcon className="mr-2 h-4 w-4" />*/}
+        {/*    <span>Table View</span>*/}
+        {/*  </Button>*/}
+        {/*</div>*/}
       </div>
     </div>
   );

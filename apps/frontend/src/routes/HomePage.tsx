@@ -5,7 +5,10 @@ import { MapBlock } from "@/components/blocks/MapBlock.tsx";
 // Define the map component
 const HomePage: React.FC = () => {
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+    <div
+      className={"flex flex-col h-[89vh]"}
+      // style={{ display: "flex", flexDirection: "column",  }}
+    >
       <MapBlock />
     </div>
   );
