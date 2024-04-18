@@ -4,7 +4,7 @@ import { Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { DataTableViewOptions } from "./data-table-view-options";
-import { priorities, statuses } from "common/src/dataTypes/labels.ts";
+import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
 import { DataTableFacetedFilter } from "./data-table-faceted-filter.tsx";
 
 interface DataTableToolbarProps<TData> {
