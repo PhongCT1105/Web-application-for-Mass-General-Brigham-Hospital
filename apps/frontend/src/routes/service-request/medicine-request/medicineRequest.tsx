@@ -35,10 +35,7 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
-import {
-  Medication,
-  MedicationForm,
-} from "common/src/interfaces/medicationReq.ts";
+import { Medication, MedicationForm } from "@/interfaces/medicationReq.ts";
 import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
