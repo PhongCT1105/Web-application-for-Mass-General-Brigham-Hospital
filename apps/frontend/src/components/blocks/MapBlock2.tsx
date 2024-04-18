@@ -47,8 +47,7 @@ declare module "leaflet" {
 export interface HospitalData {
   nodeID: string;
   name: string;
-  xCoord: number;
-  yCoord: number;
+  geocode: string;
   floor: string;
 }
 
@@ -117,15 +116,7 @@ export const MapBlock: React.FC = () => {
   const [endNodeName, setEndNodeName] = useState("");
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
-
-  // all different layers for floors
-  const LayerL1 = L.layerGroup();
-  const LayerL2 = L.layerGroup();
-  const LayerF1 = L.layerGroup();
-  const LayerF2 = L.layerGroup();
-  const LayerF3 = L.layerGroup();
   // setCurrentFloor("F1");
-
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
     lowerLevel2: lowerLevelMap2,
@@ -143,8 +134,7 @@ export const MapBlock: React.FC = () => {
       newHospitalData.push({
         nodeID: nodeData[i].nodeID,
         name: nodeData[i].longName,
-        xCoord: nodeData[i].xcoord,
-        yCoord: nodeData[i].ycoord,
+        geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
         floor: nodeData[i].floor,
       });
     }
@@ -164,35 +154,6 @@ export const MapBlock: React.FC = () => {
       });
     } else {
       let map: Map | null = mapRef.current;
-
-      const addMarkersToLayerGroups = (hospitalData: HospitalData[]) => {
-        hospitalData.forEach((node) => {
-          const marker = L.marker([node.yCoord, node.xCoord]).bindPopup(
-            node.name,
-          );
-          switch (node.floor) {
-            case "1":
-              marker.addTo(LayerL1);
-              break;
-            case "2":
-              marker.addTo(LayerL2);
-              break;
-            case "F1":
-              marker.addTo(LayerF1);
-              break;
-            case "F2":
-              marker.addTo(LayerF2);
-              break;
-            case "F3":
-              marker.addTo(LayerF3);
-              break;
-            default:
-              // Handle other floors if needed
-              break;
-          }
-        });
-      };
-
       if (!map) {
         map = L.map("map-container", {
           crs: CRS.Simple,
@@ -200,7 +161,7 @@ export const MapBlock: React.FC = () => {
           maxZoom: 2,
           zoomControl: true,
           preferCanvas: true,
-          layers: [LayerL1, LayerL2, LayerL1, LayerF2, LayerF3],
+          zoomDelta: 0.5,
         }).setView([3400, 5000], -2);
         mapRef.current = map;
       }
@@ -210,12 +171,13 @@ export const MapBlock: React.FC = () => {
         [3400, 5000], // change to resolution of the image
       ];
 
+      L.imageOverlay(theThirdFloor, bounds).addTo(map);
+      L.imageOverlay(theSecondFloor, bounds).addTo(map);
+      L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
+      L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
       L.imageOverlay(theFirstFloor, bounds).addTo(map);
 
       map.setMaxBounds(bounds);
-
-      // now lets put all of the markers in separate layergroups
-      addMarkersToLayerGroups(hospitalData);
 
       // Print out the nodes on the first floor
       // Draw new markers for the selected floor after adding the image overlay
@@ -225,7 +187,7 @@ export const MapBlock: React.FC = () => {
       setNodesOnFloor(newNodesOnCurrentFloor);
       addMarkers(map, newNodesOnCurrentFloor);
     }
-  }, [isDataLoaded, hospitalData, LayerL1, LayerL2, LayerF1, LayerF2, LayerF3]); // Dependency array
+  }, [isDataLoaded, hospitalData]); // Dependency array
 
   function drawPath(start: string, end: string) {
     const startHospital = hospitalData.find((h) => h.nodeID === start);
@@ -236,16 +198,10 @@ export const MapBlock: React.FC = () => {
     }
     setCurrentFloor(currentFloor);
 
-    // const [startLat, startLng] = startHospital.geocode
-    //   .split(",")
-    //   .map(parseFloat);
-    const startLat = startHospital.xCoord;
-    const startLng = startHospital.yCoord;
-
-    const endLat = endHospital.xCoord;
-    const endLng = endHospital.yCoord;
-
-    // const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
+    const [startLat, startLng] = startHospital.geocode
+      .split(",")
+      .map(parseFloat);
+    const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
     console.log("drawPath o day neeeeeeeeeeeeeeeeee");
     const startCoords: [number, number] = [3400 - startLng, startLat];
     const endCoords: [number, number] = [3400 - endLng, endLat];
@@ -272,12 +228,11 @@ export const MapBlock: React.FC = () => {
     const currentPath = searchPath;
 
     if (startHospital && endHospital) {
-      const startLat = startHospital.xCoord;
-      const startLng = startHospital.yCoord;
-
-      const endLat = endHospital.xCoord;
-      const endLng = endHospital.yCoord;
+      const [startLat, startLng] = startHospital.geocode
+        .split(",")
+        .map(parseFloat);
       const startCoords: [number, number] = [3400 - startLng, startLat];
+      const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
       const endCoords: [number, number] = [3400 - endLng, endLat];
       if (
         startHospital.name === startNodeName &&
@@ -778,10 +733,7 @@ export const MapBlock: React.FC = () => {
       const icons = [GrayDot, GreenStar2, RedStar2];
       let iconIndex = 0;
 
-      const lat = node.xCoord;
-      const lng = node.yCoord;
-
-      // const [lat, lng] = node.geocode.split(",").map(parseFloat);
+      const [lat, lng] = node.geocode.split(",").map(parseFloat);
       const nLat = 3400 - lng;
 
       // Create instances of Icon for each icon URL
