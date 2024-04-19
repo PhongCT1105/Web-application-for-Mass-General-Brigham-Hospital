@@ -1,4 +1,4 @@
-export const barChartData = {
+export const pieChartData = {
   labels: [
     "FlowerRequest",
     "Medication Request",
@@ -24,7 +24,7 @@ export const barChartData = {
         "rgba(75, 192, 192, 1)",
         "rgba(153, 102, 255, 1)",
       ],
-      borderWidth: 1,
+      hoverOffset: 4,
     },
   ],
 };

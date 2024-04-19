@@ -1,14 +1,24 @@
-import { Bar } from "react-chartjs-2";
+import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { barChartData } from "@/data/barChartData";
+import { pieChartData } from "@/data/pieChartData.ts";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function PieGraph() {
-  const options = {};
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 2.1,
+    plugins: {
+      title: {
+        display: true,
+        text: "Pie Chart of proportion request used",
+      },
+    },
+  };
   return (
     <>
-      <Bar options={options} data={barChartData} />
+      <Pie options={options} data={pieChartData} />
     </>
   );
 }
