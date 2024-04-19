@@ -20,6 +20,7 @@ import theFirstFloor from "@/assets/01_thefirstfloor.png";
 import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import "@/styles/mapBlock.modules.css";
+//import axios from "axios";
 import { useGraphContext } from "@/context/nodeContext.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { EditIcon } from "lucide-react";
@@ -41,16 +42,9 @@ export interface HospitalData {
 // Define the map component
 export const MapEditorRefactor: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
-  const { nodes, edges } = useGraphContext();
+  const [paths, setPaths] = useState<Polyline[]>([]);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-
-  const floorMaps: { [key: string]: string } = {
-    lowerLevel1: lowerLevelMap1,
-    lowerLevel2: lowerLevelMap2,
-    theFirstFloor: theFirstFloor,
-    theSecondFloor: theSecondFloor,
-    theThirdFloor: theThirdFloor,
-  } as const;
+  const { nodes, edges } = useGraphContext();
 
   // avoid making a bunch of new icons
   const customIcon = useMemo(
@@ -62,26 +56,14 @@ export const MapEditorRefactor: React.FC = () => {
       }),
     [],
   );
+  const floorMaps: { [key: string]: string } = {
+    lowerLevel1: lowerLevelMap1,
+    lowerLevel2: lowerLevelMap2,
+    theFirstFloor: theFirstFloor,
+    theSecondFloor: theSecondFloor,
+    theThirdFloor: theThirdFloor,
+  } as const;
 
-  // loads hospital data from context only once
-  useEffect(() => {
-    if (
-      nodes.length !== hospitalData.length ||
-      !nodes.every((node, index) => node.nodeID === hospitalData[index].nodeID)
-    ) {
-      setHospitalData(
-        nodes.map((node) => ({
-          nodeID: node.nodeID,
-          name: node.longName,
-          geocode: `${node.xcoord},${node.ycoord}`,
-          floor: node.floor,
-        })),
-      );
-      console.log("Updated Nodes");
-    }
-  }, [hospitalData, nodes]);
-
-  // draws a line between two nodes,,,, takes start and end nodes
   const drawLine = useCallback(
     (startHospital: HospitalData, endHospital: HospitalData) => {
       const map = mapRef.current;
@@ -89,6 +71,7 @@ export const MapEditorRefactor: React.FC = () => {
         console.log("cannot find map");
         return;
       }
+
       const [startLat, startLng] = startHospital.geocode
         .split(",")
         .map(parseFloat);
@@ -104,12 +87,11 @@ export const MapEditorRefactor: React.FC = () => {
         weight: 3,
       });
       newPath.addTo(map);
-      console.log("Drew line");
+      addToPaths(newPath); // Add the new path to the paths list
     },
     [],
   );
 
-  // find all the edges between all current nodes on the screen
   const findLines = useCallback(
     (hospitalData: HospitalData[]) => {
       for (const edge of edges) {
@@ -128,12 +110,10 @@ export const MapEditorRefactor: React.FC = () => {
           }
         }
       }
-      console.log("Found Line");
     },
     [drawLine, edges],
   );
 
-  // puts all nodes on the map when floors change
   const addMarkers = useCallback(
     (map: Map, nodesOnFloor: HospitalData[]) => {
       nodesOnFloor.forEach((node) => {
@@ -153,20 +133,26 @@ export const MapEditorRefactor: React.FC = () => {
           }
         });
       });
-      console.log("Added Marker");
     },
     [customIcon],
   );
 
-  // both of these are for efficiency
-  const memoizedFindLines = useCallback(findLines, [
-    edges,
-    hospitalData,
-    findLines,
-  ]);
-  const memoizedAddMarkers = useCallback(addMarkers, [addMarkers]);
+  useEffect(() => {
+    if (hospitalData.length == 0) {
+      setHospitalData(
+        nodes.map((node) => ({
+          nodeID: node.nodeID,
+          name: node.longName,
+          geocode: `${node.xcoord},${node.ycoord}`,
+          floor: node.floor,
+        })),
+      );
+    }
+  }, [hospitalData.length, nodes]);
 
-  // initial page set up function
+  const memoizedAddMarkers = useCallback(addMarkers, [addMarkers]);
+  const memoizedFindLines = useCallback(findLines, [findLines]);
+
   useEffect(() => {
     let map: Map | null = mapRef.current;
     if (!map) {
@@ -192,10 +178,8 @@ export const MapEditorRefactor: React.FC = () => {
 
     memoizedFindLines(newNodesOnCurrentFloor);
     memoizedAddMarkers(map!, newNodesOnCurrentFloor);
-    console.log("Setup");
-  }, [addMarkers, hospitalData, memoizedAddMarkers, memoizedFindLines, nodes]);
+  }, [hospitalData, memoizedAddMarkers, memoizedFindLines]);
 
-  // clears markers
   function clearMarkers() {
     const map = mapRef.current;
     if (!map) return;
@@ -207,24 +191,22 @@ export const MapEditorRefactor: React.FC = () => {
     });
   }
 
-  // clears lines
   function clearLines() {
     const map = mapRef.current;
-    if (!map) return;
+    if (!map || paths.length === 0) return;
 
-    map.eachLayer((layer) => {
-      if (layer instanceof Polyline) {
-        map.removeLayer(layer);
-      }
-    });
+    paths.forEach((path) => path.removeFrom(map));
+    setPaths([]);
   }
 
-  // handles floor changes based on button click
-  // need to change to sandi's layers
+  function addToPaths(newPath: Polyline) {
+    setPaths((prevPaths) => [...prevPaths, newPath]);
+  }
+
   function changeFloor(floorName: string) {
     const map = mapRef.current;
     if (!map) return;
-    //
+
     const convertedFloorName =
       {
         lowerLevel2: "L2",
@@ -234,29 +216,28 @@ export const MapEditorRefactor: React.FC = () => {
         theThirdFloor: "3",
       }[floorName] || "";
 
-    const initialFloorImage = floorMaps[floorName];
-    if (!initialFloorImage) return;
-
+    // Remove existing markers from the map
     clearMarkers();
     clearLines();
 
-    const bounds: LatLngBoundsExpression = [
-      [0, 0],
-      [3400, 5000],
-    ];
-    L.imageOverlay(initialFloorImage, bounds).addTo(map);
-    map.setMaxBounds(bounds);
+    const initialFloorImage = floorMaps[floorName];
+    if (initialFloorImage) {
+      const bounds: LatLngBoundsExpression = [
+        [0, 0],
+        [3400, 5000], // Update with actual resolution
+      ];
+      L.imageOverlay(initialFloorImage, bounds).addTo(map);
+      map.setMaxBounds(bounds);
 
-    // Draw new markers for the selected floor after adding the image overlay
-    const newNodesOnCurrentFloor = hospitalData.filter(
-      (node) => node.floor === convertedFloorName,
-    );
-
-    memoizedAddMarkers(map, newNodesOnCurrentFloor);
-    memoizedFindLines(newNodesOnCurrentFloor);
+      // Draw new markers for the selected floor after adding the image overlay
+      const newNodesOnCurrentFloor = hospitalData.filter(
+        (node) => node.floor === convertedFloorName,
+      );
+      memoizedAddMarkers(map, newNodesOnCurrentFloor);
+      memoizedFindLines(newNodesOnCurrentFloor);
+    }
   }
 
-  // map
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div
