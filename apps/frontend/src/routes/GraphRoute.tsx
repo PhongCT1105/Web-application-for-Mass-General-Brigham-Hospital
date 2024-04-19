@@ -6,8 +6,7 @@ import { Bar } from "react-chartjs-2";
 const Graph = () => {
   return (
     <div className="App">
-      <div className="dataCard revenueCard">Chart1</div>
-      <div className="dataCard revenueCard">
+      <div>
         <Bar
           data={{
             labels: ["A", "B", "C"],
@@ -20,7 +19,6 @@ const Graph = () => {
           }}
         />
       </div>
-      <div className="dataCard revenueCard">Chart3</div>
     </div>
   );
 };
