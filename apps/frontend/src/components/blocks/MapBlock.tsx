@@ -206,7 +206,6 @@ export const MapBlock: React.FC = () => {
       .split(",")
       .map(parseFloat);
     const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
-    console.log("drawPath o day neeeeeeeeeeeeeeeeee");
     const startCoords: [number, number] = [3400 - startLng, startLat];
     const endCoords: [number, number] = [3400 - endLng, endLat];
 
@@ -350,6 +349,29 @@ export const MapBlock: React.FC = () => {
     }
   }
 
+  function directionFromCurrentLine(nodeArray: Node[], index: number) {
+    if (index === 0) return "Continue Straight";
+    else {
+      const a = nodeArray[index - 1];
+      const b = nodeArray[index];
+      const c = nodeArray[index + 1];
+
+      const crossProduct =
+        (b.xcoord - a.xcoord) * (c.ycoord - a.ycoord) -
+        (b.ycoord - a.ycoord) * (c.xcoord - a.xcoord);
+      console.log(crossProduct);
+
+      const tolerance = 700;
+      if (Math.abs(crossProduct) < tolerance) {
+        return "Continue Straight";
+      } else if (crossProduct > 0) {
+        return "Turn Right";
+      } else {
+        return "Turn Left";
+      }
+    }
+  }
+
   function drawFullPath(nodeArray: Node[], currentFloor: string) {
     clearLines();
     setCurrentFloor(currentFloor);
@@ -367,6 +389,7 @@ export const MapBlock: React.FC = () => {
         const end = paths[0][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
+          console.log(directionFromCurrentLine(paths[0], i));
           if (newPath) newPath.addTo(layerGroup);
         }
       }
@@ -380,6 +403,8 @@ export const MapBlock: React.FC = () => {
         const end = paths[1][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
+          console.log(directionFromCurrentLine(paths[1], i));
+
           if (newPath) newPath.addTo(layerGroup);
         }
       }
@@ -393,6 +418,8 @@ export const MapBlock: React.FC = () => {
         const end = paths[2][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
+          console.log(directionFromCurrentLine(paths[2], i));
+
           if (newPath) newPath.addTo(layerGroup);
         }
       }
@@ -406,6 +433,8 @@ export const MapBlock: React.FC = () => {
         const end = paths[3][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
+          console.log(directionFromCurrentLine(paths[3], i));
+
           if (newPath) newPath.addTo(layerGroup);
         }
       }
@@ -419,6 +448,8 @@ export const MapBlock: React.FC = () => {
         const end = paths[4][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
+          console.log(directionFromCurrentLine(paths[4], i));
+
           if (newPath) newPath.addTo(layerGroup);
         }
       }
