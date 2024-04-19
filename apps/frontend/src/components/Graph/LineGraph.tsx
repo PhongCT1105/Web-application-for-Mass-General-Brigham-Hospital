@@ -24,7 +24,12 @@ function LineGraph() {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
-    aspectRatio: 2.1,
+    aspectRatio: 2.5,
+    elements: {
+      line: {
+        tension: 0.5,
+      },
+    },
     plugins: {
       title: {
         display: true,

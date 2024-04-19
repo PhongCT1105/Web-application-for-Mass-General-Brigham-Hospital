@@ -8,7 +8,7 @@ function PieGraph() {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
-    aspectRatio: 2.1,
+    aspectRatio: 2.3,
     plugins: {
       title: {
         display: true,

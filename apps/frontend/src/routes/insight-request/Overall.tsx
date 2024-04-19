@@ -8,7 +8,7 @@ import DoughnutChart from "@/components/Graph/DoughnutGraph.tsx";
 function OverallInsight() {
   return (
     <>
-      <div className="m-3 grid gap-4 grid-cols-2">
+      <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
         <div className="rounded-lg bg-gray-200">
           <LineGraph />
         </div>
