@@ -142,6 +142,7 @@ export const SecurityForm = () => {
       ...prevState,
       [id]: value,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
