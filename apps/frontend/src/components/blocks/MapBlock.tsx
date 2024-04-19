@@ -449,69 +449,6 @@ export const MapBlock: React.FC = () => {
     return true;
   }
 
-  // function drawFullPath(nodeArray: Node[], currentFloor: string) {
-  //   clearLines();
-  //   setCurrentFloor(currentFloor);
-  //   console.log("A path should be created now");
-  //
-  //   const map = mapRef.current;
-  //   if (!map) return;
-  //
-  //   const layerGroup = L.layerGroup();
-  //   const paths: Node[][] = parsePath(nodeArray);
-  //
-  //   if (currentFloor === "L2" && paths[0].length > 1) {
-  //     for (let i = 0; i < paths[0].length - 1; i++) {
-  //       const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
-  //       if (newPath) newPath.addTo(layerGroup);
-  //     }
-  //     layerGroup.addTo(map).snakeIn();
-  //
-  //     placeStartEndMarkers(paths[0]);
-  //   }
-  //
-  //   if (currentFloor === "L1" && paths[1].length > 1) {
-  //     for (let i = 0; i < paths[1].length - 1; i++) {
-  //       const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
-  //       if (newPath) newPath.addTo(layerGroup);
-  //     }
-  //     layerGroup.addTo(map).snakeIn();
-  //
-  //     placeStartEndMarkers(paths[1]);
-  //   }
-  //
-  //   if (currentFloor === "1" && paths[2].length > 1) {
-  //     for (let i = 0; i < paths[2].length - 1; i++) {
-  //       const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
-  //       if (newPath) newPath.addTo(layerGroup);
-  //     }
-  //     layerGroup.addTo(map).snakeIn();
-  //
-  //     placeStartEndMarkers(paths[2]);
-  //   }
-  //
-  //   if (currentFloor === "2" && paths[3].length > 1) {
-  //     for (let i = 0; i < paths[3].length - 1; i++) {
-  //       const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
-  //       if (newPath) newPath.addTo(layerGroup);
-  //     }
-  //     layerGroup.addTo(map).snakeIn();
-  //
-  //     placeStartEndMarkers(paths[3]);
-  //   }
-  //
-  //   if (currentFloor === "3" && paths[4].length > 1) {
-  //     for (let i = 0; i < paths[4].length - 1; i++) {
-  //       const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
-  //       if (newPath) newPath.addTo(layerGroup);
-  //     }
-  //     layerGroup.addTo(map).snakeIn();
-  //
-  //     placeStartEndMarkers(paths[4]);
-  //   }
-  //   console.log("done :D");
-  // }
-
   function addStartMarker(location: [number, number]) {
     const map = mapRef.current;
     if (!map) return;
@@ -813,28 +750,6 @@ export const MapBlock: React.FC = () => {
         e.originalEvent.preventDefault(); // Prevent default double-click behavior
       });
     });
-    // nodesOnFloor.forEach((node) => {
-    //   const customIcon = new Icon({
-    //     iconUrl: GrayDot,
-    //     iconSize: [12, 12],
-    //     iconAnchor: [6, 6],
-    //   });
-    //   const [lat, lng] = node.geocode.split(",").map(parseFloat);
-    //   const nLat = 3400 - lng;
-    //   const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
-    //
-    //   // Add a click event handler to toggle popup visibility
-    //   const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-    //   marker.bindPopup(popupContent);
-    //
-    //   marker.on("click", function (this: L.Marker) {
-    //     // Specify the type of 'this' as L.Marker
-    //     if (!this.isPopupOpen()) {
-    //       // Check if the popup is not already open
-    //       this.openPopup(); // Open the popup when the marker is clicked
-    //     }
-    //   });
-    // });
   }
 
   function changeFloor(arrayNode: Node[], floorName: string) {
@@ -859,7 +774,6 @@ export const MapBlock: React.FC = () => {
 
     // Remove existing markers from the map
     clearMarkers();
-    // clearLines();
 
     map.eachLayer((layer) => {
       if (layer instanceof L.ImageOverlay) {
@@ -876,13 +790,61 @@ export const MapBlock: React.FC = () => {
       L.imageOverlay(initialFloorImage, bounds).addTo(map);
       map.setMaxBounds(bounds);
 
-      // Draw new markers for the selected floor after adding the image overlay
-      const newNodesOnCurrentFloor = hospitalData.filter(
+      // Filter nodes for the selected floor
+      const nodesOnCurrentFloor = hospitalData.filter(
         (node) => node.floor === convertedFloorName,
       );
 
-      setNodesOnFloor(newNodesOnCurrentFloor);
-      addMarkers(map, newNodesOnCurrentFloor);
+      const searchPathOnThisFloor = searchPath.filter(
+        (node) => node.floor === convertedFloorName,
+      );
+
+      // Check if searchPath is defined and not empty
+      if (searchPathOnThisFloor && searchPathOnThisFloor.length > 0) {
+        let totalDistance = 0;
+        let xSum = 0;
+        let ySum = 0;
+
+        // Calculate total distance of the path
+        for (let i = 0; i < searchPathOnThisFloor.length - 1; i++) {
+          const node1 = searchPathOnThisFloor[i];
+          const node2 = searchPathOnThisFloor[i + 1];
+          totalDistance += Math.abs(node2.xcoord - node1.xcoord);
+
+          xSum += searchPathOnThisFloor[i].xcoord;
+          ySum += searchPathOnThisFloor[i].ycoord;
+        }
+
+        const lng = Math.abs(ySum / searchPathOnThisFloor.length - 5000);
+        const lat = xSum / searchPathOnThisFloor.length;
+        const nLat = 3400 - lng;
+        const nLng = lat;
+
+        // Adjust zoom level based on path length
+        let zoomLevel = 0;
+        if (totalDistance < 500) {
+          zoomLevel = 0;
+        } else if (totalDistance >= 500 && totalDistance < 1000) {
+          zoomLevel = -1;
+        } else if (totalDistance >= 1000) {
+          zoomLevel = -2;
+        }
+
+        // why are you the way that you are
+        // const coords: [number, number] = [3400 - lng, lat];
+
+        // Set map view to center at calculated coordinates with adjusted zoom level
+        map.setView([nLat, nLng], zoomLevel);
+      } else {
+        // Handle the case when searchPath is empty or undefined
+        console.error("searchPath is empty or undefined");
+        // Set a default map view
+        map.setView([0, 3400], 2);
+      }
+
+      // Draw new markers for the selected floor after adding the image overlay
+      setNodesOnFloor(nodesOnCurrentFloor);
+      addMarkers(map, nodesOnCurrentFloor);
       displayNodesOnFloor();
 
       // Moved the drawing of lines after updating the current floor
@@ -1050,82 +1012,6 @@ export const MapBlock: React.FC = () => {
                 </div>
               </button>
             </div>
-            {/*<div className="w-40 h-40 relative">*/}
-            {/*    <Button*/}
-            {/*        variant={"ghost"}*/}
-            {/*        className={(currentFloor === "2" ? "bg-blue-500 text-white w-full hover:bg-destructive/90" : "bg-white text-black w-full hover:bg-destructive/90")}*/}
-            {/*        onClick={() => changeFloor("lowerLevel2")}*/}
-            {/*    >*/}
-            {/*        <div*/}
-            {/*            className="absolute w-20 h-20 transform rotate-45  bg-blue-200 hover:bg-yellow-500">*/}
-            {/*            <div className={"-rotate-45 text-xl font-medium text-center w-full h-full"}>F2</div>*/}
-            {/*        </div>*/}
-            {/*    </Button>*/}
-            {/*</div><div className="w-40 h-40 relative">*/}
-            {/*    <Button*/}
-            {/*        variant={"ghost"}*/}
-            {/*        className={(currentFloor === "3" ? "bg-blue-500 text-white w-full hover:bg-destructive/90" : "bg-white text-black w-full hover:bg-destructive/90")}*/}
-            {/*        onClick={() => changeFloor("lowerLevel2")}*/}
-            {/*    >*/}
-            {/*        <div*/}
-            {/*            className="absolute w-20 h-20 transform rotate-45  bg-blue-200 hover:bg-yellow-500">*/}
-            {/*            <div className={"-rotate-45 text-xl font-medium text-center w-full h-full"}>F3</div>*/}
-            {/*        </div>*/}
-            {/*    </Button>*/}
-            {/*</div>*/}
-            {/*/!*Lower Level 2*!/*/}
-            {/*<Button*/}
-            {/*    className={(currentFloor === "L1" ? "bg-blue-500 text-white" : "bg-white text-black")}*/}
-            {/*    onClick={() => changeFloor("lowerLevel1")}*/}
-            {/*>*/}
-            {/*    <div className="w-40 h-40 relative">*/}
-            {/*        <div*/}
-            {/*            style={{*/}
-            {/*                backgroundColor: "#6FA7FF",*/}
-            {/*            }}*/}
-            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
-            {/*    </div>*/}
-            {/*    /!*Lower Level 1*!/*/}
-            {/*</Button>*/}
-            {/*<Button*/}
-            {/*    className={(currentFloor === "1" ? "bg-blue-500 text-white" : "bg-white text-black")}*/}
-            {/*    onClick={() => changeFloor("theFirstFloor")}*/}
-            {/*>*/}
-            {/*    <div className="w-40 h-40 relative">*/}
-            {/*        <div*/}
-            {/*            style={{*/}
-            {/*                backgroundColor: "#277BFF",*/}
-            {/*            }}*/}
-            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
-            {/*    </div>*/}
-            {/*    /!*First Floor*!/*/}
-            {/*</Button>*/}
-            {/*<Button*/}
-            {/*    className={(currentFloor === "2" ? "bg-blue-500 text-white" : "bg-white text-black")}*/}
-            {/*    onClick={() => changeFloor("theSecondFloor")}*/}
-            {/*>*/}
-            {/*    <div className="w-40 h-40 relative">*/}
-            {/*        <div*/}
-            {/*            style={{*/}
-            {/*                backgroundColor: "#0056DE",*/}
-            {/*            }}*/}
-            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
-            {/*    </div>*/}
-            {/*    /!*Second Floor*!/*/}
-            {/*</Button>*/}
-            {/*<Button*/}
-            {/*    className={(currentFloor === "3" ? "bg-blue-500 text-white" : "bg-white text-black")}*/}
-            {/*    onClick={() => changeFloor("theThirdFloor")}*/}
-            {/*>*/}
-            {/*    <div className="w-40 h-40 relative">*/}
-            {/*        <div*/}
-            {/*            style={{*/}
-            {/*                backgroundColor: "#003A96",*/}
-            {/*            }}*/}
-            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
-            {/*    </div>*/}
-            {/*    /!*Third Floor*!/*/}
-            {/*</Button>*/}
           </div>
         </div>
       </div>
