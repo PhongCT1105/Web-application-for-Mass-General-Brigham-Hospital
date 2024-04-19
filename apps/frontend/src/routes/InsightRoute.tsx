@@ -14,6 +14,10 @@ function InsightRoute() {
         <h1>Bar Chart of usage of every Service Requests</h1>
         <BarGraph />
       </div>
+      {/*<div>*/}
+      {/*  <h1>Bar Chart of usage of every Service Requests</h1>*/}
+      {/*  <PieGraph />*/}
+      {/*</div>*/}
     </>
   );
 }

@@ -161,6 +161,12 @@ export function Header({ highlighted }: HeaderProps) {
                 </>
               )}
               <a
+                href="/insight"
+                className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
+              >
+                Insight
+              </a>
+              <a
                 href="/about-us"
                 className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
               >
