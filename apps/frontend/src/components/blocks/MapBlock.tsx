@@ -815,7 +815,7 @@ export const MapBlock: React.FC = () => {
           ySum += searchPathOnThisFloor[i].ycoord;
         }
 
-        const lng = Math.abs(ySum / searchPathOnThisFloor.length - 5000);
+        const lng = ySum / searchPathOnThisFloor.length;
         const lat = xSum / searchPathOnThisFloor.length;
         const nLat = 3400 - lng;
         const nLng = lat;
@@ -839,7 +839,7 @@ export const MapBlock: React.FC = () => {
         // Handle the case when searchPath is empty or undefined
         console.error("searchPath is empty or undefined");
         // Set a default map view
-        map.setView([0, 3400], 2);
+        map.setView([0, 5000], 2);
       }
 
       // Draw new markers for the selected floor after adding the image overlay
