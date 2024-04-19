@@ -116,6 +116,8 @@ export const MapBlock: React.FC = () => {
   const [endNodeName, setEndNodeName] = useState("");
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
+  const [textDirections, setTextDirections] = useState<string>("");
+
   // setCurrentFloor("F1");
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -350,7 +352,7 @@ export const MapBlock: React.FC = () => {
   }
 
   function directionFromCurrentLine(nodeArray: Node[], index: number) {
-    if (index === 0) return "Continue Straight";
+    if (index === 0) return "Continue Towards " + nodeArray[1].longName;
     else {
       const a = nodeArray[index - 1];
       const b = nodeArray[index];
@@ -363,11 +365,11 @@ export const MapBlock: React.FC = () => {
 
       const tolerance = 700;
       if (Math.abs(crossProduct) < tolerance) {
-        return "Continue Straight";
+        return "Continue Straight at " + b.longName;
       } else if (crossProduct > 0) {
-        return "Turn Right";
+        return "Turn Right at " + b.longName;
       } else {
-        return "Turn Left";
+        return "Turn Left at " + b.longName;
       }
     }
   }
@@ -382,6 +384,7 @@ export const MapBlock: React.FC = () => {
 
     const layerGroup = L.layerGroup();
     const paths: Node[][] = parsePath(nodeArray);
+    let directionsStr = "";
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
@@ -389,7 +392,7 @@ export const MapBlock: React.FC = () => {
         const end = paths[0][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
-          console.log(directionFromCurrentLine(paths[0], i));
+          directionsStr += directionFromCurrentLine(paths[0], i) + "\n";
           if (newPath) newPath.addTo(layerGroup);
         }
       }
@@ -403,7 +406,7 @@ export const MapBlock: React.FC = () => {
         const end = paths[1][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
-          console.log(directionFromCurrentLine(paths[1], i));
+          directionsStr += directionFromCurrentLine(paths[1], i) + "\n";
 
           if (newPath) newPath.addTo(layerGroup);
         }
@@ -418,7 +421,7 @@ export const MapBlock: React.FC = () => {
         const end = paths[2][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
-          console.log(directionFromCurrentLine(paths[2], i));
+          directionsStr += directionFromCurrentLine(paths[2], i) + "\n";
 
           if (newPath) newPath.addTo(layerGroup);
         }
@@ -433,7 +436,7 @@ export const MapBlock: React.FC = () => {
         const end = paths[3][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
-          console.log(directionFromCurrentLine(paths[3], i));
+          directionsStr += directionFromCurrentLine(paths[3], i) + "\n";
 
           if (newPath) newPath.addTo(layerGroup);
         }
@@ -448,7 +451,7 @@ export const MapBlock: React.FC = () => {
         const end = paths[4][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
-          console.log(directionFromCurrentLine(paths[4], i));
+          directionsStr += directionFromCurrentLine(paths[4], i) + "\n";
 
           if (newPath) newPath.addTo(layerGroup);
         }
@@ -457,6 +460,9 @@ export const MapBlock: React.FC = () => {
 
       placeStartEndMarkers(paths[4]);
     }
+
+    setTextDirections(directionsStr);
+
     console.log("done :D");
   }
 
@@ -667,6 +673,7 @@ export const MapBlock: React.FC = () => {
       }
     });
     clearStartEndMarkers();
+    setTextDirections("");
   }
 
   function handleSearch(startID: string, endID: string) {
@@ -963,6 +970,12 @@ export const MapBlock: React.FC = () => {
             currentFloor={currentFloor}
           />
         </div>
+        <textarea
+          value={textDirections}
+          readOnly
+          rows={10} // Adjust rows as needed
+          cols={50} // Adjust cols as needed
+        />
         <div
           id="map-container"
           style={{
