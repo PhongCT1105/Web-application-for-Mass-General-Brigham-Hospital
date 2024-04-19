@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Card } from "@/components/ui/card.tsx";
@@ -27,12 +27,7 @@ const AboutBlock = ({
   Github,
   Linkdin,
   Imagepath,
-  FunFact,
 }: AboutInfo) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   return (
     <Card
       className={"flex flex-col justify-space-between mw-700 p-5 bg-gray-200"}
@@ -42,17 +37,7 @@ const AboutBlock = ({
         alt={Name}
         style={{ height: 250, width: 250, objectFit: "cover" }}
         className={"object-fit-cover rounded-md"}
-        onClick={handleOpen}
       />
-
-      {open && (
-        <Card className={"position-relative mw-250 bg-white shadow-sm p-2"}>
-          <h2>Favorite Quote:</h2>
-          <p>{FunFact}</p>
-          <Button onClick={handleClose}>Close</Button>
-        </Card>
-      )}
-
       <div>
         <h4 className={"text-center font-bold"}>{Name}</h4>
         {role && <p>Role: {role}</p>}
@@ -61,14 +46,13 @@ const AboutBlock = ({
         {major && <p>Major: {major}</p>}
         <p>Email: {Email}</p>
       </div>
-
-      <div className={"flex justify-content-between"}>
-        <Button variant={"invisible"} className={"ml-auto"}>
-          {Github && <GitHubLogoIcon />}
-        </Button>
-        <Button variant={"invisible"} className={"mr-auto"}>
-          {Linkdin && <LinkedInLogoIcon />}
-        </Button>
+      <div className={"mx-auto w-1/2"}>
+        <div className={"flex justify-between"}>
+          <Button variant={"invisible"}>{Github && <GitHubLogoIcon />}</Button>
+          <Button variant={"invisible"}>
+            {Linkdin && <LinkedInLogoIcon />}
+          </Button>
+        </div>
       </div>
     </Card>
   );

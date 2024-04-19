@@ -152,34 +152,32 @@ const AboutMePage = () => {
               FunFact={""}
             />
           </div>
-          <div className={"mx-auto"}>
-            <div className={"w-3/4"}>
-              <div className={"flex flex-row pt-10 pb-5 justify-between"}>
-                <AboutBlock
-                  Name={"Alexander Shettler"}
-                  role={"Scrum Master"}
-                  devrole={"Full-Stack Engineer"}
-                  ClassYear={"2026"}
-                  major={"CS"}
-                  Email={"aeshettler@wpi.edu"}
-                  Github={"https://github.com/alexshettler"}
-                  Linkdin={""}
-                  Imagepath={Shettler}
-                  FunFact={""}
-                />
-                <AboutBlock
-                  Name={"Owen Lacey"}
-                  role={"Documentation Analyst"}
-                  devrole={"Full-Stack Engineer"}
-                  ClassYear={"2026"}
-                  major={"IMGD"}
-                  Email={"oelacey@wpi.edu"}
-                  Github={"https://github.com/echoct21"}
-                  Linkdin={"https://www.linkedin.com/in/owen-lacey-721205250/"}
-                  Imagepath={Owen}
-                  FunFact={""}
-                />
-              </div>
+          <div className={"mx-auto w-3/5"}>
+            <div className={"flex flex-row pt-10 pb-5 justify-between "}>
+              <AboutBlock
+                Name={"Alexander Shettler"}
+                role={"Scrum Master"}
+                devrole={"Full-Stack Engineer"}
+                ClassYear={"2026"}
+                major={"CS"}
+                Email={"aeshettler@wpi.edu"}
+                Github={"https://github.com/alexshettler"}
+                Linkdin={""}
+                Imagepath={Shettler}
+                FunFact={""}
+              />
+              <AboutBlock
+                Name={"Owen Lacey"}
+                role={"Documentation Analyst"}
+                devrole={"Full-Stack Engineer"}
+                ClassYear={"2026"}
+                major={"IMGD"}
+                Email={"oelacey@wpi.edu"}
+                Github={"https://github.com/echoct21"}
+                Linkdin={"https://www.linkedin.com/in/owen-lacey-721205250/"}
+                Imagepath={Owen}
+                FunFact={""}
+              />
             </div>
           </div>
         </Card>
