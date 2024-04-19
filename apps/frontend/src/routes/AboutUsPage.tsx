@@ -25,12 +25,6 @@ const AboutMePage = () => {
   return (
     <div>
       <div className="about-the-team w-5/6 pt-10 pb-5 gap-5 m-auto">
-        <h4 className={"text-center text-md text-muted-foreground"}>
-          This application was developed by a team of students at Worcester
-          Polytechnic Institute as part of the CS3733-D24 Software Engineering
-          course. The team was led by Professor Wilson Wong and Team Coach Ari
-          Schechter and Katy Stuparu.
-        </h4>
         <h1 className="text-2xl font-bold my-2 mt-6 text-center">Our Team</h1>
         <Card className="team-members-flex p-5">
           <div className={"flex flex-row pt-10 pb-5 justify-between"}>
@@ -223,6 +217,12 @@ const AboutMePage = () => {
             />
           </div>
         </Card>
+        <h4 className={"text-center text-md text-muted-foreground pt-5"}>
+          This application was developed by a team of students at Worcester
+          Polytechnic Institute as part of the CS3733-D24 Software Engineering
+          course. The team was led by Professor Wilson Wong and Team Coach Ari
+          Schechter and Katy Stuparu.
+        </h4>
         <h6 style={{ textAlign: "center", marginTop: "75px" }}>
           WPI Computer Science Department, CS3733-D24 Software Engineering
         </h6>
