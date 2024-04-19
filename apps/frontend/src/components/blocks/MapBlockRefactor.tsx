@@ -1,7 +1,9 @@
 import React, {
   createContext,
+  useCallback,
   useContext,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
@@ -47,7 +49,8 @@ declare module "leaflet" {
 export interface HospitalData {
   nodeID: string;
   name: string;
-  geocode: string;
+  xCoord: number;
+  yCoord: number;
   floor: string;
 }
 
@@ -71,6 +74,23 @@ interface changeMarker {
   setEndNodeName: React.Dispatch<React.SetStateAction<string>>;
   setStartNodeID: React.Dispatch<React.SetStateAction<string>>;
   setEndNodeID: React.Dispatch<React.SetStateAction<string>>;
+}
+
+// Define the types for markers state
+interface MarkersState {
+  MarkersL1: L.LayerGroup;
+  MarkersL2: L.LayerGroup;
+  MarkersF1: L.LayerGroup;
+  MarkersF2: L.LayerGroup;
+  MarkersF3: L.LayerGroup;
+}
+
+interface LayersState {
+  LayerL1: L.LayerGroup;
+  LayerL2: L.LayerGroup;
+  LayerF1: L.LayerGroup;
+  LayerF2: L.LayerGroup;
+  LayerF3: L.LayerGroup;
 }
 
 const SearchContext = createContext<changeMarker>({
@@ -104,7 +124,6 @@ export const MapBlock: React.FC = () => {
   }
 
   const mapRef = useRef<Map | null>(null);
-  // const [path, setPath] = useState<Polyline | null>(null);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<string>("AStar");
   const [nodesOnFloor, setNodesOnFloor] = useState<HospitalData[]>([]);
@@ -116,14 +135,92 @@ export const MapBlock: React.FC = () => {
   const [endNodeName, setEndNodeName] = useState("");
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [layers, setLayers] = useState({
+    LayerL1: L.layerGroup(),
+    LayerL2: L.layerGroup(),
+    LayerF1: L.layerGroup(),
+    LayerF2: L.layerGroup(),
+    LayerF3: L.layerGroup(),
+  });
+
+  const greyIcon = useMemo(
+    () =>
+      new Icon({
+        iconUrl: GrayDot,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
+      }),
+    [],
+  );
+
+  // // using more useStates for layers, markers, and if showing (boolean)
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const [LayerL1, setLayerL1] = useState<L.LayerGroup>(L.layerGroup());
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const [LayerL2, setLayerL2] = useState<L.LayerGroup>(L.layerGroup());
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const [LayerF1, setLayerF1] = useState<L.LayerGroup>(L.layerGroup());
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const [LayerF2, setLayerF2] = useState<L.LayerGroup>(L.layerGroup());
+  // // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  // const [LayerF3, setLayerF3] = useState<L.LayerGroup>(L.layerGroup());
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [markers, setMarkers] = useState<MarkersState>({
+    MarkersL1: L.layerGroup(),
+    MarkersL2: L.layerGroup(),
+    MarkersF1: L.layerGroup(),
+    MarkersF2: L.layerGroup(),
+    MarkersF3: L.layerGroup(),
+  });
+
+  // const [MarkersL1] = useState<L.LayerGroup>(L.layerGroup());
+  // const [MarkersL2] = useState<L.LayerGroup>(L.layerGroup());
+  // const [MarkersF1] = useState<L.LayerGroup>(L.layerGroup());
+  // const [MarkersF2] = useState<L.LayerGroup>(L.layerGroup());
+  // const [MarkersF3] = useState<L.LayerGroup>(L.layerGroup());
+
+   
+  // const [markers, setMarkers] = useState({
+  //     MarkersL1: L.layerGroup(),
+  //     MarkersL2: L.layerGroup(),
+  //     MarkersF1: L.layerGroup(),
+  //     MarkersF2: L.layerGroup(),
+  //     MarkersF3: L.layerGroup(),
+  // });
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showL1, setShowL1] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showL2, setShowL2] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showF1, setShowF1] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showF2, setShowF2] = useState<boolean>(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [showF3, setShowF3] = useState<boolean>(false);
   // setCurrentFloor("F1");
-  const floorMaps: { [key: string]: string } = {
-    lowerLevel1: lowerLevelMap1,
-    lowerLevel2: lowerLevelMap2,
-    theFirstFloor: theFirstFloor,
-    theSecondFloor: theSecondFloor,
-    theThirdFloor: theThirdFloor,
-  } as const;
+
+  const floorMaps: { [key: string]: string } = useMemo(
+    () => ({
+      lowerLevel1: lowerLevelMap1,
+      lowerLevel2: lowerLevelMap2,
+      theFirstFloor: theFirstFloor,
+      theSecondFloor: theSecondFloor,
+      theThirdFloor: theThirdFloor,
+    }),
+    [],
+  );
+
+  const bounds: LatLngBoundsExpression = useMemo(
+    () => [
+      [0, 0],
+      [3400, 5000],
+    ],
+    [],
+  );
 
   const loadData = async () => {
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes`);
@@ -134,18 +231,35 @@ export const MapBlock: React.FC = () => {
       newHospitalData.push({
         nodeID: nodeData[i].nodeID,
         name: nodeData[i].longName,
-        geocode: `${nodeData[i].xcoord},${nodeData[i].ycoord}`,
+        xCoord: nodeData[i].xcoord,
+        yCoord: nodeData[i].ycoord,
         floor: nodeData[i].floor,
       });
     }
     setHospitalData(newHospitalData);
   };
 
+  const [baseLayers] = useState({
+    L1: layers.LayerL1,
+    L2: layers.LayerL2,
+    F1: layers.LayerF1,
+    F2: layers.LayerF2,
+    F3: layers.LayerF3,
+  });
+
+  // const baseLayers = useMemo(() => ({
+  //     "L1": LayerL1,
+  //     "L2": LayerL2,
+  //     "F1": LayerF1,
+  //     "F2": LayerF2,
+  //     "F3": LayerF3,
+  // }), [LayerL1, LayerL2, LayerF1, LayerF2, LayerF3]);
+
   useEffect(() => {
     // Before creating the map, check if the browser supports hardware acceleration and enable it if possible
-    if (L.Browser.canvas) {
-      L.Map.prototype.options.preferCanvas = true;
-    }
+    // if (L.Browser.canvas) {
+    //   L.Map.prototype.options.preferCanvas = true;
+    // }
 
     console.log("useEffect is running");
     if (!isDataLoaded) {
@@ -154,6 +268,7 @@ export const MapBlock: React.FC = () => {
       });
     } else {
       let map: Map | null = mapRef.current;
+
       if (!map) {
         map = L.map("map-container", {
           crs: CRS.Simple,
@@ -161,33 +276,151 @@ export const MapBlock: React.FC = () => {
           maxZoom: 2,
           zoomControl: true,
           preferCanvas: true,
-          zoomDelta: 0.5,
+          layers: [layers.LayerF1],
         }).setView([3400, 5000], -2);
         mapRef.current = map;
+        L.control.layers(baseLayers).addTo(map);
       }
 
-      const bounds: LatLngBoundsExpression = [
-        [0, 0],
-        [3400, 5000], // change to resolution of the image
-      ];
+      // const addMarkersToLayerGroups = (hospitalData: HospitalData[]) => {
+      //
+      //     hospitalData.forEach((node) => {
+      //         const coords: [number, number] = [3400 - node.yCoord, node.xCoord];
+      //         const marker = L.marker(coords, {icon: greyIcon}).bindPopup(node.name,);
+      //         switch (node.floor) {
+      //             case "L1":
+      //                 marker.addTo(MarkersL1);
+      //                 break;
+      //             case "L2":
+      //                 marker.addTo(MarkersL2);
+      //                 break;
+      //             case "1":
+      //                 marker.addTo(MarkersF1);
+      //                 break;
+      //             case "2":
+      //                 marker.addTo(MarkersF2);
+      //                 break;
+      //             case "3":
+      //                 marker.addTo(MarkersF3);
+      //                 break;
+      //             default:
+      //                 // Handle other floors if needed
+      //                 break;
+      //         }
+      //     });
+      // };
 
-      L.imageOverlay(theThirdFloor, bounds).addTo(map);
-      L.imageOverlay(theSecondFloor, bounds).addTo(map);
-      L.imageOverlay(lowerLevelMap2, bounds).addTo(map);
-      L.imageOverlay(lowerLevelMap1, bounds).addTo(map);
-      L.imageOverlay(theFirstFloor, bounds).addTo(map);
+      // MarkersL1.addTo(LayerL1);
+      // MarkersL2.addTo(LayerL2);
+      // MarkersF1.addTo(LayerF1);
+      // MarkersF2.addTo(LayerF2);
+      // MarkersF3.addTo(LayerF3);
 
+      // const bounds: LatLngBoundsExpression = [
+      //     [0, 0],
+      //     [3400, 5000], // change to resolution of the image
+      // ];
+
+      //L.imageOverlay(theFirstFloor, bounds).addTo(map);
+
+      // now lets put all of the markers in separate layergroups
+      //addMarkersToLayerGroups(hospitalData);
       map.setMaxBounds(bounds);
 
-      // Print out the nodes on the first floor
-      // Draw new markers for the selected floor after adding the image overlay
-      const newNodesOnCurrentFloor = hospitalData.filter(
-        (node) => node.floor === "1",
-      );
-      setNodesOnFloor(newNodesOnCurrentFloor);
-      addMarkers(map, newNodesOnCurrentFloor);
+      console.log("This is the map:");
+      console.log(map);
+
+      mapRef.current = map;
+
+      // L.imageOverlay(lowerLevelMap1, bounds).addTo(LayerL1);
+      // L.imageOverlay(lowerLevelMap2, bounds).addTo(LayerL2);
+      // L.imageOverlay(theSecondFloor, bounds).addTo(LayerF2);
+      // L.imageOverlay(theThirdFloor, bounds).addTo(LayerF3);
+      // L.imageOverlay(theFirstFloor, bounds).addTo(LayerF1);
+      //
+      // LayerF2.addTo(map);
+
+      // // Print out the nodes on the first floor
+      // // Draw new markers for the selected floor after adding the image overlay
+      // const newNodesOnCurrentFloor = hospitalData.filter(
+      //   (node) => node.floor === "1",
+      // );
+      // setNodesOnFloor(newNodesOnCurrentFloor);
+      // addMarkers(map, newNodesOnCurrentFloor);
     }
-  }, [isDataLoaded, hospitalData]); // Dependency array
+  }, [baseLayers, bounds, hospitalData, isDataLoaded, layers]); // Dependency array
+
+  const addMarkersToLayerGroups = useCallback(
+    (hospitalData: HospitalData[]) => {
+      hospitalData.forEach((node) => {
+        const coords: [number, number] = [3400 - node.yCoord, node.xCoord];
+        const marker = L.marker(coords, { icon: greyIcon }).bindPopup(
+          node.name,
+        );
+        const layerKey = node.floor.startsWith("L")
+          ? `Markers${node.floor}`
+          : (`MarkersF${node.floor}` as keyof MarkersState);
+        if (markers[layerKey as keyof MarkersState]) {
+          marker.addTo(markers[layerKey as keyof MarkersState]);
+        }
+      });
+    },
+    [greyIcon, markers],
+  );
+
+  useEffect(() => {
+    console.log("useEffect for markers and floor images is running");
+    if (isDataLoaded) {
+      Object.entries(markers).forEach(([key, marker]) => {
+        marker.addTo(
+          layers[key.replace("Markers", "Layer") as keyof LayersState],
+        );
+      });
+
+      [
+        "lowerLevel1",
+        "lowerLevel2",
+        "theSecondFloor",
+        "theThirdFloor",
+        "theFirstFloor",
+      ].forEach((floor, index) => {
+        L.imageOverlay(floorMaps[floor], bounds).addTo(
+          layers[
+            `Layer${floor.replace(/(\d+)/, "")}${index + 1}` as keyof LayersState
+          ],
+        );
+      });
+      addMarkersToLayerGroups(hospitalData);
+    }
+  }, [
+    isDataLoaded,
+    markers,
+    layers,
+    bounds,
+    floorMaps,
+    greyIcon,
+    addMarkersToLayerGroups,
+    hospitalData,
+  ]);
+
+  //     const toggleLayer = (layerGroup: L.LayerGroup, show: boolean) => {
+  //         if (mapRef.current) {
+  //             if (show) {
+  //                 layerGroup.addTo(mapRef.current);
+  //             } else {
+  //                 layerGroup.removeFrom(mapRef.current);
+  //             }
+  //         }
+  //     };
+  //
+  // // Toggle base layers and markers based on selected floor
+  //     useEffect(() => {
+  //         toggleLayer(LayerL1, showL1); // Show L1 layer if showL1 is true
+  //         toggleLayer(LayerL2, showL2); // Show L2 layer if showL2 is true
+  //         toggleLayer(LayerF1, showF1); // Show F1 layer if showF1 is true
+  //         toggleLayer(LayerF2, showF2); // Show F2 layer if showF2 is true
+  //         toggleLayer(LayerF3, showF3); // Show F3 layer if showF3 is true
+  //     }, [showL1, showL2, showF1, showF2, showF3, LayerL1, LayerL2, LayerF1, LayerF2, LayerF3]); // Dependency array for floor visibility state
 
   function drawPath(start: string, end: string) {
     const startHospital = hospitalData.find((h) => h.nodeID === start);
@@ -198,10 +431,16 @@ export const MapBlock: React.FC = () => {
     }
     setCurrentFloor(currentFloor);
 
-    const [startLat, startLng] = startHospital.geocode
-      .split(",")
-      .map(parseFloat);
-    const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
+    // const [startLat, startLng] = startHospital.geocode
+    //   .split(",")
+    //   .map(parseFloat);
+    const startLat = startHospital.xCoord;
+    const startLng = startHospital.yCoord;
+
+    const endLat = endHospital.xCoord;
+    const endLng = endHospital.yCoord;
+
+    // const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
     console.log("drawPath o day neeeeeeeeeeeeeeeeee");
     const startCoords: [number, number] = [3400 - startLng, startLat];
     const endCoords: [number, number] = [3400 - endLng, endLat];
@@ -228,11 +467,12 @@ export const MapBlock: React.FC = () => {
     const currentPath = searchPath;
 
     if (startHospital && endHospital) {
-      const [startLat, startLng] = startHospital.geocode
-        .split(",")
-        .map(parseFloat);
+      const startLat = startHospital.xCoord;
+      const startLng = startHospital.yCoord;
+
+      const endLat = endHospital.xCoord;
+      const endLng = endHospital.yCoord;
       const startCoords: [number, number] = [3400 - startLng, startLat];
-      const [endLat, endLng] = endHospital.geocode.split(",").map(parseFloat);
       const endCoords: [number, number] = [3400 - endLng, endLat];
       if (
         startHospital.name === startNodeName &&
@@ -733,7 +973,10 @@ export const MapBlock: React.FC = () => {
       const icons = [GrayDot, GreenStar2, RedStar2];
       let iconIndex = 0;
 
-      const [lat, lng] = node.geocode.split(",").map(parseFloat);
+      const lat = node.xCoord;
+      const lng = node.yCoord;
+
+      // const [lat, lng] = node.geocode.split(",").map(parseFloat);
       const nLat = 3400 - lng;
 
       // Create instances of Icon for each icon URL
