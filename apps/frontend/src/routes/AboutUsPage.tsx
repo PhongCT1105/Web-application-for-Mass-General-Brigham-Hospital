@@ -24,65 +24,14 @@ import { Card } from "@/components/ui/card.tsx";
 const AboutMePage = () => {
   return (
     <div>
-      <div
-        className="about-the-team"
-        style={{
-          width: "85%",
-          paddingTop: "20px",
-          paddingBottom: "10px",
-          gap: "10px",
-          margin: "auto",
-        }}
-      >
-        <h4 style={{ textAlign: "center" }}>
+      <div className="about-the-team w-5/6 pt-10 pb-5 gap-5 m-auto">
+        <h4 className={"text-center text-md text-muted-foreground"}>
           This application was developed by a team of students at Worcester
           Polytechnic Institute as part of the CS3733-D24 Software Engineering
           course. The team was led by Professor Wilson Wong and Team Coach Ari
           Schechter and Katy Stuparu.
         </h4>
-        <h1 style={{ textAlign: "center", paddingTop: "70px" }}>Faculty</h1>
-        <Card className="faculty-flex p-5">
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              paddingTop: "20px",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              margin: "auto",
-            }}
-          >
-            <AboutBlock
-              Name={"Wilson Wong"}
-              role={"Professor"}
-              Email={"wwong2@wpi.edu"}
-              Github={"https://github.com/wwong2"}
-              Linkdin={"https://www.linkedin.com/in/wilson-wong-wpi/"}
-              Imagepath={Wong}
-            />
-            <AboutBlock
-              Name={"Ari Schechter"}
-              role={"Team Coach"}
-              ClassYear={"2025"}
-              major={"CS"}
-              Email={"aschechter@wpi.edu"}
-              Github={"https://github.com/aschechter10"}
-              Linkdin={"https://www.linkedin.com/in/ari-schechter/"}
-              Imagepath={Ari}
-            />
-            <AboutBlock
-              Name={"Katy Stuparu"}
-              role={"Team Coach"}
-              ClassYear={"2025"}
-              major={"CS"}
-              Email={"kstuparu@wpi.edu"}
-              Github={"https://github.com/kastuparu"}
-              Linkdin={"https://www.linkedin.com/in/kastuparu/"}
-              Imagepath={Katy}
-            />
-          </div>
-        </Card>
-        <h1 style={{ textAlign: "center", paddingTop: "100px" }}>Our Team</h1>
+        <h1 className="text-2xl font-bold my-2 mt-6 text-center">Our Team</h1>
         <Card className="team-members-flex p-5">
           <div className={"flex flex-row pt-10 pb-5 justify-between"}>
             <AboutBlock
@@ -232,6 +181,48 @@ const AboutMePage = () => {
                 />
               </div>
             </div>
+          </div>
+        </Card>
+        <h1 className="text-2xl font-bold my-2 mt-6 text-center">Faculty</h1>
+        <Card className="faculty-flex p-5">
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              paddingTop: "20px",
+              justifyContent: "space-evenly",
+              alignItems: "center",
+              margin: "auto",
+            }}
+          >
+            <AboutBlock
+              Name={"Wilson Wong"}
+              role={"Professor"}
+              Email={"wwong2@wpi.edu"}
+              Github={"https://github.com/wwong2"}
+              Linkdin={"https://www.linkedin.com/in/wilson-wong-wpi/"}
+              Imagepath={Wong}
+            />
+            <AboutBlock
+              Name={"Ari Schechter"}
+              role={"Team Coach"}
+              ClassYear={"2025"}
+              major={"CS"}
+              Email={"aschechter@wpi.edu"}
+              Github={"https://github.com/aschechter10"}
+              Linkdin={"https://www.linkedin.com/in/ari-schechter/"}
+              Imagepath={Ari}
+            />
+            <AboutBlock
+              Name={"Katy Stuparu"}
+              role={"Team Coach"}
+              ClassYear={"2025"}
+              major={"CS"}
+              Email={"kstuparu@wpi.edu"}
+              Github={"https://github.com/kastuparu"}
+              Linkdin={"https://www.linkedin.com/in/kastuparu/"}
+              Imagepath={Katy}
+            />
           </div>
         </Card>
         <h6 style={{ textAlign: "center", marginTop: "75px" }}>
