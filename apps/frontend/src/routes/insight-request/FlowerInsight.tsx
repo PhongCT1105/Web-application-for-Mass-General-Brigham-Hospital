@@ -5,7 +5,7 @@ import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
 import DoughnutChart from "@/components/Graph/DoughnutGraph.tsx";
 
-function InsightRoute() {
+function FlowerInsight() {
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2">
@@ -26,4 +26,4 @@ function InsightRoute() {
   );
 }
 
-export default InsightRoute;
+export default FlowerInsight;

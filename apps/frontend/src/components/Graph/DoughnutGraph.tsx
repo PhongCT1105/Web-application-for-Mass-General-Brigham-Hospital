@@ -58,7 +58,7 @@ const DoughnutChart = () => {
   const options = {
     responsive: true,
     maintainAspectRatio: true,
-    aspectRatio: 2,
+    aspectRatio: 2.1,
     plugins: {
       legend: {
         position: "top" as const,

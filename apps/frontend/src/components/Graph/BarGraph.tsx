@@ -20,10 +20,20 @@ ChartJS.register(
 );
 
 function BarGraph() {
-  const options = {};
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 2.1,
+    plugins: {
+      title: {
+        display: true,
+        text: "Bar Chart of total service request used",
+      },
+    },
+  };
   return (
     <>
-      <Bar options={options} data={barChartData} />
+      <Bar options={options} data={barChartData}></Bar>
     </>
   );
 }
