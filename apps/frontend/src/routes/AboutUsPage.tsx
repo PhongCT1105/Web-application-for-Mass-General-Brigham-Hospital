@@ -3,7 +3,7 @@ import "../styles/globals.css";
 import AboutBlock from "@/components/blocks/AboutBlock.tsx";
 import Ari from "@/assets/headshots/Ari.png";
 import Katy from "@/assets/headshots/Katy.jpg";
-import Phong from "@/assets/headshots/Phong.png";
+import Phong from "@/assets/headshots/Phong.jpg";
 import Lap from "@/assets/headshots/Lap.jpg";
 import Trang from "@/assets/headshots/Trang.jpg";
 import Mina from "@/assets/headshots/Mina.jpg";
