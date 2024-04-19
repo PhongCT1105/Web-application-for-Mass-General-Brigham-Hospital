@@ -15,6 +15,11 @@ import mapPic from "@/assets/01_thefirstfloor.png";
 export default function StartPage() {
   return (
     <>
+      <div className="text-white text-bold bg-red-500 mb-0 p-0 text-s w-full text-center">
+        * * * This website is a term project exercise for WPI CS 3733 Software
+        Engineering (Prof. Wong) and is not to be confused with the actual
+        Brigham & Women’s Hospital website. * * *
+      </div>
       {/*<HeaderHome />*/}
       <HomeCarousel
         data={[

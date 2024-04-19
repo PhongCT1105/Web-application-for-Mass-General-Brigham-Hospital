@@ -113,9 +113,14 @@ export const MapEditor: React.FC = () => {
           crs: CRS.Simple,
           minZoom: -2,
           maxZoom: 2,
-          zoomControl: true,
+          zoomControl: false,
         }).setView([3400, 5000], -2);
         mapRef.current = map;
+        L.control
+          .zoom({
+            position: "topright",
+          })
+          .addTo(map);
       }
 
       const bounds: LatLngBoundsExpression = [
@@ -286,15 +291,13 @@ export const MapEditor: React.FC = () => {
         }}
       >
         <div
-          className={"w-full h-full relative"}
+          className={" relative "}
           style={{
             zIndex: 1000,
           }}
         >
           <Button
-            className={
-              "absolute bottom-0 right-0 mr-10 mb-8 rounded-full w-20 h-20"
-            }
+            className={"absolute ml-4 mt-4 rounded-full w-20 h-20 "}
             onClick={() => (window.location.href = "/map-editor/table")}
           >
             <EditIcon className="h-8 w-8" />
@@ -305,27 +308,30 @@ export const MapEditor: React.FC = () => {
           style={{
             position: "absolute",
             top: "67%", // Position at the vertical center of the page
-            left: "50%",
+            left: "90%",
             transform: "translate(0%, -100%)", // Center horizontally and vertically
             display: "flex",
             flexDirection: "column-reverse",
             justifyContent: "center",
             alignItems: "center",
-            width: "87%",
             zIndex: 1000,
             color: "black",
           }}
         >
           <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "L2" ? "mt-8" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "L2" ? "mt-8" : ""}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
-              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+              className={
+                currentFloor === "1"
+                  ? "bg-yellow-500 w-full"
+                  : "bg-blue-500 text-black w-full hover:bg-yellow-500"
+              }
               onClick={() => changeFloor("lowerLevel2")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -336,15 +342,19 @@ export const MapEditor: React.FC = () => {
             </button>
           </div>
           <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "L1" ? "mt-8" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "L1" ? "mt-8" : ""}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
-              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+              className={
+                currentFloor === "1"
+                  ? "bg-yellow-500 w-full"
+                  : "bg-blue-500 text-black w-full hover:bg-yellow-500"
+              }
               onClick={() => changeFloor("lowerLevel1")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -355,15 +365,19 @@ export const MapEditor: React.FC = () => {
             </button>
           </div>
           <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "1" ? "mt-8" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "1" ? "mt-8" : ""}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
-              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+              className={
+                currentFloor === "1"
+                  ? "bg-yellow-500 w-full"
+                  : "bg-blue-500 text-black w-full hover:bg-yellow-500"
+              }
               onClick={() => changeFloor("theFirstFloor")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -374,7 +388,7 @@ export const MapEditor: React.FC = () => {
             </button>
           </div>
           <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "2" ? "mt-8" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "2" ? "mt-8" : ""}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
@@ -382,7 +396,7 @@ export const MapEditor: React.FC = () => {
               onClick={() => changeFloor("theSecondFloor")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
@@ -393,7 +407,7 @@ export const MapEditor: React.FC = () => {
             </button>
           </div>
           <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "3" ? "mt-8" : "hover:mr-4"}`}
+            className={`w-[80px] h-[80px] relative  ${currentFloor === "3" ? "mt-8" : ""}`}
             style={{ marginBottom: "-15px" }}
           >
             <button
@@ -401,7 +415,7 @@ export const MapEditor: React.FC = () => {
               onClick={() => changeFloor("theThirdFloor")}
             >
               <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
+                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
               >
                 <div
                   className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
