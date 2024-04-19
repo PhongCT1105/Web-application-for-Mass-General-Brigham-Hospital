@@ -206,7 +206,6 @@ export const MapEditor: React.FC = () => {
   function changeFloor(floorName: string) {
     const map = mapRef.current;
     if (!map) return;
-
     const convertedFloorName =
       {
         lowerLevel2: "L2",

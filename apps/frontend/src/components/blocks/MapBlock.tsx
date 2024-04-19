@@ -25,8 +25,7 @@ import F3 from "@/assets/Floor3.png";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
-import { Button } from "@/components/ui/button";
-
+// import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
 
 declare module "leaflet" {
@@ -117,7 +116,7 @@ export const MapBlock: React.FC = () => {
   const [endNodeName, setEndNodeName] = useState("");
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
-
+  // setCurrentFloor("F1");
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
     lowerLevel2: lowerLevelMap2,
@@ -160,10 +159,15 @@ export const MapBlock: React.FC = () => {
           crs: CRS.Simple,
           minZoom: -2,
           maxZoom: 2,
-          zoomControl: true,
+          zoomControl: false,
           preferCanvas: true,
         }).setView([3400, 5000], -2);
         mapRef.current = map;
+        L.control
+          .zoom({
+            position: "topright",
+          })
+          .addTo(map);
       }
 
       const bounds: LatLngBoundsExpression = [
@@ -209,14 +213,13 @@ export const MapBlock: React.FC = () => {
     const map = mapRef.current;
     if (!map) return;
 
-    const newPath = L.polyline([startCoords, endCoords], {
+    return L.polyline([startCoords, endCoords], {
       color: "blue",
       weight: 5,
       snakingSpeed: 200,
       snakeRepeat: false,
       snakeRepeatDelay: 100,
     });
-    return newPath;
   }
 
   function placeStartEndMarkers(path: Node[]) {
@@ -903,9 +906,32 @@ export const MapBlock: React.FC = () => {
       }}
     >
       <div
-        // style={{ display: "flex", height: "100%", zIndex: 1 }}
-        className={"flex h-[90vh] z-1"}
+        style={{
+          display: "flex",
+          height: "100%",
+          zIndex: 1,
+          overflow: "hidden",
+        }}
+        // className={"flex h-[80vh] z-1"}
       >
+        <div
+        // style={{ flex: 1, padding: "10px" }}
+        >
+          <SearchBar
+            locations={hospitalData
+              .filter((hospital) => !hospital.name.includes("Hall"))
+              .map((hospital) => ({
+                nodeID: hospital.nodeID,
+                longName: hospital.name,
+              }))
+              .sort((a, b) => a.longName.localeCompare(b.longName))}
+            onSearch={handleSearch}
+            onClear={clearLines}
+            //onChange={changeMarker}
+            changePathfindingStrategy={changePathfindingStrategy}
+            currentFloor={currentFloor}
+          />
+        </div>
         <div
           id="map-container"
           style={{
@@ -913,75 +939,193 @@ export const MapBlock: React.FC = () => {
             backgroundColor: "gray-300",
             position: "relative",
             zIndex: 0,
-            // maxHeight: "90vh", // Adjust 20px to suit your layout
-            overflow: "hidden",
           }}
         >
           <div
             style={{
               position: "absolute",
-              zIndex: 1000,
-              marginLeft: 40,
-            }}
-          >
-            <SearchBar
-              locations={hospitalData
-                .filter((hospital) => !hospital.name.includes("Hall"))
-                .map((hospital) => ({
-                  nodeID: hospital.nodeID,
-                  longName: hospital.name,
-                }))
-                .sort((a, b) => a.longName.localeCompare(b.longName))}
-              onSearch={handleSearch}
-              onClear={clearLines}
-              //onChange={changeMarker}
-              changePathfindingStrategy={changePathfindingStrategy}
-              currentFloor={currentFloor}
-            />
-          </div>
-          <div
-            style={{
-              position: "absolute",
-              bottom: 20,
-              left: "50%",
-              transform: "translateX(-50%)",
+              top: "67%", // Position at the vertical center of the page
+              left: "90%",
+              transform: "translate(0%, -100%)", // Center horizontally and vertically
               display: "flex",
-              justifyContent: "space-around",
-              width: "80%",
+              flexDirection: "column-reverse",
+              justifyContent: "center",
+              alignItems: "center",
               zIndex: 1000,
               color: "black",
             }}
           >
-            <Button
-              className="bg-white text-black"
-              onClick={() => changeFloor(searchPath, "lowerLevel2")}
+            <div
+              className={`w-[80px] h-[80px] ${currentFloor === "L2" ? "mt-8" : ""}`}
+              style={{ marginBottom: "-15px" }}
             >
-              Lower Level 2
-            </Button>
-            <Button
-              className="bg-white text-black"
-              onClick={() => changeFloor(searchPath, "lowerLevel1")}
+              <button
+                // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+                onClick={() => changeFloor(searchPath, "lowerLevel2")}
+              >
+                <div
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
+                >
+                  <div
+                    className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                  >
+                    L2
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div
+              className={`w-[80px] h-[80px] relative ${currentFloor === "L1" ? "mt-8" : ""}`}
+              style={{ marginBottom: "-15px" }}
             >
-              Lower Level 1
-            </Button>
-            <Button
-              className="bg-white text-black"
-              onClick={() => changeFloor(searchPath, "theFirstFloor")}
+              <button
+                // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+                onClick={() => changeFloor(searchPath, "lowerLevel1")}
+              >
+                <div
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
+                >
+                  <div
+                    className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                  >
+                    L1
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div
+              className={`w-[80px] h-[80px] relative ${currentFloor === "1" ? "mt-8" : ""}`}
+              style={{ marginBottom: "-15px" }}
             >
-              First Floor
-            </Button>
-            <Button
-              className="bg-white text-black"
-              onClick={() => changeFloor(searchPath, "theSecondFloor")}
+              <button
+                // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+                onClick={() => changeFloor(searchPath, "theFirstFloor")}
+              >
+                <div
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
+                >
+                  <div
+                    className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                  >
+                    F1
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div
+              className={`w-[80px] h-[80px] relative ${currentFloor === "2" ? "mt-8" : ""}`}
+              style={{ marginBottom: "-15px" }}
             >
-              Second Floor
-            </Button>
-            <Button
-              className="bg-white text-black"
-              onClick={() => changeFloor(searchPath, "theThirdFloor")}
+              <button
+                // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+                onClick={() => changeFloor(searchPath, "theSecondFloor")}
+              >
+                <div
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
+                >
+                  <div
+                    className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                  >
+                    F2
+                  </div>
+                </div>
+              </button>
+            </div>
+            <div
+              className={`w-[80px] h-[80px] relative  ${currentFloor === "3" ? "mt-8" : ""}`}
+              style={{ marginBottom: "-15px" }}
             >
-              Third Floor
-            </Button>
+              <button
+                // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
+                onClick={() => changeFloor(searchPath, "theThirdFloor")}
+              >
+                <div
+                  className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
+                >
+                  <div
+                    className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                  >
+                    F3
+                  </div>
+                </div>
+              </button>
+            </div>
+            {/*<div className="w-40 h-40 relative">*/}
+            {/*    <Button*/}
+            {/*        variant={"ghost"}*/}
+            {/*        className={(currentFloor === "2" ? "bg-blue-500 text-white w-full hover:bg-destructive/90" : "bg-white text-black w-full hover:bg-destructive/90")}*/}
+            {/*        onClick={() => changeFloor("lowerLevel2")}*/}
+            {/*    >*/}
+            {/*        <div*/}
+            {/*            className="absolute w-20 h-20 transform rotate-45  bg-blue-200 hover:bg-yellow-500">*/}
+            {/*            <div className={"-rotate-45 text-xl font-medium text-center w-full h-full"}>F2</div>*/}
+            {/*        </div>*/}
+            {/*    </Button>*/}
+            {/*</div><div className="w-40 h-40 relative">*/}
+            {/*    <Button*/}
+            {/*        variant={"ghost"}*/}
+            {/*        className={(currentFloor === "3" ? "bg-blue-500 text-white w-full hover:bg-destructive/90" : "bg-white text-black w-full hover:bg-destructive/90")}*/}
+            {/*        onClick={() => changeFloor("lowerLevel2")}*/}
+            {/*    >*/}
+            {/*        <div*/}
+            {/*            className="absolute w-20 h-20 transform rotate-45  bg-blue-200 hover:bg-yellow-500">*/}
+            {/*            <div className={"-rotate-45 text-xl font-medium text-center w-full h-full"}>F3</div>*/}
+            {/*        </div>*/}
+            {/*    </Button>*/}
+            {/*</div>*/}
+            {/*/!*Lower Level 2*!/*/}
+            {/*<Button*/}
+            {/*    className={(currentFloor === "L1" ? "bg-blue-500 text-white" : "bg-white text-black")}*/}
+            {/*    onClick={() => changeFloor("lowerLevel1")}*/}
+            {/*>*/}
+            {/*    <div className="w-40 h-40 relative">*/}
+            {/*        <div*/}
+            {/*            style={{*/}
+            {/*                backgroundColor: "#6FA7FF",*/}
+            {/*            }}*/}
+            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
+            {/*    </div>*/}
+            {/*    /!*Lower Level 1*!/*/}
+            {/*</Button>*/}
+            {/*<Button*/}
+            {/*    className={(currentFloor === "1" ? "bg-blue-500 text-white" : "bg-white text-black")}*/}
+            {/*    onClick={() => changeFloor("theFirstFloor")}*/}
+            {/*>*/}
+            {/*    <div className="w-40 h-40 relative">*/}
+            {/*        <div*/}
+            {/*            style={{*/}
+            {/*                backgroundColor: "#277BFF",*/}
+            {/*            }}*/}
+            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
+            {/*    </div>*/}
+            {/*    /!*First Floor*!/*/}
+            {/*</Button>*/}
+            {/*<Button*/}
+            {/*    className={(currentFloor === "2" ? "bg-blue-500 text-white" : "bg-white text-black")}*/}
+            {/*    onClick={() => changeFloor("theSecondFloor")}*/}
+            {/*>*/}
+            {/*    <div className="w-40 h-40 relative">*/}
+            {/*        <div*/}
+            {/*            style={{*/}
+            {/*                backgroundColor: "#0056DE",*/}
+            {/*            }}*/}
+            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
+            {/*    </div>*/}
+            {/*    /!*Second Floor*!/*/}
+            {/*</Button>*/}
+            {/*<Button*/}
+            {/*    className={(currentFloor === "3" ? "bg-blue-500 text-white" : "bg-white text-black")}*/}
+            {/*    onClick={() => changeFloor("theThirdFloor")}*/}
+            {/*>*/}
+            {/*    <div className="w-40 h-40 relative">*/}
+            {/*        <div*/}
+            {/*            style={{*/}
+            {/*                backgroundColor: "#003A96",*/}
+            {/*            }}*/}
+            {/*            className="absolute bg-blue-700 w-20 h-20 transform rotate-45 "></div>*/}
+            {/*    </div>*/}
+            {/*    /!*Third Floor*!/*/}
+            {/*</Button>*/}
           </div>
         </div>
       </div>

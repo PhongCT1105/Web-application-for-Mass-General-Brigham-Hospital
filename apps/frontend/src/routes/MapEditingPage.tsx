@@ -7,7 +7,14 @@ import { MapEditor } from "@/routes/map-editor/mapEditorBlock.tsx";
 // Define the map component
 const MapEditingPage = () => {
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
+    <div
+      style={{
+        display: "flex",
+        flexDirection: "column",
+        height: "89vh",
+        overflow: "hidden",
+      }}
+    >
       {/*<Header highlighted={"/map-editor"} /> /!* Add the Header component *!/*/}
       {/*<MapEditorRefactor />*/}
       <MapEditor />

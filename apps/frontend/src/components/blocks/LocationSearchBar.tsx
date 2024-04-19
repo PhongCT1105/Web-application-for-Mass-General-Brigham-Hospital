@@ -95,7 +95,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       className="flex flex-col items-center bg-transparent p-4 w-[350px]
 "
     >
-      <Card className={"w-full "}>
+      <Card className={"w-full shadow"}>
         <CardHeader>
           <CardTitle
           // className={"text-4xl font-semibold"}
@@ -232,6 +232,23 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               Clear
             </Button>
           </div>
+        </CardContent>
+      </Card>
+
+      <Card className={"m-4 w-full shadow"}>
+        <CardHeader>
+          <CardTitle className={"font-bold"}>Instructions:</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className={"font-semibold"}>
+            Before attempting to find a path, ensure that you have a floor
+            selected.
+          </p>
+          <p className={"font-light"}>
+            Click once on a node to set it as your start node, click twice to
+            set it as your end node. Please click twice on "Find Path" to get
+            directions.
+          </p>
         </CardContent>
       </Card>
       {/*  <h3 className="mb-3 mt-0 text-center text-2xl">Directions</h3>*/}

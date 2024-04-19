@@ -95,7 +95,7 @@ export function Header({ highlighted }: HeaderProps) {
 
   return (
     <div className="flex w-full flex-col">
-      <header className="sticky top-0 flex flex-col items-center gap-4 bg-blue-900">
+      <header className="sticky top-0 flex flex-col items-center -gap-4 bg-blue-900">
         <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6">
           <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
             <a
@@ -113,7 +113,7 @@ export function Header({ highlighted }: HeaderProps) {
                     href="/home"
                     className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/home" ? "text-yellow-500 " : "text-gray-300"}`}
                   >
-                    Home
+                    Navigation
                   </a>
                   <a
                     href="/service-requests"
@@ -160,6 +160,12 @@ export function Header({ highlighted }: HeaderProps) {
                   </DropdownMenu>
                 </>
               )}
+              <a
+                href="/insight"
+                className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
+              >
+                Insight
+              </a>
               <a
                 href="/about-us"
                 className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
