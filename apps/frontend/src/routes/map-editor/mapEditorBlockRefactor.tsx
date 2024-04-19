@@ -43,7 +43,6 @@ export const MapEditorRefactor: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   const { nodes, edges } = useGraphContext();
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-  // const [currentHospitalData, setCurrentHospitalData] = useState<HospitalData[]>([]);
 
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
@@ -53,6 +52,7 @@ export const MapEditorRefactor: React.FC = () => {
     theThirdFloor: theThirdFloor,
   } as const;
 
+  // avoid making a bunch of new icons
   const customIcon = useMemo(
     () =>
       new Icon({
@@ -63,17 +63,25 @@ export const MapEditorRefactor: React.FC = () => {
     [],
   );
 
+  // loads hospital data from context only once
   useEffect(() => {
-    setHospitalData(
-      nodes.map((node) => ({
-        nodeID: node.nodeID,
-        name: node.longName,
-        geocode: `${node.xcoord},${node.ycoord}`,
-        floor: node.floor,
-      })),
-    );
-  }, [nodes]);
+    if (
+      nodes.length !== hospitalData.length ||
+      !nodes.every((node, index) => node.nodeID === hospitalData[index].nodeID)
+    ) {
+      setHospitalData(
+        nodes.map((node) => ({
+          nodeID: node.nodeID,
+          name: node.longName,
+          geocode: `${node.xcoord},${node.ycoord}`,
+          floor: node.floor,
+        })),
+      );
+      console.log("Updated Nodes");
+    }
+  }, [hospitalData, nodes]);
 
+  // draws a line between two nodes,,,, takes start and end nodes
   const drawLine = useCallback(
     (startHospital: HospitalData, endHospital: HospitalData) => {
       const map = mapRef.current;
@@ -81,7 +89,6 @@ export const MapEditorRefactor: React.FC = () => {
         console.log("cannot find map");
         return;
       }
-
       const [startLat, startLng] = startHospital.geocode
         .split(",")
         .map(parseFloat);
@@ -97,10 +104,12 @@ export const MapEditorRefactor: React.FC = () => {
         weight: 3,
       });
       newPath.addTo(map);
+      console.log("Drew line");
     },
     [],
   );
 
+  // find all the edges between all current nodes on the screen
   const findLines = useCallback(
     (hospitalData: HospitalData[]) => {
       for (const edge of edges) {
@@ -119,10 +128,12 @@ export const MapEditorRefactor: React.FC = () => {
           }
         }
       }
+      console.log("Found Line");
     },
     [drawLine, edges],
   );
 
+  // puts all nodes on the map when floors change
   const addMarkers = useCallback(
     (map: Map, nodesOnFloor: HospitalData[]) => {
       nodesOnFloor.forEach((node) => {
@@ -142,10 +153,12 @@ export const MapEditorRefactor: React.FC = () => {
           }
         });
       });
+      console.log("Added Marker");
     },
     [customIcon],
   );
 
+  // both of these are for efficiency
   const memoizedFindLines = useCallback(findLines, [
     edges,
     hospitalData,
@@ -153,6 +166,7 @@ export const MapEditorRefactor: React.FC = () => {
   ]);
   const memoizedAddMarkers = useCallback(addMarkers, [addMarkers]);
 
+  // initial page set up function
   useEffect(() => {
     let map: Map | null = mapRef.current;
     if (!map) {
@@ -178,8 +192,10 @@ export const MapEditorRefactor: React.FC = () => {
 
     memoizedFindLines(newNodesOnCurrentFloor);
     memoizedAddMarkers(map!, newNodesOnCurrentFloor);
+    console.log("Setup");
   }, [addMarkers, hospitalData, memoizedAddMarkers, memoizedFindLines, nodes]);
 
+  // clears markers
   function clearMarkers() {
     const map = mapRef.current;
     if (!map) return;
@@ -190,6 +206,8 @@ export const MapEditorRefactor: React.FC = () => {
       }
     });
   }
+
+  // clears lines
   function clearLines() {
     const map = mapRef.current;
     if (!map) return;
@@ -201,10 +219,12 @@ export const MapEditorRefactor: React.FC = () => {
     });
   }
 
+  // handles floor changes based on button click
+  // need to change to sandi's layers
   function changeFloor(floorName: string) {
     const map = mapRef.current;
     if (!map) return;
-
+    //
     const convertedFloorName =
       {
         lowerLevel2: "L2",
@@ -231,10 +251,12 @@ export const MapEditorRefactor: React.FC = () => {
     const newNodesOnCurrentFloor = hospitalData.filter(
       (node) => node.floor === convertedFloorName,
     );
+
     memoizedAddMarkers(map, newNodesOnCurrentFloor);
     memoizedFindLines(newNodesOnCurrentFloor);
   }
 
+  // map
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
       <div
