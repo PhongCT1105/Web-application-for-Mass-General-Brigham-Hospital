@@ -1,5 +1,6 @@
 import React from "react";
 import "leaflet/dist/leaflet.css";
+// import { MapEditorRefactor } from "@/routes/map-editor/mapEditorBlockRefactor.tsx";
 // import { Header } from "@/components/blocks/header.tsx";
 import { MapEditor } from "@/routes/map-editor/mapEditorBlock.tsx";
 
@@ -15,6 +16,7 @@ const MapEditingPage = () => {
       }}
     >
       {/*<Header highlighted={"/map-editor"} /> /!* Add the Header component *!/*/}
+      {/*<MapEditorRefactor />*/}
       <MapEditor />
     </div>
   );

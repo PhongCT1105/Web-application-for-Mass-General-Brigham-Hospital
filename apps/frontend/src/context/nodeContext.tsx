@@ -56,7 +56,7 @@ export const GraphStateProvider = ({ children }: GraphStateProviderProps) => {
         }));
         setEdges(updateEdges);
         console.log("Successfully loaded edge data");
-        console.log(edgeData);
+        // console.log(edgeData);
 
         // Accumulate changes in a temporary array
         const updatedNodes = nodeData.map((nodeItem: Node) => ({
@@ -72,13 +72,13 @@ export const GraphStateProvider = ({ children }: GraphStateProviderProps) => {
 
         setNodes(updatedNodes);
         console.log("Successfully loaded node data");
-        console.log(nodeData);
+        // console.log(nodeData);
       } catch (error) {
         console.error("Error loading data:", error);
       }
     };
 
-    loadData().then(() => console.log("Done."));
+    loadData().then(() => console.log("Done loading nodes and edges."));
   }, []);
 
   return (
