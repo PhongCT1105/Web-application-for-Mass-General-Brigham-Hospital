@@ -310,7 +310,9 @@ const CSVTable: React.FC = () => {
     }
   };
 
-  const uploadEmployees = async () => {
+  const uploadEmployees = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("UPLOAD EMPLOYEES");
     console.log(JSON.stringify(employeeData));
     const res = await axios.post("/api/employeeData", employeeData, {
       headers: {
