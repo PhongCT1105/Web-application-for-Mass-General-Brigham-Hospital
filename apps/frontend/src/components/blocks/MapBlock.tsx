@@ -21,9 +21,9 @@ import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
 //import GrayDot from "@/assets/gray-dot.png";
 import GreenStar from "@/assets/start-marker.png";
-//import GreenStar2 from "@/assets/start-marker2.png";
+import GreenStar2 from "@/assets/start-marker2.png";
 import RedStar from "@/assets/end-marker.png";
-//import RedStar2 from "@/assets/end-marker2.png";
+import RedStar2 from "@/assets/end-marker2.png";
 import L2 from "@/assets/FloorL2.png";
 import L1 from "@/assets/FloorL1.png";
 import F1 from "@/assets/Floor1.png";
@@ -420,8 +420,72 @@ export const MapBlock: React.FC = () => {
         iconSize: [25, 30],
         iconAnchor: [13, 30],
       });
-      L.marker(location, { icon: customIcon }).addTo(floorLayer);
-      // add clickable marker here
+      const marker = L.marker(location, { icon: customIcon }).addTo(floorLayer);
+      let clickTimer: ReturnType<typeof setTimeout>; // Explicit type annotation
+      //const iconInstances = [GrayDot, GreenStar2, RedStar2];
+      //let iconIndex = 0;
+
+      marker.on("click", function () {
+        const map = mapRef.current;
+        if (!map) return;
+
+        // Remove all polyline layers from the map
+        map.eachLayer((layer) => {
+          if (layer instanceof L.Polyline) {
+            map.removeLayer(layer);
+          }
+        });
+        clearTimeout(clickTimer);
+        //console.log("Setting the end node name to " + node.name);
+        //setEndNodeName(node.name);
+        //setEndNodeID(node.nodeID);
+        //iconIndex = 2; // Set icon to red star for end node
+
+        // Reset icons of all markers to gray, except for the start node
+        map.eachLayer((layer) => {
+          if (layer instanceof L.Marker && layer.options.icon) {
+            const markerIconUrl = layer.options.icon.options.iconUrl;
+            if (
+              markerIconUrl === GreenStar2 // End marker icon URL
+            ) {
+              //layer.setIcon(iconInstances[0]); // Set icon to gray
+            }
+          }
+        });
+        //marker.setIcon(iconInstances[iconIndex]);
+      });
+
+      marker.on("dblclick", function (e) {
+        // delete the existing lines
+        const map = mapRef.current;
+        if (!map) return;
+
+        // Remove all polyline layers from the map
+        map.eachLayer((layer) => {
+          if (layer instanceof L.Polyline) {
+            map.removeLayer(layer);
+          }
+        });
+        clearTimeout(clickTimer);
+        //console.log("Setting the end node name to " + node.name);
+        //setEndNodeName(node.name);
+        //setEndNodeID(node.nodeID);
+        //iconIndex = 2; // Set icon to red star for end node
+
+        // Reset icons of all markers to gray, except for the start node
+        map.eachLayer((layer) => {
+          if (layer instanceof L.Marker && layer.options.icon) {
+            const markerIconUrl = layer.options.icon.options.iconUrl;
+            if (
+              markerIconUrl === RedStar2 // End marker icon URL
+            ) {
+              //layer.setIcon(iconInstances[0]); // Set icon to gray
+            }
+          }
+        });
+        //marker.setIcon(iconInstances[iconIndex]);
+        e.originalEvent.preventDefault(); // Prevent default double-click behavior
+      });
     } else {
       const customIcon = new Icon({
         iconUrl: iconPath,
@@ -500,7 +564,7 @@ export const MapBlock: React.FC = () => {
   //                 }),
   //         );
   //
-  //         let clickTimer: ReturnType<typeof setTimeout>; // Explicit type annotation
+  //
   //         const marker = L.marker([nLat, lat], {
   //             icon: iconInstances[iconIndex],
   //         }).addTo(map);
@@ -509,80 +573,11 @@ export const MapBlock: React.FC = () => {
   //         const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
   //         marker.bindPopup(popupContent);
   //
-  //         marker.on("click", function () {
-  //             // delete the existing lines
-  //             const map = mapRef.current;
-  //             if (!map) return;
   //
-  //             // Remove all polyline layers from the map
-  //             map.eachLayer((layer) => {
-  //                 if (layer instanceof L.Polyline) {
-  //                     map.removeLayer(layer);
-  //                 }
-  //             });
-  //             clearTimeout(clickTimer);
-  //             clickTimer = setTimeout(() => {
-  //                 console.log("Setting the start node name to " + node.name);
-  //                 setStartNodeName(node.name);
-  //                 setStartNodeID(node.nodeID);
-  //                 iconIndex = 1; // Set icon to green star for start node
-  //                 marker.setIcon(iconInstances[iconIndex]);
-  //             }, 300); // Adjust this duration as needed
-  //         });
   //
-  //         marker.on("dblclick", function (e) {
-  //             // delete the existing lines
-  //             const map = mapRef.current;
-  //             if (!map) return;
   //
-  //             // Remove all polyline layers from the map
-  //             map.eachLayer((layer) => {
-  //                 if (layer instanceof L.Polyline) {
-  //                     map.removeLayer(layer);
-  //                 }
-  //             });
-  //             clearTimeout(clickTimer);
-  //             console.log("Setting the end node name to " + node.name);
-  //             setEndNodeName(node.name);
-  //             setEndNodeID(node.nodeID);
-  //             iconIndex = 2; // Set icon to red star for end node
-  //
-  //             // Reset icons of all markers to gray, except for the start node
-  //             map.eachLayer((layer) => {
-  //                 if (layer instanceof L.Marker && layer.options.icon) {
-  //                     const markerIconUrl = layer.options.icon.options.iconUrl;
-  //                     if (
-  //                         markerIconUrl === RedStar // End marker icon URL
-  //                     ) {
-  //                         layer.setIcon(iconInstances[0]); // Set icon to gray
-  //                     }
-  //                 }
-  //             });
-  //
-  //             marker.setIcon(iconInstances[iconIndex]);
-  //             e.originalEvent.preventDefault(); // Prevent default double-click behavior
   //         });
   //     });
-  //     // nodesOnFloor.forEach((node) => {
-  //     //   const customIcon = new Icon({
-  //     //     iconUrl: GrayDot,
-  //     //     iconSize: [12, 12],
-  //     //     iconAnchor: [6, 6],
-  //     //   });
-  //     //   const [lat, lng] = node.geocode.split(",").map(parseFloat);
-  //     //   const nLat = 3400 - lng;
-  //     //   const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
-  //     //
-  //     //   // Add a click event handler to toggle popup visibility
-  //     //   const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-  //     //   marker.bindPopup(popupContent);
-  //     //
-  //     //   marker.on("click", function (this: L.Marker) {
-  //     //     // Specify the type of 'this' as L.Marker
-  //     //     if (!this.isPopupOpen()) {
-  //     //       // Check if the popup is not already open
-  //     //       this.openPopup(); // Open the popup when the marker is clicked
-  //     //     }
   //     //   });
   //     // });
   // }
@@ -594,6 +589,10 @@ export const MapBlock: React.FC = () => {
     if (!layer) return;
     map.removeLayer(Layers[floor]);
     layer.addTo(map);
+
+    // // Add a click event handler to toggle popup visibility
+    // const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+    // marker.bindPopup(popupContent);
   }
 
   return (
