@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React, { useEffect } from "react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -33,13 +33,19 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
-import { Label } from "@/components/ui/label.tsx";
+//import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Medication, MedicationForm } from "@/interfaces/medicationReq.ts";
 import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
 import axios from "axios";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 interface DataTableProps {
   columns: ColumnDef<Medication>[];
 }
@@ -56,6 +62,8 @@ export function MedicineRequest({ columns }: DataTableProps) {
     medication: [],
     patient: "",
   });
+  const [employees, setEmployees] = React.useState<string[]>([]);
+  const [locations, setLocations] = React.useState<string[]>([]);
 
   const handleAddRow = (item: Medication) => {
     setSubmission((prev) => [
@@ -89,6 +97,87 @@ export function MedicineRequest({ columns }: DataTableProps) {
     if (res.status == 200) {
       console.log("success");
     }
+  };
+
+  // Get locations from database
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/mapreq/nodes");
+        const rawData = response.data;
+
+        const extractedLocations = rawData.map(
+          (item: {
+            nodeID: string;
+            xcoord: number;
+            ycoord: number;
+            floor: string;
+            building: string;
+            nodeType: string;
+            longName: string;
+            shortName: string;
+          }) => item.longName,
+        );
+        const filteredLocations = extractedLocations.filter(
+          (location: string) => {
+            return (
+              !location.includes("Hallway") &&
+              !location.startsWith("Hall") &&
+              !location.includes("Restroom") &&
+              !location.includes("Elevator") &&
+              !location.includes("Staircase") &&
+              !location.includes("Stair")
+            );
+          },
+        );
+
+        setLocations(filteredLocations);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    // Fetch data on component mount
+    fetchData();
+  }, []);
+
+  const handleLocation = (selectedLocation: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      location: selectedLocation,
+    }));
+  };
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get("/api/employeeData");
+        const rawData = response.data;
+
+        const extractedEmployees = rawData.map(
+          (item: { id: number; fName: string; lName: string; title: string }) =>
+            item.lName,
+        );
+
+        setEmployees(extractedEmployees);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchEmployees();
+  }, []);
+
+  const handleEmployee = (selectedEmployee: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      employee: selectedEmployee,
+    }));
+    //checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   const [rowSelection, setRowSelection] = React.useState({});
@@ -199,21 +288,42 @@ export function MedicineRequest({ columns }: DataTableProps) {
           </Button>
         </DialogTrigger>
         <DialogContent>
-          <Label>Signature</Label>
-          <Input
-            type={"text"}
-            id={"employee"}
-            placeholder={"Sign here"}
-            onChange={handleFormChange}
-          />
-          <Label>Patient Location</Label>
-          <Input
-            type={"text"}
-            id={"location"}
-            placeholder={"Location"}
-            onChange={handleFormChange}
-          />
-          <Label>Patient Name</Label>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                {form.employee ? form.employee : "Select Employee Name"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+              {employees.map((employee, index) => (
+                <DropdownMenuRadioItem
+                  key={index}
+                  value={employee}
+                  onClick={() => handleEmployee(employee)}
+                >
+                  {employee}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                {form.location ? form.location : "Select Location"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+              {locations.map((location, index) => (
+                <DropdownMenuRadioItem
+                  key={index}
+                  value={location}
+                  onClick={() => handleLocation(location)}
+                >
+                  {location}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Input
             type={"text"}
             id={"patient"}
