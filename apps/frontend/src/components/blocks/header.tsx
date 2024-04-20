@@ -19,16 +19,6 @@ import "../../styles/globals.css";
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/brighamJlogo.png";
 
-// import {
-//     Card,
-//     CardContent,
-//     CardDescription,
-//     CardFooter,
-//     CardHeader,
-//     CardTitle,
-// } from "@/components/ui/card"
-// import { Checkbox } from "@/components/ui/checkbox"
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,11 +37,41 @@ import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/modeToggle.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { searchList } from "@/components/blocks/searchList.ts";
 
 export function Header() {
   const location = useLocation();
+
+  const [query, setQuery] = useState<string>("");
+  const [results, setResults] = useState<
+    { mainTitle: string; alternativeTitles: string[]; url: string }[]
+  >([]);
+  const dropdownRef = useRef<HTMLUListElement>(null);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setQuery(inputValue);
+
+    const searchResults = searchList.filter(
+      (item) =>
+        item.mainTitle.toLowerCase().includes(inputValue.toLowerCase()) ||
+        item.alternativeTitles.some((altTitle) =>
+          altTitle.toLowerCase().includes(inputValue.toLowerCase()),
+        ),
+    );
+
+    setResults(searchResults);
+  };
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target as Node)
+    ) {
+      setResults([]); // Close the dropdown
+    }
+  };
 
   const {
     loginWithRedirect,
@@ -62,6 +82,7 @@ export function Header() {
   } = useAuth0();
 
   useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
     const redirect = async () => {
       try {
         await getAccessTokenSilently();
@@ -76,6 +97,9 @@ export function Header() {
     if (!isLoading && isAuthenticated) {
       redirect().then();
     }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, [
     getAccessTokenSilently,
     isAuthenticated,
@@ -101,7 +125,7 @@ export function Header() {
   };
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col" style={{ zIndex: 1000 }}>
       <header className="sticky top-0 flex flex-col items-center -gap-4 bg-blue-900">
         <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6 text-nowrap">
           <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
@@ -129,10 +153,10 @@ export function Header() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button
-                        className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${location.pathname === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
+                        className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${location.pathname === "/map-editor/map" || location.pathname === "/map-editor/table" ? "text-yellow-500" : "text-gray-300"}`}
                       >
                         Map Editor
-                        <ChevronDown className={" h-auto"} />
+                        <ChevronDown className={" h-auto translate-y-1"} />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -170,7 +194,7 @@ export function Header() {
                         ) : (
                           <>Service Requests</>
                         )}
-                        <ChevronDown className={" h-auto"} />
+                        <ChevronDown className={" h-auto translate-y-1"} />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -261,16 +285,38 @@ export function Header() {
               </nav>
             </SheetContent>
           </Sheet>
-          <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2  lg:gap-4">
-            <form className="ml-auto flex-1 sm:flex-initial">
+          <div className="flex w-full items-center gap-4">
+            <form className="ml-auto" onSubmit={(e) => e.preventDefault()}>
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
                   placeholder="Search ..."
-                  className="pl-8 sm:w-[300px] md:w-[300px] lg:w-[300px]"
+                  className="pl-8 w-[300px]"
+                  value={query}
+                  onChange={handleSearch}
                 />
               </div>
+              {results.length > 0 && (
+                <ul
+                  className="absolute z-10 mt-1 w-auto bg-white border border-gray-200 rounded-lg shadow-lg"
+                  ref={dropdownRef}
+                >
+                  {results.slice(0, 5).map(
+                    (
+                      result,
+                      index, // Limiting to 6 results
+                    ) => (
+                      <li
+                        key={index}
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                      >
+                        <a href={result.url}>{result.mainTitle}</a>
+                      </li>
+                    ),
+                  )}
+                </ul>
+              )}
             </form>
             <ModeToggle />
             {!isLoading && isAuthenticated ? (
