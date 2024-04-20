@@ -129,27 +129,57 @@ export function NodeDataTable({ columns }: DataTableProps) {
     setNodes((prevNodes) => [...prevNodes, newNode]);
     console.log("New node array length: " + data.length);
   };
+  useEffect(() => {
+    console.log("Data before filtering:", data);
+    const filteredData = data.filter((node) => {
+      if (node && node.nodeID != null && node.nodeID !== undefined) {
+        return true;
+      } else {
+        console.log("Node with undefined or null nodeID found:", node);
+        return false;
+      }
+    });
+    console.log("Filtered data:", filteredData);
+
+    // Check if filtered data has changed
+    if (JSON.stringify(filteredData) !== JSON.stringify(data)) {
+      // If changed, update state
+      setNodes(filteredData);
+      console.log("Update nodes request sent to database.");
+    }
+
+    console.log("Node array length: " + data.length);
+  }, [data, setNodes]);
 
   useEffect(() => {
+    console.log("Data before filtering:", data);
+    const filteredData = data.filter((node) => {
+      if (node && node.nodeID != null && node.nodeID !== undefined) {
+        return true;
+      } else {
+        console.log("Node with undefined or null nodeID found:", node);
+        return false;
+      }
+    });
+    console.log("Filtered data:", filteredData);
+    // setNodes(filteredData);
+    console.log(data.length);
     const handleUpdateNodes = async () => {
-      const res = await axios.post(
-        "/api/csvFetch/node",
-        data.filter((node) => node.nodeID != null),
-        {
-          headers: {
-            "content-type": "Application/json",
-          },
+      const res = await axios.post("/api/csvFetch/node", filteredData, {
+        headers: {
+          "content-type": "Application/json",
         },
-      );
+      });
       if (res.status == 200) {
         console.log("success");
       } else {
         console.log(res.status);
       }
     };
-    handleUpdateNodes().then(() =>
-      console.log("Update nodes request sent to database."),
-    );
+    handleUpdateNodes().then(() => {
+      // setNodes(filteredData);
+      console.log("Update nodes request sent to database.");
+    });
     console.log("Node array length: " + data.length);
   }, [data]);
 
@@ -199,6 +229,12 @@ export function NodeDataTable({ columns }: DataTableProps) {
       },
       deleteRow: (rowIndex: number) => {
         setNodes((old) => old.filter((_, index) => index !== rowIndex));
+        const filteredData = data.filter((node) => {
+          if (node && node.nodeID != null && node.nodeID !== undefined)
+            return true;
+          else return false;
+        });
+        setNodes(filteredData);
       },
     },
 

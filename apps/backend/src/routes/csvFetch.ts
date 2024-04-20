@@ -50,31 +50,40 @@ router.post("/node", async (req, res) => {
   const nodeData: nodeTable[] = JSON.parse(jsonString);
 
   try {
-    // Handle deletion of nodes not present in the updated data
-    // const allNodeIDs = nodeData.map((node) => node.nodeID);
-    // await prisma.nodes.deleteMany({
-    //   where: {
-    //     NOT: {
-    //       nodeID: {
-    //         in: allNodeIDs,
-    //       },
-    //     },
-    //   },
-    // });
+    // Retrieve all existing node IDs from the database
+    const existingNodes = await prisma.nodes.findMany();
+    const existingNodeIDs = existingNodes.map((node) => node.nodeID);
+
+    // Extract node IDs from the updated data
+    const updatedNodeIDs = nodeData.map((node) => node.nodeID);
+
+    // Find node IDs that need to be deleted
+    const nodesToDelete = existingNodeIDs.filter(
+      (nodeID) => !updatedNodeIDs.includes(nodeID),
+    );
+
+    // Delete nodes not present in the updated data
+    if (nodesToDelete.length > 0) {
+      await prisma.nodes.deleteMany({
+        where: {
+          nodeID: {
+            in: nodesToDelete,
+          },
+        },
+      });
+    }
 
     // Don't delete edges here
     // await prisma.nodes.deleteMany();
-    const filteredNodeData = nodeData.filter((node) => node.nodeID !== null);
+    // const filteredNodeData = nodeData.filter((node) => node.nodeID !== null);
 
     // Iterate over nodeData and create or update nodes
-    for (let i = 0; i < filteredNodeData.length; i++) {
-      const node = filteredNodeData[i];
-      // Find existing node by nodeID
-      const existingNode = await prisma.nodes.findUnique({
-        where: {
-          nodeID: node.nodeID,
-        },
-      });
+    for (let i = 0; i < nodeData.length; i++) {
+      const node = nodeData[i];
+      // Check if node exists in the database
+      const existingNode = existingNodes.find(
+        (existingNode) => existingNode.nodeID === node.nodeID,
+      );
 
       if (existingNode) {
         // If node exists, update it
