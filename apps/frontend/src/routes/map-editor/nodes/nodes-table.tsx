@@ -29,6 +29,16 @@ import { Node } from "@/routes/map-editor/mapEditorTablePage.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { useGraphContext } from "@/context/nodeContext.tsx";
 import axios from "axios";
+import { Button } from "@/components/ui/button.tsx";
+import { PlusIcon } from "lucide-react";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogFooter,
+  DialogTrigger,
+} from "@/components/ui/dialog.tsx";
+import { Label } from "@/components/ui/label.tsx";
 // import {Input} from "@/components/ui/input.tsx";
 
 interface DataTableProps {
@@ -43,14 +53,50 @@ export function NodeDataTable({ columns }: DataTableProps) {
     [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const { nodes, setNodes } = useGraphContext();
-  const [originalData, setOriginalData] = useState(() => [...nodes]);
+  const { nodes: data, setNodes } = useGraphContext();
+  const [originalData, setOriginalData] = useState(() => [...data]);
   const [editedRows, setEditedRows] = useState({});
+  const [nodeToAdd, setNodeToAdd] = useState<{ node: Node; neighbor: string }>({
+    node: {
+      nodeID: "",
+      xcoord: 0,
+      ycoord: 0,
+      floor: "",
+      building: "",
+      nodeType: "",
+      longName: "",
+      shortName: "",
+    },
+    neighbor: "",
+  });
+
+  const nodeKV: { [key: string]: keyof Node | string } = {
+    nodeID: "nodeID",
+    xcoord: "xcoord",
+    ycoord: "ycoord",
+    floor: "floor",
+    building: "building",
+    nodeType: "nodeType",
+    longName: "longName",
+    shortName: "shortName",
+    neighbor: "neighbor",
+  };
+
+  const handleAddedNodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNodeToAdd((prevState) => ({
+      ...prevState,
+      [e.target.id]: e.target.value,
+    }));
+    console.log(nodeToAdd);
+  };
+
+  const handleSubmitForm = () => {
+    console.log(JSON.stringify(nodeToAdd.node));
+  };
 
   useEffect(() => {
     const handleUpdateNodes = async () => {
-      console.log(nodes);
-      const res = await axios.post("/api/csvFetch/node", nodes, {
+      const res = await axios.post("/api/csvFetch/node", data, {
         headers: {
           "content-type": "Application/json",
         },
@@ -64,10 +110,10 @@ export function NodeDataTable({ columns }: DataTableProps) {
     handleUpdateNodes().then(() =>
       console.log("Update nodes request sent to database."),
     );
-  }, [nodes]);
+  }, [data]);
 
   const table = useReactTable({
-    data: nodes,
+    data,
     columns,
     state: {
       sorting,
@@ -88,7 +134,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
         } else {
           setOriginalData((old) =>
             old.map((row, index) =>
-              index === rowIndex ? nodes[rowIndex] : row,
+              index === rowIndex ? data[rowIndex] : row,
             ),
           );
         }
@@ -126,10 +172,10 @@ export function NodeDataTable({ columns }: DataTableProps) {
   });
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        {/* search bar */}
-        <div className="flex flex-1 items-center space-x-2">
+    <div className="space-y-2">
+      <div className="flex flex-1 items-center space-x-2">
+        <div className="flex items-center justify-between">
+          {/* search bar */}
           <Input
             placeholder="Filter Items..."
             value={
@@ -141,6 +187,40 @@ export function NodeDataTable({ columns }: DataTableProps) {
             className="h-8 w-[150px] lg:w-[250px]"
           />
         </div>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className={"h-8 mb-2 space-between items-center"}>
+              <PlusIcon className={"mr-2 -ml-1 h-5 w-5"} />
+              Add Node
+            </Button>
+          </DialogTrigger>
+          <DialogContent
+            className={"lg:w-[500px] h-[700px] overflow-y-scroll "}
+          >
+            <div className="flex flex-col space-y-4">
+              {Object.keys(nodeKV).map((key) => (
+                <div key={key} className={"space-y-1"}>
+                  <Label>{key.charAt(0).toUpperCase() + key.slice(1)}</Label>
+                  <Input
+                    type={
+                      key === "ycoord" || key === "xcoord" ? "number" : "text"
+                    }
+                    id={key}
+                    placeholder={key}
+                    onChange={handleAddedNodeChange}
+                  />
+                </div>
+              ))}
+            </div>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button className={"w-full"} onClick={handleSubmitForm}>
+                  Submit
+                </Button>
+              </DialogClose>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
       <div className="rounded-md border">
         <Table>
