@@ -71,16 +71,9 @@ export function NodeDataTable({ columns }: DataTableProps) {
   const { nodes: data, setNodes } = useGraphContext();
   const [originalData, setOriginalData] = useState(() => [...data]);
   const [editedRows, setEditedRows] = useState({});
-
-  const uniqueNodeIds: string[] = Array.from(
-    new Set(data.map((node) => node.nodeID)),
-  );
-  const uniqueFloor: string[] = Array.from(
-    new Set(data.map((node) => node.floor)),
-  );
-  const uniqueBuilding: string[] = Array.from(
-    new Set(data.map((node) => node.building)),
-  );
+  // const [uniqueNodeIds, setUniqueNodeIds] = useState<string[]>([]);
+  // const [uniqueFloor, setUniqueFloor] = useState<string[]>([]);
+  // const [uniqueBuilding, setUniqueBuilding] = useState<string[]>([]);
 
   const nodeFormSchema = z.object({
     nodeID: z
@@ -188,22 +181,24 @@ export function NodeDataTable({ columns }: DataTableProps) {
   };
 
   useEffect(() => {
-    // console.log("Data before filtering:", data);
-    const filteredData = data.filter((node) => {
-      if (node && node.nodeID != null && node.nodeID !== undefined) {
-        return true;
-      } else {
-        console.log("Node with undefined or null nodeID found:", node);
-        return false;
+    if (data.length > 0) {
+      // console.log("Data before filtering:", data);
+      const filteredData = data.filter((node) => {
+        if (node && node.nodeID != null && node.nodeID !== undefined) {
+          return true;
+        } else {
+          console.log("Node with undefined or null nodeID found:", node);
+          return false;
+        }
+      });
+      // Check if filtered data has changed
+      if (JSON.stringify(filteredData) !== JSON.stringify(data)) {
+        // If changed, update state
+        setNodes(filteredData);
       }
-    });
-    // Check if filtered data has changed
-    if (JSON.stringify(filteredData) !== JSON.stringify(data)) {
-      // If changed, update state
-      setNodes(filteredData);
-    }
 
-    console.log("Node array length: " + data.length);
+      console.log("Node array length: " + data.length);
+    }
   }, [data, setNodes]);
 
   useEffect(() => {
@@ -349,7 +344,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
                         </FormLabel>
                         {["floor", "building", "nodeID"].includes(key) ? (
                           <Select
-                            defaultValue={field.value.toString()}
+                            defaultValue={String(field.value)}
                             onValueChange={field.onChange}
                           >
                             <FormControl>
@@ -359,19 +354,25 @@ export function NodeDataTable({ columns }: DataTableProps) {
                             </FormControl>
                             <SelectContent>
                               {key === "floor" &&
-                                uniqueFloor.map((value) => (
+                                Array.from(
+                                  new Set(data.map((node) => node.floor)),
+                                ).map((value) => (
                                   <SelectItem key={value} value={value}>
                                     {value}
                                   </SelectItem>
                                 ))}
                               {key === "building" &&
-                                uniqueBuilding.map((value) => (
+                                Array.from(
+                                  new Set(data.map((node) => node.building)),
+                                ).map((value) => (
                                   <SelectItem key={value} value={value}>
                                     {value}
                                   </SelectItem>
                                 ))}
                               {key === "nodeID" &&
-                                uniqueNodeIds.map((value) => (
+                                Array.from(
+                                  new Set(data.map((node) => node.nodeID)),
+                                ).map((value) => (
                                   <SelectItem key={value} value={value}>
                                     {value}
                                   </SelectItem>
@@ -446,7 +447,9 @@ export function NodeDataTable({ columns }: DataTableProps) {
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {uniqueNodeIds.map((value) => (
+                            {Array.from(
+                              new Set(data.map((node) => node.nodeID)),
+                            ).map((value) => (
                               <SelectItem key={value} value={value}>
                                 {value}
                               </SelectItem>
