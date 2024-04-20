@@ -25,7 +25,7 @@ function LineGraph() {
   const options = {
     animations: {
       tension: {
-        duration: 1000,
+        duration: 2500,
         easing: "linear" as AnimationSpec<never>["easing"],
         from: 1,
         to: 0,
