@@ -906,7 +906,6 @@ export const MapBlock: React.FC = () => {
         // why are you the way that you are?
         // honestly every time I try to do something fun or exciting,  you make it not that way.
         // I hate so much about the things you choose to be.
-
         // const coords: [number, number] = [3400 - lng, lat];
 
         // Set map view to center at calculated coordinates with adjusted zoom level
