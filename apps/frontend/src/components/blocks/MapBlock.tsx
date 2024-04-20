@@ -713,6 +713,18 @@ export const MapBlock: React.FC = () => {
           setStartNodeName(node.name);
           setStartNodeID(node.nodeID);
           iconIndex = 1; // Set icon to green star for start node
+
+          // Reset icons of all markers to gray, except for the start node
+          map.eachLayer((layer) => {
+            if (layer instanceof L.Marker && layer.options.icon) {
+              const markerIconUrl = layer.options.icon.options.iconUrl;
+              if (
+                markerIconUrl === GreenStar2 // End marker icon URL
+              ) {
+                layer.setIcon(iconInstances[0]); // Set icon to gray
+              }
+            }
+          });
           marker.setIcon(iconInstances[iconIndex]);
         }, 300); // Adjust this duration as needed
       });
@@ -734,12 +746,12 @@ export const MapBlock: React.FC = () => {
         setEndNodeID(node.nodeID);
         iconIndex = 2; // Set icon to red star for end node
 
-        // Reset icons of all markers to gray, except for the start node
+        // Reset icons of all markers to gray, except for the end node
         map.eachLayer((layer) => {
           if (layer instanceof L.Marker && layer.options.icon) {
             const markerIconUrl = layer.options.icon.options.iconUrl;
             if (
-              markerIconUrl === RedStar // End marker icon URL
+              markerIconUrl === RedStar2 // End marker icon URL
             ) {
               layer.setIcon(iconInstances[0]); // Set icon to gray
             }
