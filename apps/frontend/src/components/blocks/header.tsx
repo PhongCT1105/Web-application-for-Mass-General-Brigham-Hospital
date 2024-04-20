@@ -1,31 +1,23 @@
 import {
-  CircleUser,
-  CreditCard,
+  ChevronDown,
+  // CircleUser,
+  // CreditCard,
   EditIcon,
-  FolderArchive,
-  Key,
-  LogOut,
+  // LogOut,
+  // FolderArchive,
+  // Key,
+  // LogOut,
   MapIcon,
   Package,
   Search,
-  Settings,
-  User,
-  Users,
+  // Settings,
+  // User,
+  // Users,
 } from "lucide-react";
 import "../../styles/globals.css";
 
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/brighamJlogo.png";
-
-// import {
-//     Card,
-//     CardContent,
-//     CardDescription,
-//     CardFooter,
-//     CardHeader,
-//     CardTitle,
-// } from "@/components/ui/card"
-// import { Checkbox } from "@/components/ui/checkbox"
 
 import {
   DropdownMenu,
@@ -33,25 +25,54 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
+  // DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
+  // DropdownMenuShortcut,
+  // DropdownMenuSub,
+  // DropdownMenuSubContent,
+  // DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/modeToggle.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
+import { searchList } from "@/components/blocks/searchList.ts";
 
-interface HeaderProps {
-  highlighted?: string; // Assuming highlightColor is a string
-}
+export function Header() {
+  const location = useLocation();
 
-export function Header({ highlighted }: HeaderProps) {
+  const [query, setQuery] = useState<string>("");
+  const [results, setResults] = useState<
+    { mainTitle: string; alternativeTitles: string[]; url: string }[]
+  >([]);
+  const dropdownRef = useRef<HTMLUListElement>(null);
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setQuery(inputValue);
+
+    const searchResults = searchList.filter(
+      (item) =>
+        item.mainTitle.toLowerCase().includes(inputValue.toLowerCase()) ||
+        item.alternativeTitles.some((altTitle) =>
+          altTitle.toLowerCase().includes(inputValue.toLowerCase()),
+        ),
+    );
+
+    setResults(searchResults);
+  };
+  const handleClickOutside = (e: MouseEvent) => {
+    if (
+      dropdownRef.current &&
+      !dropdownRef.current.contains(e.target as Node)
+    ) {
+      setResults([]); // Close the dropdown
+    }
+  };
+
   const {
     loginWithRedirect,
     isAuthenticated,
@@ -61,6 +82,7 @@ export function Header({ highlighted }: HeaderProps) {
   } = useAuth0();
 
   useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
     const redirect = async () => {
       try {
         await getAccessTokenSilently();
@@ -75,7 +97,16 @@ export function Header({ highlighted }: HeaderProps) {
     if (!isLoading && isAuthenticated) {
       redirect().then();
     }
-  }, [getAccessTokenSilently, isAuthenticated, isLoading, loginWithRedirect]);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [
+    getAccessTokenSilently,
+    isAuthenticated,
+    isLoading,
+    loginWithRedirect,
+    location.pathname,
+  ]);
 
   const handleLogin = () => {
     loginWithRedirect({
@@ -94,9 +125,9 @@ export function Header({ highlighted }: HeaderProps) {
   };
 
   return (
-    <div className="flex w-full flex-col">
+    <div className="flex w-full flex-col" style={{ zIndex: 1000 }}>
       <header className="sticky top-0 flex flex-col items-center -gap-4 bg-blue-900">
-        <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6">
+        <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6 text-nowrap">
           <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
             <a
               href=""
@@ -106,33 +137,26 @@ export function Header({ highlighted }: HeaderProps) {
               <Package className="h-6 w-6" />
               <span className="sr-only">Acme Inc</span>
             </a>
-            <div className={"flex w-full items-center justify-end gap-4 pr-4"}>
+            <div
+              className={
+                "flex w-full items-center justify-end gap-4 pr-4 text-nowrap"
+              }
+            >
               {!isLoading && isAuthenticated && (
                 <>
                   <a
                     href="/home"
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/home" ? "text-yellow-500 " : "text-gray-300"}`}
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${location.pathname === "/home" ? "text-yellow-500 " : "text-gray-300"}`}
                   >
                     Navigation
-                  </a>
-                  <a
-                    href="/service-requests"
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/service-requests" ? "text-yellow-500 " : "text-gray-300"}`}
-                  >
-                    Service Requests
-                  </a>
-                  <a
-                    href="/csv-table"
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/csv-table" ? "text-yellow-500" : "text-gray-300"}`}
-                  >
-                    CSV Table
                   </a>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button
-                        className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
+                        className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${location.pathname === "/map-editor/map" || location.pathname === "/map-editor/table" ? "text-yellow-500" : "text-gray-300"}`}
                       >
                         Map Editor
+                        <ChevronDown className={" h-auto translate-y-1"} />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -158,17 +182,56 @@ export function Header({ highlighted }: HeaderProps) {
                       </DropdownMenuGroup>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${location.pathname === "/service-requests" || location.pathname === "/request-log-Page" || location.pathname === "/insight" ? "text-yellow-500" : "text-gray-300"}`}
+                      >
+                        {location.pathname === "/insight" ? (
+                          <>Insight</>
+                        ) : location.pathname === "/request-log-Page" ? (
+                          <>Request Log</>
+                        ) : (
+                          <>Service Requests</>
+                        )}
+                        <ChevronDown className={" h-auto translate-y-1"} />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            (window.location.href = "/service-requests")
+                          }
+                        >
+                          <span>Service Requests</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => (window.location.href = "/insight")}
+                        >
+                          <span>Insight</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            (window.location.href = "/request-log-Page")
+                          }
+                        >
+                          <span>Request Logs</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <a
+                    href="/csv-table"
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${location.pathname === "/csv-table" ? "text-yellow-500" : "text-gray-300"}`}
+                  >
+                    CSV Table
+                  </a>
                 </>
               )}
               <a
-                href="/insight"
-                className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
-              >
-                Insight
-              </a>
-              <a
                 href="/about-us"
-                className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
+                className={`transition-colors hover:text-yellow-500 text-gray-300 ${location.pathname === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
               >
                 About Us
               </a>
@@ -202,6 +265,12 @@ export function Header({ highlighted }: HeaderProps) {
                   Service Requests
                 </a>
                 <a
+                  href="/request-log-Page"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Request Logs
+                </a>
+                <a
                   href="/about-us"
                   className="text-muted-foreground hover:text-foreground"
                 >
@@ -216,89 +285,130 @@ export function Header({ highlighted }: HeaderProps) {
               </nav>
             </SheetContent>
           </Sheet>
-          <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2  lg:gap-4">
-            <form className="ml-auto flex-1 sm:flex-initial">
+          <div className="flex w-full items-center gap-4">
+            <form className="ml-auto" onSubmit={(e) => e.preventDefault()}>
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
                   placeholder="Search ..."
-                  className="pl-8 sm:w-[300px] md:w-[300px] lg:w-[300px]"
+                  className="pl-8 w-[300px]"
+                  value={query}
+                  onChange={handleSearch}
                 />
               </div>
+              {results.length > 0 && (
+                <ul
+                  className="absolute z-10 mt-1 w-auto bg-white border border-gray-200 rounded-lg shadow-lg"
+                  ref={dropdownRef}
+                >
+                  {results.slice(0, 5).map(
+                    (
+                      result,
+                      index, // Limiting to 6 results
+                    ) => (
+                      <li
+                        key={index}
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                      >
+                        <a href={result.url}>{result.mainTitle}</a>
+                      </li>
+                    ),
+                  )}
+                </ul>
+              )}
             </form>
             <ModeToggle />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="secondary" // CHANGE THIS TO MAKE THE COLOR RIGHT?
-                  size="icon"
-                  className="rounded-full"
-                >
-                  <CircleUser className="h-5 w-5" />
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    <span>Billing</span>
-                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  {!isLoading && isAuthenticated && (
-                    <DropdownMenuItem
-                      onClick={() => {
-                        window.location.href = "/request-log-Page";
-                      }}
-                    >
-                      <FolderArchive className="mr-2 h-4 w-4" />
-                      <span>Request Logs</span>
-                      <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
-                      <Users className="mr-2 h-4 w-4" />
-                      <span>Switch Account</span>
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuItem onClick={handleLogin}>
-                          <Key className="mr-2 h-4 w-4" />
-                          <span>Admin</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleLogin}>
-                          <User className="mr-2 h-4 w-4" />
-                          <span>Employee</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {!isLoading && isAuthenticated ? (
+              <Button
+                className={" w-20"}
+                variant="default"
+                onClick={handleLogout}
+              >
+                Log Out
+                {/*<LogOut className="mr-2 h-4 w-4 ml-2" />*/}
+              </Button>
+            ) : (
+              <Button
+                className={" w-20"}
+                variant="default"
+                onClick={handleLogin}
+              >
+                Log In
+              </Button>
+            )}
+
+            {/*<DropdownMenu>*/}
+            {/*  <DropdownMenuTrigger asChild>*/}
+            {/*    <Button*/}
+            {/*      variant="secondary" // CHANGE THIS TO MAKE THE COLOR RIGHT?*/}
+            {/*      size="icon"*/}
+            {/*      className="rounded-full"*/}
+            {/*    >*/}
+            {/*      <CircleUser className="h-5 w-5" />*/}
+            {/*      <span className="sr-only">Toggle user menu</span>*/}
+            {/*    </Button>*/}
+            {/*  </DropdownMenuTrigger>*/}
+            {/*  <DropdownMenuContent className="w-56">*/}
+            {/*    <DropdownMenuLabel>My Account</DropdownMenuLabel>*/}
+            {/*    <DropdownMenuSeparator />*/}
+            {/*    <DropdownMenuGroup>*/}
+            {/*      <DropdownMenuItem>*/}
+            {/*        <User className="mr-2 h-4 w-4" />*/}
+            {/*        <span>Profile</span>*/}
+            {/*        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>*/}
+            {/*      </DropdownMenuItem>*/}
+            {/*      <DropdownMenuItem>*/}
+            {/*        <CreditCard className="mr-2 h-4 w-4" />*/}
+            {/*        <span>Billing</span>*/}
+            {/*        <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>*/}
+            {/*      </DropdownMenuItem>*/}
+            {/*      <DropdownMenuItem>*/}
+            {/*        <Settings className="mr-2 h-4 w-4" />*/}
+            {/*        <span>Settings</span>*/}
+            {/*        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>*/}
+            {/*      </DropdownMenuItem>*/}
+            {/*      {!isLoading && isAuthenticated && (*/}
+            {/*        <DropdownMenuItem*/}
+            {/*          onClick={() => {*/}
+            {/*            window.location.href = "/request-log-Page";*/}
+            {/*          }}*/}
+            {/*        >*/}
+            {/*          <FolderArchive className="mr-2 h-4 w-4" />*/}
+            {/*          <span>Request Logs</span>*/}
+            {/*          <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>*/}
+            {/*        </DropdownMenuItem>*/}
+            {/*      )}*/}
+            {/*    </DropdownMenuGroup>*/}
+            {/*    <DropdownMenuSeparator />*/}
+            {/*    <DropdownMenuGroup>*/}
+            {/*      <DropdownMenuSub>*/}
+            {/*        <DropdownMenuSubTrigger>*/}
+            {/*          <Users className="mr-2 h-4 w-4" />*/}
+            {/*          <span>Switch Account</span>*/}
+            {/*        </DropdownMenuSubTrigger>*/}
+            {/*        <DropdownMenuPortal>*/}
+            {/*          <DropdownMenuSubContent>*/}
+            {/*            <DropdownMenuItem onClick={handleLogin}>*/}
+            {/*              <Key className="mr-2 h-4 w-4" />*/}
+            {/*              <span>Admin</span>*/}
+            {/*            </DropdownMenuItem>*/}
+            {/*            <DropdownMenuItem onClick={handleLogin}>*/}
+            {/*              <User className="mr-2 h-4 w-4" />*/}
+            {/*              <span>Employee</span>*/}
+            {/*            </DropdownMenuItem>*/}
+            {/*          </DropdownMenuSubContent>*/}
+            {/*        </DropdownMenuPortal>*/}
+            {/*      </DropdownMenuSub>*/}
+            {/*    </DropdownMenuGroup>*/}
+            {/*    <DropdownMenuSeparator />*/}
+            {/*    <DropdownMenuItem onClick={handleLogout}>*/}
+            {/*      <LogOut className="mr-2 h-4 w-4" />*/}
+            {/*      <span>Log out</span>*/}
+            {/*      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>*/}
+            {/*    </DropdownMenuItem>*/}
+            {/*  </DropdownMenuContent>*/}
+            {/*</DropdownMenu>*/}
           </div>
         </div>
       </header>

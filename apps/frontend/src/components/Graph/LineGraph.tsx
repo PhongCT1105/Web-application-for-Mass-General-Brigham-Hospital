@@ -9,7 +9,8 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { lineChartData } from "@/data/lineChartData";
+import { lineChartData } from "@/data/chartValue/lineChartData.ts";
+import { AnimationSpec } from "chart.js/auto";
 
 ChartJS.register(
   CategoryScale,
@@ -22,6 +23,15 @@ ChartJS.register(
 );
 function LineGraph() {
   const options = {
+    animations: {
+      tension: {
+        duration: 2500,
+        easing: "linear" as AnimationSpec<never>["easing"],
+        from: 1,
+        to: 0,
+        loop: true,
+      },
+    },
     responsive: true,
     maintainAspectRatio: true,
     aspectRatio: 2.5,

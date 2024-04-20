@@ -87,6 +87,7 @@ model securityRequest {
   reqID     Int     @id @default(autoincrement())
   ename     String
   location  String
+  employee  String
   situation String
   call      Boolean
   status    String
@@ -124,4 +125,11 @@ model medicationRequest {
   patient       String
   dateSubmitted String
   medication    medicationInfo[]
+}
+
+model employee {
+  id    Int    @id @default(autoincrement())
+  fName String
+  lName String
+  title String
 }

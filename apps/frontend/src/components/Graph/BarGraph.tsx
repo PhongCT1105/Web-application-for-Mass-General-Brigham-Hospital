@@ -1,6 +1,7 @@
 import { Bar } from "react-chartjs-2";
+import ChartJS, { AnimationSpec } from "chart.js/auto";
 import {
-  Chart as ChartJS,
+  ChartType,
   CategoryScale,
   LinearScale,
   BarElement,
@@ -8,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { barChartData } from "@/data/barChartData";
+import { barChartData } from "@/data/chartValue/barChartData.ts";
 
 ChartJS.register(
   CategoryScale,
@@ -21,9 +22,15 @@ ChartJS.register(
 
 function BarGraph() {
   const options = {
+    type: "bar" as ChartType,
     responsive: true,
     maintainAspectRatio: true,
     aspectRatio: 2.5,
+    animation: {
+      easing: "easeOutCubic" as AnimationSpec<never>["easing"], // Corrected easing value
+      loop: true,
+      duration: 2500,
+    },
     plugins: {
       title: {
         display: true,
@@ -33,7 +40,7 @@ function BarGraph() {
   };
   return (
     <>
-      <Bar options={options} data={barChartData}></Bar>
+      <Bar options={options} data={barChartData} />
     </>
   );
 }

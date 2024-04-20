@@ -3,7 +3,7 @@
 import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import DoughnutChart from "@/components/Graph/DoughnutGraph.tsx";
+import DoughnutChart from "@/components/Graph/PolorAreaGraph.tsx";
 
 function SecurityInsight() {
   return (

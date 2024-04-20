@@ -25,6 +25,7 @@ router.post("/", async (req: Request, res: Response) => {
       data: {
         ename: requestForm.ename,
         location: requestForm.location,
+        employee: requestForm.employee,
         situation: requestForm.situation,
         call: requestForm.call,
         status: requestForm.status,
