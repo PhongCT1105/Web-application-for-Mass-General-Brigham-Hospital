@@ -182,7 +182,6 @@ export const MapBlock: React.FC = () => {
   // const [MarkersF2] = useState<L.LayerGroup>(L.layerGroup());
   // const [MarkersF3] = useState<L.LayerGroup>(L.layerGroup());
 
-   
   // const [markers, setMarkers] = useState({
   //     MarkersL1: L.layerGroup(),
   //     MarkersL2: L.layerGroup(),

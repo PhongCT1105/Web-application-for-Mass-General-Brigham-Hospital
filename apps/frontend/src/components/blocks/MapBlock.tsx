@@ -259,17 +259,11 @@ export const MapBlock: React.FC = () => {
 
         if (!startLocation) {
           setStartNodeID(locationName);
-          console.log("if");
-          console.log(locationName);
         } else if (!endLocation) {
           setEndNodeID(locationName);
-          console.log("else if");
-          console.log(locationName);
         } else {
           setStartNodeID(locationName);
           setEndNodeID("");
-          console.log("else");
-          console.log(locationName);
         }
       };
 
@@ -283,7 +277,7 @@ export const MapBlock: React.FC = () => {
             fillOpacity: 0.8,
           }).bindPopup(node.name);
           marker.addTo(Markers[node.floor]);
-          marker.options.attribution = node.nodeID;
+          //marker.options.attribution = node.nodeID;
           // Event listener for clicking on markers
           marker.on("click", function () {
             setStartEndLocation(node.nodeID);
