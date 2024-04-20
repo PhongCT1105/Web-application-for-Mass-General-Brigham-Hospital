@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { z } from "zod";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -14,7 +15,7 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-
+// import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -35,16 +36,26 @@ import {
   Dialog,
   DialogClose,
   DialogContent,
-  DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
-import { Label } from "@/components/ui/label.tsx";
-// import {Input} from "@/components/ui/input.tsx";
+// import { Label } from "@/components/ui/label.tsx";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form.tsx";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+// import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
+// import {CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
+// import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem} from "@/components/ui/command.tsx";
 
 interface DataTableProps {
   columns: ColumnDef<Node>[];
 }
-
 export function NodeDataTable({ columns }: DataTableProps) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
@@ -56,8 +67,38 @@ export function NodeDataTable({ columns }: DataTableProps) {
   const { nodes: data, setNodes } = useGraphContext();
   const [originalData, setOriginalData] = useState(() => [...data]);
   const [editedRows, setEditedRows] = useState({});
-  const [nodeToAdd, setNodeToAdd] = useState<{ node: Node; neighbor: string }>({
-    node: {
+  // const uniqueBuildingNames: [string, ...string[]] = Array.from(new Set(data.map(node => node.building))) as [string, ...string[]];
+  // const uniqueFloorNames: [string, ...string[]] = Array.from(new Set(data.map(node => node.floor))) as [string, ...string[]];
+  // const uniqueNodeIds: [string, ...string[]] = Array.from(new Set(data.map(node => node.nodeID))) as [string, ...string[]];
+  //
+  // const uniqueFloorNames: [string, ...string[]] = Array.from(new Set(data.map(node => node.floor)))
+  //         .filter((building): building is string => true) as [string, ...string[]];
+  //     const uniqueBuildingNames: [string, ...string[]] = Array.from(new Set(data.map(node => node.building)))
+  //         .filter((building): building is string => true) as [string, ...string[]];
+  // const uniqueNodeIds: [string, ...string[]] = Array.from(new Set(data.map(node => node.nodeID)))
+  //         .filter((building): building is string => true) as [string, ...string[]];
+
+  const formSchema = z.object({
+    nodeID: z.string({ required_error: "Must enter a node ID." }),
+    xcoord: z
+      .number()
+      .min(0, { message: "Invalid x-coord." })
+      .max(5000, { message: "Invalid x-coord." }),
+    ycoord: z
+      .number()
+      .min(0, { message: "Invalid y-coord." })
+      .max(3400, { message: "Invalid y-coord." }),
+    floor: z.string({ required_error: "Must enter a floor." }),
+    building: z.string({ required_error: "Must enter a building." }),
+    nodeType: z.string({ required_error: "Must enter a node type." }),
+    longName: z.string({ required_error: "Must enter a long name." }),
+    shortName: z.string({ required_error: "Must enter a short name." }),
+    neighbor: z.string({ required_error: "Must enter a neighbor node." }),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
       nodeID: "",
       xcoord: 0,
       ycoord: 0,
@@ -66,41 +107,40 @@ export function NodeDataTable({ columns }: DataTableProps) {
       nodeType: "",
       longName: "",
       shortName: "",
+      neighbor: "",
     },
-    neighbor: "",
   });
 
-  const nodeKV: { [key: string]: keyof Node | string } = {
-    nodeID: "nodeID",
-    xcoord: "xcoord",
-    ycoord: "ycoord",
-    floor: "floor",
-    building: "building",
-    nodeType: "nodeType",
-    longName: "longName",
-    shortName: "shortName",
-    neighbor: "neighbor",
-  };
+  const handleSubmitForm = (values: z.infer<typeof formSchema>) => {
+    // Create a new Node object from the values
+    const newNode = {
+      nodeID: values.nodeID,
+      xcoord: Number(values.xcoord),
+      ycoord: Number(values.ycoord),
+      floor: values.floor,
+      building: values.building,
+      nodeType: values.nodeType,
+      longName: values.longName,
+      shortName: values.shortName,
+    };
 
-  const handleAddedNodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNodeToAdd((prevState) => ({
-      ...prevState,
-      [e.target.id]: e.target.value,
-    }));
-    console.log(nodeToAdd);
-  };
-
-  const handleSubmitForm = () => {
-    console.log(JSON.stringify(nodeToAdd.node));
+    console.log(newNode);
+    // Add the new node to the nodes state
+    setNodes((prevNodes) => [...prevNodes, newNode]);
+    console.log("New node array length: " + data.length);
   };
 
   useEffect(() => {
     const handleUpdateNodes = async () => {
-      const res = await axios.post("/api/csvFetch/node", data, {
-        headers: {
-          "content-type": "Application/json",
+      const res = await axios.post(
+        "/api/csvFetch/node",
+        data.filter((node) => node.nodeID != null),
+        {
+          headers: {
+            "content-type": "Application/json",
+          },
         },
-      });
+      );
       if (res.status == 200) {
         console.log("success");
       } else {
@@ -110,6 +150,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
     handleUpdateNodes().then(() =>
       console.log("Update nodes request sent to database."),
     );
+    console.log("Node array length: " + data.length);
   }, [data]);
 
   const table = useReactTable({
@@ -156,6 +197,9 @@ export function NodeDataTable({ columns }: DataTableProps) {
           }),
         );
       },
+      deleteRow: (rowIndex: number) => {
+        setNodes((old) => old.filter((_, index) => index !== rowIndex));
+      },
     },
 
     enableRowSelection: true,
@@ -194,31 +238,52 @@ export function NodeDataTable({ columns }: DataTableProps) {
               Add Node
             </Button>
           </DialogTrigger>
-          <DialogContent
-            className={"lg:w-[500px] h-[700px] overflow-y-scroll "}
-          >
-            <div className="flex flex-col space-y-4">
-              {Object.keys(nodeKV).map((key) => (
-                <div key={key} className={"space-y-1"}>
-                  <Label>{key.charAt(0).toUpperCase() + key.slice(1)}</Label>
-                  <Input
-                    type={
-                      key === "ycoord" || key === "xcoord" ? "number" : "text"
-                    }
-                    id={key}
-                    placeholder={key}
-                    onChange={handleAddedNodeChange}
+          <DialogContent className={"w-[500px] h-[700px] overflow-y-scroll "}>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(handleSubmitForm)}
+                className={"space-y-4"}
+              >
+                {Object.keys(formSchema.shape).map((key) => (
+                  <FormField
+                    control={form.control}
+                    key={key}
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    name={key}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {key.charAt(0).toUpperCase() + key.slice(1)}
+                        </FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder={key}
+                            type={
+                              key === "xcoord" || key === "ycoord"
+                                ? "number"
+                                : "text"
+                            }
+                            {...field}
+                            onChange={(e) => {
+                              if (key === "xcoord" || key === "ycoord") {
+                                field.onChange(Number(e.target.value));
+                              } else {
+                                field.onChange(e.target.value);
+                              }
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                </div>
-              ))}
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button className={"w-full"} onClick={handleSubmitForm}>
-                  Submit
-                </Button>
-              </DialogClose>
-            </DialogFooter>
+                ))}
+                <DialogClose asChild>
+                  <Button type={"submit"}>Submit</Button>
+                </DialogClose>
+              </form>
+            </Form>
           </DialogContent>
         </Dialog>
       </div>

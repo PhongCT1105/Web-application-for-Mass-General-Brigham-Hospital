@@ -48,13 +48,27 @@ router.post("/node", async (req, res) => {
   const data = req.body;
   const jsonString = JSON.stringify(data);
   const nodeData: nodeTable[] = JSON.parse(jsonString);
+
   try {
+    // Handle deletion of nodes not present in the updated data
+    // const allNodeIDs = nodeData.map((node) => node.nodeID);
+    // await prisma.nodes.deleteMany({
+    //   where: {
+    //     NOT: {
+    //       nodeID: {
+    //         in: allNodeIDs,
+    //       },
+    //     },
+    //   },
+    // });
+
     // Don't delete edges here
     // await prisma.nodes.deleteMany();
+    const filteredNodeData = nodeData.filter((node) => node.nodeID !== null);
 
     // Iterate over nodeData and create or update nodes
-    for (let i = 0; i < nodeData.length; i++) {
-      const node = nodeData[i];
+    for (let i = 0; i < filteredNodeData.length; i++) {
+      const node = filteredNodeData[i];
       // Find existing node by nodeID
       const existingNode = await prisma.nodes.findUnique({
         where: {
