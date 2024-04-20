@@ -3,12 +3,12 @@
 import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import DoughnutChart from "@/components/Graph/DoughnutGraph.tsx";
+import DoughnutChart from "@/components/Graph/PolorAreaGraph.tsx";
 
 function SanitationInsight() {
   return (
     <>
-      <div className="m-3 grid gap-4 grid-cols-2">
+      <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
         <div className="rounded-lg bg-gray-200">
           <LineGraph />
         </div>
