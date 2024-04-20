@@ -21,7 +21,22 @@ ChartJS.register(
   Legend,
 );
 function LineGraph() {
-  const options = {};
+  const options = {
+    responsive: true,
+    maintainAspectRatio: true,
+    aspectRatio: 2.5,
+    elements: {
+      line: {
+        tension: 0.5,
+      },
+    },
+    plugins: {
+      title: {
+        display: true,
+        text: "Line Graph of total users",
+      },
+    },
+  };
   return (
     <>
       <Line options={options} data={lineChartData} />
