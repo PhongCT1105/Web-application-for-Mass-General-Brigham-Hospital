@@ -49,6 +49,13 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { toast } from "@/components/ui/use-toast.ts";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface DataTableProps {
   columns: ColumnDef<Node>[];
@@ -64,6 +71,17 @@ export function NodeDataTable({ columns }: DataTableProps) {
   const { nodes: data, setNodes } = useGraphContext();
   const [originalData, setOriginalData] = useState(() => [...data]);
   const [editedRows, setEditedRows] = useState({});
+
+  const uniqueNodeIds: string[] = Array.from(
+    new Set(data.map((node) => node.nodeID)),
+  );
+  const uniqueFloor: string[] = Array.from(
+    new Set(data.map((node) => node.floor)),
+  );
+  const uniqueBuilding: string[] = Array.from(
+    new Set(data.map((node) => node.building)),
+  );
+
   const nodeFormSchema = z.object({
     nodeID: z
       .string({ required_error: "Must enter a node ID." })
@@ -183,7 +201,6 @@ export function NodeDataTable({ columns }: DataTableProps) {
     if (JSON.stringify(filteredData) !== JSON.stringify(data)) {
       // If changed, update state
       setNodes(filteredData);
-      // console.log("Update nodes request sent to database.");
     }
 
     console.log("Node array length: " + data.length);
@@ -312,11 +329,11 @@ export function NodeDataTable({ columns }: DataTableProps) {
               Add Node
             </Button>
           </DialogTrigger>
-          <DialogContent className={"w-[500px] h-[700px] overflow-y-scroll "}>
+          <DialogContent className={"w-[500px] h-[730px] overflow-y-scroll"}>
             <Form {...nodeForm}>
               <form
                 onSubmit={nodeForm.handleSubmit(onNodeFormSubmit)}
-                className={"space-y-4"}
+                className={"space-y-2"}
               >
                 {Object.keys(nodeFormSchema.shape).map((key) => (
                   <FormField
@@ -330,31 +347,66 @@ export function NodeDataTable({ columns }: DataTableProps) {
                         <FormLabel>
                           {key.charAt(0).toUpperCase() + key.slice(1)}
                         </FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder={key}
-                            type={
-                              key === "xcoord" || key === "ycoord"
-                                ? "number"
-                                : "text"
-                            }
-                            {...field}
-                            onChange={(e) => {
-                              if (key === "xcoord" || key === "ycoord") {
-                                field.onChange(Number(e.target.value));
-                              } else {
-                                field.onChange(e.target.value);
+                        {["floor", "building", "nodeID"].includes(key) ? (
+                          <Select
+                            defaultValue={field.value.toString()}
+                            onValueChange={field.onChange}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder={`Select ${key}`} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              {key === "floor" &&
+                                uniqueFloor.map((value) => (
+                                  <SelectItem key={value} value={value}>
+                                    {value}
+                                  </SelectItem>
+                                ))}
+                              {key === "building" &&
+                                uniqueBuilding.map((value) => (
+                                  <SelectItem key={value} value={value}>
+                                    {value}
+                                  </SelectItem>
+                                ))}
+                              {key === "nodeID" &&
+                                uniqueNodeIds.map((value) => (
+                                  <SelectItem key={value} value={value}>
+                                    {value}
+                                  </SelectItem>
+                                ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <FormControl>
+                            <Input
+                              placeholder={key}
+                              type={
+                                key === "xcoord" || key === "ycoord"
+                                  ? "number"
+                                  : "text"
                               }
-                            }}
-                          />
-                        </FormControl>
+                              {...field}
+                              onChange={(e) => {
+                                if (key === "xcoord" || key === "ycoord") {
+                                  field.onChange(Number(e.target.value));
+                                } else {
+                                  field.onChange(e.target.value);
+                                }
+                              }}
+                            />
+                          </FormControl>
+                        )}
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                 ))}
                 <DialogClose asChild></DialogClose>
-                <Button type={"submit"}>Submit</Button>
+                <Button type={"submit"} className={""}>
+                  Submit
+                </Button>
               </form>
             </Form>
           </DialogContent>
@@ -384,9 +436,23 @@ export function NodeDataTable({ columns }: DataTableProps) {
                         <FormLabel>
                           {key.charAt(0).toUpperCase() + key.slice(1)}
                         </FormLabel>
-                        <FormControl>
-                          <Input placeholder={key} {...field} />
-                        </FormControl>
+                        <Select
+                          defaultValue={field.value}
+                          onValueChange={field.onChange}
+                        >
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder={`Select ${key}`} />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            {uniqueNodeIds.map((value) => (
+                              <SelectItem key={value} value={value}>
+                                {value}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -452,4 +518,59 @@ export function NodeDataTable({ columns }: DataTableProps) {
       <DataTablePagination table={table} />
     </div>
   );
+}
+
+{
+  /*{ key === "floor" ||  key === "building" ||  key === "nodeID" ? (*/
+}
+{
+  /*    <Select defaultValue={field.value.toString()} onValueChange={field.onChange}>*/
+}
+{
+  /*        <FormControl>*/
+}
+{
+  /*            <SelectTrigger>*/
+}
+{
+  /*                <SelectValue placeholder="Select a value..." />*/
+}
+{
+  /*            </SelectTrigger>*/
+}
+{
+  /*        </FormControl>*/
+}
+{
+  /*        <SelectContent>*/
+}
+{
+  /*            {key === "floor" ?*/
+}
+{
+  /*                uniqueFloor.map(value => (*/
+}
+{
+  /*                    <SelectItem value={value}>{value}</SelectItem>))*/
+}
+{
+  /*                : key === "building" ?*/
+}
+{
+  /*                    uniqueBuilding.map(value => (*/
+}
+{
+  /*                        <SelectItem value={value}>{value}</SelectItem>))*/
+}
+{
+  /*                    : key === "nodeID" ? uniqueNodeIds.map(value => (*/
+}
+{
+  /*                        <SelectItem value={value}>{value}</SelectItem>)) : (<></>)}*/
+}
+{
+  /*        </SelectContent>*/
+}
+{
+  /*    </Select>*/
 }

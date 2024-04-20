@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button.tsx";
 import React from "react";
 import { Row, Table } from "@tanstack/react-table";
-import { TrashIcon } from "lucide-react";
+// import { TrashIcon } from "lucide-react";
 
 // Define an interface for the table meta
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -41,26 +41,26 @@ export function EditCellActionButton<TData>({
     }
   };
   return (
-    <div className="edit-cell-container">
+    <>
       {meta?.editedRows[row.id] ? (
         <div className="edit-cell ">
           <Button
             onClick={setEditedRows}
-            className={"h-10 w-10"}
+            className={"w-11 m-1"}
             variant={"destructive"}
             name="cancel"
           >
-            <TrashIcon className={""} />
+            🗑️
           </Button>
-          <Button onClick={setEditedRows} name="done">
+          <Button onClick={setEditedRows} className={"w-11 m-1"} name="done">
             ✔
           </Button>
         </div>
       ) : (
-        <Button onClick={setEditedRows} name="edit">
+        <Button className={"w-11 m-1"} onClick={setEditedRows} name="edit">
           ✐
         </Button>
       )}
-    </div>
+    </>
   );
 }
