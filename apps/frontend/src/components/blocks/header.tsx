@@ -1,7 +1,9 @@
 import {
+  ChevronDown,
   // CircleUser,
   // CreditCard,
   EditIcon,
+  // LogOut,
   // FolderArchive,
   // Key,
   // LogOut,
@@ -46,12 +48,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ModeToggle } from "@/components/modeToggle.tsx";
 import { useAuth0 } from "@auth0/auth0-react";
 import React, { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
-interface HeaderProps {
-  highlighted?: string; // Assuming highlightColor is a string
-}
+export function Header() {
+  const location = useLocation();
 
-export function Header({ highlighted }: HeaderProps) {
   const {
     loginWithRedirect,
     isAuthenticated,
@@ -75,7 +76,13 @@ export function Header({ highlighted }: HeaderProps) {
     if (!isLoading && isAuthenticated) {
       redirect().then();
     }
-  }, [getAccessTokenSilently, isAuthenticated, isLoading, loginWithRedirect]);
+  }, [
+    getAccessTokenSilently,
+    isAuthenticated,
+    isLoading,
+    loginWithRedirect,
+    location.pathname,
+  ]);
 
   const handleLogin = () => {
     loginWithRedirect({
@@ -96,7 +103,7 @@ export function Header({ highlighted }: HeaderProps) {
   return (
     <div className="flex w-full flex-col">
       <header className="sticky top-0 flex flex-col items-center -gap-4 bg-blue-900">
-        <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6">
+        <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6 text-nowrap">
           <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
             <a
               href=""
@@ -106,33 +113,26 @@ export function Header({ highlighted }: HeaderProps) {
               <Package className="h-6 w-6" />
               <span className="sr-only">Acme Inc</span>
             </a>
-            <div className={"flex w-full items-center justify-end gap-4 pr-4"}>
+            <div
+              className={
+                "flex w-full items-center justify-end gap-4 pr-4 text-nowrap"
+              }
+            >
               {!isLoading && isAuthenticated && (
                 <>
                   <a
                     href="/home"
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/home" ? "text-yellow-500 " : "text-gray-300"}`}
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${location.pathname === "/home" ? "text-yellow-500 " : "text-gray-300"}`}
                   >
                     Navigation
-                  </a>
-                  <a
-                    href="/service-requests"
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/service-requests" ? "text-yellow-500 " : "text-gray-300"}`}
-                  >
-                    Service Requests
-                  </a>
-                  <a
-                    href="/csv-table"
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/csv-table" ? "text-yellow-500" : "text-gray-300"}`}
-                  >
-                    CSV Table
                   </a>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <button
-                        className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
+                        className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${location.pathname === "/map-editor" ? "text-yellow-500" : "text-gray-300"}`}
                       >
                         Map Editor
+                        <ChevronDown className={" h-auto"} />
                       </button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent>
@@ -158,17 +158,56 @@ export function Header({ highlighted }: HeaderProps) {
                       </DropdownMenuGroup>
                     </DropdownMenuContent>
                   </DropdownMenu>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <button
+                        className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${location.pathname === "/service-requests" || location.pathname === "/request-log-Page" || location.pathname === "/insight" ? "text-yellow-500" : "text-gray-300"}`}
+                      >
+                        {location.pathname === "/insight" ? (
+                          <>Insight</>
+                        ) : location.pathname === "/request-log-Page" ? (
+                          <>Request Log</>
+                        ) : (
+                          <>Service Requests</>
+                        )}
+                        <ChevronDown className={" h-auto"} />
+                      </button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent>
+                      <DropdownMenuGroup>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            (window.location.href = "/service-requests")
+                          }
+                        >
+                          <span>Service Requests</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => (window.location.href = "/insight")}
+                        >
+                          <span>Insight</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() =>
+                            (window.location.href = "/request-log-Page")
+                          }
+                        >
+                          <span>Request Logs</span>
+                        </DropdownMenuItem>
+                      </DropdownMenuGroup>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                  <a
+                    href="/csv-table"
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${location.pathname === "/csv-table" ? "text-yellow-500" : "text-gray-300"}`}
+                  >
+                    CSV Table
+                  </a>
                 </>
               )}
               <a
-                href="/insight"
-                className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
-              >
-                Insight
-              </a>
-              <a
                 href="/about-us"
-                className={`transition-colors hover:text-yellow-500 text-gray-300 ${highlighted === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
+                className={`transition-colors hover:text-yellow-500 text-gray-300 ${location.pathname === "/about-us" ? "text-yellow-500" : "text-gray-300"}`}
               >
                 About Us
               </a>
@@ -202,6 +241,12 @@ export function Header({ highlighted }: HeaderProps) {
                   Service Requests
                 </a>
                 <a
+                  href="/request-log-Page"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  Request Logs
+                </a>
+                <a
                   href="/about-us"
                   className="text-muted-foreground hover:text-foreground"
                 >
@@ -228,21 +273,25 @@ export function Header({ highlighted }: HeaderProps) {
               </div>
             </form>
             <ModeToggle />
-            <Button
-              className={"rounded-[5px]"}
-              variant="default"
-              onClick={handleLogin}
-              // className="shrink-0 md:hidden hover:accent-white"
-            >
-              Login
-            </Button>
-            <Button
-              variant="default"
-              onClick={handleLogout}
-              // className="shrink-0 md:hidden hover:accent-white"
-            >
-              Logout
-            </Button>
+            {!isLoading && isAuthenticated ? (
+              <Button
+                className={" w-20"}
+                variant="default"
+                onClick={handleLogout}
+              >
+                Log Out
+                {/*<LogOut className="mr-2 h-4 w-4 ml-2" />*/}
+              </Button>
+            ) : (
+              <Button
+                className={" w-20"}
+                variant="default"
+                onClick={handleLogin}
+              >
+                Log In
+              </Button>
+            )}
+
             {/*<DropdownMenu>*/}
             {/*  <DropdownMenuTrigger asChild>*/}
             {/*    <Button*/}
