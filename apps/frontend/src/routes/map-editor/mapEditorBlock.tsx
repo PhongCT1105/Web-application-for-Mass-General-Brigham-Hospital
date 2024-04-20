@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import L, {
   CRS,
   Icon,
@@ -37,12 +43,19 @@ export interface HospitalData {
 export const MapEditor: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   const [paths, setPaths] = useState<Polyline[]>([]);
-  const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-  const [edges, setEdges] = useState<Edge[]>([]);
-  //const [floorEdges, setFloorEdges] = useState<string[][]>([]);
-  const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
+  const { nodes, edges } = useGraphContext();
 
+  // avoid making a bunch of new icons
+  const customIcon = useMemo(
+    () =>
+      new Icon({
+        iconUrl: GrayDot,
+        iconSize: [12, 12],
+        iconAnchor: [6, 6],
+      }),
+    [],
+  );
   const floorMaps: { [key: string]: string } = {
     lowerLevel1: lowerLevelMap1,
     lowerLevel2: lowerLevelMap2,
@@ -51,98 +64,121 @@ export const MapEditor: React.FC = () => {
     theThirdFloor: theThirdFloor,
   } as const;
 
-  const { nodes: nodeData, edges: edgeData } = useGraphContext();
-
-  // const handleUpdateNodes = async () => {
-  //   console.log(nodeData);
-  //   const res = await axios.post("/api/csvFetch/node", nodeData, {
-  //     headers: {
-  //       "content-type": "Application/json",
-  //     },
-  //   });
-  //   if (res.status == 200) {
-  //     console.log("success");
-  //   }
-  // };
-
-  const newHospitalData: HospitalData[] = useMemo(() => {
-    return [];
-  }, []);
-
-  const edgeIDs: Edge[] = useMemo(() => {
-    return [];
-  }, []);
-
-  // const newHospitalData: HospitalData[] = [];
-  // const edgeIDs: Edge[] = [];
-
-  for (const node of nodeData) {
-    newHospitalData.push({
-      nodeID: node.nodeID,
-      name: node.longName,
-      geocode: `${node.xcoord},${node.ycoord}`,
-      floor: node.floor,
-    });
-  }
-
-  for (const edge of edgeData) {
-    edgeIDs.push({
-      edgeID: edge.edgeID,
-      start: edge.startNode,
-      end: edge.endNode,
-    });
-  }
-
-  useEffect(() => {
-    const loadData = async () => {
-      // console.log(newHospitalData);
-      console.log(edgeData.length);
-      setEdges(edgeIDs);
-      setHospitalData(newHospitalData);
-    };
-
-    console.log("useEffect is running");
-    if (!isDataLoaded) {
-      loadData().then(() => {
-        setIsDataLoaded(true);
-      });
-    } else {
-      let map: Map | null = mapRef.current;
+  const drawLine = useCallback(
+    (startHospital: HospitalData, endHospital: HospitalData) => {
+      const map = mapRef.current;
       if (!map) {
-        map = L.map("map-container", {
-          crs: CRS.Simple,
-          minZoom: -2,
-          maxZoom: 2,
-          zoomControl: true,
-        }).setView([3400, 5000], -2);
-        mapRef.current = map;
+        console.log("cannot find map");
+        return;
       }
 
-      const bounds: LatLngBoundsExpression = [
-        [0, 0],
-        [3400, 5000], // change to resolution of the image
-      ];
+      const [startLat, startLng] = startHospital.geocode
+        .split(",")
+        .map(parseFloat);
+      const nStartLat = 3400 - startLng;
+      const startCoordinates: LatLngExpression = [nStartLat, startLat];
 
-      L.imageOverlay(theFirstFloor, bounds).addTo(map);
+      const [lat, lng] = endHospital.geocode.split(",").map(parseFloat);
+      const nLat = 3400 - lng;
+      const endCoordinates: LatLngExpression = [nLat, lat];
 
-      map.setMaxBounds(bounds);
+      const newPath = L.polyline([startCoordinates, endCoordinates], {
+        color: "red",
+        weight: 3,
+      });
+      newPath.addTo(map);
+      addToPaths(newPath); // Add the new path to the paths list
+    },
+    [],
+  );
 
-      // Print out the nodes on the first floor
-      // Draw new markers for the selected floor after adding the image overlay
-      const newNodesOnCurrentFloor = hospitalData.filter(
-        (node) => node.floor == "1",
+  const findLines = useCallback(
+    (hospitalData: HospitalData[]) => {
+      for (const edge of edges) {
+        const edgeID = edge.edgeID;
+        //console.log(edgeID);
+        const edgeSplit = edgeID.split("_", 2);
+        if (hospitalData.find((h) => h.nodeID == edgeSplit[0])) {
+          const startHospital = hospitalData.find(
+            (h) => h.nodeID === edgeSplit[0],
+          )!;
+          const endHospital = hospitalData.find(
+            (h) => h.nodeID === edgeSplit[1],
+          )!;
+          if (startHospital && endHospital) {
+            drawLine(startHospital, endHospital);
+          }
+        }
+      }
+    },
+    [drawLine, edges],
+  );
+
+  const addMarkers = useCallback(
+    (map: Map, nodesOnFloor: HospitalData[]) => {
+      nodesOnFloor.forEach((node) => {
+        const [lat, lng] = node.geocode.split(",").map(parseFloat);
+        const nLat = 3400 - lng;
+        const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
+
+        // Add a click event handler to toggle popup visibility
+        const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+        marker.bindPopup(popupContent);
+
+        marker.on("click", function (this: L.Marker) {
+          // Specify the type of 'this' as L.Marker
+          if (!this.isPopupOpen()) {
+            // Check if the popup is not already open
+            this.openPopup(); // Open the popup when the marker is clicked
+          }
+        });
+      });
+    },
+    [customIcon],
+  );
+
+  useEffect(() => {
+    if (hospitalData.length == 0) {
+      setHospitalData(
+        nodes.map((node) => ({
+          nodeID: node.nodeID,
+          name: node.longName,
+          geocode: `${node.xcoord},${node.ycoord}`,
+          floor: node.floor,
+        })),
       );
-
-      addMarkers(map!, newNodesOnCurrentFloor);
     }
-  }, [
-    hospitalData,
-    nodeData,
-    edgeData,
-    isDataLoaded,
-    edgeIDs,
-    newHospitalData,
-  ]);
+  }, [hospitalData.length, nodes]);
+
+  const memoizedAddMarkers = useCallback(addMarkers, [addMarkers]);
+  const memoizedFindLines = useCallback(findLines, [findLines]);
+
+  useEffect(() => {
+    let map: Map | null = mapRef.current;
+    if (!map) {
+      map = L.map("map-container", {
+        crs: CRS.Simple,
+        minZoom: -2,
+        maxZoom: 2,
+        zoomControl: true,
+      }).setView([3400, 5000], -2);
+      mapRef.current = map;
+    }
+    const bounds: LatLngBoundsExpression = [
+      [0, 0],
+      [3400, 5000], // change to resolution of the image
+    ];
+
+    L.imageOverlay(theFirstFloor, bounds).addTo(map);
+    map.setMaxBounds(bounds);
+
+    const newNodesOnCurrentFloor = hospitalData.filter(
+      (node) => node.floor == "1",
+    );
+
+    memoizedFindLines(newNodesOnCurrentFloor);
+    memoizedAddMarkers(map!, newNodesOnCurrentFloor);
+  }, [hospitalData, memoizedAddMarkers, memoizedFindLines]);
 
   function clearMarkers() {
     const map = mapRef.current;
@@ -163,95 +199,22 @@ export const MapEditor: React.FC = () => {
     setPaths([]);
   }
 
-  function findLines(hospitalData: HospitalData[]) {
-    for (const edge of edges) {
-      const edgeID = edge.edgeID;
-      //console.log(edgeID);
-      const edgeSplit = edgeID.split("_", 2);
-      if (hospitalData.find((h) => h.nodeID == edgeSplit[0])) {
-        const startHospital = hospitalData.find(
-          (h) => h.nodeID === edgeSplit[0],
-        )!;
-        const endHospital = hospitalData.find(
-          (h) => h.nodeID === edgeSplit[1],
-        )!;
-        if (startHospital && endHospital) {
-          drawLine(startHospital, endHospital);
-        }
-      }
-    }
-  }
-
-  function drawLine(startHospital: HospitalData, endHospital: HospitalData) {
-    const map = mapRef.current;
-    if (!map) {
-      console.log("cannot find map");
-      return;
-    }
-
-    const [startLat, startLng] = startHospital.geocode
-      .split(",")
-      .map(parseFloat);
-    const nStartLat = 3400 - startLng;
-    const startCoordinates: LatLngExpression = [nStartLat, startLat];
-
-    const [lat, lng] = endHospital.geocode.split(",").map(parseFloat);
-    const nLat = 3400 - lng;
-    const endCoordinates: LatLngExpression = [nLat, lat];
-
-    const newPath = L.polyline([startCoordinates, endCoordinates], {
-      color: "red",
-      weight: 3,
-    });
-    newPath.addTo(map);
-    addToPaths(newPath); // Add the new path to the paths list
-  }
-
   function addToPaths(newPath: Polyline) {
     setPaths((prevPaths) => [...prevPaths, newPath]);
-  }
-
-  function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
-    nodesOnFloor.forEach((node) => {
-      const customIcon = new Icon({
-        iconUrl: GrayDot,
-        iconSize: [12, 12],
-        iconAnchor: [6, 6],
-      });
-      const [lat, lng] = node.geocode.split(",").map(parseFloat);
-      const nLat = 3400 - lng;
-      const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
-
-      // Add a click event handler to toggle popup visibility
-      const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-      marker.bindPopup(popupContent);
-
-      marker.on("click", function (this: L.Marker) {
-        // Specify the type of 'this' as L.Marker
-        if (!this.isPopupOpen()) {
-          // Check if the popup is not already open
-          this.openPopup(); // Open the popup when the marker is clicked
-        }
-      });
-    });
   }
 
   function changeFloor(floorName: string) {
     const map = mapRef.current;
     if (!map) return;
     const convertedFloorName =
-      floorName === "lowerLevel2"
-        ? "L2"
-        : floorName === "lowerLevel1"
-          ? "L1"
-          : floorName === "theFirstFloor"
-            ? "1"
-            : floorName === "theSecondFloor"
-              ? "2"
-              : floorName === "theThirdFloor"
-                ? "3"
-                : "";
-    setCurrentFloor(convertedFloorName);
+      {
+        lowerLevel2: "L2",
+        lowerLevel1: "L1",
+        theFirstFloor: "1",
+        theSecondFloor: "2",
+        theThirdFloor: "3",
+      }[floorName] || "";
+
     // Remove existing markers from the map
     clearMarkers();
     clearLines();
@@ -269,8 +232,8 @@ export const MapEditor: React.FC = () => {
       const newNodesOnCurrentFloor = hospitalData.filter(
         (node) => node.floor === convertedFloorName,
       );
-      addMarkers(map, newNodesOnCurrentFloor);
-      findLines(newNodesOnCurrentFloor);
+      memoizedAddMarkers(map, newNodesOnCurrentFloor);
+      memoizedFindLines(newNodesOnCurrentFloor);
     }
   }
 
@@ -286,181 +249,54 @@ export const MapEditor: React.FC = () => {
         }}
       >
         <div
-          className={"w-full h-full relative"}
-          style={{
-            zIndex: 1000,
-          }}
-        >
-          <Button
-            className={
-              "absolute bottom-0 right-0 mr-10 mb-8 rounded-full w-20 h-20"
-            }
-            onClick={() => (window.location.href = "/map-editor/table")}
-          >
-            <EditIcon className="h-8 w-8" />
-            {/*<span>Table View</span>*/}
-          </Button>
-        </div>
-        <div
+          className={"space-x-2"}
           style={{
             position: "absolute",
-            top: "67%", // Position at the vertical center of the page
+            bottom: 100,
             left: "50%",
-            transform: "translate(0%, -100%)", // Center horizontally and vertically
+            transform: "translateX(-50%)",
             display: "flex",
-            flexDirection: "column-reverse",
-            justifyContent: "center",
-            alignItems: "center",
-            width: "87%",
+            justifyContent: "space-around",
+            width: "80%",
             zIndex: 1000,
             color: "black",
           }}
         >
-          <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "L2" ? "mt-8" : "hover:mr-4"}`}
-            style={{ marginBottom: "-15px" }}
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("lowerLevel2")}
           >
-            <button
-              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
-              onClick={() => changeFloor("lowerLevel2")}
-            >
-              <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
-              >
-                <div
-                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                >
-                  L2
-                </div>
-              </div>
-            </button>
-          </div>
-          <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "L1" ? "mt-8" : "hover:mr-4"}`}
-            style={{ marginBottom: "-15px" }}
+            Lower Level 2
+          </Button>
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("lowerLevel1")}
           >
-            <button
-              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
-              onClick={() => changeFloor("lowerLevel1")}
-            >
-              <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
-              >
-                <div
-                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                >
-                  L1
-                </div>
-              </div>
-            </button>
-          </div>
-          <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "1" ? "mt-8" : "hover:mr-4"}`}
-            style={{ marginBottom: "-15px" }}
+            Lower Level 1
+          </Button>
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("theFirstFloor")}
           >
-            <button
-              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
-              onClick={() => changeFloor("theFirstFloor")}
-            >
-              <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
-              >
-                <div
-                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                >
-                  F1
-                </div>
-              </div>
-            </button>
-          </div>
-          <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "2" ? "mt-8" : "hover:mr-4"}`}
-            style={{ marginBottom: "-15px" }}
+            First Floor
+          </Button>
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("theSecondFloor")}
           >
-            <button
-              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
-              onClick={() => changeFloor("theSecondFloor")}
-            >
-              <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
-              >
-                <div
-                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                >
-                  F2
-                </div>
-              </div>
-            </button>
-          </div>
-          <div
-            className={`w-[80px] h-[80px] relative  ${currentFloor === "3" ? "mt-8" : "hover:mr-4"}`}
-            style={{ marginBottom: "-15px" }}
+            Second Floor
+          </Button>
+          <Button
+            variant={"secondary"}
+            onClick={() => changeFloor("theThirdFloor")}
           >
-            <button
-              // className={(currentFloor === "1" ? "bg-yellow-500 w-full" : "bg-blue-500 text-black w-full hover:bg-yellow-500")}
-              onClick={() => changeFloor("theThirdFloor")}
-            >
-              <div
-                className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45 origin-bottom-left ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
-              >
-                <div
-                  className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                >
-                  F3
-                </div>
-              </div>
-            </button>
-          </div>
+            Third Floor
+          </Button>
+          <Button onClick={() => (window.location.href = "/map-editor/table")}>
+            <EditIcon className="mr-2 h-4 w-4" />
+            <span>Table View</span>
+          </Button>
         </div>
-        {/*<div*/}
-        {/*  className={"space-x-2"}*/}
-        {/*  style={{*/}
-        {/*    position: "absolute",*/}
-        {/*    bottom: 100,*/}
-        {/*    left: "50%",*/}
-        {/*    transform: "translateX(-50%)",*/}
-        {/*    display: "flex",*/}
-        {/*    justifyContent: "space-around",*/}
-        {/*    width: "80%",*/}
-        {/*    zIndex: 1000,*/}
-        {/*    color: "black",*/}
-        {/*  }}*/}
-        {/*>*/}
-        {/*  <Button*/}
-        {/*    variant={"secondary"}*/}
-        {/*    onClick={() => changeFloor("lowerLevel2")}*/}
-        {/*  >*/}
-        {/*    Lower Level 2*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    variant={"secondary"}*/}
-        {/*    onClick={() => changeFloor("lowerLevel1")}*/}
-        {/*  >*/}
-        {/*    Lower Level 1*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    variant={"secondary"}*/}
-        {/*    onClick={() => changeFloor("theFirstFloor")}*/}
-        {/*  >*/}
-        {/*    First Floor*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    variant={"secondary"}*/}
-        {/*    onClick={() => changeFloor("theSecondFloor")}*/}
-        {/*  >*/}
-        {/*    Second Floor*/}
-        {/*  </Button>*/}
-        {/*  <Button*/}
-        {/*    variant={"secondary"}*/}
-        {/*    onClick={() => changeFloor("theThirdFloor")}*/}
-        {/*  >*/}
-        {/*    Third Floor*/}
-        {/*  </Button>*/}
-        {/*  <Button onClick={() => (window.location.href = "/map-editor/table")}>*/}
-        {/*    <EditIcon className="mr-2 h-4 w-4" />*/}
-        {/*    <span>Table View</span>*/}
-        {/*  </Button>*/}
-        {/*</div>*/}
       </div>
     </div>
   );
