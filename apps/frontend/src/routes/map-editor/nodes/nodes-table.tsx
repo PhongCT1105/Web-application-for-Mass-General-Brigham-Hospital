@@ -49,9 +49,7 @@ import {
 } from "@/components/ui/form.tsx";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-// import {Popover, PopoverContent, PopoverTrigger} from "@/components/ui/popover";
-// import {CaretSortIcon, CheckIcon} from "@radix-ui/react-icons";
-// import {Command, CommandEmpty, CommandGroup, CommandInput, CommandItem} from "@/components/ui/command.tsx";
+import { toast } from "@/components/ui/use-toast.ts";
 
 interface DataTableProps {
   columns: ColumnDef<Node>[];
@@ -67,19 +65,10 @@ export function NodeDataTable({ columns }: DataTableProps) {
   const { nodes: data, setNodes } = useGraphContext();
   const [originalData, setOriginalData] = useState(() => [...data]);
   const [editedRows, setEditedRows] = useState({});
-  // const uniqueBuildingNames: [string, ...string[]] = Array.from(new Set(data.map(node => node.building))) as [string, ...string[]];
-  // const uniqueFloorNames: [string, ...string[]] = Array.from(new Set(data.map(node => node.floor))) as [string, ...string[]];
-  // const uniqueNodeIds: [string, ...string[]] = Array.from(new Set(data.map(node => node.nodeID))) as [string, ...string[]];
-  //
-  // const uniqueFloorNames: [string, ...string[]] = Array.from(new Set(data.map(node => node.floor)))
-  //         .filter((building): building is string => true) as [string, ...string[]];
-  //     const uniqueBuildingNames: [string, ...string[]] = Array.from(new Set(data.map(node => node.building)))
-  //         .filter((building): building is string => true) as [string, ...string[]];
-  // const uniqueNodeIds: [string, ...string[]] = Array.from(new Set(data.map(node => node.nodeID)))
-  //         .filter((building): building is string => true) as [string, ...string[]];
-
   const formSchema = z.object({
-    nodeID: z.string({ required_error: "Must enter a node ID." }),
+    nodeID: z
+      .string({ required_error: "Must enter a node ID." })
+      .min(1, { message: "Required." }),
     xcoord: z
       .number()
       .min(0, { message: "Invalid x-coord." })
@@ -88,12 +77,22 @@ export function NodeDataTable({ columns }: DataTableProps) {
       .number()
       .min(0, { message: "Invalid y-coord." })
       .max(3400, { message: "Invalid y-coord." }),
-    floor: z.string({ required_error: "Must enter a floor." }),
-    building: z.string({ required_error: "Must enter a building." }),
-    nodeType: z.string({ required_error: "Must enter a node type." }),
-    longName: z.string({ required_error: "Must enter a long name." }),
-    shortName: z.string({ required_error: "Must enter a short name." }),
-    neighbor: z.string({ required_error: "Must enter a neighbor node." }),
+    floor: z
+      .string({ required_error: "Must enter a floor." })
+      .min(1, { message: "Required." }),
+    building: z
+      .string({ required_error: "Must enter a building." })
+      .min(1, { message: "Required." }),
+    nodeType: z
+      .string({ required_error: "Must enter a node type." })
+      .min(1, { message: "Required." }),
+    longName: z
+      .string({ required_error: "Must enter a long name." })
+      .min(1, { message: "Required." }),
+    shortName: z
+      .string({ required_error: "Must enter a short name." })
+      .min(1, { message: "Required." }),
+    // neighbor: z.string({ required_error: "Must enter a neighbor node." }).min(1),
   });
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -107,30 +106,24 @@ export function NodeDataTable({ columns }: DataTableProps) {
       nodeType: "",
       longName: "",
       shortName: "",
-      neighbor: "",
     },
   });
 
   const handleSubmitForm = (values: z.infer<typeof formSchema>) => {
-    // Create a new Node object from the values
-    const newNode = {
-      nodeID: values.nodeID,
-      xcoord: Number(values.xcoord),
-      ycoord: Number(values.ycoord),
-      floor: values.floor,
-      building: values.building,
-      nodeType: values.nodeType,
-      longName: values.longName,
-      shortName: values.shortName,
-    };
+    toast({
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      ),
+    });
 
-    console.log(newNode);
-    // Add the new node to the nodes state
-    setNodes((prevNodes) => [...prevNodes, newNode]);
+    setNodes((prevNodes) => [...prevNodes, values]);
     console.log("New node array length: " + data.length);
   };
   useEffect(() => {
-    console.log("Data before filtering:", data);
+    // console.log("Data before filtering:", data);
     const filteredData = data.filter((node) => {
       if (node && node.nodeID != null && node.nodeID !== undefined) {
         return true;
@@ -139,48 +132,47 @@ export function NodeDataTable({ columns }: DataTableProps) {
         return false;
       }
     });
-    console.log("Filtered data:", filteredData);
-
     // Check if filtered data has changed
     if (JSON.stringify(filteredData) !== JSON.stringify(data)) {
       // If changed, update state
       setNodes(filteredData);
-      console.log("Update nodes request sent to database.");
+      // console.log("Update nodes request sent to database.");
     }
 
     console.log("Node array length: " + data.length);
   }, [data, setNodes]);
 
   useEffect(() => {
-    console.log("Data before filtering:", data);
-    const filteredData = data.filter((node) => {
-      if (node && node.nodeID != null && node.nodeID !== undefined) {
-        return true;
-      } else {
-        console.log("Node with undefined or null nodeID found:", node);
-        return false;
-      }
-    });
-    console.log("Filtered data:", filteredData);
-    // setNodes(filteredData);
-    console.log(data.length);
-    const handleUpdateNodes = async () => {
-      const res = await axios.post("/api/csvFetch/node", filteredData, {
-        headers: {
-          "content-type": "Application/json",
-        },
+    if (data.length > 0) {
+      // console.log("Data before filtering:", data);
+      const filteredData = data.filter((node) => {
+        if (node && node.nodeID != null && node.nodeID !== undefined) {
+          return true;
+        } else {
+          console.log("Node with undefined or null nodeID found:", node);
+          return false;
+        }
       });
-      if (res.status == 200) {
-        console.log("success");
-      } else {
-        console.log(res.status);
-      }
-    };
-    handleUpdateNodes().then(() => {
+      // console.log("Filtered data:", filteredData);
       // setNodes(filteredData);
-      console.log("Update nodes request sent to database.");
-    });
-    console.log("Node array length: " + data.length);
+      console.log(data.length);
+      const handleUpdateNodes = async () => {
+        const res = await axios.post("/api/csvFetch/node", filteredData, {
+          headers: {
+            "content-type": "Application/json",
+          },
+        });
+        if (res.status == 200) {
+          console.log("success");
+        } else {
+          console.log(res.status);
+        }
+      };
+      handleUpdateNodes().then(() => {
+        console.log("Request was sent to database.");
+        console.log("Node array length: " + data.length);
+      });
+    }
   }, [data]);
 
   const table = useReactTable({
@@ -228,13 +220,15 @@ export function NodeDataTable({ columns }: DataTableProps) {
         );
       },
       deleteRow: (rowIndex: number) => {
-        setNodes((old) => old.filter((_, index) => index !== rowIndex));
-        const filteredData = data.filter((node) => {
-          if (node && node.nodeID != null && node.nodeID !== undefined)
-            return true;
-          else return false;
+        setNodes((oldNodes) => {
+          const newNodes = oldNodes.filter(
+            (node, index) =>
+              index !== rowIndex &&
+              node.nodeID != null &&
+              node.nodeID !== undefined,
+          );
+          return newNodes;
         });
-        setNodes(filteredData);
       },
     },
 
@@ -315,9 +309,8 @@ export function NodeDataTable({ columns }: DataTableProps) {
                     )}
                   />
                 ))}
-                <DialogClose asChild>
-                  <Button type={"submit"}>Submit</Button>
-                </DialogClose>
+                <DialogClose asChild></DialogClose>
+                <Button type={"submit"}>Submit</Button>
               </form>
             </Form>
           </DialogContent>
