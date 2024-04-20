@@ -12,6 +12,7 @@ import medicationRoute from "./routes/medicationRoute.ts";
 // import m from "./routes/sanitationRoute.ts";
 import { auth } from "express-oauth2-jwt-bearer";
 import pathfindingRoute from "./routes/pathfindingRoute.ts";
+import employeeRoute from "./routes/employeeRoute.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -39,6 +40,7 @@ app.use("/api/sanitationReq", sanitationRouter);
 app.use("/api/securityReq", securityRoute);
 app.use("/api/medicationReq", medicationRoute);
 app.use("/api/search", pathfindingRoute);
+app.use("/api/employeeData", employeeRoute);
 app.use("/healthcheck", function (req: Request, res: Response): void {
   if (!process.env["VITETEST"]) {
     app.use(
