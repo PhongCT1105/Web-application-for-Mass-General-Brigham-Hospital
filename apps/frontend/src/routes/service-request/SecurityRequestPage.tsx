@@ -37,6 +37,7 @@ type rPriority = "low" | "medium" | "high" | "emergency" | "";
 interface securityRequest {
   ename: string;
   location: string;
+  employee: string;
   situation: string;
   call: boolean;
   status: rStatus;
@@ -49,6 +50,7 @@ export const SecurityForm = () => {
     ename: "",
     location: "",
     situation: "",
+    employee: "",
     call: false,
     status: "unassigned",
     priority: "low",
@@ -57,6 +59,7 @@ export const SecurityForm = () => {
   const [curPriority, setCurPriority] = useState("low");
   const [curStatus, setCurStatus] = useState("unassigned");
   const [locations, setLocations] = useState<string[]>([]);
+  const [employees, setEmployees] = useState<string[]>([]);
   const [buttonState, setButtonState] = useState<buttonColor>("ghost");
 
   type buttonColor = "ghost" | "default";
@@ -68,6 +71,7 @@ export const SecurityForm = () => {
     setSecurityRequest({
       ename: "",
       location: "",
+      employee: "",
       situation: "",
       call: false,
       status: "unassigned",
@@ -112,11 +116,34 @@ export const SecurityForm = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get("/api/employeeData");
+        const rawData = response.data;
+
+        const extractedEmployees = rawData.map(
+          (item: { id: number; fName: string; lName: string; title: string }) =>
+            item.lName,
+        );
+
+        setEmployees(extractedEmployees);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchEmployees();
+  }, []);
+
   const checkEmpty = () => {
     return (
       securityRequest.ename === "" ||
       securityRequest.location === "" ||
-      securityRequest.situation === ""
+      securityRequest.situation === "" ||
+      securityRequest.employee === ""
     );
   };
 
@@ -124,6 +151,14 @@ export const SecurityForm = () => {
     setSecurityRequest((prevState) => ({
       ...prevState,
       location: selectedLocation,
+    }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
+  };
+
+  const handleEmployee = (selectedEmployee: string) => {
+    setSecurityRequest((prevState) => ({
+      ...prevState,
+      employee: selectedEmployee,
     }));
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
@@ -142,6 +177,7 @@ export const SecurityForm = () => {
       ...prevState,
       [id]: value,
     }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
   /**
@@ -190,7 +226,8 @@ export const SecurityForm = () => {
     if (
       securityRequest.ename === "" ||
       securityRequest.location === "" ||
-      securityRequest.situation === ""
+      securityRequest.situation === "" ||
+      securityRequest.employee === ""
     ) {
       toast({
         title: "Error",
@@ -300,6 +337,31 @@ export const SecurityForm = () => {
                         onClick={() => handleLocation(location)}
                       >
                         {location}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* Employee Input */}
+              <div className="w-1/5">
+                <h1 className="text-2xl font-bold my-2">Employee</h1>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                      {securityRequest.employee
+                        ? securityRequest.employee
+                        : "Select Employee"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                    {employees.map((employee, index) => (
+                      <DropdownMenuRadioItem
+                        key={index}
+                        value={employee}
+                        onClick={() => handleEmployee(employee)}
+                      >
+                        {employee}
                       </DropdownMenuRadioItem>
                     ))}
                   </DropdownMenuContent>

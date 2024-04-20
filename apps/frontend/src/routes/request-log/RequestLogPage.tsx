@@ -64,6 +64,7 @@ interface securityRequest {
   reqID: number;
   ename: string;
   location: string;
+  employee: string;
   situation: string;
   call: boolean;
   status: string;
@@ -147,6 +148,7 @@ export const RequestLogPage = () => {
             reqID: item.reqID,
             ename: item.ename,
             location: item.location,
+            employee: item.employee,
             situation: item.situation,
             call: item.call.toString(),
             status: item.status,
