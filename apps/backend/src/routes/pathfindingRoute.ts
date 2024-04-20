@@ -7,6 +7,7 @@ import express, { Router } from "express";
 import { aStar } from "../util/aStar.ts";
 import { BFS } from "../util/BFS.ts";
 import { DFS } from "../util/DFS.ts";
+import { Dijkstra } from "../util/Dijkstra.ts";
 
 const router: Router = express.Router();
 
@@ -27,6 +28,9 @@ router.post("/", async (req, res) => {
       break;
     case "DFS":
       searchStrategy = new DFS();
+      break;
+    case "Dijkstra":
+      searchStrategy = new Dijkstra();
       break;
     default:
       return res.status(400).json({ error: "Invalid search strategy" });

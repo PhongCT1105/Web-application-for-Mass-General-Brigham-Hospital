@@ -210,6 +210,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 >
                   DFS
                 </TabsTrigger>
+                <TabsTrigger
+                  value="dijkstra"
+                  onClick={() => changePathfindingStrategy("Dijkstra")}
+                >
+                  Dijkstra
+                </TabsTrigger>
               </TabsList>
               {/*<TabsContent value="account">Make changes to your account here.</TabsContent>*/}
               {/*<TabsContent value="password">Change your password here.</TabsContent>*/}
