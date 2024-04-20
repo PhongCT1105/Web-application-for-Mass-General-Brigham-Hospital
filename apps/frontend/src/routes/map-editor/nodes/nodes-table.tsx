@@ -125,8 +125,8 @@ export function NodeDataTable({ columns }: DataTableProps) {
     resolver: zodResolver(nodeFormSchema),
     defaultValues: {
       nodeID: "",
-      xcoord: 0,
-      ycoord: 0,
+      // xcoord: 0,
+      // ycoord: 0,
       floor: "",
       building: "",
       nodeType: "",
@@ -342,7 +342,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
                         <FormLabel>
                           {key.charAt(0).toUpperCase() + key.slice(1)}
                         </FormLabel>
-                        {["floor", "building", "nodeID"].includes(key) ? (
+                        {["floor", "building"].includes(key) ? (
                           <Select
                             defaultValue={String(field.value)}
                             onValueChange={field.onChange}
@@ -364,14 +364,6 @@ export function NodeDataTable({ columns }: DataTableProps) {
                               {key === "building" &&
                                 Array.from(
                                   new Set(data.map((node) => node.building)),
-                                ).map((value) => (
-                                  <SelectItem key={value} value={value}>
-                                    {value}
-                                  </SelectItem>
-                                ))}
-                              {key === "nodeID" &&
-                                Array.from(
-                                  new Set(data.map((node) => node.nodeID)),
                                 ).map((value) => (
                                   <SelectItem key={value} value={value}>
                                     {value}
