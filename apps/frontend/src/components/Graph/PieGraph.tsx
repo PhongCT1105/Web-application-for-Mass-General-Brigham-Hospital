@@ -1,11 +1,17 @@
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { pieChartData } from "@/data/pieChartData.ts";
+import { pieChartData } from "@/data/chartValue/pieChartData.ts";
+import { AnimationSpec } from "chart.js/auto";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 function PieGraph() {
   const options = {
+    animation: {
+      easing: "easeInOutSine" as AnimationSpec<never>["easing"], // Corrected easing value
+      loop: true,
+      duration: 3000,
+    },
     responsive: true,
     maintainAspectRatio: true,
     aspectRatio: 2.3,

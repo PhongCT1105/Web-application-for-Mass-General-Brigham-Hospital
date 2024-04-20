@@ -1,15 +1,17 @@
+const data = [
+  { request: "Flower Request", total: 500 },
+  { request: "MedicationRequest", total: 300 },
+  { request: "Patient Transport Request", total: 150 },
+  { request: "Sanitation Request", total: 180 },
+  { request: "Security Request", total: 100 },
+];
+
 export const barChartData = {
-  labels: [
-    "FlowerRequest",
-    "Medication Request",
-    "Patient Transport Request",
-    "Sanitation Request",
-    "Security Request",
-  ],
+  labels: data.map((map) => map.request),
   datasets: [
     {
       label: "Total Used",
-      data: [1200, 300, 150, 180, 100],
+      data: data.map((map) => map.total),
       backgroundColor: [
         "rgba(255, 99, 13, 0.2)",
         "rgba(54, 162, 235, 0.2)",

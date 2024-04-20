@@ -55,7 +55,7 @@ function App() {
         {
           path: "/insight",
           errorElement: <h1>ERROR</h1>,
-          element: <InsightRoute />,
+          element: <ProtectedPage Page={InsightRoute} />,
         },
         {
           path: "/service-requests",
