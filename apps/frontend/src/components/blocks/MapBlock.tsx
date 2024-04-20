@@ -592,12 +592,8 @@ export const MapBlock: React.FC = () => {
     if (!map) return;
     const layer: L.FeatureGroup = Layers[floor];
     if (!layer) return;
-    console.log(layer);
-    layer.bringToFront();
-    layer.bringToFront();
-    layer.bringToFront();
-    layer.bringToFront();
-    layer.bringToFront();
+    map.removeLayer(Layers[floor]);
+    layer.addTo(map);
   }
 
   return (
