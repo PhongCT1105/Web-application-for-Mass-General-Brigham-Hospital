@@ -251,6 +251,28 @@ export const MapBlock: React.FC = () => {
         map.setMaxBounds(bounds);
       }
 
+      const setStartEndLocation = (locationName: string) => {
+        const startLocation = hospitalData.find(
+          (h) => h.nodeID === startNodeID,
+        );
+        const endLocation = hospitalData.find((h) => h.nodeID === endNodeID);
+
+        if (!startLocation) {
+          setStartNodeID(locationName);
+          console.log("if");
+          console.log(locationName);
+        } else if (!endLocation) {
+          setEndNodeID(locationName);
+          console.log("else if");
+          console.log(locationName);
+        } else {
+          setStartNodeID(locationName);
+          setEndNodeID("");
+          console.log("else");
+          console.log(locationName);
+        }
+      };
+
       const addMarkersToLayerGroups = (hospitalData: HospitalData[]) => {
         hospitalData.forEach((node) => {
           const coords: [number, number] = [3400 - node.yCoord, node.xCoord];
@@ -261,6 +283,11 @@ export const MapBlock: React.FC = () => {
             fillOpacity: 0.8,
           }).bindPopup(node.name);
           marker.addTo(Markers[node.floor]);
+          marker.options.attribution = node.nodeID;
+          // Event listener for clicking on markers
+          marker.on("click", function () {
+            setStartEndLocation(node.nodeID);
+          });
         });
       };
 
@@ -281,8 +308,10 @@ export const MapBlock: React.FC = () => {
     Paths,
     SpecialMarkers,
     baseLayers,
+    endNodeID,
     hospitalData,
     isDataLoaded,
+    startNodeID,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -306,9 +335,6 @@ export const MapBlock: React.FC = () => {
     return L.polyline([startCoords, endCoords], {
       color: "blue",
       weight: 5,
-      snakingSpeed: 600,
-      snakeRepeat: false,
-      snakeRepeatDelay: 100,
     });
   }
 
@@ -379,7 +405,7 @@ export const MapBlock: React.FC = () => {
     }
 
     Object.keys(Layers).forEach((key) => {
-      Paths[key].addTo(Layers[key]).snakeIn();
+      Paths[key].addTo(Layers[key]);
     });
 
     placeStartEndMarkers();
@@ -443,11 +469,11 @@ export const MapBlock: React.FC = () => {
     });
   }
 
-  function handleSearch(startID: string, endID: string) {
+  function handleSearch() {
     const test = {
       strategy: pathfindingStrategy,
-      start: startID,
-      end: endID,
+      start: startNodeID,
+      end: endNodeID,
     };
 
     const nodeArray: Node[] = [];
@@ -479,6 +505,9 @@ export const MapBlock: React.FC = () => {
     });
   }
 
+  // useEffect(() => {
+  //     addPathPolylines();
+  // }, [addPathPolylines, searchPath]);
   // function addMarkers(map: Map, nodesOnFloor: HospitalData[]) {
   //     nodesOnFloor.forEach((node) => {
   //         const icons = [GrayDot, GreenStar2, RedStar2];
