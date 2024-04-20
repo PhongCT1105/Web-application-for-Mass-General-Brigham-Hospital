@@ -115,11 +115,11 @@ export const MapBlock: React.FC = () => {
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
 
-  const [LayerL1] = useState<L.LayerGroup>(L.layerGroup());
-  const [LayerL2] = useState<L.LayerGroup>(L.layerGroup());
-  const [LayerF1] = useState<L.LayerGroup>(L.layerGroup());
-  const [LayerF2] = useState<L.LayerGroup>(L.layerGroup());
-  const [LayerF3] = useState<L.LayerGroup>(L.layerGroup());
+  const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
+  const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
+  const [LayerF1] = useState<L.FeatureGroup>(new L.FeatureGroup());
+  const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
+  const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
 
   // floor images
   const FloorMarkers: { [key: string]: string } = useMemo(
@@ -159,7 +159,7 @@ export const MapBlock: React.FC = () => {
     [],
   );
 
-  const Layers: { [key: string]: L.LayerGroup } = useMemo(
+  const Layers: { [key: string]: L.FeatureGroup } = useMemo(
     () =>
       ({
         L1: LayerL1,
@@ -359,6 +359,7 @@ export const MapBlock: React.FC = () => {
         );
       }
     }
+    changeFloor(searchPath[0].floor);
   }
 
   function addPathPolylines() {
@@ -420,6 +421,7 @@ export const MapBlock: React.FC = () => {
         iconAnchor: [13, 30],
       });
       L.marker(location, { icon: customIcon }).addTo(floorLayer);
+      // add clickable marker here
     } else {
       const customIcon = new Icon({
         iconUrl: iconPath,
@@ -584,6 +586,19 @@ export const MapBlock: React.FC = () => {
   //     //   });
   //     // });
   // }
+
+  function changeFloor(floor: string) {
+    const map = mapRef.current;
+    if (!map) return;
+    const layer: L.FeatureGroup = Layers[floor];
+    if (!layer) return;
+    console.log(layer);
+    layer.bringToFront();
+    layer.bringToFront();
+    layer.bringToFront();
+    layer.bringToFront();
+    layer.bringToFront();
+  }
 
   return (
     <SearchContext.Provider
