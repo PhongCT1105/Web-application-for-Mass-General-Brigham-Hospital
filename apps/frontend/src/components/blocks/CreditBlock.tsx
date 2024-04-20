@@ -14,7 +14,12 @@ const CreditBlock = ({ children, Tool, Link }: CreditInfo) => {
       <CardContent>
         <div className={"text-md"}>{children}</div>
         <Separator className={"my-1"}></Separator>
-        <div className={"text-md"}>Link: {Link}</div>
+        <div className={"text-md"}>
+          Link:{" "}
+          <a href={Link} target="_blank" rel="noreferrer noopener">
+            {Link}
+          </a>
+        </div>
       </CardContent>
     </Card>
   );

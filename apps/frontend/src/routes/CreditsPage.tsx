@@ -16,8 +16,43 @@ const CreditsPage = () => {
         </h1>
 
         <Separator></Separator>
-        <CreditBlock Tool={"GitHub"} Link={"github.com"}>
-          This was used as the primary version control software.
+        <CreditBlock Tool={"Figma"} Link={"https://www.figma.com/"}>
+          Figma was used to design the color scheme and initial page layouts for
+          the site.
+        </CreditBlock>
+        <CreditBlock Tool={"ShadCN"} Link={"https://ui.shadcn.com/"}>
+          ShadCN is the UI framework we used for all of our basic components.
+        </CreditBlock>
+        <CreditBlock Tool={"TailwindCSS"} Link={"https://tailwindcss.com/"}>
+          TailwindCSS is the CSS style framework used with ShadCN to style
+          components.
+        </CreditBlock>
+        <CreditBlock Tool={"Yarn"} Link={"https://yarnpkg.com/"}>
+          Yarn is the package manager we used to compile and run our project.
+        </CreditBlock>
+        <CreditBlock Tool={"NodeJS"} Link={"https://nodejs.org/en"}>
+          Node JS is the runtime environment we used.
+        </CreditBlock>
+        <CreditBlock Tool={"PrismaORM"} Link={"https://www.prisma.io/"}>
+          Prisma ORM is the database interface we use to work with the database.
+        </CreditBlock>
+        <CreditBlock Tool={"PostgreSQL"} Link={"https://www.postgresql.org/"}>
+          PostgreSQL is the database provider we use for the backend database.
+        </CreditBlock>
+        <CreditBlock Tool={"Auth0"} Link={"https://auth0.com/"}>
+          Auth0 is the login interface we use.
+        </CreditBlock>
+        <CreditBlock
+          Tool={"WebStorm"}
+          Link={"https://www.jetbrains.com/webstorm/"}
+        >
+          WebStorm is the IDE we use to write and run code.
+        </CreditBlock>
+        <CreditBlock Tool={"Taiga"} Link={"https://tree.taiga.io/"}>
+          Taiga is the project tracking software we use.
+        </CreditBlock>
+        <CreditBlock Tool={"GitHub"} Link={"https://github.com"}>
+          GitHub is the version control software we are using.
         </CreditBlock>
 
         <h6 style={{ textAlign: "center", marginTop: "75px" }}>

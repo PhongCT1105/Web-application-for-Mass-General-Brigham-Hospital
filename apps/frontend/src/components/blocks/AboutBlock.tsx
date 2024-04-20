@@ -30,7 +30,7 @@ const AboutBlock = ({
 }: AboutInfo) => {
   return (
     <Card
-      className={"flex flex-col justify-space-between mw-700 p-5 bg-gray-200"}
+      className={"flex flex-col justify-space-between mw-700 p-5 bg-secondary"}
     >
       <img
         src={Imagepath}
@@ -48,9 +48,15 @@ const AboutBlock = ({
       </div>
       <div className={"mx-auto w-1/2"}>
         <div className={"flex justify-between"}>
-          <Button variant={"invisible"}>{Github && <GitHubLogoIcon />}</Button>
           <Button variant={"invisible"}>
-            {Linkdin && <LinkedInLogoIcon />}
+            <a href={Github} target="_blank" rel="noreferrer noopener">
+              {Github && <GitHubLogoIcon />}
+            </a>
+          </Button>
+          <Button variant={"invisible"}>
+            <a href={Linkdin} target="_blank" rel="noreferrer noopener">
+              {Linkdin && <LinkedInLogoIcon />}
+            </a>
           </Button>
         </div>
       </div>
