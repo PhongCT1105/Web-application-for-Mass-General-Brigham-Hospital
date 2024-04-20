@@ -386,13 +386,36 @@ export const MapBlock: React.FC = () => {
     const paths: Node[][] = parsePath(nodeArray);
     let directionsStr = "";
 
+    for (let i = 0; i < paths.length; i++) {
+      if (paths[i].length > 1) {
+        const convertedFloorName =
+          i === 0
+            ? "Lower Level 2 Directions:"
+            : i === 1
+              ? "Lower Level 1 Directions:"
+              : i === 2
+                ? "Floor 1 Directions:"
+                : i === 3
+                  ? "Floor 2 Directions:"
+                  : i === 4
+                    ? "Floor 3 Directions:"
+                    : "";
+
+        directionsStr += convertedFloorName + "\n" + "\n";
+        for (let j = 0; j < paths[i].length - 1; j++) {
+          directionsStr += directionFromCurrentLine(paths[i], j) + "\n";
+        }
+        directionsStr += "\n";
+      }
+    }
+    setTextDirections(directionsStr);
+
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
         const start = paths[0][i].nodeType;
         const end = paths[0][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
-          directionsStr += directionFromCurrentLine(paths[0], i) + "\n";
           if (newPath) newPath.addTo(layerGroup);
         }
       }
@@ -406,7 +429,6 @@ export const MapBlock: React.FC = () => {
         const end = paths[1][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
-          directionsStr += directionFromCurrentLine(paths[1], i) + "\n";
 
           if (newPath) newPath.addTo(layerGroup);
         }
@@ -421,7 +443,6 @@ export const MapBlock: React.FC = () => {
         const end = paths[2][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
-          directionsStr += directionFromCurrentLine(paths[2], i) + "\n";
 
           if (newPath) newPath.addTo(layerGroup);
         }
@@ -436,7 +457,6 @@ export const MapBlock: React.FC = () => {
         const end = paths[3][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
-          directionsStr += directionFromCurrentLine(paths[3], i) + "\n";
 
           if (newPath) newPath.addTo(layerGroup);
         }
@@ -451,7 +471,6 @@ export const MapBlock: React.FC = () => {
         const end = paths[4][i + 1].nodeType;
         if (checkNodeTypes(start, end)) {
           const newPath = drawPath(paths[4][i].nodeID, paths[4][i + 1].nodeID);
-          directionsStr += directionFromCurrentLine(paths[4], i) + "\n";
 
           if (newPath) newPath.addTo(layerGroup);
         }
@@ -460,8 +479,6 @@ export const MapBlock: React.FC = () => {
 
       placeStartEndMarkers(paths[4]);
     }
-
-    setTextDirections(directionsStr);
 
     console.log("done :D");
   }
@@ -957,7 +974,7 @@ export const MapBlock: React.FC = () => {
           value={textDirections}
           readOnly
           rows={10} // Adjust rows as needed
-          cols={50} // Adjust cols as needed
+          cols={42} // Adjust cols as needed
         />
         <div
           id="map-container"
