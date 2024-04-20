@@ -5,7 +5,7 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 // Importing different pages and components for routing
 import LoginPage from "./routes/LoginPage.tsx";
 import HomePage from "./routes/HomePage.tsx"; // Correct import path
-import AboutUsPage from "./routes/AboutUsPage.tsx"; // Correct import path
+import AboutCreditsPages from "./routes/AboutCreditsPages.tsx"; // Correct import path
 import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"; // Correct import path
 import CSVTable from "./routes/CSVPage/csvTable.tsx";
 import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
@@ -50,7 +50,7 @@ function App() {
         {
           path: "/about-us",
           errorElement: <h1>ERROR</h1>,
-          element: <AboutUsPage />,
+          element: <AboutCreditsPages />,
         },
         {
           path: "/insight",
