@@ -125,3 +125,10 @@ model medicationRequest {
   dateSubmitted String
   medication    medicationInfo[]
 }
+
+model employee {
+  id    Int    @id @default(autoincrement())
+  fName String
+  lName String
+  title String
+}

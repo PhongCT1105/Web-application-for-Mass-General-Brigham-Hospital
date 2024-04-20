@@ -18,7 +18,7 @@ import { Auth0Provider } from "@auth0/auth0-react";
 import ProtectedPage from "@/routes/ProtectedPage.tsx";
 import { Header } from "@/components/blocks/header.tsx";
 import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
-import GraphRoute from "@/routes/GraphRoute.tsx";
+import InsightRoute from "@/routes/InsightRoute.tsx";
 // import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 
 function App() {
@@ -53,9 +53,9 @@ function App() {
           element: <AboutUsPage />,
         },
         {
-          path: "/graph",
+          path: "/insight",
           errorElement: <h1>ERROR</h1>,
-          element: <GraphRoute />,
+          element: <ProtectedPage Page={InsightRoute} />,
         },
         {
           path: "/service-requests",
