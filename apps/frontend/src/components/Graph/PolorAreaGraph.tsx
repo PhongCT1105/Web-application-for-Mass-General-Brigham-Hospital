@@ -7,7 +7,7 @@ const PolarAreaChart = () => {
     animation: {
       easing: "easeInBounce" as AnimationSpec<never>["easing"], // Corrected easing value
       loop: true,
-      duration: 3000,
+      duration: 2500,
     },
     responsive: true,
     maintainAspectRatio: true,

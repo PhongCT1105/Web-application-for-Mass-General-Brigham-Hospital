@@ -29,7 +29,7 @@ function BarGraph() {
     animation: {
       easing: "easeOutCubic" as AnimationSpec<never>["easing"], // Corrected easing value
       loop: true,
-      duration: 3000,
+      duration: 2500,
     },
     plugins: {
       title: {
