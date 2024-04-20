@@ -9,7 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { lineChartData } from "@/data/lineChartData";
+import { lineChartData } from "@/data/chartValue/lineChartData.ts";
 
 ChartJS.register(
   CategoryScale,
