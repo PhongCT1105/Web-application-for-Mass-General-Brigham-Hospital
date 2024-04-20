@@ -13,6 +13,7 @@ import axios, { AxiosError, AxiosResponse } from "axios";
 import { Input } from "@/components/ui/input.tsx";
 import { DataTable } from "@/components/table/data-table.tsx";
 import { edgeColumns, nodeColumns } from "@/routes/CSVPage/csvColumns.tsx";
+import { employeeData } from "@/interfaces/dataTypes/employeeData.ts";
 
 interface CSVData {
   [key: string]: string; // Assuming all values in CSV are strings, adjust as needed
@@ -309,6 +310,21 @@ const CSVTable: React.FC = () => {
     }
   };
 
+  const uploadEmployees = async (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log("UPLOAD EMPLOYEES");
+    console.log(JSON.stringify(employeeData));
+    const res = await axios.post("/api/employeeData", employeeData, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    }
+    console.log(employeeData);
+  };
+
   return (
     <div className={"scrollbar "}>
       <div className="hidden md:block p-5">
@@ -320,6 +336,7 @@ const CSVTable: React.FC = () => {
                   <TabsList className={"mb-4"}>
                     <TabsTrigger value="Nodes">Nodes</TabsTrigger>
                     <TabsTrigger value="Edges">Edges</TabsTrigger>
+                    <TabsTrigger value="Employees">Employees</TabsTrigger>
                   </TabsList>
                   <div className="flex items-center justify-between mb-4">
                     <div className="space-y-1">
@@ -358,6 +375,9 @@ const CSVTable: React.FC = () => {
                     {/*    <span>{edge.endNodeID}</span>*/}
                     {/*  </div>*/}
                     {/*))}*/}
+                  </TabsContent>
+                  <TabsContent value="Employees">
+                    <Button onClick={uploadEmployees}>Upload Data</Button>
                   </TabsContent>
                 </Tabs>
                 {/*<Separator className="my-4" />*/}
