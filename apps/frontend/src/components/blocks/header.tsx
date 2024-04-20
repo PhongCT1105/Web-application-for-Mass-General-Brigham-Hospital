@@ -1,16 +1,16 @@
 import {
-  CircleUser,
-  CreditCard,
+  // CircleUser,
+  // CreditCard,
   EditIcon,
-  FolderArchive,
-  Key,
-  LogOut,
+  // FolderArchive,
+  // Key,
+  // LogOut,
   MapIcon,
   Package,
   Search,
-  Settings,
-  User,
-  Users,
+  // Settings,
+  // User,
+  // Users,
 } from "lucide-react";
 import "../../styles/globals.css";
 
@@ -33,12 +33,12 @@ import {
   DropdownMenuGroup,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuPortal,
+  // DropdownMenuPortal,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
+  // DropdownMenuShortcut,
+  // DropdownMenuSub,
+  // DropdownMenuSubContent,
+  // DropdownMenuSubTrigger,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -228,77 +228,92 @@ export function Header({ highlighted }: HeaderProps) {
               </div>
             </form>
             <ModeToggle />
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="secondary" // CHANGE THIS TO MAKE THE COLOR RIGHT?
-                  size="icon"
-                  className="rounded-full"
-                >
-                  <CircleUser className="h-5 w-5" />
-                  <span className="sr-only">Toggle user menu</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent className="w-56">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuItem>
-                    <User className="mr-2 h-4 w-4" />
-                    <span>Profile</span>
-                    <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CreditCard className="mr-2 h-4 w-4" />
-                    <span>Billing</span>
-                    <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="mr-2 h-4 w-4" />
-                    <span>Settings</span>
-                    <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
-                  </DropdownMenuItem>
-                  {!isLoading && isAuthenticated && (
-                    <DropdownMenuItem
-                      onClick={() => {
-                        window.location.href = "/request-log-Page";
-                      }}
-                    >
-                      <FolderArchive className="mr-2 h-4 w-4" />
-                      <span>Request Logs</span>
-                      <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>
-                    </DropdownMenuItem>
-                  )}
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuGroup>
-                  <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
-                      <Users className="mr-2 h-4 w-4" />
-                      <span>Switch Account</span>
-                    </DropdownMenuSubTrigger>
-                    <DropdownMenuPortal>
-                      <DropdownMenuSubContent>
-                        <DropdownMenuItem onClick={handleLogin}>
-                          <Key className="mr-2 h-4 w-4" />
-                          <span>Admin</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem onClick={handleLogin}>
-                          <User className="mr-2 h-4 w-4" />
-                          <span>Employee</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuSubContent>
-                    </DropdownMenuPortal>
-                  </DropdownMenuSub>
-                </DropdownMenuGroup>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleLogout}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  <span>Log out</span>
-                  <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <Button
+              className={"rounded-[5px]"}
+              variant="default"
+              onClick={handleLogin}
+              // className="shrink-0 md:hidden hover:accent-white"
+            >
+              Login
+            </Button>
+            <Button
+              variant="default"
+              onClick={handleLogout}
+              // className="shrink-0 md:hidden hover:accent-white"
+            >
+              Logout
+            </Button>
+            {/*<DropdownMenu>*/}
+            {/*  <DropdownMenuTrigger asChild>*/}
+            {/*    <Button*/}
+            {/*      variant="secondary" // CHANGE THIS TO MAKE THE COLOR RIGHT?*/}
+            {/*      size="icon"*/}
+            {/*      className="rounded-full"*/}
+            {/*    >*/}
+            {/*      <CircleUser className="h-5 w-5" />*/}
+            {/*      <span className="sr-only">Toggle user menu</span>*/}
+            {/*    </Button>*/}
+            {/*  </DropdownMenuTrigger>*/}
+            {/*  <DropdownMenuContent className="w-56">*/}
+            {/*    <DropdownMenuLabel>My Account</DropdownMenuLabel>*/}
+            {/*    <DropdownMenuSeparator />*/}
+            {/*    <DropdownMenuGroup>*/}
+            {/*      <DropdownMenuItem>*/}
+            {/*        <User className="mr-2 h-4 w-4" />*/}
+            {/*        <span>Profile</span>*/}
+            {/*        <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>*/}
+            {/*      </DropdownMenuItem>*/}
+            {/*      <DropdownMenuItem>*/}
+            {/*        <CreditCard className="mr-2 h-4 w-4" />*/}
+            {/*        <span>Billing</span>*/}
+            {/*        <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>*/}
+            {/*      </DropdownMenuItem>*/}
+            {/*      <DropdownMenuItem>*/}
+            {/*        <Settings className="mr-2 h-4 w-4" />*/}
+            {/*        <span>Settings</span>*/}
+            {/*        <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>*/}
+            {/*      </DropdownMenuItem>*/}
+            {/*      {!isLoading && isAuthenticated && (*/}
+            {/*        <DropdownMenuItem*/}
+            {/*          onClick={() => {*/}
+            {/*            window.location.href = "/request-log-Page";*/}
+            {/*          }}*/}
+            {/*        >*/}
+            {/*          <FolderArchive className="mr-2 h-4 w-4" />*/}
+            {/*          <span>Request Logs</span>*/}
+            {/*          <DropdownMenuShortcut>⌘L</DropdownMenuShortcut>*/}
+            {/*        </DropdownMenuItem>*/}
+            {/*      )}*/}
+            {/*    </DropdownMenuGroup>*/}
+            {/*    <DropdownMenuSeparator />*/}
+            {/*    <DropdownMenuGroup>*/}
+            {/*      <DropdownMenuSub>*/}
+            {/*        <DropdownMenuSubTrigger>*/}
+            {/*          <Users className="mr-2 h-4 w-4" />*/}
+            {/*          <span>Switch Account</span>*/}
+            {/*        </DropdownMenuSubTrigger>*/}
+            {/*        <DropdownMenuPortal>*/}
+            {/*          <DropdownMenuSubContent>*/}
+            {/*            <DropdownMenuItem onClick={handleLogin}>*/}
+            {/*              <Key className="mr-2 h-4 w-4" />*/}
+            {/*              <span>Admin</span>*/}
+            {/*            </DropdownMenuItem>*/}
+            {/*            <DropdownMenuItem onClick={handleLogin}>*/}
+            {/*              <User className="mr-2 h-4 w-4" />*/}
+            {/*              <span>Employee</span>*/}
+            {/*            </DropdownMenuItem>*/}
+            {/*          </DropdownMenuSubContent>*/}
+            {/*        </DropdownMenuPortal>*/}
+            {/*      </DropdownMenuSub>*/}
+            {/*    </DropdownMenuGroup>*/}
+            {/*    <DropdownMenuSeparator />*/}
+            {/*    <DropdownMenuItem onClick={handleLogout}>*/}
+            {/*      <LogOut className="mr-2 h-4 w-4" />*/}
+            {/*      <span>Log out</span>*/}
+            {/*      <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>*/}
+            {/*    </DropdownMenuItem>*/}
+            {/*  </DropdownMenuContent>*/}
+            {/*</DropdownMenu>*/}
           </div>
         </div>
       </header>
