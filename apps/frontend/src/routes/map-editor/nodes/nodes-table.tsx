@@ -15,7 +15,6 @@ import {
   useReactTable,
   VisibilityState,
 } from "@tanstack/react-table";
-// import { cn } from "@/lib/utils";
 import {
   Table,
   TableBody,
@@ -65,7 +64,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
   const { nodes: data, setNodes } = useGraphContext();
   const [originalData, setOriginalData] = useState(() => [...data]);
   const [editedRows, setEditedRows] = useState({});
-  const formSchema = z.object({
+  const nodeFormSchema = z.object({
     nodeID: z
       .string({ required_error: "Must enter a node ID." })
       .min(1, { message: "Required." }),
@@ -92,11 +91,27 @@ export function NodeDataTable({ columns }: DataTableProps) {
     shortName: z
       .string({ required_error: "Must enter a short name." })
       .min(1, { message: "Required." }),
-    // neighbor: z.string({ required_error: "Must enter a neighbor node." }).min(1),
   });
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const edgeFormSchema = z.object({
+    startNodeID: z
+      .string({ required_error: "Must enter a node ID." })
+      .min(1, { message: "Required." }),
+    endNodeID: z
+      .string({ required_error: "Must enter a node ID." })
+      .min(1, { message: "Required." }),
+  });
+
+  const edgeForm = useForm<z.infer<typeof edgeFormSchema>>({
+    resolver: zodResolver(edgeFormSchema),
+    defaultValues: {
+      startNodeID: "",
+      endNodeID: "",
+    },
+  });
+
+  const nodeForm = useForm<z.infer<typeof nodeFormSchema>>({
+    resolver: zodResolver(nodeFormSchema),
     defaultValues: {
       nodeID: "",
       xcoord: 0,
@@ -109,7 +124,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
     },
   });
 
-  const handleSubmitForm = (values: z.infer<typeof formSchema>) => {
+  const onNodeFormSubmit = (values: z.infer<typeof nodeFormSchema>) => {
     toast({
       title: "You submitted the following values:",
       description: (
@@ -122,6 +137,38 @@ export function NodeDataTable({ columns }: DataTableProps) {
     setNodes((prevNodes) => [...prevNodes, values]);
     console.log("New node array length: " + data.length);
   };
+
+  const onEdgeFormSubmit = async (values: z.infer<typeof edgeFormSchema>) => {
+    toast({
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      ),
+    });
+
+    const newEdge = {
+      edgeID: values.endNodeID + "_" + values.startNodeID,
+      startNodeID: values.startNodeID,
+      endNodeID: values.endNodeID,
+    };
+
+    // ACONF00102
+    // ACONF00103
+
+    const res = await axios.post("/api/csvFetch/edge/add", newEdge, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    } else {
+      console.log(res.status);
+    }
+  };
+
   useEffect(() => {
     // console.log("Data before filtering:", data);
     const filteredData = data.filter((node) => {
@@ -144,7 +191,6 @@ export function NodeDataTable({ columns }: DataTableProps) {
 
   useEffect(() => {
     if (data.length > 0) {
-      // console.log("Data before filtering:", data);
       const filteredData = data.filter((node) => {
         if (node && node.nodeID != null && node.nodeID !== undefined) {
           return true;
@@ -153,8 +199,6 @@ export function NodeDataTable({ columns }: DataTableProps) {
           return false;
         }
       });
-      // console.log("Filtered data:", filteredData);
-      // setNodes(filteredData);
       console.log(data.length);
       const handleUpdateNodes = async () => {
         const res = await axios.post("/api/csvFetch/node", filteredData, {
@@ -269,14 +313,14 @@ export function NodeDataTable({ columns }: DataTableProps) {
             </Button>
           </DialogTrigger>
           <DialogContent className={"w-[500px] h-[700px] overflow-y-scroll "}>
-            <Form {...form}>
+            <Form {...nodeForm}>
               <form
-                onSubmit={form.handleSubmit(handleSubmitForm)}
+                onSubmit={nodeForm.handleSubmit(onNodeFormSubmit)}
                 className={"space-y-4"}
               >
-                {Object.keys(formSchema.shape).map((key) => (
+                {Object.keys(nodeFormSchema.shape).map((key) => (
                   <FormField
-                    control={form.control}
+                    control={nodeForm.control}
                     key={key}
                     // eslint-disable-next-line
                     // @ts-ignore
@@ -303,6 +347,45 @@ export function NodeDataTable({ columns }: DataTableProps) {
                               }
                             }}
                           />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ))}
+                <DialogClose asChild></DialogClose>
+                <Button type={"submit"}>Submit</Button>
+              </form>
+            </Form>
+          </DialogContent>
+        </Dialog>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button className={"h-8 mb-2 space-between items-center"}>
+              <PlusIcon className={"mr-2 -ml-1 h-5 w-5"} />
+              Add Edge
+            </Button>
+          </DialogTrigger>
+          <DialogContent className={"w-[500px] "}>
+            <Form {...edgeForm}>
+              <form
+                onSubmit={edgeForm.handleSubmit(onEdgeFormSubmit)}
+                className={"space-y-4"}
+              >
+                {Object.keys(edgeFormSchema.shape).map((key) => (
+                  <FormField
+                    control={edgeForm.control}
+                    key={key}
+                    // eslint-disable-next-line
+                    // @ts-ignore
+                    name={key}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>
+                          {key.charAt(0).toUpperCase() + key.slice(1)}
+                        </FormLabel>
+                        <FormControl>
+                          <Input placeholder={key} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

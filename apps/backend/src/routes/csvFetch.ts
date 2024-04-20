@@ -138,6 +138,57 @@ router.post("/edge", async (req, res) => {
   }
 });
 
+router.post("/edge/add", async (req, res) => {
+  const edgeData = req.body;
+
+  try {
+    // Ensure that edgeData contains startNodeID and endNodeID
+    if (!edgeData.startNodeID || !edgeData.endNodeID) {
+      throw new Error("startNodeID and endNodeID are required.");
+    }
+
+    // Find the corresponding nodes based on their nodeIDs
+    const startNode = await prisma.nodes.findUnique({
+      where: {
+        nodeID: edgeData.startNodeID,
+      },
+    });
+
+    const endNode = await prisma.nodes.findUnique({
+      where: {
+        nodeID: edgeData.endNodeID,
+      },
+    });
+
+    // Check if startNode and endNode are not null
+    if (!startNode || !endNode) {
+      throw new Error("Start node or end node not found.");
+    }
+
+    // Create the new edge
+    await prisma.edges.create({
+      data: {
+        edgeID: edgeData.edgeID,
+        startNodeID: {
+          connect: {
+            nodeID: startNode.nodeID,
+          },
+        },
+        endNodeID: {
+          connect: {
+            nodeID: endNode.nodeID,
+          },
+        },
+      },
+    });
+
+    res.status(200).send("Edge added successfully.");
+  } catch (error) {
+    console.error("Error processing edge addition:", error);
+    res.status(400).send("Bad request");
+  }
+});
+
 router.get("/node", async (req, res) => {
   try {
     const nodes = await prisma.nodes.findMany();
