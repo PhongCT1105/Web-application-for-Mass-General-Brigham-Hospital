@@ -95,7 +95,8 @@ model securityRequest {
 
 model internalTransportRequest {
   reqID        Int      @id @default(autoincrement())
-  name         String
+  employeeName String
+  patientName  String
   priority     String
   locationFrom String
   locationTo   String
