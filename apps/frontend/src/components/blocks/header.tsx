@@ -83,37 +83,19 @@ export function Header() {
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside);
-    const redirect = async () => {
-      try {
-        await getAccessTokenSilently();
-      } catch (error) {
-        await loginWithRedirect({
-          appState: {
-            returnTo: location.pathname,
-          },
-        });
-      }
-    };
-    if (!isLoading && isAuthenticated) {
-      redirect().then();
-    }
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [
-    getAccessTokenSilently,
-    isAuthenticated,
-    isLoading,
-    loginWithRedirect,
-    location.pathname,
-  ]);
+  }, []);
 
-  const handleLogin = () => {
-    loginWithRedirect({
-      appState: {
-        returnTo: location.pathname,
-      },
-    });
+  const handleLogin = async () => {
+    try {
+      await loginWithRedirect();
+      const token = await getAccessTokenSilently();
+      console.log(token);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleLogout = async () => {
