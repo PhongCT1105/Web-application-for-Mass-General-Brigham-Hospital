@@ -66,6 +66,7 @@ export function Sanitation() {
   const [selectedSeverity, setSelectedSeverity] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [submittedForms, setSubmittedForms] = useState<Form[]>([]);
+  const [employees, setEmployees] = useState<string[]>([]);
 
   const [locations, setLocationsTo] = useState<string[]>([]);
   const [buttonState, setButtonState] = useState<buttonColor>("ghost");
@@ -101,6 +102,28 @@ export function Sanitation() {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get("/api/employeeData");
+        const rawData = response.data;
+
+        const extractedEmployees = rawData.map(
+          (item: { id: number; fName: string; lName: string; title: string }) =>
+            item.lName,
+        );
+
+        setEmployees(extractedEmployees);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchEmployees();
   }, []);
 
   const [form, setForm] = useState<Form>({
@@ -190,6 +213,14 @@ export function Sanitation() {
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
+  const handleEmployeeChange = (selectedEmployee: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      name: selectedEmployee,
+    }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
+  };
+
   const handleSubmit = () => {
     if (
       form.name === "" ||
@@ -239,15 +270,38 @@ export function Sanitation() {
             <CardContent>
               <div className="space-y-6">
                 <div className="w-1/4">
-                  <h1 className="text-2xl font-bold ">Name</h1>
-                  <Input
-                    type="text"
-                    id="name"
-                    placeholder="Enter Your Name Here"
-                    onChange={handleFormChange}
-                    value={form.name}
-                  />
+                  <h1 className="text-2xl font-bold my-2 pb-2">
+                    Employee Name
+                  </h1>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="">
+                        {form.name ? form.name : "Select Your Name"}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                      {employees.map((employee, index) => (
+                        <DropdownMenuRadioItem
+                          key={index}
+                          value={employee}
+                          onClick={() => handleEmployeeChange(employee)}
+                        >
+                          {employee}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
+                {/*<div className="w-1/4">*/}
+                {/*  <h1 className="text-2xl font-bold ">Employee Name</h1>*/}
+                {/*  <Input*/}
+                {/*    type="text"*/}
+                {/*    id="name"*/}
+                {/*    placeholder="Select Your Name Here"*/}
+                {/*    onChange={handleFormChange}*/}
+                {/*    value={form.name}*/}
+                {/*  />*/}
+                {/*</div>*/}
                 <div className="flex">
                   <div className="w-1/3  ">
                     <h1 className="text-2xl font-bold my-2 pb-2">

@@ -148,7 +148,6 @@ export const RequestLogPage = () => {
             reqID: item.reqID,
             ename: item.ename,
             location: item.location,
-            employee: item.employee,
             situation: item.situation,
             call: item.call.toString(),
             status: item.status,
@@ -200,7 +199,8 @@ export const RequestLogPage = () => {
         const cleanedData: ScheduleForm[] = rawData.map(
           (item: ScheduleForm) => ({
             reqID: item.reqID,
-            name: item.name,
+            employeeName: item.employeeName,
+            patientName: item.patientName,
             locationFrom: item.locationFrom,
             locationTo: item.locationTo,
             reason: item.reason,

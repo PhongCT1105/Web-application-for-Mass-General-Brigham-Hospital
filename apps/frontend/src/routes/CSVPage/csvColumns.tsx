@@ -1,4 +1,5 @@
 import { Edge, Node } from "@/routes/map-editor/mapEditorTablePage.tsx";
+import { Employee } from "@/interfaces/employeeInterface.ts";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
 import { ColumnDef } from "@tanstack/react-table";
 export const edgeColumns: ColumnDef<Edge>[] = [
@@ -203,6 +204,68 @@ export const nodeColumns: ColumnDef<Node>[] = [
         <div className="flex space-x-2">
           <span className="max-w-[200px] truncate font-medium">
             {row.getValue("shortName")}
+          </span>
+        </div>
+      );
+    },
+    enableHiding: false,
+  },
+];
+
+export const employeeColumns: ColumnDef<Employee>[] = [
+  {
+    accessorKey: "id",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="ID" />
+    ),
+    cell: ({ row }) => (
+      <div className="w-[100px] font-normal">#{row.getValue("id")}</div>
+    ),
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "fName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="First Name" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[100px] truncate font-medium">
+            {row.getValue("fName")}
+          </span>
+        </div>
+      );
+    },
+    enableHiding: false,
+  },
+  {
+    accessorKey: "lName",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Last Name" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[100px] truncate font-medium">
+            {row.getValue("lName")}
+          </span>
+        </div>
+      );
+    },
+    enableHiding: false,
+  },
+  {
+    accessorKey: "title",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Job Title" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[100px] truncate font-medium">
+            {row.getValue("title")}
           </span>
         </div>
       );
