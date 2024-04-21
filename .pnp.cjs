@@ -104,6 +104,8 @@ const RAW_RUNTIME_STATE =
           ["install", "npm:0.13.0"],\
           ["leaflet", "npm:1.9.4"],\
           ["leaflet-ant-path", "npm:1.3.0"],\
+          ["leaflet-moving-marker", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.3.0"],\
+          ["leaflet.animatedmarker", "npm:1.0.0"],\
           ["leaflet.markercluster", "virtual:a657ee487c4210b95204859cdabe06f03ec08433ab706cfa484088bf818c3d5b7eba1df2444afeb50a660321f8c236d084c716c2b23544e39eaee66887ee25fa#npm:1.5.3"],\
           ["npm", "npm:10.5.0"],\
           ["pathfinding", "npm:0.4.18"],\
@@ -11704,6 +11706,37 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["leaflet-moving-marker", [\
+      ["npm:0.3.0", {\
+        "packageLocation": "./.yarn/cache/leaflet-moving-marker-npm-0.3.0-3bb676fd43-1d7eab6d0a.zip/node_modules/leaflet-moving-marker/",\
+        "packageDependencies": [\
+          ["leaflet-moving-marker", "npm:0.3.0"]\
+        ],\
+        "linkType": "SOFT"\
+      }],\
+      ["virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.3.0", {\
+        "packageLocation": "./.yarn/__virtual__/leaflet-moving-marker-virtual-9386471dfc/0/cache/leaflet-moving-marker-npm-0.3.0-3bb676fd43-1d7eab6d0a.zip/node_modules/leaflet-moving-marker/",\
+        "packageDependencies": [\
+          ["leaflet-moving-marker", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.3.0"],\
+          ["@types/leaflet", "npm:1.9.8"],\
+          ["leaflet", "npm:1.9.4"]\
+        ],\
+        "packagePeers": [\
+          "@types/leaflet",\
+          "leaflet"\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["leaflet.animatedmarker", [\
+      ["npm:1.0.0", {\
+        "packageLocation": "./.yarn/cache/leaflet.animatedmarker-npm-1.0.0-3089e5cb4f-67557377aa.zip/node_modules/leaflet.animatedmarker/",\
+        "packageDependencies": [\
+          ["leaflet.animatedmarker", "npm:1.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["leaflet.markercluster", [\
       ["npm:1.5.3", {\
         "packageLocation": "./.yarn/cache/leaflet.markercluster-npm-1.5.3-a17883ef0b-28dc441de7.zip/node_modules/leaflet.markercluster/",\
@@ -16034,6 +16067,8 @@ const RAW_RUNTIME_STATE =
           ["install", "npm:0.13.0"],\
           ["leaflet", "npm:1.9.4"],\
           ["leaflet-ant-path", "npm:1.3.0"],\
+          ["leaflet-moving-marker", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.3.0"],\
+          ["leaflet.animatedmarker", "npm:1.0.0"],\
           ["leaflet.markercluster", "virtual:a657ee487c4210b95204859cdabe06f03ec08433ab706cfa484088bf818c3d5b7eba1df2444afeb50a660321f8c236d084c716c2b23544e39eaee66887ee25fa#npm:1.5.3"],\
           ["npm", "npm:10.5.0"],\
           ["pathfinding", "npm:0.4.18"],\
