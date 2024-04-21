@@ -273,6 +273,9 @@ const CSVTable: React.FC = () => {
     if (columns.length === 8) {
       return "Node";
     }
+    if (columns.length === 4) {
+      return "Employee";
+    }
     return "";
   };
 
@@ -287,6 +290,17 @@ const CSVTable: React.FC = () => {
           endNode: value.endNode,
         }),
       );
+      // } else if (getType(columns) === "Employee") {
+      //     // let edges: Edge[] = [];
+      //     // jsonData.map((value) => value);
+      //     return jsonData.map(
+      //         (value): Employee => ({
+      //             id: value.id,
+      //             fName: value.fName,
+      //             lName: value.lName,
+      //         }),
+      //     );
+      // }
     } else {
       return jsonData.map(
         (value): Node => ({
