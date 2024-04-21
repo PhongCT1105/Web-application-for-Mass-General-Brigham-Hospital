@@ -2,8 +2,7 @@ import { z } from "zod";
 export const Flowers = z.object({
   id: z.number(),
   name: z.string(),
-  price: z.number(),
-  quantity: z.number(),
+  cost: z.number(),
 });
 
 export const FlowerForm = z.object({
@@ -11,6 +10,7 @@ export const FlowerForm = z.object({
   priority: z.string(),
   status: z.string(),
   flowers: z.array(Flowers),
+  total: z.number(),
   sender: z.string(),
   location: z.string(),
   recipient: z.string(),

@@ -1,4 +1,3 @@
-import { requestFormWID } from "@/routes/request-log/RequestLogPage.tsx";
 import {
   Table,
   TableBody,
@@ -22,8 +21,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontal } from "lucide-react";
+import { FlowerForm } from "@/interfaces/flowerReq.ts";
 interface props {
-  data: requestFormWID[];
+  data: FlowerForm[];
 }
 
 export const FlowerLogPage = ({ data }: props) => {
@@ -41,8 +41,8 @@ export const FlowerLogPage = ({ data }: props) => {
         <TableBody>
           {data.map((item) => {
             return (
-              <TableRow key={item.reqID}>
-                <TableCell className="font-medium">#{item.reqID}</TableCell>
+              <TableRow key={item.id}>
+                <TableCell className="font-medium">#{item.id}</TableCell>
                 <TableCell>{item.location}</TableCell>
                 <TableCell>${item.total}</TableCell>
                 <TableCell className="items-end w-[100px] text-right">
@@ -77,7 +77,7 @@ export const FlowerLogPage = ({ data }: props) => {
                                 </TableRow>
                               </TableHeader>
                               <TableBody>
-                                <TableRow key={item.reqID}>
+                                <TableRow key={item.id}>
                                   <TableCell
                                     className={"text-nowrap font-medium"}
                                   >
@@ -111,7 +111,7 @@ export const FlowerLogPage = ({ data }: props) => {
                                 </TableRow>
                               </TableHeader>
                               <TableBody>
-                                {item.cartItems.map((item) => (
+                                {item.flowers.map((item) => (
                                   <TableRow key={item.name}>
                                     <TableCell
                                       className={"text-nowrap font-medium"}

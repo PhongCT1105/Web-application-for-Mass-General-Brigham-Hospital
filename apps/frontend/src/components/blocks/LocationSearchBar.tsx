@@ -72,8 +72,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     onClear();
     console.log("startSearch === " + startPoint);
     console.log("endSearch === " + endPoint);
-    //setStartPoint(onChange.start);
-    //setEndPoint(onChange.end);
     onSearch(startPointID, endPointID);
   };
 

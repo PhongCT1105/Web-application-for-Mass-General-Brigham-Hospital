@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/tabs.tsx";
 
 import { Badge, FlowerIcon, PillIcon, Calendar, Biohazard } from "lucide-react";
-import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
+import { FlowerContent } from "@/routes/service-request/flower-request/flower-request-content.tsx";
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
 import { MedicineRequest } from "@/routes/service-request/medicine-request/medicineRequest.tsx";
