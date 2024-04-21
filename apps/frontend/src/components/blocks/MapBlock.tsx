@@ -83,6 +83,11 @@ interface changeMarker {
   setEndNodeID: React.Dispatch<React.SetStateAction<string>>;
 }
 
+export interface directionObject {
+  text: string;
+  icon: Element;
+}
+
 const SearchContext = createContext<changeMarker>({
   startNodeName: "",
   endNodeName: "",
