@@ -148,6 +148,7 @@ export const MapEditor: React.FC = () => {
         })),
       );
     }
+    console.log(nodes.length);
   }, [hospitalData.length, nodes]);
 
   const memoizedAddMarkers = useCallback(addMarkers, [addMarkers]);
