@@ -12,8 +12,13 @@ import { parse, ParseResult } from "papaparse";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Input } from "@/components/ui/input.tsx";
 import { DataTable } from "@/components/table/data-table.tsx";
-import { edgeColumns, nodeColumns } from "@/routes/CSVPage/csvColumns.tsx";
+import {
+  edgeColumns,
+  nodeColumns,
+  employeeColumns,
+} from "@/routes/CSVPage/csvColumns.tsx";
 import { employeeData } from "@/interfaces/dataTypes/employeeData.ts";
+import { Employee } from "@/interfaces/employeeInterface.ts";
 
 interface CSVData {
   [key: string]: string; // Assuming all values in CSV are strings, adjust as needed
@@ -53,6 +58,7 @@ const CSVTable: React.FC = () => {
   // const [paginationButtonCount] = useState<number>(5);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -98,6 +104,7 @@ const CSVTable: React.FC = () => {
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentNodes = nodes.slice(indexOfFirstRow, indexOfLastRow);
   const currentEdges = edges.slice(indexOfFirstRow, indexOfLastRow);
+  const currentEmployees = employees.slice(indexOfFirstRow, indexOfLastRow);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const paginate = (pageNumber: number) => {
@@ -111,8 +118,11 @@ const CSVTable: React.FC = () => {
           await axios.get("/api/csvFetch/node");
         const edgesRes: AxiosResponse<Edge[]> =
           await axios.get("/api/csvFetch/edge");
+        const employeesRes: AxiosResponse<Employee[]> =
+          await axios.get("/api/employeeData");
         setNodes(nodesRes.data);
         setEdges(edgesRes.data);
+        setEmployees(employeesRes.data);
       } catch (error) {
         const axiosError = error as AxiosError;
         console.error("Error fetching data:", axiosError.message);
@@ -377,6 +387,10 @@ const CSVTable: React.FC = () => {
                     {/*))}*/}
                   </TabsContent>
                   <TabsContent value="Employees">
+                    <DataTable
+                      columns={employeeColumns}
+                      data={currentEmployees}
+                    ></DataTable>
                     <Button onClick={uploadEmployees}>Upload Data</Button>
                   </TabsContent>
                 </Tabs>
