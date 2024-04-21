@@ -37,7 +37,6 @@ type rPriority = "low" | "medium" | "high" | "emergency" | "";
 interface securityRequest {
   ename: string;
   location: string;
-  employee: string;
   situation: string;
   call: boolean;
   status: rStatus;
@@ -50,7 +49,6 @@ export const SecurityForm = () => {
     ename: "",
     location: "",
     situation: "",
-    employee: "",
     call: false,
     status: "unassigned",
     priority: "low",
@@ -72,7 +70,6 @@ export const SecurityForm = () => {
       ename: "",
       location: "",
       situation: "",
-      employee: "",
       call: false,
       status: "unassigned",
       priority: "low",

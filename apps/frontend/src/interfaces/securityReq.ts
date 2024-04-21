@@ -3,7 +3,6 @@ export const _SecurityForm = z.object({
   reqID: z.number(),
   ename: z.string(),
   location: z.string(),
-  employee: z.string(),
   call: z.boolean(),
   priority: z.string(),
   status: z.string(),

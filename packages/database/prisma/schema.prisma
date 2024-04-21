@@ -87,7 +87,6 @@ model securityRequest {
   reqID     Int     @id @default(autoincrement())
   ename     String
   location  String
-  employee  String
   situation String
   call      Boolean
   status    String
