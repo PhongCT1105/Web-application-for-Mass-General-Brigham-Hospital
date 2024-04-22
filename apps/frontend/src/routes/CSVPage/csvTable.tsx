@@ -360,11 +360,9 @@ const CSVTable: React.FC = () => {
       // @ts-expect-error
       const nodes: Node[] = setData();
       return <DataTable columns={nodeColumns} data={nodes} />;
-    }
-    // } else if (type === "Employee") {
-    //     return <DataTable columns={employeeColumns} data={employees}/>;
-    // }
-    else {
+    } else if (type === "Employee") {
+      return <DataTable columns={employeeColumns} data={employees} />;
+    } else {
       return <h2>No valid input detected.</h2>;
     }
   };
@@ -410,9 +408,11 @@ const CSVTable: React.FC = () => {
                     </div>
                   </div>
                   <Separator className="my-4" />
+                  <h1>Uploaded Data:</h1> <br></br>
                   <div className={"mb-5"}>{getTable()}</div>
                   <Separator className="my-4" />
                   <TabsContent value="Nodes">
+                    <h1>Nodes Data:</h1> <br></br>
                     <DataTable
                       data={currentNodes}
                       columns={nodeColumns}
@@ -425,6 +425,7 @@ const CSVTable: React.FC = () => {
                     {/*))}*/}
                   </TabsContent>
                   <TabsContent value="Edges">
+                    <h1>Edge Data:</h1> <br></br>
                     <DataTable columns={edgeColumns} data={currentEdges} />
                     {}
                     {/*{currentEdges.map((edge) => (*/}
@@ -436,6 +437,7 @@ const CSVTable: React.FC = () => {
                     {/*))}*/}
                   </TabsContent>
                   <TabsContent value="Employees">
+                    <h1>Employee Data:</h1> <br></br>
                     <DataTable
                       columns={employeeColumns}
                       data={currentEmployees}
