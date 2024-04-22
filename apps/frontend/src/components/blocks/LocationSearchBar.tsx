@@ -20,29 +20,29 @@ import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 
 // import {Label} from "@/components/ui/label.tsx";
 
-interface changeMarker {
-  start: string;
-  end: string;
-  setStart: React.Dispatch<React.SetStateAction<string>>;
-  setEnd: React.Dispatch<React.SetStateAction<string>>;
-}
-
-interface locationData {
-  nodeID: string;
-  longName: string;
-}
+// interface changeMarker {
+//   start: string;
+//   end: string;
+//   setStart: React.Dispatch<React.SetStateAction<string>>;
+//   setEnd: React.Dispatch<React.SetStateAction<string>>;
+// }
+//
+// interface locationData {
+//   nodeID: string;
+//   longName: string;
+// }
 
 interface SearchBarProps {
-  locations: locationData[];
-  //hospitalData: HospitalData[];
-  onSearch: (start: string, end: string) => void;
+  locations: {
+    nodeID: string;
+    longName: string;
+  }[];
+  onSearch: (startID: string, endID: string) => void;
   onClear: () => void;
+  changePathfindingStrategy: (strat: string) => void;
   currentFloor: string;
   textDirections: direction[];
   children?: React.ReactNode; // Add this line
-  changePathfindingStrategy: (strat: string) => void;
-  //nodesOnFloor: HospitalData[];
-  onChange?: changeMarker;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -212,6 +212,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                   onClick={() => changePathfindingStrategy("DFS")}
                 >
                   DFS
+                </TabsTrigger>
+                <TabsTrigger
+                  value="dijkstra"
+                  onClick={() => changePathfindingStrategy("Dijkstra")}
+                >
+                  Dijkstra
                 </TabsTrigger>
               </TabsList>
               {/*<TabsContent value="account">Make changes to your account here.</TabsContent>*/}
