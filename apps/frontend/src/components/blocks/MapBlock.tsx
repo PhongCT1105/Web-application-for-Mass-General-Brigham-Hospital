@@ -995,21 +995,8 @@ export const MapBlock: React.FC = () => {
             //onChange={changeMarker}
             changePathfindingStrategy={changePathfindingStrategy}
             currentFloor={currentFloor}
+            textDirections={textDirections}
           />
-        </div>
-        <div
-          style={{ overflowY: "auto", maxWidth: "20vw", position: "relative" }}
-        >
-          {textDirections.map((direction, index) => (
-            <div key={index} style={{ display: "flex", alignItems: "center" }}>
-              <img
-                src={direction.icon}
-                alt="arrow-icon"
-                style={{ width: "24px", height: "24px", marginRight: "8px" }}
-              />
-              <span>{direction.text}</span>
-            </div>
-          ))}
         </div>
 
         <div
