@@ -3,6 +3,19 @@ import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
+// type rPriority = "low" | "medium" | "high" | "emergency";
+//
+// type rStatus = "unassigned" | "assigned" | "inprogress" | "closed";
+
+// interface RequestForm {
+//   ename: string;
+//   location: string;
+//   situation: string;
+//   call: boolean;
+//   status: rStatus;
+//   priority: rPriority;
+// }
+
 router.post("/", async (req: Request, res: Response) => {
   try {
     const requestForm = req.body;
@@ -12,6 +25,7 @@ router.post("/", async (req: Request, res: Response) => {
       data: {
         ename: requestForm.ename,
         location: requestForm.location,
+        employee: requestForm.employee,
         situation: requestForm.situation,
         call: requestForm.call,
         status: requestForm.status,
