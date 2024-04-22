@@ -20,27 +20,28 @@ import { useSearchContext } from "@/components/blocks/MapBlock.tsx";
 
 // import {Label} from "@/components/ui/label.tsx";
 
-interface changeMarker {
-  start: string;
-  end: string;
-  setStart: React.Dispatch<React.SetStateAction<string>>;
-  setEnd: React.Dispatch<React.SetStateAction<string>>;
-}
-
-interface locationData {
-  nodeID: string;
-  longName: string;
-}
+// interface changeMarker {
+//   start: string;
+//   end: string;
+//   setStart: React.Dispatch<React.SetStateAction<string>>;
+//   setEnd: React.Dispatch<React.SetStateAction<string>>;
+// }
+//
+// interface locationData {
+//   nodeID: string;
+//   longName: string;
+// }
 
 interface SearchBarProps {
-  locations: locationData[];
-  //hospitalData: HospitalData[];
-  onSearch: (start: string, end: string) => void;
+  locations: {
+    nodeID: string;
+    longName: string;
+  }[];
+  onSearch: (startID: string, endID: string) => void;
   onClear: () => void;
-  currentFloor: string;
   changePathfindingStrategy: (strat: string) => void;
-  //nodesOnFloor: HospitalData[];
-  onChange?: changeMarker;
+  currentFloor: string;
+  children?: React.ReactNode; // Add this line
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
