@@ -506,6 +506,61 @@ export const MapBlock: React.FC = () => {
     if (!layer) return;
     map.removeLayer(Layers[floor]);
     layer.addTo(map);
+
+    const searchPathOnThisFloor = searchPath.filter(
+      (node) => node.floor === searchPath[0].floor,
+    );
+
+    // Check if searchPath is defined and not empty
+    if (searchPathOnThisFloor && searchPathOnThisFloor.length > 0) {
+      let totalDistance = 0;
+
+      // Calculate total distance of the path
+      for (let i = 0; i < searchPathOnThisFloor.length - 1; i++) {
+        const node1 = searchPathOnThisFloor[i];
+        const node2 = searchPathOnThisFloor[i + 1];
+        totalDistance += Math.sqrt(
+          Math.pow(node2.xcoord - node1.xcoord, 2) +
+            Math.pow(node2.ycoord - node1.ycoord, 2),
+        );
+      }
+
+      const xSum =
+        searchPathOnThisFloor[0].xcoord +
+        searchPathOnThisFloor[searchPathOnThisFloor.length - 1].xcoord;
+      const ySum =
+        searchPathOnThisFloor[0].ycoord +
+        searchPathOnThisFloor[searchPathOnThisFloor.length - 1].ycoord;
+
+      const lng = ySum / 2;
+      const lat = xSum / 2;
+
+      const nLat = 3400 - lng;
+      const nLng = lat;
+
+      // Adjust zoom level based on path length
+      let zoomLevel = 0;
+      if (totalDistance < 500) {
+        zoomLevel = 0;
+      } else if (totalDistance >= 500 && totalDistance < 1000) {
+        zoomLevel = -1;
+      } else if (totalDistance >= 1000) {
+        zoomLevel = -2;
+      }
+
+      // why are you the way that you are?
+      // honestly every time I try to do something fun or exciting,  you make it not that way.
+      // I hate so much about the things you choose to be.
+      // const coords: [number, number] = [3400 - lng, lat];
+
+      // Set map view to center at calculated coordinates with adjusted zoom level
+      map.setView([nLat, nLng], zoomLevel);
+    } else {
+      // Handle the case when searchPath is empty or undefined
+      console.error("searchPath is empty or undefined");
+      // Set a default map view
+      map.setView([0, 0], -2);
+    }
   }
 
   return (
