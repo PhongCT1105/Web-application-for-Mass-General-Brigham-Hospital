@@ -130,7 +130,7 @@ const CSVTable: React.FC = () => {
     };
 
     fetchData(); // Fetch data when the component mounts
-  }, []); // Empty dependency array to fetch data only once
+  }, [employees, nodes, edges]); // Empty dependency array to fetch data only once
 
   const importCSV = async (file: File): Promise<CSVData[]> => {
     return new Promise<CSVData[]>((resolve, reject) => {
@@ -321,17 +321,17 @@ const CSVTable: React.FC = () => {
           endNode: value.endNode,
         }),
       );
-      // } else if (getType(columns) === "Employee") {
-      //     // let edges: Edge[] = [];
-      //     // jsonData.map((value) => value);
-      //     return jsonData.map(
-      //         (value): Employee => ({
-      //             id: value.id,
-      //             fName: value.fName,
-      //             lName: value.lName,
-      //         }),
-      //     );
-      // }
+    } else if (getType(columns) === "Employee") {
+      // let edges: Edge[] = [];
+      // jsonData.map((value) => value);
+      return jsonData.map(
+        (value): Employee => ({
+          id: parseInt(value.id),
+          fName: value.fName,
+          lName: value.lName,
+          title: value.title,
+        }),
+      );
     } else {
       return jsonData.map(
         (value): Node => ({
@@ -361,6 +361,9 @@ const CSVTable: React.FC = () => {
       const nodes: Node[] = setData();
       return <DataTable columns={nodeColumns} data={nodes} />;
     } else if (type === "Employee") {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const employees: Employee[] = setData();
       return <DataTable columns={employeeColumns} data={employees} />;
     } else {
       return <h2>No valid input detected.</h2>;
@@ -408,7 +411,7 @@ const CSVTable: React.FC = () => {
                     </div>
                   </div>
                   <Separator className="my-4" />
-                  <h1>Uploaded Data:</h1> <br></br>
+                  <h1>Imported File:</h1> <br></br>
                   <div className={"mb-5"}>{getTable()}</div>
                   <Separator className="my-4" />
                   <TabsContent value="Nodes">
