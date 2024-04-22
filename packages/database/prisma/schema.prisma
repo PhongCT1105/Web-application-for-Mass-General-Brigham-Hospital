@@ -134,3 +134,13 @@ model employee {
   lName String
   title String
 }
+
+model maintenanceRequest {
+  reqId       Int    @id @default(autoincrement())
+  name        String
+  severity    String
+  location    String
+  typeOfIssue String
+  status      String
+  description String
+}

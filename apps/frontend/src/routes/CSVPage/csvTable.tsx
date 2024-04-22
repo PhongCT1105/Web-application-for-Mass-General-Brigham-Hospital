@@ -12,8 +12,19 @@ import { parse, ParseResult } from "papaparse";
 import axios, { AxiosError, AxiosResponse } from "axios";
 import { Input } from "@/components/ui/input.tsx";
 import { DataTable } from "@/components/table/data-table.tsx";
-import { edgeColumns, nodeColumns } from "@/routes/CSVPage/csvColumns.tsx";
-import { employeeData } from "@/interfaces/dataTypes/employeeData.ts";
+import {
+  edgeColumns,
+  nodeColumns,
+  employeeColumns,
+} from "@/routes/CSVPage/csvColumns.tsx";
+import { Employee } from "@/interfaces/employeeInterface.ts";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 
 interface CSVData {
   [key: string]: string; // Assuming all values in CSV are strings, adjust as needed
@@ -53,6 +64,7 @@ const CSVTable: React.FC = () => {
   // const [paginationButtonCount] = useState<number>(5);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
+  const [employees, setEmployees] = useState<Employee[]>([]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -77,10 +89,35 @@ const CSVTable: React.FC = () => {
     return value.charAt(0).toUpperCase() + value.slice(1);
   };
 
-  const exportCSV = () => {
-    const csvContent = jsonData
-      .map((row) => Object.values(row).join(","))
-      .join("\n");
+  const exportCSV = (dataToExport: string) => {
+    let csvContent = "";
+    //dataToExport is set depending on which dropdown option is chosen from ExportCSV button
+    switch (dataToExport) {
+      case "Employees": {
+        csvContent = employees
+          .map((row) => Object.values(row).join(","))
+          .join("\n");
+        break;
+      }
+      case "Nodes": {
+        csvContent = nodes
+          .map((row) => Object.values(row).join(","))
+          .join("\n");
+        break;
+      }
+      case "Edges": {
+        csvContent = edges
+          .map((row) => Object.values(row).join(","))
+          .join("\n");
+        break;
+      }
+      default: {
+        csvContent = "";
+        console.log(
+          "csvTable.exportCSV() - Export content not properly assigned! Returning empty",
+        );
+      }
+    }
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     if (link.download !== undefined) {
@@ -98,6 +135,7 @@ const CSVTable: React.FC = () => {
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentNodes = nodes.slice(indexOfFirstRow, indexOfLastRow);
   const currentEdges = edges.slice(indexOfFirstRow, indexOfLastRow);
+  const currentEmployees = employees.slice(indexOfFirstRow, indexOfLastRow);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const paginate = (pageNumber: number) => {
@@ -111,8 +149,11 @@ const CSVTable: React.FC = () => {
           await axios.get("/api/csvFetch/node");
         const edgesRes: AxiosResponse<Edge[]> =
           await axios.get("/api/csvFetch/edge");
+        const employeesRes: AxiosResponse<Employee[]> =
+          await axios.get("/api/employeeData");
         setNodes(nodesRes.data);
         setEdges(edgesRes.data);
+        setEmployees(employeesRes.data);
       } catch (error) {
         const axiosError = error as AxiosError;
         console.error("Error fetching data:", axiosError.message);
@@ -120,7 +161,7 @@ const CSVTable: React.FC = () => {
     };
 
     fetchData(); // Fetch data when the component mounts
-  }, []); // Empty dependency array to fetch data only once
+  }, [employees, nodes, edges]); // Empty dependency array to fetch data only once
 
   const importCSV = async (file: File): Promise<CSVData[]> => {
     return new Promise<CSVData[]>((resolve, reject) => {
@@ -163,7 +204,7 @@ const CSVTable: React.FC = () => {
 
   //hi
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedFile) {
       console.error("No file selected.");
@@ -210,6 +251,7 @@ const CSVTable: React.FC = () => {
 
       if (res.status == 200) {
         console.log("success");
+        setJsonData(jsonData);
       }
     } else if (selectedFile.name.toLowerCase().includes("edge")) {
       const redefinedJsonData = jsonData as {
@@ -227,10 +269,6 @@ const CSVTable: React.FC = () => {
           endNode: redefinedJsonData[i].endNode,
         });
       }
-
-      //console.log(JSON.parse(JSON.stringify(parsedJsonData)));
-      console.log(parsedJsonData);
-
       const res = await axios.post(
         "/api/csvFetch/edge",
         //JSON.parse(JSON.stringify(parsedJsonData)),
@@ -245,7 +283,42 @@ const CSVTable: React.FC = () => {
         console.log("success");
         setJsonData(jsonData);
       }
+    } else if (selectedFile.name.toLowerCase().includes("employee")) {
+      const redefinedJsonData = jsonData as {
+        id: string;
+        fName: string;
+        lName: string;
+        title: string;
+      }[];
+
+      const parsedJsonData = [];
+
+      for (let i = 0; i < jsonData.length; i++) {
+        parsedJsonData.push({
+          id: redefinedJsonData[i].id,
+          fName: redefinedJsonData[i].fName,
+          lName: redefinedJsonData[i].lName,
+          title: redefinedJsonData[i].title,
+        });
+      }
+      const res = await axios.post(
+        "/api/employeeData",
+        //JSON.parse(JSON.stringify(parsedJsonData)),
+        parsedJsonData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      if (res.status == 200) {
+        console.log("success");
+        setJsonData(jsonData);
+      }
+
+      //console.log(JSON.parse(JSON.stringify(parsedJsonData)));
     }
+    //console.log(parsedJsonData);
   }
 
   const columns: TableColumn[] =
@@ -277,6 +350,17 @@ const CSVTable: React.FC = () => {
           endNode: value.endNode,
         }),
       );
+    } else if (getType(columns) === "Employee") {
+      // let edges: Edge[] = [];
+      // jsonData.map((value) => value);
+      return jsonData.map(
+        (value): Employee => ({
+          id: parseInt(value.id),
+          fName: value.fName,
+          lName: value.lName,
+          title: value.title,
+        }),
+      );
     } else {
       return jsonData.map(
         (value): Node => ({
@@ -305,24 +389,14 @@ const CSVTable: React.FC = () => {
       // @ts-expect-error
       const nodes: Node[] = setData();
       return <DataTable columns={nodeColumns} data={nodes} />;
+    } else if (type === "Employee") {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      const employees: Employee[] = setData();
+      return <DataTable columns={employeeColumns} data={employees} />;
     } else {
       return <h2>No valid input detected.</h2>;
     }
-  };
-
-  const uploadEmployees = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("UPLOAD EMPLOYEES");
-    console.log(JSON.stringify(employeeData));
-    const res = await axios.post("/api/employeeData", employeeData, {
-      headers: {
-        "content-type": "Application/json",
-      },
-    });
-    if (res.status == 200) {
-      console.log("success");
-    }
-    console.log(employeeData);
   };
 
   return (
@@ -343,7 +417,35 @@ const CSVTable: React.FC = () => {
                       <Input type="file" onChange={handleFileUpload} />
                     </div>
                     <div className="flex space-x-4">
-                      <Button onClick={exportCSV}>Export CSV</Button>
+                      {/*<Button onClick={exportCSV()}>Export CSV</Button>*/}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button>Export CSV</Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                          <DropdownMenuRadioItem
+                            key={1}
+                            value={"Nodes"}
+                            onClick={() => exportCSV("Nodes")}
+                          >
+                            {"Export Nodes"}
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem
+                            key={2}
+                            value={"Edges"}
+                            onClick={() => exportCSV("Edges")}
+                          >
+                            {"Export Edges"}
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem
+                            key={2}
+                            value={"Employees"}
+                            onClick={() => exportCSV("Employees")}
+                          >
+                            {"Export Employees"}
+                          </DropdownMenuRadioItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                       <form onSubmit={handleSubmit}>
                         <Button type="submit">Upload</Button>{" "}
                         {/* Added type="submit" */}
@@ -351,9 +453,11 @@ const CSVTable: React.FC = () => {
                     </div>
                   </div>
                   <Separator className="my-4" />
+                  <h1>Imported File:</h1> <br></br>
                   <div className={"mb-5"}>{getTable()}</div>
                   <Separator className="my-4" />
                   <TabsContent value="Nodes">
+                    <h1>Nodes Data:</h1> <br></br>
                     <DataTable
                       data={currentNodes}
                       columns={nodeColumns}
@@ -366,6 +470,7 @@ const CSVTable: React.FC = () => {
                     {/*))}*/}
                   </TabsContent>
                   <TabsContent value="Edges">
+                    <h1>Edge Data:</h1> <br></br>
                     <DataTable columns={edgeColumns} data={currentEdges} />
                     {}
                     {/*{currentEdges.map((edge) => (*/}
@@ -377,7 +482,11 @@ const CSVTable: React.FC = () => {
                     {/*))}*/}
                   </TabsContent>
                   <TabsContent value="Employees">
-                    <Button onClick={uploadEmployees}>Upload Data</Button>
+                    <h1>Employee Data:</h1> <br></br>
+                    <DataTable
+                      columns={employeeColumns}
+                      data={currentEmployees}
+                    ></DataTable>
                   </TabsContent>
                 </Tabs>
                 {/*<Separator className="my-4" />*/}
