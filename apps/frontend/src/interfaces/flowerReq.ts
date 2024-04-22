@@ -1,8 +1,9 @@
 import { z } from "zod";
 export const Flowers = z.object({
-  id: z.number(),
+  fID: z.number(),
   name: z.string(),
   cost: z.number(),
+  reqID: z.number(),
 });
 
 export const FlowerForm = z.object({

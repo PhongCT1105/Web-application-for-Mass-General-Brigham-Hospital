@@ -150,7 +150,10 @@ export const columnsFlowerFormLog: ColumnDef<FlowerForm>[] = [
                 Gift was requested by {row.original.sender}
               </DialogTitle>
             </DialogHeader>
-            <DataTable columns={flowerLogColumns} data={row.original.flowers} />
+            <DataTable
+              columns={flowerLogColumns}
+              data={!!row.original.flowers && row.original.flowers}
+            />
           </DialogContent>
         </Dialog>
       </div>
@@ -159,15 +162,15 @@ export const columnsFlowerFormLog: ColumnDef<FlowerForm>[] = [
 ];
 
 const flowerLogColumns: ColumnDef<Flowers>[] = [
-  {
-    accessorKey: "id",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="ID" />
-    ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
-    enableSorting: false,
-    enableHiding: false,
-  },
+  // {
+  //   accessorKey: "id",
+  //   header: ({ column }) => (
+  //     <DataTableColumnHeader column={column} title="ID" />
+  //   ),
+  //   cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+  //   enableSorting: false,
+  //   enableHiding: false,
+  // },
   {
     accessorKey: "name",
     header: ({ column }) => (

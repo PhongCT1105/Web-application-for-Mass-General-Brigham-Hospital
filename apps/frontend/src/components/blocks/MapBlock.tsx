@@ -266,27 +266,70 @@ export const MapBlock: React.FC = () => {
         map.setMaxBounds(bounds);
       }
 
-      const setStartEndLocation = (locationName: string) => {
-        const startLocation = hospitalData.find(
+      const setStartEndLocation = (
+        locationID: string,
+        locationName: string,
+      ) => {
+        const startLocation: HospitalData | undefined = hospitalData.find(
           (h) => h.nodeID === startNodeID,
         );
         const endLocation = hospitalData.find((h) => h.nodeID === endNodeID);
 
         if (!startLocation) {
-          setStartNodeID(locationName);
+          setStartNodeID(locationID);
+          setStartNodeName(locationName);
+          const x: number = startLocation!.xCoord;
+          const y: number = startLocation!.yCoord;
+          console.log(Layers[startLocation!.floor]);
+          addMarker(
+            [3400 - y, x],
+            GreenStar,
+            Layers[startLocation!.floor],
+            false,
+          );
         } else if (!endLocation) {
-          setEndNodeID(locationName);
+          setEndNodeID(locationID);
+          setEndNodeName(locationName);
         } else {
-          setStartNodeID(locationName);
+          setStartNodeID(locationID);
+          setStartNodeName(locationName);
           setEndNodeID("");
+          setEndNodeName("");
         }
+
+        // if (startLocation) {
+        //   const x: number = startLocation.xCoord;
+        //   const y: number = startLocation.yCoord;
+        //   console.log(Layers[startLocation.floor]);
+        //   addMarker(
+        //     [3400 - y, x],
+        //     GreenStar,
+        //     Layers[startLocation.floor],
+        //     false,
+        //   );
+        // } else if (endLocation) {
+        //   const x: number = endLocation.xCoord;
+        //   const y: number = endLocation.yCoord;
+        //   console.log(Layers[endLocation.floor]);
+        //   addMarker([3400 - y, x], RedStar, Layers[endLocation.floor], false);
+        // } else {
+        //   const x: number = startLocation!.xCoord;
+        //   const y: number = startLocation!.yCoord;
+        //   console.log(Layers[startLocation!.floor]);
+        //   addMarker(
+        //     [3400 - y, x],
+        //     GreenStar,
+        //     Layers[startLocation!.floor],
+        //     false,
+        //   );
+        // }
       };
 
       const addMarkersToLayerGroups = (hospitalData: HospitalData[]) => {
         hospitalData.forEach((node) => {
           const coords: [number, number] = [3400 - node.yCoord, node.xCoord];
           const marker = L.circleMarker(coords, {
-            radius: 3,
+            radius: 4,
             color: "#3B3B3B",
             fillColor: "#3B3B3B",
             fillOpacity: 0.8,
@@ -295,7 +338,7 @@ export const MapBlock: React.FC = () => {
           //marker.options.attribution = node.nodeID;
           // Event listener for clicking on markers
           marker.on("click", function () {
-            setStartEndLocation(node.nodeID);
+            setStartEndLocation(node.nodeID, node.name);
           });
         });
       };
@@ -321,6 +364,7 @@ export const MapBlock: React.FC = () => {
     hospitalData,
     isDataLoaded,
     startNodeID,
+    searchPath,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -347,7 +391,7 @@ export const MapBlock: React.FC = () => {
     });
   }
 
-  function placeStartEndMarkers() {
+  function placeStartEndMarkers(searchPath: Node[]) {
     const startCoord: LatLngExpression = [
       3400 - searchPath[0].ycoord,
       searchPath[0].xcoord,
@@ -397,7 +441,7 @@ export const MapBlock: React.FC = () => {
     }
   }
 
-  function placeFloorMarkers() {
+  function placeFloorMarkers(searchPath: Node[]) {
     for (let i = 0; i < searchPath.length - 1; i++) {
       const current = searchPath[i];
       const currentCoord: LatLngExpression = [
@@ -492,7 +536,7 @@ export const MapBlock: React.FC = () => {
     return Object.values(pathsByFloor);
   }
 
-  function addPathPolylines() {
+  function addPathPolylines(searchPath: Node[]) {
     for (let i = 0; i < searchPath.length - 1; i++) {
       const current = searchPath[i];
       const next = searchPath[i + 1];
@@ -512,8 +556,8 @@ export const MapBlock: React.FC = () => {
       Paths[key].addTo(Layers[key]);
     });
 
-    placeStartEndMarkers();
-    placeFloorMarkers();
+    placeStartEndMarkers(searchPath);
+    placeFloorMarkers(searchPath);
 
     console.log("done :D");
   }
@@ -574,12 +618,13 @@ export const MapBlock: React.FC = () => {
     setTextDirections([]);
   }
 
-  function handleSearch() {
+  function handleSearch(start: string, end: string) {
     const test = {
       strategy: pathfindingStrategy,
-      start: startNodeID,
-      end: endNodeID,
+      start: start,
+      end: end,
     };
+    console.log(test);
 
     const nodeArray: Node[] = [];
 
@@ -607,7 +652,9 @@ export const MapBlock: React.FC = () => {
 
     path().then(() => {
       setSearchPath(nodeArray);
-      addPathPolylines();
+      console.log(nodeArray);
+      console.log(searchPath);
+      addPathPolylines(nodeArray);
       createTextDirections(nodeArray, nodeArray[0].floor);
     });
   }
