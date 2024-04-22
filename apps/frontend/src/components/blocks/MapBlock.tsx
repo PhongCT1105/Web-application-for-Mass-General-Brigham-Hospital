@@ -27,7 +27,6 @@ import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
-
 declare module "leaflet" {
   interface Polyline {
     snakeIn: () => void;
