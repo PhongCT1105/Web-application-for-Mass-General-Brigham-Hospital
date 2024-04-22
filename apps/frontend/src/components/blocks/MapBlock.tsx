@@ -22,12 +22,16 @@ import L1 from "@/assets/FloorL1.png";
 import F1 from "@/assets/Floor1.png";
 import F2 from "@/assets/Floor2.png";
 import F3 from "@/assets/Floor3.png";
+import UpArrow from "@/assets/arrow-up-solid.svg";
+import LeftArrow from "@/assets/arrow-left-solid.svg";
+import RightArrow from "@/assets/arrow-right-solid.svg";
+import Hospital from "@/assets/hospital-solid.svg";
+import Circle from "@/assets/circle-regular.svg";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
-
 declare module "leaflet" {
   interface Polyline {
     snakeIn: () => void;
@@ -62,6 +66,11 @@ export interface Node {
   shortName: string;
 }
 
+export interface direction {
+  text: string;
+  icon: string;
+}
+
 interface changeMarker {
   startNodeName: string;
   endNodeName: string;
@@ -71,6 +80,11 @@ interface changeMarker {
   setEndNodeName: React.Dispatch<React.SetStateAction<string>>;
   setStartNodeID: React.Dispatch<React.SetStateAction<string>>;
   setEndNodeID: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface directionObject {
+  text: string;
+  icon: Element;
 }
 
 const SearchContext = createContext<changeMarker>({
@@ -116,7 +130,7 @@ export const MapBlock: React.FC = () => {
   const [endNodeName, setEndNodeName] = useState("");
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
-  const [textDirections, setTextDirections] = useState<string>("");
+  const [textDirections, setTextDirections] = useState<direction[]>([]);
 
   // setCurrentFloor("F1");
   const floorMaps: { [key: string]: string } = {
@@ -352,7 +366,11 @@ export const MapBlock: React.FC = () => {
   }
 
   function directionFromCurrentLine(nodeArray: Node[], index: number) {
-    if (index === 0) return "Continue Towards " + nodeArray[1].longName;
+    if (index === 0)
+      return {
+        text: "Continue Towards " + nodeArray[1].longName,
+        icon: UpArrow,
+      };
     else {
       const a = nodeArray[index - 1];
       const b = nodeArray[index];
@@ -365,11 +383,11 @@ export const MapBlock: React.FC = () => {
 
       const tolerance = 700;
       if (Math.abs(crossProduct) < tolerance) {
-        return "Continue Straight at " + b.longName;
+        return { text: "Continue Straight at " + b.longName, icon: UpArrow };
       } else if (crossProduct > 0) {
-        return "Turn Right at " + b.longName;
+        return { text: "Turn Right at " + b.longName, icon: RightArrow };
       } else {
-        return "Turn Left at " + b.longName;
+        return { text: "Turn Left at " + b.longName, icon: LeftArrow };
       }
     }
   }
@@ -384,7 +402,7 @@ export const MapBlock: React.FC = () => {
 
     const layerGroup = L.layerGroup();
     const paths: Node[][] = parsePath(nodeArray);
-    let directionsStr = "";
+    const directionsArray: direction[] = [];
 
     for (let i = 0; i < paths.length; i++) {
       if (paths[i].length > 1) {
@@ -400,15 +418,24 @@ export const MapBlock: React.FC = () => {
                   : i === 4
                     ? "Floor 3 Directions:"
                     : "";
+        const directionObject: direction = {
+          text: convertedFloorName,
+          icon: Hospital,
+        };
+        directionsArray.push(directionObject);
+        directionsArray.push({ text: "\n", icon: Circle });
 
-        directionsStr += convertedFloorName + "\n" + "\n";
         for (let j = 0; j < paths[i].length - 1; j++) {
-          directionsStr += directionFromCurrentLine(paths[i], j) + "\n";
+          const directionObject: direction = {
+            text: directionFromCurrentLine(paths[i], j).text,
+            icon: directionFromCurrentLine(paths[i], j).icon,
+          };
+          directionsArray.push(directionObject);
         }
-        directionsStr += "\n";
+        directionsArray.push({ text: "\n", icon: Circle });
       }
     }
-    setTextDirections(directionsStr);
+    setTextDirections(directionsArray);
 
     if (currentFloor === "L2" && paths[0].length > 1) {
       for (let i = 0; i < paths[0].length - 1; i++) {
@@ -627,7 +654,7 @@ export const MapBlock: React.FC = () => {
       }
     });
     clearStartEndMarkers();
-    setTextDirections("");
+    setTextDirections([]);
   }
 
   function handleSearch(startID: string, endID: string) {
@@ -967,14 +994,10 @@ export const MapBlock: React.FC = () => {
             //onChange={changeMarker}
             changePathfindingStrategy={changePathfindingStrategy}
             currentFloor={currentFloor}
+            textDirections={textDirections}
           />
         </div>
-        <textarea
-          value={textDirections}
-          readOnly
-          rows={10} // Adjust rows as needed
-          cols={42} // Adjust cols as needed
-        />
+
         <div
           id="map-container"
           style={{
