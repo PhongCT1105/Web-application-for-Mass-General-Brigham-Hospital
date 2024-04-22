@@ -29,12 +29,16 @@ import L1 from "@/assets/FloorL1.png";
 import F1 from "@/assets/Floor1.png";
 import F2 from "@/assets/Floor2.png";
 import F3 from "@/assets/Floor3.png";
+import UpArrow from "@/assets/arrow-up-solid.svg";
+import LeftArrow from "@/assets/arrow-left-solid.svg";
+import RightArrow from "@/assets/arrow-right-solid.svg";
+import Hospital from "@/assets/hospital-solid.svg";
+import Circle from "@/assets/circle-regular.svg";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
-
 declare module "leaflet" {
   interface Polyline {
     snakeIn: () => void;
@@ -70,6 +74,11 @@ export interface Node {
   shortName: string;
 }
 
+export interface direction {
+  text: string;
+  icon: string;
+}
+
 interface changeMarker {
   startNodeName: string;
   endNodeName: string;
@@ -79,6 +88,11 @@ interface changeMarker {
   setEndNodeName: React.Dispatch<React.SetStateAction<string>>;
   setStartNodeID: React.Dispatch<React.SetStateAction<string>>;
   setEndNodeID: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export interface directionObject {
+  text: string;
+  icon: Element;
 }
 
 const SearchContext = createContext<changeMarker>({
@@ -114,6 +128,7 @@ export const MapBlock: React.FC = () => {
   const [endNodeName, setEndNodeName] = useState("");
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
+  const [textDirections, setTextDirections] = useState<direction[]>([]);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -354,6 +369,30 @@ export const MapBlock: React.FC = () => {
       false,
     );
   }
+  
+  function directionFromCurrentLine(nodeArray: Node[], index: number) {
+    if (index === 0)
+      return {
+        text: "Continue Towards " + nodeArray[1].longName,
+        icon: UpArrow,
+      };
+    else {
+      const a = nodeArray[index - 1];
+      const b = nodeArray[index];
+      const c = nodeArray[index + 1];
+
+      const crossProduct =
+        (b.xcoord - a.xcoord) * (c.ycoord - a.ycoord) -
+        (b.ycoord - a.ycoord) * (c.xcoord - a.xcoord);
+      console.log(crossProduct);
+
+      const tolerance = 700;
+      if (Math.abs(crossProduct) < tolerance) {
+        return { text: "Continue Straight at " + b.longName, icon: UpArrow };
+      } else if (crossProduct > 0) {
+        return { text: "Turn Right at " + b.longName, icon: RightArrow };
+      } else {
+        return { text: "Turn Left at " + b.longName, icon: LeftArrow };
 
   function placeFloorMarkers() {
     for (let i = 0; i < searchPath.length - 1; i++) {
@@ -381,6 +420,101 @@ export const MapBlock: React.FC = () => {
     }
     changeFloor(searchPath[0].floor);
   }
+
+  function drawFullPath(nodeArray: Node[], currentFloor: string) {
+    clearLines();
+    setCurrentFloor(currentFloor);
+    console.log("A path should be created now");
+
+    const map = mapRef.current;
+    if (!map) return;
+
+    const layerGroup = L.layerGroup();
+    const paths: Node[][] = parsePath(nodeArray);
+    const directionsArray: direction[] = [];
+
+    for (let i = 0; i < paths.length; i++) {
+      if (paths[i].length > 1) {
+        const convertedFloorName =
+          i === 0
+            ? "Lower Level 2 Directions:"
+            : i === 1
+              ? "Lower Level 1 Directions:"
+              : i === 2
+                ? "Floor 1 Directions:"
+                : i === 3
+                  ? "Floor 2 Directions:"
+                  : i === 4
+                    ? "Floor 3 Directions:"
+                    : "";
+        const directionObject: direction = {
+          text: convertedFloorName,
+          icon: Hospital,
+        };
+        directionsArray.push(directionObject);
+        directionsArray.push({ text: "\n", icon: Circle });
+
+        for (let j = 0; j < paths[i].length - 1; j++) {
+          const directionObject: direction = {
+            text: directionFromCurrentLine(paths[i], j).text,
+            icon: directionFromCurrentLine(paths[i], j).icon,
+          };
+          directionsArray.push(directionObject);
+        }
+        directionsArray.push({ text: "\n", icon: Circle });
+      }
+    }
+    setTextDirections(directionsArray);
+
+    if (currentFloor === "L2" && paths[0].length > 1) {
+      for (let i = 0; i < paths[0].length - 1; i++) {
+        const start = paths[0][i].nodeType;
+        const end = paths[0][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
+          if (newPath) newPath.addTo(layerGroup);
+        }
+      }
+      layerGroup.addTo(map).snakeIn();
+      placeStartEndMarkers(paths[0]);
+    }
+
+    if (currentFloor === "L1" && paths[1].length > 1) {
+      for (let i = 0; i < paths[1].length - 1; i++) {
+        const start = paths[1][i].nodeType;
+        const end = paths[1][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
+
+          if (newPath) newPath.addTo(layerGroup);
+        }
+      }
+      layerGroup.addTo(map).snakeIn();
+      placeStartEndMarkers(paths[1]);
+    }
+
+    if (currentFloor === "1" && paths[2].length > 1) {
+      for (let i = 0; i < paths[2].length - 1; i++) {
+        const start = paths[2][i].nodeType;
+        const end = paths[2][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
+
+          if (newPath) newPath.addTo(layerGroup);
+        }
+      }
+      layerGroup.addTo(map).snakeIn();
+      placeStartEndMarkers(paths[2]);
+    }
+
+    if (currentFloor === "2" && paths[3].length > 1) {
+      for (let i = 0; i < paths[3].length - 1; i++) {
+        const start = paths[3][i].nodeType;
+        const end = paths[3][i + 1].nodeType;
+        if (checkNodeTypes(start, end)) {
+          const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
+
+          if (newPath) newPath.addTo(layerGroup);
 
   function addPathPolylines() {
     for (let i = 0; i < searchPath.length - 1; i++) {
@@ -461,6 +595,8 @@ export const MapBlock: React.FC = () => {
       SpecialMarkers[key].clearLayers();
       Paths[key].clearLayers();
     });
+    clearStartEndMarkers();
+    setTextDirections([]);
   }
 
   function handleSearch() {
@@ -601,6 +737,7 @@ export const MapBlock: React.FC = () => {
             //onChange={changeMarker}
             changePathfindingStrategy={changePathfindingStrategy}
             currentFloor={currentFloor}
+            textDirections={textDirections}
           />
         </div>
         <div
