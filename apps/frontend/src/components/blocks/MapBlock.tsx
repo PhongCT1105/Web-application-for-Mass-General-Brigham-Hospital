@@ -1004,7 +1004,7 @@ export const MapBlock: React.FC = () => {
             flex: 2.5,
             backgroundColor: "gray-300",
             position: "relative",
-            zIndex: 0,
+            zIndex: -1,
           }}
         >
           <div
