@@ -62,7 +62,7 @@ export const RequestLogPage = () => {
 
         const cleanedData: FlowerForm[] = rawData.map((item: FlowerForm) => ({
           reqID: item.reqID,
-          flowers: item.flowers,
+          cartItems: item.cartItems,
           sender: item.sender,
           recipient: item.recipient,
           location: item.location,
