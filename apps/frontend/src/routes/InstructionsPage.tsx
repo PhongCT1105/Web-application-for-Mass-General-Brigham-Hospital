@@ -34,6 +34,21 @@ const InstructionsPage = () => {
             </p>
           </AccordionContent>
         </AccordionItem>
+        <AccordionItem value={"editor"}>
+          <AccordionTrigger>Map Editor Page</AccordionTrigger>
+          <AccordionContent>
+            <p>
+              The map editing pages are located under the "Map Editor" tab at
+              the top of the screen.
+            </p>
+
+            <p>
+              You can either edit the map graphically on the map view, or via
+              changing the nodes directly on the table view. Both options allow
+              you to change the map information.
+            </p>
+          </AccordionContent>
+        </AccordionItem>
         <AccordionItem value={"service"}>
           <AccordionTrigger>Service Requests Page</AccordionTrigger>
           <AccordionContent>
@@ -54,18 +69,30 @@ const InstructionsPage = () => {
             </p>
           </AccordionContent>
         </AccordionItem>
-        <AccordionItem value={"editor"}>
-          <AccordionTrigger>Map Editor Page</AccordionTrigger>
+        <AccordionItem value={"csv"}>
+          <AccordionTrigger>CSV Table Page</AccordionTrigger>
           <AccordionContent>
             <p>
-              The map editing pages are located under the "Map Editor" tab at
-              the top of the screen.
+              The CSV Tables for the nodes, edges, and employees are stored
+              here. They are simply here for display, there is no editing on
+              this page.
             </p>
-
+          </AccordionContent>
+        </AccordionItem>
+        <AccordionItem value={"search"}>
+          <AccordionTrigger>Search, styles, and Login</AccordionTrigger>
+          <AccordionContent>
             <p>
-              You can either edit the map graphically on the map view, or via
-              changing the nodes directly on the table view. Both options allow
-              you to change the map information.
+              You can search for any page you want to access in the top right
+              with the search bar.
+            </p>
+            <p>
+              There is a toggle to switch between light and dark modes, and to
+              use the system setting for that.
+            </p>
+            <p>
+              There is a log in button in the top right (or log out if you are
+              logged in) to access the employee-only side of the application.
             </p>
           </AccordionContent>
         </AccordionItem>
