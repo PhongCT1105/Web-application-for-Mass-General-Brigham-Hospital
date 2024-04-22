@@ -28,7 +28,7 @@ export const columnsMedicationFormLog: ColumnDef<MedicationForm>[] = [
   {
     accessorKey: "employee",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Employee Name" />
+      <DataTableColumnHeader column={column} title="Employee" />
     ),
     cell: ({ row }) => {
       return (
