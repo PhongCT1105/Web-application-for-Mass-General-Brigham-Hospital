@@ -1,5 +1,10 @@
 import L from "leaflet";
 
+///// FIXME: Use path._rings instead of path._latlngs???
+///// FIXME: Panic if this._map doesn't exist when called.
+///// FIXME: Implement snakeOut()
+///// FIXME: Implement layerGroup.snakeIn() / Out()
+
 L.Polyline.include({
   // Hi-res timestamp indicating when the last calculations for vertices and
   // distance took place.
@@ -17,6 +22,7 @@ L.Polyline.include({
   // Flag
   _snaking: false,
 
+  /// TODO: accept a 'map' parameter, fall back to addTo() in case
   /// performance.now is not available.
   snakeIn: function () {
     if (this._snaking) {
@@ -123,21 +129,14 @@ L.Polyline.include({
   },
 
   _snakeEnd: function () {
-    this.setLatLngs(this._snakeLatLngs); // Reset to original coordinates
+    this.setLatLngs(this._snakeLatLngs);
     this._snaking = false;
     this.fire("snakeend");
-
-    // Repeat the animation by calling snakeIn again
-    if (this.options.snakeRepeat) {
-      setTimeout(this.snakeIn.bind(this), this.options.snakeRepeatDelay);
-    }
   },
 });
 
 L.Polyline.mergeOptions({
   snakingSpeed: 200, // In pixels/sec
-  snakeRepeat: true, // Whether to repeat the animation
-  snakeRepeatDelay: 1000, // Delay before repeating the animation (in milliseconds)
 });
 
 L.LayerGroup.include({

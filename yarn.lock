@@ -9313,6 +9313,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"leaflet-moving-marker@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "leaflet-moving-marker@npm:0.3.0"
+  peerDependencies:
+    leaflet: 1.0.2
+  checksum: 1d7eab6d0a16c0c6a39429776bab96a168f82f8c61cf597a4c7496c240bd947891194a061fe4bc1c41ca5bd92554252319f535bc5ecafa93b9bf905c9670997d
+  languageName: node
+  linkType: hard
+
+"leaflet.animatedmarker@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "leaflet.animatedmarker@npm:1.0.0"
+  checksum: 67557377aaaa090dfb365025e105ee50a49032b37eea112a74e5542957b15054c962893657642d96897112fb4c4e5c4961ae59a8ea011a8f7d68b72944daf806
+  languageName: node
+  linkType: hard
+
 "leaflet.markercluster@npm:^1.4.1, leaflet.markercluster@npm:^1.5.3":
   version: 1.5.3
   resolution: "leaflet.markercluster@npm:1.5.3"
@@ -12840,6 +12856,8 @@ __metadata:
     install: "npm:^0.13.0"
     leaflet: "npm:^1.9.4"
     leaflet-ant-path: "npm:^1.3.0"
+    leaflet-moving-marker: "npm:^0.3.0"
+    leaflet.animatedmarker: "npm:^1.0.0"
     leaflet.markercluster: "npm:^1.5.3"
     npm: "npm:^10.5.0"
     pathfinding: "npm:^0.4.18"
