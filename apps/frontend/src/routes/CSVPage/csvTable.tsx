@@ -17,15 +17,8 @@ import {
   nodeColumns,
   employeeColumns,
 } from "@/routes/CSVPage/csvColumns.tsx";
-//import { employeeData } from "@/interfaces/dataTypes/employeeData.ts";
 import { Employee } from "@/interfaces/employeeInterface.ts";
-// import {
-//     DropdownMenu,
-//     DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
-//     DropdownMenuLabel, DropdownMenuRadioItem,
-//     DropdownMenuSeparator,
-//     DropdownMenuTrigger
-// } from "@/components/ui/dropdown-menu.tsx";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -409,21 +402,6 @@ const CSVTable: React.FC = () => {
     }
   };
 
-  // const uploadEmployees = async (e: React.FormEvent) => {
-  //   e.preventDefault();
-  //   console.log("UPLOAD EMPLOYEES");
-  //   console.log(JSON.stringify(employeeData));
-  //   const res = await axios.post("/api/employeeData", employeeData, {
-  //     headers: {
-  //       "content-type": "Application/json",
-  //     },
-  //   });
-  //   if (res.status == 200) {
-  //     console.log("success");
-  //   }
-  //   console.log(employeeData);
-  // };
-
   return (
     <div className={"scrollbar "}>
       <div className="hidden md:block p-5">
@@ -512,7 +490,6 @@ const CSVTable: React.FC = () => {
                       columns={employeeColumns}
                       data={currentEmployees}
                     ></DataTable>
-                    {/*<Button onClick={uploadEmployees}>Upload Data</Button>*/}
                   </TabsContent>
                 </Tabs>
                 {/*<Separator className="my-4" />*/}
