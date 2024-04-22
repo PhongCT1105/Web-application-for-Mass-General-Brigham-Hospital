@@ -1,8 +1,12 @@
 import { Graph } from "./Graph.ts";
 import { Node } from "./Node.ts";
-import { PathfindingTemplate } from "./PathfindingTemplate.ts";
+import { PathfindingStrategy } from "./PathfindingStrategy.ts";
 
-export class aStar extends PathfindingTemplate {
+export class aStar implements PathfindingStrategy {
+  findPath(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+    return this.run(graph, startNodeID, endNodeID);
+  }
+
   // run will perform all the logic of the A* implementation
   run(graph: Graph, startNodeID: string, endNodeID: string) {
     // translating nodes
@@ -55,5 +59,28 @@ export class aStar extends PathfindingTemplate {
     }
 
     return this.reconstructPath(cameFrom, endNodeID, graph);
+  }
+
+  calcDist(currNode: Node, goalNode: Node): number {
+    return Math.hypot(
+      goalNode.xcoord - currNode.xcoord,
+      goalNode.ycoord - currNode.ycoord,
+    );
+  }
+
+  // reconstructPath will take in relevant parameters and return an array of Nodes
+  reconstructPath(
+    cameFrom: Map<string, string>,
+    endNodeID: string,
+    graph: Graph,
+  ): Node[] {
+    const path: Node[] = []; // returning an array of Nodes
+    let node: Node | null = graph.nodes.get(endNodeID)!;
+
+    while (node != null) {
+      path.unshift(node);
+      node = graph.nodes.get(cameFrom.get(node.nodeID)!)!;
+    }
+    return path;
   }
 }

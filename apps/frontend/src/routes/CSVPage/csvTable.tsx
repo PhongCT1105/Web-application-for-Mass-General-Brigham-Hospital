@@ -64,7 +64,6 @@ const CSVTable: React.FC = () => {
   // const [paginationButtonCount] = useState<number>(5);
   const [nodes, setNodes] = useState<Node[]>([]);
   const [edges, setEdges] = useState<Edge[]>([]);
-  const [employees, setEmployees] = useState<Employee[]>([]);
 
   const handleFileUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -135,7 +134,6 @@ const CSVTable: React.FC = () => {
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
   const currentNodes = nodes.slice(indexOfFirstRow, indexOfLastRow);
   const currentEdges = edges.slice(indexOfFirstRow, indexOfLastRow);
-  const currentEmployees = employees.slice(indexOfFirstRow, indexOfLastRow);
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const paginate = (pageNumber: number) => {
@@ -149,11 +147,8 @@ const CSVTable: React.FC = () => {
           await axios.get("/api/csvFetch/node");
         const edgesRes: AxiosResponse<Edge[]> =
           await axios.get("/api/csvFetch/edge");
-        const employeesRes: AxiosResponse<Employee[]> =
-          await axios.get("/api/employeeData");
         setNodes(nodesRes.data);
         setEdges(edgesRes.data);
-        setEmployees(employeesRes.data);
       } catch (error) {
         const axiosError = error as AxiosError;
         console.error("Error fetching data:", axiosError.message);
@@ -335,9 +330,6 @@ const CSVTable: React.FC = () => {
     }
     if (columns.length === 8) {
       return "Node";
-    }
-    if (columns.length === 4) {
-      return "Employee";
     }
     return "";
   };

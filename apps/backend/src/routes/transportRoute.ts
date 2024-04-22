@@ -13,8 +13,7 @@ router.post("/", async (req: Request, res: Response) => {
   try {
     await PrismaClient.internalTransportRequest.create({
       data: {
-        employeeName: requestForm.employeeName,
-        patientName: requestForm.patientName,
+        name: requestForm.name,
         locationFrom: requestForm.locationFrom,
         locationTo: requestForm.locationTo,
         reason: requestForm.reason,

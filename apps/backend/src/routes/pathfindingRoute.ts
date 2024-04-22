@@ -7,8 +7,6 @@ import express, { Router } from "express";
 import { aStar } from "../util/aStar.ts";
 import { BFS } from "../util/BFS.ts";
 import { DFS } from "../util/DFS.ts";
-import { Dijkstra } from "../util/Dijkstra.ts";
-import { PathingContext } from "../util/PathfindingTemplate.ts";
 
 const router: Router = express.Router();
 
@@ -16,7 +14,7 @@ router.post("/", async (req, res) => {
   //const { strategy, start, end } = req.body;
   const data: { strategy: string; start: string; end: string } = req.body;
   let searchStrategy;
-  const pathFindingContext: PathingContext = new PathingContext(new aStar());
+
   console.log(data);
 
   // Choose the strategy based on the provided parameter
@@ -25,16 +23,10 @@ router.post("/", async (req, res) => {
       searchStrategy = new BFS();
       break;
     case "AStar":
-      // Set the AStar strategy using the setter method
-      pathFindingContext.pathFindingStrategy = new aStar();
       searchStrategy = new aStar();
       break;
     case "DFS":
       searchStrategy = new DFS();
-      break;
-    case "Dijkstra":
-      pathFindingContext.pathFindingStrategy = new Dijkstra();
-      searchStrategy = new Dijkstra();
       break;
     default:
       return res.status(400).json({ error: "Invalid search strategy" });
