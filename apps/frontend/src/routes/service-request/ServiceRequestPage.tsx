@@ -14,6 +14,7 @@ import { Badge, FlowerIcon, PillIcon, Calendar, Biohazard } from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
+import { Maintenance } from "@/routes/service-request/MaintenanceRequestPage.tsx";
 import { MedicineRequest } from "@/routes/service-request/medicine-request/medicineRequest.tsx";
 import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
 import { Medication } from "@/interfaces/medicationReq.ts";
@@ -76,6 +77,10 @@ export default function ServiceRequestPage() {
                           <TabsTrigger value="Security Request">
                             <Badge className="mr-2 h-4 w-4" />
                             Security Request
+                          </TabsTrigger>
+                          <TabsTrigger value="Maintenance Request">
+                            <Badge className="mr-2 h-4 w-4" />
+                            Maintenance Request
                           </TabsTrigger>
                         </TabsList>
                       </div>
@@ -152,6 +157,25 @@ export default function ServiceRequestPage() {
                         </div>
                         <Separator className="my-4" />
                         <SecurityForm />
+                      </TabsContent>
+                      <TabsContent
+                        value={"Maintenance Request"}
+                        className={
+                          " w-full flex-col border-none p-0 data-[state=active]:flex"
+                        }
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              Maintenance Request
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                              Request Security services and optionally call 911.
+                            </p>
+                          </div>
+                        </div>
+                        <Separator className="my-4" />
+                        <Maintenance />
                       </TabsContent>
                     </Tabs>
                   </div>
