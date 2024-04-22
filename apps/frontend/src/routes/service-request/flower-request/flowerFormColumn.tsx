@@ -9,18 +9,19 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
-import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 import { FlowerForm, Flowers } from "@/interfaces/flowerReq";
+import { format } from "date-fns";
+import React from "react";
+import { DataTable } from "@/components/table/data-table.tsx";
 export const columnsFlowerFormLog: ColumnDef<FlowerForm>[] = [
   {
-    accessorKey: "id",
+    accessorKey: "reqID",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-normal">#{row.getValue("id")}</div>
+      <div className="w-[80px] font-normal">{row.getValue("reqID")}</div>
     ),
-    enableSorting: false,
     enableHiding: false,
   },
   {
@@ -68,7 +69,7 @@ export const columnsFlowerFormLog: ColumnDef<FlowerForm>[] = [
         <div className="flex space-x-2">
           {/*{label && <Badge variant="outline">{label.label}</Badge>}*/}
           <span className="max-w-[200px] truncate font-medium">
-            {row.getValue("dateSubmitted")}
+            {format(row.getValue("dateSubmitted"), "MMMM do, yyyy")}
           </span>
         </div>
       );
@@ -111,6 +112,22 @@ export const columnsFlowerFormLog: ColumnDef<FlowerForm>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "status",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Status" />
+    ),
+    cell: ({ row }) => {
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[100px] truncate font-medium">
+            {row.getValue("status")}
+          </span>
+        </div>
+      );
+    },
+    enableHiding: false,
+  },
+  {
     id: "actions",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Details" />
@@ -130,13 +147,10 @@ export const columnsFlowerFormLog: ColumnDef<FlowerForm>[] = [
           <DialogContent className={"lg:max-w-screen-lg  max-h-screen"}>
             <DialogHeader>
               <DialogTitle className={"pb-3"}>
-                Medication administrated by {row.original.sender}
+                Gift was requested by {row.original.sender}
               </DialogTitle>
             </DialogHeader>
-            <MedicineFormLogTable
-              columns={flowerLogColumns}
-              data={row.original.flowers}
-            />
+            <DataTable columns={flowerLogColumns} data={row.original.flowers} />
           </DialogContent>
         </Dialog>
       </div>

@@ -6,7 +6,7 @@ export const Flowers = z.object({
 });
 
 export const FlowerForm = z.object({
-  id: z.number(),
+  reqID: z.number(),
   priority: z.string(),
   status: z.string(),
   flowers: z.array(Flowers),

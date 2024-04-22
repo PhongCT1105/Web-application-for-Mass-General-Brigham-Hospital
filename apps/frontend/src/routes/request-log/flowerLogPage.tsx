@@ -41,8 +41,8 @@ export const FlowerLogPage = ({ data }: props) => {
         <TableBody>
           {data.map((item) => {
             return (
-              <TableRow key={item.id}>
-                <TableCell className="font-medium">#{item.id}</TableCell>
+              <TableRow key={item.reqID}>
+                <TableCell className="font-medium">#{item.reqID}</TableCell>
                 <TableCell>{item.location}</TableCell>
                 <TableCell>${item.total}</TableCell>
                 <TableCell className="items-end w-[100px] text-right">
@@ -77,7 +77,7 @@ export const FlowerLogPage = ({ data }: props) => {
                                 </TableRow>
                               </TableHeader>
                               <TableBody>
-                                <TableRow key={item.id}>
+                                <TableRow key={item.reqID}>
                                   <TableCell
                                     className={"text-nowrap font-medium"}
                                   >

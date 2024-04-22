@@ -1,12 +1,24 @@
 import express, { Router, Request, Response } from "express";
 // import { Flower, flowerRequest } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-import {
-  FlowerForm,
-  Flowers,
-} from "../../../frontend/src/interfaces/flowerReq.ts";
-
 const router: Router = express.Router();
+
+interface cartItem {
+  name: string;
+  cost: number;
+}
+
+interface RequestForm {
+  cartItems: cartItem[];
+  sender: string;
+  recipient: string;
+  location: string;
+  message?: string;
+  total: number;
+  priority: string;
+  status: string;
+  dateSubmitted: Date;
+}
 
 router.post("/", async (req: Request, res: Response) => {
   try {
@@ -16,9 +28,8 @@ router.post("/", async (req: Request, res: Response) => {
     console.log("JSON String:", jsonString);
 
     // Parse the JSON string back into an object
-    const requestForm: FlowerForm = JSON.parse(jsonString);
-    console.log(requestForm);
-    const flowers: Flowers[] = requestForm.flowers;
+    const requestForm: RequestForm = JSON.parse(jsonString);
+    const flowers: cartItem[] = requestForm.cartItems;
     const cartItemCreateData = flowers.map((flower) => ({
       name: flower.name,
       cost: flower.cost,
@@ -38,6 +49,7 @@ router.post("/", async (req: Request, res: Response) => {
         total: requestForm.total,
         priority: requestForm.priority,
         status: requestForm.status,
+        dateSubmitted: requestForm.dateSubmitted,
       },
     });
     console.info("Successfully requested flowers");

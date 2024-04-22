@@ -58,17 +58,18 @@ model Flower {
 }
 
 model flowerRequest {
-  reqID     Int      @id @default(autoincrement())
+  reqID         Int      @id @default(autoincrement())
   // reqUser User     @relation("reqUser", fields: [userID], references: [userID], onDelete: Cascade)
   // userID  Int
-  cartItems Flower[] //@relation("Flowers")
-  location  String
-  message   String?
-  recipient String
-  sender    String
-  total     Float
-  priority  String
-  status    String
+  cartItems     Flower[] //@relation("Flowers")
+  location      String
+  message       String?
+  recipient     String
+  sender        String
+  total         Float
+  priority      String
+  status        String
+  dateSubmitted DateTime
 }
 
 model sanitationRequest {

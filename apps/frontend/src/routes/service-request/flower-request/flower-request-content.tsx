@@ -65,6 +65,7 @@ export interface requestForm {
   total: number;
   priority: string;
   status: string;
+  dateSubmitted: Date;
 }
 
 export const FlowerContent = () => {
@@ -76,8 +77,9 @@ export const FlowerContent = () => {
     recipient: "",
     location: "",
     total: totalCost,
-    priority: "",
-    status: "",
+    priority: "Low",
+    status: "Unassigned",
+    dateSubmitted: new Date(),
   });
 
   const handleForm = (
@@ -224,17 +226,17 @@ export const FlowerContent = () => {
                             value={form.priority}
                             onChange={handleForm}
                           >
-                            <option id="emergency" value="emergency">
-                              Emergency
-                            </option>
-                            <option id="high" value="high">
-                              High
+                            <option id="low" value="low">
+                              Low
                             </option>
                             <option id="medium" value="medium">
                               Medium
                             </option>
-                            <option id="low" value="low">
-                              Low
+                            <option id="high" value="high">
+                              High
+                            </option>
+                            <option id="emergency" value="emergency">
+                              Emergency
                             </option>
                           </select>
                           <Label htmlFor="Priority" className="text-right">

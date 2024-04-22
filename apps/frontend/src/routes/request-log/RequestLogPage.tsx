@@ -59,17 +59,19 @@ export const RequestLogPage = () => {
       try {
         const res = await axios.get("/api/flowerReq");
         const rawData = res.data;
-         
+
         const cleanedData: FlowerForm[] = rawData.map((item: FlowerForm) => ({
-          reqID: item.id,
+          reqID: item.reqID,
           cartItems: item.flowers,
           sender: item.sender,
           recipient: item.recipient,
           location: item.location,
           message: item.message,
           total: item.total,
+          dateSubmitted: item.dateSubmitted,
+          priority: item.priority,
+          status: item.status,
         }));
-         
         setFlowerLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
