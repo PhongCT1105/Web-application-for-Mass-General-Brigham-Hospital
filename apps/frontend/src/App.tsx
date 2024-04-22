@@ -19,6 +19,7 @@ import ProtectedPage from "@/routes/ProtectedPage.tsx";
 import { Header } from "@/components/blocks/header.tsx";
 import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
 import InsightRoute from "@/routes/InsightRoute.tsx";
+import InstructionsPage from "./routes/InstructionsPage.tsx";
 // import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 
 function App() {
@@ -79,6 +80,11 @@ function App() {
           path: "/map-editor/table",
           errorElement: <h1>ERROR</h1>,
           element: <MapEditorTablePage />,
+        },
+        {
+          path: "/instructions",
+          errorElement: <h1>ERROR</h1>,
+          element: <InstructionsPage />,
         },
       ],
     },
