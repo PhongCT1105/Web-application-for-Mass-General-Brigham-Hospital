@@ -281,7 +281,7 @@ export function Header() {
               </div>
               {results.length > 0 && (
                 <ul
-                  className="absolute z-10 mt-1 w-auto bg-secondary border border-gray-200 rounded-lg shadow-lg"
+                  className="absolute z-[1000] mt-1 w-auto bg-secondary border border-gray-200 rounded-lg shadow-lg"
                   ref={dropdownRef}
                 >
                   {results.slice(0, 5).map(

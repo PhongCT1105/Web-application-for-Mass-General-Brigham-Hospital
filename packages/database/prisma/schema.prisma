@@ -87,6 +87,7 @@ model securityRequest {
   reqID     Int     @id @default(autoincrement())
   ename     String
   location  String
+  employee  String
   situation String
   call      Boolean
   status    String
@@ -95,8 +96,7 @@ model securityRequest {
 
 model internalTransportRequest {
   reqID        Int      @id @default(autoincrement())
-  employeeName String
-  patientName  String
+  name         String
   priority     String
   locationFrom String
   locationTo   String
@@ -132,4 +132,14 @@ model employee {
   fName String
   lName String
   title String
+}
+
+model maintenanceRequest {
+  reqId       Int    @id @default(autoincrement())
+  name        String
+  severity    String
+  location    String
+  typeOfIssue String
+  status      String
+  description String
 }

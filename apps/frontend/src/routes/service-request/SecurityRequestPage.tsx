@@ -6,7 +6,7 @@ import {
   // CardDescription,
   CardFooter,
 } from "@/components/ui/card.tsx";
-//import { Input } from "@/components/ui/input.tsx";
+import { Input } from "@/components/ui/input.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
@@ -37,6 +37,7 @@ type rPriority = "low" | "medium" | "high" | "emergency" | "";
 interface securityRequest {
   ename: string;
   location: string;
+  employee: string;
   situation: string;
   call: boolean;
   status: rStatus;
@@ -49,6 +50,7 @@ export const SecurityForm = () => {
     ename: "",
     location: "",
     situation: "",
+    employee: "",
     call: false,
     status: "unassigned",
     priority: "low",
@@ -69,6 +71,7 @@ export const SecurityForm = () => {
     setSecurityRequest({
       ename: "",
       location: "",
+      employee: "",
       situation: "",
       call: false,
       status: "unassigned",
@@ -139,7 +142,8 @@ export const SecurityForm = () => {
     return (
       securityRequest.ename === "" ||
       securityRequest.location === "" ||
-      securityRequest.situation === ""
+      securityRequest.situation === "" ||
+      securityRequest.employee === ""
     );
   };
 
@@ -154,7 +158,7 @@ export const SecurityForm = () => {
   const handleEmployee = (selectedEmployee: string) => {
     setSecurityRequest((prevState) => ({
       ...prevState,
-      ename: selectedEmployee,
+      employee: selectedEmployee,
     }));
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
@@ -222,7 +226,8 @@ export const SecurityForm = () => {
     if (
       securityRequest.ename === "" ||
       securityRequest.location === "" ||
-      securityRequest.situation === ""
+      securityRequest.situation === "" ||
+      securityRequest.employee === ""
     ) {
       toast({
         title: "Error",
@@ -252,28 +257,15 @@ export const SecurityForm = () => {
         <CardContent className={"grid gap-4"}>
           <div className={"space-y-1"}>
             {/* Name Input */}
-            <div className="w-1/5">
-              <h1 className="text-2xl font-bold my-2">Employee Name</h1>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline">
-                    {securityRequest.ename
-                      ? securityRequest.ename
-                      : "Select Employee"}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                  {employees.map((employee, index) => (
-                    <DropdownMenuRadioItem
-                      key={index}
-                      value={employee}
-                      onClick={() => handleEmployee(employee)}
-                    >
-                      {employee}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
+            <div className="w-1/4">
+              <h1 className="text-2xl font-bold my-2 mt-6">Name</h1>
+              <Input
+                type="text"
+                id="ename"
+                placeholder="Enter Your Name Here"
+                onChange={handleText}
+                value={securityRequest.ename}
+              />
             </div>
             {/* Data input */}
             <div className="flex">
@@ -345,6 +337,31 @@ export const SecurityForm = () => {
                         onClick={() => handleLocation(location)}
                       >
                         {location}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+
+              {/* Employee Input */}
+              <div className="w-1/5">
+                <h1 className="text-2xl font-bold my-2">Employee</h1>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                      {securityRequest.employee
+                        ? securityRequest.employee
+                        : "Select Employee"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                    {employees.map((employee, index) => (
+                      <DropdownMenuRadioItem
+                        key={index}
+                        value={employee}
+                        onClick={() => handleEmployee(employee)}
+                      >
+                        {employee}
                       </DropdownMenuRadioItem>
                     ))}
                   </DropdownMenuContent>

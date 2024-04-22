@@ -48,42 +48,19 @@ router.post("/node", async (req, res) => {
   const data = req.body;
   const jsonString = JSON.stringify(data);
   const nodeData: nodeTable[] = JSON.parse(jsonString);
-
   try {
-    // Retrieve all existing node IDs from the database
-    const existingNodes = await prisma.nodes.findMany();
-    const existingNodeIDs = existingNodes.map((node) => node.nodeID);
-
-    // Extract node IDs from the updated data
-    const updatedNodeIDs = nodeData.map((node) => node.nodeID);
-
-    // Find node IDs that need to be deleted
-    const nodesToDelete = existingNodeIDs.filter(
-      (nodeID) => !updatedNodeIDs.includes(nodeID),
-    );
-
-    // Delete nodes not present in the updated data
-    if (nodesToDelete.length > 0) {
-      await prisma.nodes.deleteMany({
-        where: {
-          nodeID: {
-            in: nodesToDelete,
-          },
-        },
-      });
-    }
-
     // Don't delete edges here
     // await prisma.nodes.deleteMany();
-    // const filteredNodeData = nodeData.filter((node) => node.nodeID !== null);
 
     // Iterate over nodeData and create or update nodes
     for (let i = 0; i < nodeData.length; i++) {
       const node = nodeData[i];
-      // Check if node exists in the database
-      const existingNode = existingNodes.find(
-        (existingNode) => existingNode.nodeID === node.nodeID,
-      );
+      // Find existing node by nodeID
+      const existingNode = await prisma.nodes.findUnique({
+        where: {
+          nodeID: node.nodeID,
+        },
+      });
 
       if (existingNode) {
         // If node exists, update it
@@ -134,57 +111,6 @@ router.post("/edge", async (req, res) => {
     res.status(200).send("CSV data imported successfully.");
   } catch (error) {
     console.error("Error processing CSV file:", error);
-    res.status(400).send("Bad request");
-  }
-});
-
-router.post("/edge/add", async (req, res) => {
-  const edgeData = req.body;
-
-  try {
-    // Ensure that edgeData contains startNodeID and endNodeID
-    if (!edgeData.startNodeID || !edgeData.endNodeID) {
-      throw new Error("startNodeID and endNodeID are required.");
-    }
-
-    // Find the corresponding nodes based on their nodeIDs
-    const startNode = await prisma.nodes.findUnique({
-      where: {
-        nodeID: edgeData.startNodeID,
-      },
-    });
-
-    const endNode = await prisma.nodes.findUnique({
-      where: {
-        nodeID: edgeData.endNodeID,
-      },
-    });
-
-    // Check if startNode and endNode are not null
-    if (!startNode || !endNode) {
-      throw new Error("Start node or end node not found.");
-    }
-
-    // Create the new edge
-    await prisma.edges.create({
-      data: {
-        edgeID: edgeData.edgeID,
-        startNodeID: {
-          connect: {
-            nodeID: startNode.nodeID,
-          },
-        },
-        endNodeID: {
-          connect: {
-            nodeID: endNode.nodeID,
-          },
-        },
-      },
-    });
-
-    res.status(200).send("Edge added successfully.");
-  } catch (error) {
-    console.error("Error processing edge addition:", error);
     res.status(400).send("Bad request");
   }
 });

@@ -25,31 +25,15 @@ export const TransportRequestColumns: ColumnDef<ScheduleForm>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "employeeName",
+    accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Employee Name" />
+      <DataTableColumnHeader column={column} title="Name" />
     ),
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
           <span className="max-w-[100px] truncate font-medium">
-            {row.getValue("employeeName")}
-          </span>
-        </div>
-      );
-    },
-    enableHiding: false,
-  },
-  {
-    accessorKey: "patientName",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Patient Name" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[100px] truncate font-medium">
-            {row.getValue("patientName")}
+            {row.getValue("name")}
           </span>
         </div>
       );
@@ -171,12 +155,8 @@ export const TransportRequestColumns: ColumnDef<ScheduleForm>[] = [
             </DialogHeader>
             <div className="space-y-6 mt-6">
               <div>
-                <h1 className="text-2xl font-bold">Employee Name:</h1>
-                <h2>{row.original.employeeName}</h2>
-              </div>
-              <div>
                 <h1 className="text-2xl font-bold">Patient Name:</h1>
-                <h2>{row.original.patientName}</h2>
+                <h2>{row.original.name}</h2>
               </div>
               <div className="flex">
                 <div className="w-1/4">
