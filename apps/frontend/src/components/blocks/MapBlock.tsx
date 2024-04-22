@@ -369,7 +369,7 @@ export const MapBlock: React.FC = () => {
       false,
     );
   }
-  
+
   function directionFromCurrentLine(nodeArray: Node[], index: number) {
     if (index === 0)
       return {
@@ -393,6 +393,9 @@ export const MapBlock: React.FC = () => {
         return { text: "Turn Right at " + b.longName, icon: RightArrow };
       } else {
         return { text: "Turn Left at " + b.longName, icon: LeftArrow };
+      }
+    }
+  }
 
   function placeFloorMarkers() {
     for (let i = 0; i < searchPath.length - 1; i++) {
@@ -421,15 +424,11 @@ export const MapBlock: React.FC = () => {
     changeFloor(searchPath[0].floor);
   }
 
-  function drawFullPath(nodeArray: Node[], currentFloor: string) {
-    clearLines();
+  function createTextDirections(nodeArray: Node[], currentFloor: string) {
+    handleClear();
     setCurrentFloor(currentFloor);
-    console.log("A path should be created now");
+    console.log("Text directions should be created now");
 
-    const map = mapRef.current;
-    if (!map) return;
-
-    const layerGroup = L.layerGroup();
     const paths: Node[][] = parsePath(nodeArray);
     const directionsArray: direction[] = [];
 
@@ -465,56 +464,34 @@ export const MapBlock: React.FC = () => {
       }
     }
     setTextDirections(directionsArray);
+  }
 
-    if (currentFloor === "L2" && paths[0].length > 1) {
-      for (let i = 0; i < paths[0].length - 1; i++) {
-        const start = paths[0][i].nodeType;
-        const end = paths[0][i + 1].nodeType;
-        if (checkNodeTypes(start, end)) {
-          const newPath = drawPath(paths[0][i].nodeID, paths[0][i + 1].nodeID);
-          if (newPath) newPath.addTo(layerGroup);
-        }
-      }
-      layerGroup.addTo(map).snakeIn();
-      placeStartEndMarkers(paths[0]);
+  function parsePath(nodes: Node[]): Node[][] {
+    const pathsByFloor: { [key: string]: Node[] } = {};
+
+    for (let i = 0; i < 5; i++) {
+      pathsByFloor[i] = [];
     }
+    nodes.forEach((node) => {
+      const floorToIndex =
+        node.floor === "L2"
+          ? "0"
+          : node.floor === "L1"
+            ? "1"
+            : node.floor === "1"
+              ? "2"
+              : node.floor === "2"
+                ? "3"
+                : node.floor === "3"
+                  ? "4"
+                  : "";
 
-    if (currentFloor === "L1" && paths[1].length > 1) {
-      for (let i = 0; i < paths[1].length - 1; i++) {
-        const start = paths[1][i].nodeType;
-        const end = paths[1][i + 1].nodeType;
-        if (checkNodeTypes(start, end)) {
-          const newPath = drawPath(paths[1][i].nodeID, paths[1][i + 1].nodeID);
+      pathsByFloor[floorToIndex].push(node);
+    });
 
-          if (newPath) newPath.addTo(layerGroup);
-        }
-      }
-      layerGroup.addTo(map).snakeIn();
-      placeStartEndMarkers(paths[1]);
-    }
-
-    if (currentFloor === "1" && paths[2].length > 1) {
-      for (let i = 0; i < paths[2].length - 1; i++) {
-        const start = paths[2][i].nodeType;
-        const end = paths[2][i + 1].nodeType;
-        if (checkNodeTypes(start, end)) {
-          const newPath = drawPath(paths[2][i].nodeID, paths[2][i + 1].nodeID);
-
-          if (newPath) newPath.addTo(layerGroup);
-        }
-      }
-      layerGroup.addTo(map).snakeIn();
-      placeStartEndMarkers(paths[2]);
-    }
-
-    if (currentFloor === "2" && paths[3].length > 1) {
-      for (let i = 0; i < paths[3].length - 1; i++) {
-        const start = paths[3][i].nodeType;
-        const end = paths[3][i + 1].nodeType;
-        if (checkNodeTypes(start, end)) {
-          const newPath = drawPath(paths[3][i].nodeID, paths[3][i + 1].nodeID);
-
-          if (newPath) newPath.addTo(layerGroup);
+    console.log(pathsByFloor);
+    return Object.values(pathsByFloor);
+  }
 
   function addPathPolylines() {
     for (let i = 0; i < searchPath.length - 1; i++) {
@@ -595,7 +572,6 @@ export const MapBlock: React.FC = () => {
       SpecialMarkers[key].clearLayers();
       Paths[key].clearLayers();
     });
-    clearStartEndMarkers();
     setTextDirections([]);
   }
 
@@ -629,9 +605,11 @@ export const MapBlock: React.FC = () => {
         });
       }
     }
+
     path().then(() => {
       setSearchPath(nodeArray);
       addPathPolylines();
+      createTextDirections(nodeArray, nodeArray[0].floor);
     });
   }
 
