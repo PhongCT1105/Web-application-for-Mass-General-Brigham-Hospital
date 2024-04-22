@@ -17,7 +17,7 @@ import {
   nodeColumns,
   employeeColumns,
 } from "@/routes/CSVPage/csvColumns.tsx";
-import { employeeData } from "@/interfaces/dataTypes/employeeData.ts";
+//import { employeeData } from "@/interfaces/dataTypes/employeeData.ts";
 import { Employee } from "@/interfaces/employeeInterface.ts";
 
 interface CSVData {
@@ -173,7 +173,7 @@ const CSVTable: React.FC = () => {
 
   //hi
 
-  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (!selectedFile) {
       console.error("No file selected.");
@@ -237,10 +237,6 @@ const CSVTable: React.FC = () => {
           endNode: redefinedJsonData[i].endNode,
         });
       }
-
-      //console.log(JSON.parse(JSON.stringify(parsedJsonData)));
-      console.log(parsedJsonData);
-
       const res = await axios.post(
         "/api/csvFetch/edge",
         //JSON.parse(JSON.stringify(parsedJsonData)),
@@ -255,7 +251,42 @@ const CSVTable: React.FC = () => {
         console.log("success");
         setJsonData(jsonData);
       }
+    } else if (selectedFile.name.toLowerCase().includes("employee")) {
+      const redefinedJsonData = jsonData as {
+        id: string;
+        fName: string;
+        lName: string;
+        title: string;
+      }[];
+
+      const parsedJsonData = [];
+
+      for (let i = 0; i < jsonData.length; i++) {
+        parsedJsonData.push({
+          id: redefinedJsonData[i].id,
+          fName: redefinedJsonData[i].fName,
+          lName: redefinedJsonData[i].lName,
+          title: redefinedJsonData[i].title,
+        });
+      }
+      const res = await axios.post(
+        "/api/employeeData",
+        //JSON.parse(JSON.stringify(parsedJsonData)),
+        parsedJsonData,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        },
+      );
+      if (res.status == 200) {
+        console.log("success");
+        setJsonData(jsonData);
+      }
+
+      //console.log(JSON.parse(JSON.stringify(parsedJsonData)));
     }
+    //console.log(parsedJsonData);
   }
 
   const columns: TableColumn[] =
@@ -329,25 +360,29 @@ const CSVTable: React.FC = () => {
       // @ts-expect-error
       const nodes: Node[] = setData();
       return <DataTable columns={nodeColumns} data={nodes} />;
-    } else {
+    }
+    // } else if (type === "Employee") {
+    //     return <DataTable columns={employeeColumns} data={employees}/>;
+    // }
+    else {
       return <h2>No valid input detected.</h2>;
     }
   };
 
-  const uploadEmployees = async (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log("UPLOAD EMPLOYEES");
-    console.log(JSON.stringify(employeeData));
-    const res = await axios.post("/api/employeeData", employeeData, {
-      headers: {
-        "content-type": "Application/json",
-      },
-    });
-    if (res.status == 200) {
-      console.log("success");
-    }
-    console.log(employeeData);
-  };
+  // const uploadEmployees = async (e: React.FormEvent) => {
+  //   e.preventDefault();
+  //   console.log("UPLOAD EMPLOYEES");
+  //   console.log(JSON.stringify(employeeData));
+  //   const res = await axios.post("/api/employeeData", employeeData, {
+  //     headers: {
+  //       "content-type": "Application/json",
+  //     },
+  //   });
+  //   if (res.status == 200) {
+  //     console.log("success");
+  //   }
+  //   console.log(employeeData);
+  // };
 
   return (
     <div className={"scrollbar "}>
@@ -405,7 +440,7 @@ const CSVTable: React.FC = () => {
                       columns={employeeColumns}
                       data={currentEmployees}
                     ></DataTable>
-                    <Button onClick={uploadEmployees}>Upload Data</Button>
+                    {/*<Button onClick={uploadEmployees}>Upload Data</Button>*/}
                   </TabsContent>
                 </Tabs>
                 {/*<Separator className="my-4" />*/}
