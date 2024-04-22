@@ -25,12 +25,10 @@ import {
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
 type rTypeOfIssue =
-  | "Spill"
-  | "Leak"
-  | "BodilyFluid"
-  | "FoulOdor"
-  | "Garbage"
   | "BrokenEquipment"
+  | "PowerIssue"
+  | "PlumbingIssue"
+  | "ElevatorIssue"
   | "Other"
   | "";
 
@@ -160,12 +158,10 @@ export function Maintenance() {
 
   const handleIssueChange = (
     typeOfIssue:
-      | "Spill"
-      | "Leak"
-      | "BodilyFluid"
-      | "FoulOdor"
-      | "Garbage"
       | "BrokenEquipment"
+      | "PowerIssue"
+      | "PlumbingIssue"
+      | "ElevatorIssue"
       | "Other"
       | "",
   ) => {
@@ -355,67 +351,45 @@ export function Maintenance() {
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
                           id="typeOfIssue"
-                          onClick={() => handleIssueChange("Spill")}
-                          value="Spill"
-                          checked={selectedTypeOfIssue === "Spill"}
-                        />
-                        <Label htmlFor="Spill" className=" ">
-                          Spill
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          id="typeOfIssue"
-                          onClick={() => handleIssueChange("Leak")}
-                          value="Leak"
-                          checked={selectedTypeOfIssue === "Leak"}
-                        />
-                        <Label htmlFor="Leak" className=" ">
-                          Leak
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          id="typeOfIssue"
-                          onClick={() => handleIssueChange("BodilyFluid")}
-                          value="BodilyFluid"
-                          checked={selectedTypeOfIssue === "BodilyFluid"}
-                        />
-                        <Label htmlFor="BodilyFluid" className=" ">
-                          Bodily Fluid
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          id="typeOfIssue"
-                          onClick={() => handleIssueChange("FoulOdor")}
-                          value="FoulOdor"
-                          checked={selectedTypeOfIssue === "FoulOdor"}
-                        />
-                        <Label htmlFor="FoulOdor" className=" ">
-                          Foul Odor
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          id="typeOfIssue"
-                          onClick={() => handleIssueChange("Garbage")}
-                          value="Garbage"
-                          checked={selectedTypeOfIssue === "Garbage"}
-                        />
-                        <Label htmlFor="Garbage" className=" ">
-                          Garbage Accumulation
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          id="typeOfIssue"
                           onClick={() => handleIssueChange("BrokenEquipment")}
                           value="BrokenEquipment"
                           checked={selectedTypeOfIssue === "BrokenEquipment"}
                         />
                         <Label htmlFor="BrokenEquipment" className=" ">
                           Broken Equipment
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="typeOfIssue"
+                          onClick={() => handleIssueChange("PowerIssue")}
+                          value="PowerIssue"
+                          checked={selectedTypeOfIssue === "PowerIssue"}
+                        />
+                        <Label htmlFor="PowerIssue" className=" ">
+                          Power Issue
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="typeOfIssue"
+                          onClick={() => handleIssueChange("PlumbingIssue")}
+                          value="PlumbingIssue"
+                          checked={selectedTypeOfIssue === "PlumbingIssue"}
+                        />
+                        <Label htmlFor="PlumbingIssue" className=" ">
+                          Plumbing Issue
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="typeOfIssue"
+                          onClick={() => handleIssueChange("ElevatorIssue")}
+                          value="ElevatorIssue"
+                          checked={selectedTypeOfIssue === "ElevatorIssue"}
+                        />
+                        <Label htmlFor="ElevatorIssue" className=" ">
+                          Elevator Issue
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">
@@ -566,7 +540,9 @@ export function Maintenance() {
           </Card>
         </div>
       </div>
-      <h2 className="mt-8 text-small ml-4">June Whittall and Alex Shettler</h2>
+      <h2 className="mt-8 text-small ml-4">
+        June Whittall and Alex Shettler (Team Awesome)
+      </h2>
     </>
   );
 }

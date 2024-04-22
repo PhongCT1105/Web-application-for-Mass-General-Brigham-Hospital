@@ -336,6 +336,9 @@ const CSVTable: React.FC = () => {
     if (columns.length === 8) {
       return "Node";
     }
+    if (columns.length === 4) {
+      return "Employee";
+    }
     return "";
   };
 

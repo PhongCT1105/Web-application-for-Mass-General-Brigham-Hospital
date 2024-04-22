@@ -26,11 +26,9 @@ type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
 type rTypeOfIssue =
   | "Spill"
-  | "Leak"
   | "BodilyFluid"
   | "FoulOdor"
   | "Garbage"
-  | "BrokenEquipment"
   | "Other"
   | "";
 
@@ -143,11 +141,9 @@ export function Sanitation() {
   const handleIssueChange = (
     typeOfIssue:
       | "Spill"
-      | "Leak"
       | "BodilyFluid"
       | "FoulOdor"
       | "Garbage"
-      | "BrokenEquipment"
       | "Other"
       | "",
   ) => {
@@ -320,17 +316,6 @@ export function Sanitation() {
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
                           id="typeOfIssue"
-                          onClick={() => handleIssueChange("Leak")}
-                          value="Leak"
-                          checked={selectedTypeOfIssue === "Leak"}
-                        />
-                        <Label htmlFor="Leak" className=" ">
-                          Leak
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          id="typeOfIssue"
                           onClick={() => handleIssueChange("BodilyFluid")}
                           value="BodilyFluid"
                           checked={selectedTypeOfIssue === "BodilyFluid"}
@@ -359,17 +344,6 @@ export function Sanitation() {
                         />
                         <Label htmlFor="Garbage" className=" ">
                           Garbage Accumulation
-                        </Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          id="typeOfIssue"
-                          onClick={() => handleIssueChange("BrokenEquipment")}
-                          value="BrokenEquipment"
-                          checked={selectedTypeOfIssue === "BrokenEquipment"}
-                        />
-                        <Label htmlFor="BrokenEquipment" className=" ">
-                          Broken Equipment
                         </Label>
                       </div>
                       <div className="flex items-center space-x-2">

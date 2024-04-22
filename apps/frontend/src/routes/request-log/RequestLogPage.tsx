@@ -10,10 +10,18 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
-import { Badge, Biohazard, Calendar, FlowerIcon, PillIcon } from "lucide-react";
+import {
+  Badge,
+  Biohazard,
+  Calendar,
+  FlowerIcon,
+  PillIcon,
+  Hammer,
+} from "lucide-react";
 import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 import { SecurityFormLogTable } from "@/routes/request-log/securityLogPage.tsx";
+import { MaintenanceForm } from "@/interfaces/maintenanceReq.ts";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
 import { columnsSecurityFormLog } from "@/routes/service-request/securityColumns.tsx";
 import { SecurityForm } from "@/interfaces/securityReq.ts";
@@ -22,6 +30,7 @@ import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 import { TransportRequestColumns } from "@/routes/service-request/transportResquest/transportTable.tsx";
 import { DataTable } from "@/components/table/data-table.tsx";
+import { columnsMaintenanceLog } from "@/routes/service-request/MaintenanceColumns.tsx";
 export interface requestFormWID {
   reqID: number;
   cartItems: cartItem[];
@@ -77,6 +86,7 @@ export const RequestLogPage = () => {
   const [securityLog, setSecurityLog] = useState<SecurityForm[]>([]);
   const [tranportLog, setTransportLog] = useState<ScheduleForm[]>([]);
   const [sanitationLog, setSanitationLog] = useState<SanitationForm[]>([]);
+  const [maintenanceLog, setMaintenanceLog] = useState<MaintenanceForm[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -220,6 +230,31 @@ export const RequestLogPage = () => {
     fetchData().then(() => console.log(tranportLog));
   }, [tranportLog]);
 
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/maintenanceReq");
+        const rawData = res.data;
+        const cleanedData: MaintenanceForm[] = rawData.map(
+          (item: MaintenanceForm) => ({
+            reqId: item.reqId,
+            name: item.name,
+            location: item.location,
+            typeOfIssue: item.typeOfIssue,
+            severity: item.severity,
+            status: item.status,
+            description: item.description,
+          }),
+        );
+        setMaintenanceLog(cleanedData);
+        console.log("successfully got data from get request");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData().then(() => console.log(maintenanceLog));
+  }, [maintenanceLog]);
+
   return (
     <div className={" scrollbar-hide"}>
       <div className="hidden md:block">
@@ -255,6 +290,10 @@ export const RequestLogPage = () => {
                           <TabsTrigger value="Security Request">
                             <Badge className="mr-2 h-4 w-4" />
                             Security Request
+                          </TabsTrigger>
+                          <TabsTrigger value="Maintenance Request">
+                            <Hammer className="mr-2 h-4 w-4" />
+                            Maintenance Request
                           </TabsTrigger>
                         </TabsList>
                       </div>
@@ -349,6 +388,28 @@ export const RequestLogPage = () => {
                         <SecurityFormLogTable
                           columns={columnsSecurityFormLog}
                           data={securityLog}
+                        />
+                      </TabsContent>
+                      <TabsContent
+                        value={"Maintenance Request"}
+                        className={
+                          " w-full flex-col border-none p-0 data-[state=active]:flex"
+                        }
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              Maintenance Request
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                              Get maintenance services for an Issue.
+                            </p>
+                          </div>
+                        </div>
+                        <Separator className="my-4" />
+                        <DataTable
+                          columns={columnsMaintenanceLog}
+                          data={maintenanceLog}
                         />
                       </TabsContent>
                     </Tabs>
