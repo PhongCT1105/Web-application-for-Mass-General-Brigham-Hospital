@@ -126,6 +126,7 @@ export const MapEditor: React.FC = () => {
 
       // Create an array to store edges
       const edges: Edge[] = [];
+      const paths: globalThis.Map<string, L.Polyline> = new globalThis.Map();
 
       sortedNodes.forEach((node, index) => {
         const [lat, lng] = node.geocode.split(",").map(parseFloat);
@@ -153,6 +154,16 @@ export const MapEditor: React.FC = () => {
                   : item,
               ),
             );
+
+            setHospitalData((prevData) => [...prevData]);
+
+            // Update the path to follow the marker
+            const path = paths.get(`${node.nodeID}_${node.nodeID}`);
+            if (path) {
+              const latLngs = path.getLatLngs();
+              latLngs[1] = position;
+              path.setLatLngs(latLngs);
+            }
           });
 
           // Add a click event handler to toggle popup visibility
