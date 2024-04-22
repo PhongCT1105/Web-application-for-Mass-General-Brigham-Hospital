@@ -19,6 +19,19 @@ import {
 } from "@/routes/CSVPage/csvColumns.tsx";
 //import { employeeData } from "@/interfaces/dataTypes/employeeData.ts";
 import { Employee } from "@/interfaces/employeeInterface.ts";
+// import {
+//     DropdownMenu,
+//     DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
+//     DropdownMenuLabel, DropdownMenuRadioItem,
+//     DropdownMenuSeparator,
+//     DropdownMenuTrigger
+// } from "@/components/ui/dropdown-menu.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 
 interface CSVData {
   [key: string]: string; // Assuming all values in CSV are strings, adjust as needed
@@ -83,10 +96,35 @@ const CSVTable: React.FC = () => {
     return value.charAt(0).toUpperCase() + value.slice(1);
   };
 
-  const exportCSV = () => {
-    const csvContent = jsonData
-      .map((row) => Object.values(row).join(","))
-      .join("\n");
+  const exportCSV = (dataToExport: string) => {
+    let csvContent = "";
+    //dataToExport is set depending on which dropdown option is chosen from ExportCSV button
+    switch (dataToExport) {
+      case "Employees": {
+        csvContent = employees
+          .map((row) => Object.values(row).join(","))
+          .join("\n");
+        break;
+      }
+      case "Nodes": {
+        csvContent = nodes
+          .map((row) => Object.values(row).join(","))
+          .join("\n");
+        break;
+      }
+      case "Edges": {
+        csvContent = edges
+          .map((row) => Object.values(row).join(","))
+          .join("\n");
+        break;
+      }
+      default: {
+        csvContent = "";
+        console.log(
+          "csvTable.exportCSV() - Export content not properly assigned! Returning empty",
+        );
+      }
+    }
     const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
     const link = document.createElement("a");
     if (link.download !== undefined) {
@@ -220,6 +258,7 @@ const CSVTable: React.FC = () => {
 
       if (res.status == 200) {
         console.log("success");
+        setJsonData(jsonData);
       }
     } else if (selectedFile.name.toLowerCase().includes("edge")) {
       const redefinedJsonData = jsonData as {
@@ -403,7 +442,35 @@ const CSVTable: React.FC = () => {
                       <Input type="file" onChange={handleFileUpload} />
                     </div>
                     <div className="flex space-x-4">
-                      <Button onClick={exportCSV}>Export CSV</Button>
+                      {/*<Button onClick={exportCSV()}>Export CSV</Button>*/}
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button>Export CSV</Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                          <DropdownMenuRadioItem
+                            key={1}
+                            value={"Nodes"}
+                            onClick={() => exportCSV("Nodes")}
+                          >
+                            {"Export Nodes"}
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem
+                            key={2}
+                            value={"Edges"}
+                            onClick={() => exportCSV("Edges")}
+                          >
+                            {"Export Edges"}
+                          </DropdownMenuRadioItem>
+                          <DropdownMenuRadioItem
+                            key={2}
+                            value={"Employees"}
+                            onClick={() => exportCSV("Employees")}
+                          >
+                            {"Export Employees"}
+                          </DropdownMenuRadioItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
                       <form onSubmit={handleSubmit}>
                         <Button type="submit">Upload</Button>{" "}
                         {/* Added type="submit" */}
