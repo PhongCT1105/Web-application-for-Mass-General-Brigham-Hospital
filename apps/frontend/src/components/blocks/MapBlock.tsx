@@ -425,7 +425,6 @@ export const MapBlock: React.FC = () => {
   }
 
   function createTextDirections(nodeArray: Node[], currentFloor: string) {
-    handleClear();
     setCurrentFloor(currentFloor);
     console.log("Text directions should be created now");
 
