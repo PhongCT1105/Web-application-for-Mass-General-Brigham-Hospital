@@ -33,3 +33,22 @@ export abstract class PathfindingTemplate implements PathfindingStrategy {
     return path;
   }
 }
+
+export class PathingContext {
+  private _pathFindingTemplate: PathfindingTemplate;
+
+  constructor(_pathFindingTemplate: PathfindingTemplate) {
+    this._pathFindingTemplate = _pathFindingTemplate;
+  }
+  get pathFindingStrategy(): PathfindingTemplate {
+    return this._pathFindingTemplate;
+  }
+
+  set pathFindingStrategy(value: PathfindingTemplate) {
+    this._pathFindingTemplate = value;
+  }
+
+  run(graph: Graph, startNodeID: string, endNodeID: string): Node[] {
+    return this._pathFindingTemplate.run(graph, startNodeID, endNodeID);
+  }
+}
