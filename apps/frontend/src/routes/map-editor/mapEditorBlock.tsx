@@ -114,25 +114,73 @@ export const MapEditor: React.FC = () => {
     [drawLine, edges],
   );
 
+  // Create a Set to store unique nodes outside of the useCallback hook
+  const uniqueNodes = useRef(new Set());
+
   const addMarkers = useCallback(
     (map: Map, nodesOnFloor: HospitalData[]) => {
-      nodesOnFloor.forEach((node) => {
+      // Sort nodesOnFloor by nodeID before adding edges
+      const sortedNodes = [...nodesOnFloor].sort((a, b) =>
+        a.nodeID.localeCompare(b.nodeID),
+      );
+
+      // Create an array to store edges
+      const edges: Edge[] = [];
+
+      sortedNodes.forEach((node, index) => {
         const [lat, lng] = node.geocode.split(",").map(parseFloat);
         const nLat = 3400 - lng;
-        const marker = L.marker([nLat, lat], { icon: customIcon }).addTo(map);
 
-        // Add a click event handler to toggle popup visibility
-        const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-        marker.bindPopup(popupContent);
+        // Check if the node is already in the Set
+        if (!uniqueNodes.current.has(node.nodeID)) {
+          // If the node is not in the Set, add it to the Set and the map
+          uniqueNodes.current.add(node.nodeID);
+          const marker = L.marker([nLat, lat], {
+            icon: customIcon,
+            draggable: true,
+          }).addTo(map);
 
-        marker.on("click", function (this: L.Marker) {
-          // Specify the type of 'this' as L.Marker
-          if (!this.isPopupOpen()) {
-            // Check if the popup is not already open
-            this.openPopup(); // Open the popup when the marker is clicked
-          }
-        });
+          // Add a dragend event handler to update the node's geocode when the marker is dragged
+          marker.on("dragend", function () {
+            const position = marker.getLatLng();
+            const newGeocode = `${position.lng},${3400 - position.lat}`;
+
+            // Update the hospitalData state
+            setHospitalData((prevData) =>
+              prevData.map((item) =>
+                item.nodeID === node.nodeID
+                  ? { ...item, geocode: newGeocode }
+                  : item,
+              ),
+            );
+          });
+
+          // Add a click event handler to toggle popup visibility
+          const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+          marker.bindPopup(popupContent);
+
+          marker.on("click", function (this: L.Marker) {
+            // Specify the type of 'this' as L.Marker
+            if (!this.isPopupOpen()) {
+              // Check if the popup is not already open
+              this.openPopup(); // Open the popup when the marker is clicked
+            }
+          });
+        }
+
+        // Add edges between consecutive nodes
+        const previousNode = sortedNodes[index - 1];
+        if (previousNode) {
+          edges.push({
+            edgeID: `${previousNode.nodeID}_${node.nodeID}`,
+            start: previousNode.nodeID,
+            end: node.nodeID,
+          });
+        }
       });
+
+      // Log the edges to the console
+      console.log(edges);
     },
     [customIcon],
   );
