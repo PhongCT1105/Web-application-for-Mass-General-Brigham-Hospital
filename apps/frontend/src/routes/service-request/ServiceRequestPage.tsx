@@ -332,7 +332,10 @@ export default function ServiceRequestPage() {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Maintenance Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white" }}
+                            >
                               Report a maintenance issue
                             </p>
                           </div>

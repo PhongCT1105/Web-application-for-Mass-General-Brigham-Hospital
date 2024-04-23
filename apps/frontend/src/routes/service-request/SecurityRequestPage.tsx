@@ -254,7 +254,7 @@ export const SecurityForm = () => {
     <>
       <Card className={" flex flex-col border rounded-md text mx-10 my-5"}>
         <CardContent className={"grid gap-4"}>
-          <div className={"space-y-1"}>
+          <div className="space-y-1">
             {/* Name Input */}
             <div className="w-1/5">
               <h1 className="text-2xl font-bold my-2">Employee</h1>
@@ -405,7 +405,7 @@ export const SecurityForm = () => {
                     </div>
                   </RadioGroup>
                 </div>
-                <Separator className={"my-4"} />
+                <Separator />
                 {/* Call 911? Input  (this will be a checkbox)*/}
                 <div className={"flex items-center space-x-2 mt-6"}>
                   <Checkbox

@@ -141,7 +141,7 @@ export const FlowerContent = () => {
   };
 
   return (
-    <>
+    <div>
       <div
         className="flex items-center justify-center"
         style={{
@@ -475,28 +475,28 @@ export const FlowerContent = () => {
                 <CardContent className={"relative w-[300px] mt-2"}>
                   {addon.discountAmt === 10 && (
                     <img
-                      src="../../../assets/discount-tags/ten-percent-discount.webp"
+                      src={ten}
                       alt="10% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 20 && (
                     <img
-                      src="../../../assets/discount-tags/twenty-percent-discount.webp"
+                      src={twenty}
                       alt="20% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 30 && (
                     <img
-                      src="../../../assets/discount-tags/thirty-percent-discount.webp"
+                      src={thirty}
                       alt="30% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 50 && (
                     <img
-                      src="../../../assets/discount-tags/fifty-percent-discount.png"
+                      src={fiftyPercent}
                       alt="50% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
@@ -556,6 +556,6 @@ export const FlowerContent = () => {
           <ScrollBar orientation="horizontal" />
         </ScrollArea>
       </div>
-    </>
+    </div>
   );
 };
