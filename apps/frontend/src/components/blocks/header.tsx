@@ -107,10 +107,19 @@ export function Header() {
   };
 
   return (
-    <div className="flex w-full flex-col" style={{ zIndex: 1000 }}>
-      <header className="sticky top-0 flex flex-col items-center -gap-4 bg-blue-900">
-        <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6 text-nowrap">
-          <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
+    <div className="flex w-full flex-col">
+      <header
+        className="sticky top-0 flex flex-col items-center -gap-4 bg-blue-900"
+        style={{ zIndex: 1000 }}
+      >
+        <div
+          className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6 text-nowrap"
+          style={{ zIndex: 1000 }}
+        >
+          <nav
+            className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap"
+            style={{ zIndex: 1000 }}
+          >
             <a
               href=""
               className="flex items-center gap-2 text-lg font-semibold md:text-base"
@@ -141,7 +150,7 @@ export function Header() {
                         <ChevronDown className={" h-auto translate-y-1"} />
                       </button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                    <DropdownMenuContent style={{ zIndex: 1000 }}>
                       <DropdownMenuLabel>Editor View</DropdownMenuLabel>
                       <DropdownMenuSeparator />
                       <DropdownMenuGroup>
@@ -179,7 +188,7 @@ export function Header() {
                         <ChevronDown className={" h-auto translate-y-1"} />
                       </button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent>
+                    <DropdownMenuContent style={{ zIndex: 1000 }}>
                       <DropdownMenuGroup>
                         <DropdownMenuItem
                           onClick={() =>

@@ -254,11 +254,11 @@ export const MapBlock: React.FC = () => {
 
   const baseLayers = useMemo(
     () => ({
-      L1: LayerL1,
-      L2: LayerL2,
-      F1: LayerF1,
-      F2: LayerF2,
-      F3: LayerF3,
+      "Lower Level 2": LayerL2,
+      "Lower Level 1": LayerL1,
+      "First Floor": LayerF1,
+      "Second Floor": LayerF2,
+      "Third Floor": LayerF3,
     }),
     [LayerL1, LayerL2, LayerF1, LayerF2, LayerF3],
   );
@@ -759,7 +759,7 @@ export const MapBlock: React.FC = () => {
       // Handle the case when searchPath is empty or undefined
       console.error("searchPath is empty or undefined");
       // Set a default map view
-      map.setView([0, 0], -2);
+      map.setView([0, 0], -3);
     }
   }
 
