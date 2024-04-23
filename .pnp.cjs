@@ -78,6 +78,7 @@ const RAW_RUNTIME_STATE =
           ["@radix-ui/react-slot", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.0.2"],\
           ["@react-leaflet/core", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["@types/csv-parse", "npm:1.2.2"],\
+          ["@types/kill-port", "npm:2.0.3"],\
           ["@types/leaflet", "npm:1.9.8"],\
           ["@types/leaflet.markercluster", "npm:1.5.4"],\
           ["@types/node", "npm:20.12.2"],\
@@ -104,6 +105,7 @@ const RAW_RUNTIME_STATE =
           ["happy-dom", "npm:10.11.2"],\
           ["husky", "npm:8.0.3"],\
           ["install", "npm:0.13.0"],\
+          ["kill-port", "npm:2.0.1"],\
           ["leaflet", "npm:1.9.4"],\
           ["leaflet-ant-path", "npm:1.3.0"],\
           ["leaflet-moving-marker", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.3.0"],\
@@ -6260,6 +6262,17 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/kill-port", [\
+      ["npm:2.0.3", {\
+        "packageLocation": "./.yarn/cache/@types-kill-port-npm-2.0.3-96eb7de242-41782acdc9.zip/node_modules/@types/kill-port/",\
+        "packageDependencies": [\
+          ["@types/kill-port", "npm:2.0.3"],\
+          ["@types/node", "npm:20.11.5"],\
+          ["shell-exec", "npm:1.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/leaflet", [\
       ["npm:1.9.8", {\
         "packageLocation": "./.yarn/cache/@types-leaflet-npm-1.9.8-37444cf7c0-c0c68ae0d1.zip/node_modules/@types/leaflet/",\
@@ -10679,6 +10692,15 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["get-them-args", [\
+      ["npm:1.3.2", {\
+        "packageLocation": "./.yarn/cache/get-them-args-npm-1.3.2-fca835a30c-5544dcec7f.zip/node_modules/get-them-args/",\
+        "packageDependencies": [\
+          ["get-them-args", "npm:1.3.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["glob", [\
       ["npm:10.3.10", {\
         "packageLocation": "./.yarn/cache/glob-npm-10.3.10-da1ef8b112-38bdb2c9ce.zip/node_modules/glob/",\
@@ -11721,6 +11743,17 @@ const RAW_RUNTIME_STATE =
         "packageDependencies": [\
           ["keyv", "npm:4.5.4"],\
           ["json-buffer", "npm:3.0.1"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["kill-port", [\
+      ["npm:2.0.1", {\
+        "packageLocation": "./.yarn/cache/kill-port-npm-2.0.1-fdcbae7530-5478f5e623.zip/node_modules/kill-port/",\
+        "packageDependencies": [\
+          ["kill-port", "npm:2.0.1"],\
+          ["get-them-args", "npm:1.3.2"],\
+          ["shell-exec", "npm:1.0.2"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -15941,6 +15974,22 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["shell-exec", [\
+      ["npm:1.0.2", {\
+        "packageLocation": "./.yarn/cache/shell-exec-npm-1.0.2-439b1acf5b-3ce3b4edfc.zip/node_modules/shell-exec/",\
+        "packageDependencies": [\
+          ["shell-exec", "npm:1.0.2"]\
+        ],\
+        "linkType": "HARD"\
+      }],\
+      ["npm:1.1.2", {\
+        "packageLocation": "./.yarn/cache/shell-exec-npm-1.1.2-bbf5b611a0-79dd4e84ec.zip/node_modules/shell-exec/",\
+        "packageDependencies": [\
+          ["shell-exec", "npm:1.1.2"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["side-channel", [\
       ["npm:1.0.4", {\
         "packageLocation": "./.yarn/cache/side-channel-npm-1.0.4-e1f38b9e06-c4998d9fc5.zip/node_modules/side-channel/",\
@@ -16078,6 +16127,7 @@ const RAW_RUNTIME_STATE =
           ["@radix-ui/react-slot", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:1.0.2"],\
           ["@react-leaflet/core", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:2.1.0"],\
           ["@types/csv-parse", "npm:1.2.2"],\
+          ["@types/kill-port", "npm:2.0.3"],\
           ["@types/leaflet", "npm:1.9.8"],\
           ["@types/leaflet.markercluster", "npm:1.5.4"],\
           ["@types/node", "npm:20.12.2"],\
@@ -16104,6 +16154,7 @@ const RAW_RUNTIME_STATE =
           ["happy-dom", "npm:10.11.2"],\
           ["husky", "npm:8.0.3"],\
           ["install", "npm:0.13.0"],\
+          ["kill-port", "npm:2.0.1"],\
           ["leaflet", "npm:1.9.4"],\
           ["leaflet-ant-path", "npm:1.3.0"],\
           ["leaflet-moving-marker", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.3.0"],\

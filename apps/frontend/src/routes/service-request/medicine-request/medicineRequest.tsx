@@ -56,14 +56,7 @@ export function MedicineRequest({ columns }: DataTableProps) {
 
   const [employees, setEmployees] = React.useState<string[]>([]);
   const [submission, setSubmission] = React.useState<Medication[]>([]);
-  const [form, setForm] = React.useState<MedicationForm>({
-    id: 0,
-    dateSubmitted: now.toDateString(),
-    employee: "",
-    location: "",
-    medication: [],
-    patient: "",
-  });
+  const [form, setForm] = React.useState<MedicationForm>({} as MedicationForm);
 
   const handleAddRow = (item: Medication) => {
     setSubmission((prev) => [
@@ -82,6 +75,7 @@ export function MedicineRequest({ columns }: DataTableProps) {
     setForm((prevState) => ({
       ...prevState,
       medication: submission,
+      dateSubmitted: now.toDateString(),
       [event.target.id]: event.target.value,
     }));
   };
