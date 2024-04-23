@@ -161,7 +161,7 @@ export const FlowerContent = () => {
           </h2>
           <p
             className="text-sm text-muted-foreground"
-            style={{ color: "#D3D3D3" }}
+            style={{ color: "white" }}
           >
             Send a loved one a special gift
           </p>
