@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
 import { SecurityForm } from "@/interfaces/securityReq.ts";
+import { DataTableColumnHeaderEmployee } from "@/components/table/data-table-employee-header.tsx";
 
 //import {SecurityFormLogTable} from "@/routes/request-log/securityLogPage.tsx";
 export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
@@ -19,7 +20,7 @@ export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
   {
     accessorKey: "ename",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Employee Name" />
+      <DataTableColumnHeaderEmployee column={column} title="Employee Name" />
     ),
     cell: ({ row }) => {
       return (
