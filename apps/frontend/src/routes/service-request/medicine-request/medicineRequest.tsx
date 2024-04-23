@@ -57,6 +57,7 @@ export function MedicineRequest({ columns }: DataTableProps) {
   const [employees, setEmployees] = React.useState<string[]>([]);
   const [submission, setSubmission] = React.useState<Medication[]>([]);
   const [form, setForm] = React.useState<MedicationForm>({} as MedicationForm);
+  const [locations, setLocations] = React.useState<string[]>([]);
 
   const handleAddRow = (item: Medication) => {
     setSubmission((prev) => [
@@ -71,6 +72,14 @@ export function MedicineRequest({ columns }: DataTableProps) {
       },
     ]);
   };
+
+  const handleLocationChange = (selectedLocation: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      location: selectedLocation,
+    }));
+  };
+
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prevState) => ({
       ...prevState,
@@ -94,7 +103,7 @@ export function MedicineRequest({ columns }: DataTableProps) {
   };
 
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchData = async () => {
       try {
         const response = await axios.get("/api/employeeData");
         const rawData = response.data;
@@ -104,16 +113,31 @@ export function MedicineRequest({ columns }: DataTableProps) {
             item.lName,
         );
 
-        setEmployees(extractedEmployees);
+        const res = await axios.get("/api/mapreq/nodes/location");
+        const location = res.data.map(
+          (item: { longName: string }) => item.longName,
+        );
+        const filteredLocations = location.filter((longName: string) => {
+          return (
+            !longName.includes("Hallway") &&
+            !longName.startsWith("Hall") &&
+            !longName.includes("Restroom") &&
+            !longName.includes("Elevator") &&
+            !longName.includes("Staircase") &&
+            !longName.includes("Stair")
+          );
+        });
 
+        setEmployees(extractedEmployees);
+        setLocations(filteredLocations);
         console.log("Successfully fetched data from the API.");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     // Fetch data on component mount
-    fetchEmployees();
-  }, []);
+    fetchData();
+  }, [employees, locations]);
 
   const handleEmployeeChange = (selectedEmployee: string) => {
     setForm((prevState) => ({
@@ -250,12 +274,24 @@ export function MedicineRequest({ columns }: DataTableProps) {
             </DropdownMenuContent>
           </DropdownMenu>
           <Label>Patient Location</Label>
-          <Input
-            type={"text"}
-            id={"location"}
-            placeholder={"Location"}
-            onChange={handleFormChange}
-          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                {form.location ? form.location : "Select Location"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70  overflow-y-auto">
+              {locations.map((location, index) => (
+                <DropdownMenuRadioItem
+                  key={index}
+                  value={location}
+                  onClick={() => handleLocationChange(location)}
+                >
+                  {location}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Label>Patient Name</Label>
           <Input
             type={"text"}

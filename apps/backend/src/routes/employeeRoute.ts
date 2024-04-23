@@ -20,14 +20,17 @@ router.post("/", async (req: Request, res: Response) => {
     console.log(employee);
     console.log(typeof employee.id);
 
-    await PrismaClient.employee.create({
-      data: {
-        //id: parseInt(String(employee.id)),
-        fName: employee[0].fName,
-        lName: employee[0].lName,
-        title: employee[0].title,
-      },
-    });
+    for (let i = 0; i < employee.length; i++) {
+      await PrismaClient.employee.create({
+        data: {
+          //id: parseInt(String(employee.id)),
+          fName: employee[i].fName,
+          lName: employee[i].lName,
+          title: employee[i].title,
+        },
+      });
+    }
+
     console.info("Successfully requested employee data");
     res.status(200).json({ message: "Employee data created successfully" });
   } catch (error) {
