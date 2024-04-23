@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+//import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
@@ -39,18 +39,16 @@ interface Form {
   severity: rSeverity;
   location: string;
   typeOfIssue: rTypeOfIssue;
-  time: string;
   status: rStatus;
   description: string;
-  comments: string;
 }
 
-export function Sanitation() {
+export function Maintenance() {
   const { toast } = useToast();
 
   async function submit() {
     console.log(form);
-    const res = await axios.post("/api/sanitationReq", form, {
+    const res = await axios.post("/api/maintenanceReq", form, {
       headers: {
         "content-type": "Application/json",
       },
@@ -66,6 +64,7 @@ export function Sanitation() {
   const [selectedSeverity, setSelectedSeverity] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [submittedForms, setSubmittedForms] = useState<Form[]>([]);
+  const [employees, setEmployees] = useState<string[]>([]);
 
   const [locations, setLocationsTo] = useState<string[]>([]);
   const [buttonState, setButtonState] = useState<buttonColor>("ghost");
@@ -103,15 +102,35 @@ export function Sanitation() {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get("/api/employeeData");
+        const rawData = response.data;
+
+        const extractedEmployees = rawData.map(
+          (item: { id: number; fName: string; lName: string; title: string }) =>
+            item.lName,
+        );
+
+        setEmployees(extractedEmployees);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchEmployees();
+  }, []);
+
   const [form, setForm] = useState<Form>({
     name: "",
     severity: "",
     location: "",
     typeOfIssue: "",
-    time: "",
     status: "",
     description: "",
-    comments: "",
   });
 
   const checkEmpty = () => {
@@ -120,7 +139,6 @@ export function Sanitation() {
       form.severity === "" ||
       form.location === "" ||
       form.typeOfIssue === "" ||
-      form.time === "" ||
       form.status === "" ||
       form.description === ""
     );
@@ -190,13 +208,20 @@ export function Sanitation() {
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
 
+  const handleEmployeeChange = (selectedEmployee: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      name: selectedEmployee,
+    }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
+  };
+
   const handleSubmit = () => {
     if (
       form.name === "" ||
       form.severity === "" ||
       form.location === "" ||
       form.typeOfIssue === "" ||
-      form.time === "" ||
       form.status === "" ||
       form.description === ""
     ) {
@@ -221,10 +246,8 @@ export function Sanitation() {
       severity: "",
       location: "",
       typeOfIssue: "",
-      time: "",
       status: "",
       description: "",
-      comments: "",
     }));
     setSelectedSeverity("");
     setSelectedTypeOfIssue("");
@@ -239,15 +262,38 @@ export function Sanitation() {
             <CardContent>
               <div className="space-y-6">
                 <div className="w-1/4">
-                  <h1 className="text-2xl font-bold ">Name</h1>
-                  <Input
-                    type="text"
-                    id="name"
-                    placeholder="Enter Your Name Here"
-                    onChange={handleFormChange}
-                    value={form.name}
-                  />
+                  <h1 className="text-2xl font-bold my-2 pb-2">
+                    Employee Name
+                  </h1>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline" className="">
+                        {form.name ? form.name : "Select Your Name"}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                      {employees.map((employee, index) => (
+                        <DropdownMenuRadioItem
+                          key={index}
+                          value={employee}
+                          onClick={() => handleEmployeeChange(employee)}
+                        >
+                          {employee}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
+                {/*<div className="w-1/4">*/}
+                {/*  <h1 className="text-2xl font-bold ">Employee Name</h1>*/}
+                {/*  <Input*/}
+                {/*    type="text"*/}
+                {/*    id="name"*/}
+                {/*    placeholder="Select Your Name Here"*/}
+                {/*    onChange={handleFormChange}*/}
+                {/*    value={form.name}*/}
+                {/*  />*/}
+                {/*</div>*/}
                 <div className="flex">
                   <div className="w-1/3  ">
                     <h1 className="text-2xl font-bold my-2 pb-2">
@@ -457,18 +503,6 @@ export function Sanitation() {
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>
-                  <div className="w-1/8 mr-20">
-                    <h1 className="text-2xl font-bold my-2 whitespace-nowrap pb-2">
-                      Time of Issue
-                    </h1>
-                    <Input
-                      type="time"
-                      placeholder="Time of Issue"
-                      id="time"
-                      onChange={handleFormChange}
-                      value={form.time}
-                    />
-                  </div>
                 </div>
 
                 <div className="flex">
@@ -481,18 +515,6 @@ export function Sanitation() {
                       id="description"
                       onChange={handleFormChange}
                       value={form.description}
-                    />
-                  </div>
-
-                  <div className="w-1/2 ml-8">
-                    <h1 className="text-2xl font-bold my-2 pb-2">
-                      Additional Comments (optional)
-                    </h1>
-                    <Textarea
-                      placeholder="Type your instructions here."
-                      id="comments"
-                      onChange={handleFormChange}
-                      value={form.comments}
                     />
                   </div>
                 </div>
@@ -544,7 +566,7 @@ export function Sanitation() {
           </Card>
         </div>
       </div>
-      <h2 className="mt-8 text-small ml-4">Alex Shettler and Tracy Yang</h2>
+      <h2 className="mt-8 text-small ml-4">June Whittall and Alex Shettler</h2>
     </>
   );
 }

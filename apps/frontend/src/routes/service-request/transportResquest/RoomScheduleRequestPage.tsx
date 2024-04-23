@@ -23,14 +23,14 @@ import {
 } from "@/components/ui/dropdown-menu.tsx";
 import { format } from "date-fns";
 import axios from "axios";
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from "@/components/ui/table.tsx";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table.tsx";
 import {
   Tooltip,
   TooltipContent,
@@ -39,8 +39,7 @@ import {
 } from "@/components/ui/tooltip.tsx";
 
 export interface scheduleForm {
-  employeeName: string;
-  patientName: string;
+  name: string;
   priority: string;
   locationFrom: string;
   locationTo: string;
@@ -64,8 +63,7 @@ export interface scheduleForm {
 
 export const SheduleContent = () => {
   const [form, setForm] = useState<scheduleForm>({
-    employeeName: "",
-    patientName: "",
+    name: "",
     priority: "",
     locationFrom: "",
     locationTo: "",
@@ -82,7 +80,7 @@ export const SheduleContent = () => {
   const [locationsFrom, setLocationsFrom] = useState<string[]>([]);
   const [locationsTo, setLocationsTo] = useState<string[]>([]);
   const [buttonState, setButtonState] = useState<buttonColor>("ghost");
-  const [employees, setEmployees] = useState<string[]>([]);
+
   type buttonColor = "ghost" | "default";
 
   // Get locations from database
@@ -130,28 +128,6 @@ export const SheduleContent = () => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    const fetchEmployees = async () => {
-      try {
-        const response = await axios.get("/api/employeeData");
-        const rawData = response.data;
-
-        const extractedEmployees = rawData.map(
-          (item: { id: number; fName: string; lName: string; title: string }) =>
-            item.lName,
-        );
-
-        setEmployees(extractedEmployees);
-
-        console.log("Successfully fetched data from the API.");
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    // Fetch data on component mount
-    fetchEmployees();
-  }, []);
-
   const handleLocationFromChange = (selectedLocation: string) => {
     setForm((prevState) => ({
       ...prevState,
@@ -187,8 +163,7 @@ export const SheduleContent = () => {
   const clearForm = () => {
     setForm((prevState) => ({
       ...prevState,
-      employeeName: "",
-      patientName: "",
+      name: "",
       priority: "",
       locationFrom: "",
       locationTo: "",
@@ -237,14 +212,6 @@ export const SheduleContent = () => {
     }
   };
 
-  const handleEmployee = (selectedEmployee: string) => {
-    setForm((prevState) => ({
-      ...prevState,
-      employeeName: selectedEmployee,
-    }));
-    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
-  };
-
   //convert Date type to String
   const formattedDate = form.date
     ? format(form.date, "MMMM do, yyyy")
@@ -252,8 +219,7 @@ export const SheduleContent = () => {
 
   const checkEmpty = () => {
     return (
-      form.employeeName === "" ||
-      form.patientName === "" ||
+      form.name === "" ||
       form.priority === "" ||
       form.locationFrom === "" ||
       form.locationTo === "" ||
@@ -267,8 +233,7 @@ export const SheduleContent = () => {
   //submit
   const handleSubmit = async () => {
     if (
-      form.employeeName === "" ||
-      form.patientName === "" ||
+      form.name === "" ||
       form.priority === "" ||
       form.locationFrom === "" ||
       form.locationTo === "" ||
@@ -314,34 +279,15 @@ export const SheduleContent = () => {
             {/*  /!*</CardDescription>*!/*/}
             {/*</CardHeader>*/}
             <CardContent>
-              <h1 className="text-2xl font-bold">Employee Name</h1>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline">
-                    {form.employeeName ? form.employeeName : "Select Your Name"}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70  overflow-y-auto">
-                  {employees.map((employee, index) => (
-                    <DropdownMenuRadioItem
-                      key={index}
-                      value={employee}
-                      onClick={() => handleEmployee(employee)}
-                    >
-                      {employee}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
               <div className="space-y-6 mt-6">
                 <div>
                   <h1 className="text-2xl font-bold">Patient Name</h1>
                   <Input
                     type="text"
-                    id="patientName"
-                    placeholder="Enter The Patient's Name Here"
+                    id="name"
+                    placeholder="Enter Your Name Here"
                     onChange={handleFormChange}
-                    value={form.patientName}
+                    value={form.name}
                   />
                 </div>
 
@@ -572,42 +518,42 @@ export const SheduleContent = () => {
         </div>
       </div>
       <div>
-        {/*<Card className={"mx-10 mb-5 mt-[120px]"}>*/}
-        {/*  <Table>*/}
-        {/*    <TableHeader>*/}
-        {/*      <TableRow className={""}>*/}
-        {/*        <TableHead className="">Patient Name</TableHead>*/}
-        {/*        <TableHead className="">From</TableHead>*/}
-        {/*        <TableHead className="">To</TableHead>*/}
-        {/*        <TableHead className="">Date</TableHead>*/}
-        {/*        <TableHead className="">Time</TableHead>*/}
-        {/*        <TableHead className="">Reason</TableHead>*/}
-        {/*        <TableHead className="">Note</TableHead>*/}
-        {/*        <TableHead className="">Priority</TableHead>*/}
-        {/*        <TableHead className="">Status</TableHead>*/}
-        {/*      </TableRow>*/}
-        {/*    </TableHeader>*/}
-        {/*    <TableBody>*/}
-        {/*      {submittedForms.map((request) => {*/}
-        {/*        return (*/}
-        {/*          <TableRow>*/}
-        {/*            <TableCell>{request.name}</TableCell>*/}
-        {/*            <TableCell>{request.locationFrom}</TableCell>*/}
-        {/*            <TableCell>{request.locationTo}</TableCell>*/}
-        {/*            <TableCell>*/}
-        {/*              {format(request.date, "MMMM do, yyyy")}*/}
-        {/*            </TableCell>*/}
-        {/*            <TableCell>{request.time}</TableCell>*/}
-        {/*            <TableCell>{request.reason}</TableCell>*/}
-        {/*            <TableCell>{request.note}</TableCell>*/}
-        {/*            <TableCell>{request.priority}</TableCell>*/}
-        {/*            <TableCell>{request.status}</TableCell>*/}
-        {/*          </TableRow>*/}
-        {/*        );*/}
-        {/*      })}*/}
-        {/*    </TableBody>*/}
-        {/*  </Table>*/}
-        {/*</Card>*/}
+        <Card className={"mx-10 mb-5 mt-[120px]"}>
+          <Table>
+            <TableHeader>
+              <TableRow className={""}>
+                <TableHead className="">Patient Name</TableHead>
+                <TableHead className="">From</TableHead>
+                <TableHead className="">To</TableHead>
+                <TableHead className="">Date</TableHead>
+                <TableHead className="">Time</TableHead>
+                <TableHead className="">Reason</TableHead>
+                <TableHead className="">Note</TableHead>
+                <TableHead className="">Priority</TableHead>
+                <TableHead className="">Status</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {submittedForms.map((request) => {
+                return (
+                  <TableRow>
+                    <TableCell>{request.name}</TableCell>
+                    <TableCell>{request.locationFrom}</TableCell>
+                    <TableCell>{request.locationTo}</TableCell>
+                    <TableCell>
+                      {format(request.date, "MMMM do, yyyy")}
+                    </TableCell>
+                    <TableCell>{request.time}</TableCell>
+                    <TableCell>{request.reason}</TableCell>
+                    <TableCell>{request.note}</TableCell>
+                    <TableCell>{request.priority}</TableCell>
+                    <TableCell>{request.status}</TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </Card>
       </div>
     </>
   );
