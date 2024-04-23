@@ -281,13 +281,18 @@ export const MapBlock: React.FC = () => {
         map = L.map("map-container", {
           crs: CRS.Simple,
           minZoom: -2,
-          maxZoom: 2,
+          maxZoom: 3,
           zoomControl: true,
           preferCanvas: true,
           layers: [LayerF1],
         }).setView([3400, 5000], -2);
         mapRef.current = map;
-        L.control.layers(baseLayers).addTo(map);
+        L.control
+          .layers(baseLayers, undefined, {
+            collapsed: false,
+            position: "bottomright",
+          })
+          .addTo(map);
         map.setMaxBounds(bounds);
       }
 
