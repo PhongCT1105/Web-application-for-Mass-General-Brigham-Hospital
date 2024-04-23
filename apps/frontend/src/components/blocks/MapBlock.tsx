@@ -199,6 +199,30 @@ export const MapBlock: React.FC = () => {
     [],
   );
 
+  const StartMarker: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
+  const EndMarker: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
   const Paths: { [key: string]: L.LayerGroup } = useMemo(
     () =>
       ({
@@ -269,6 +293,9 @@ export const MapBlock: React.FC = () => {
       const setStartEndLocation = (
         locationID: string,
         locationName: string,
+        locationxCoord: number,
+        locationyCoord: number,
+        locationFloor: string,
       ) => {
         const startLocation: HospitalData | undefined = hospitalData.find(
           (h) => h.nodeID === startNodeID,
@@ -278,51 +305,43 @@ export const MapBlock: React.FC = () => {
         if (!startLocation) {
           setStartNodeID(locationID);
           setStartNodeName(locationName);
-          const x: number = startLocation!.xCoord;
-          const y: number = startLocation!.yCoord;
-          console.log(Layers[startLocation!.floor]);
+
+          //add start marker
           addMarker(
-            [3400 - y, x],
+            [3400 - locationyCoord, locationxCoord],
             GreenStar,
-            Layers[startLocation!.floor],
+            StartMarker[locationFloor],
             false,
           );
         } else if (!endLocation) {
           setEndNodeID(locationID);
           setEndNodeName(locationName);
+
+          //add end marker
+          EndMarker[locationFloor].clearLayers();
+          addMarker(
+            [3400 - locationyCoord, locationxCoord],
+            RedStar,
+            EndMarker[locationFloor],
+            false,
+          );
         } else {
           setStartNodeID(locationID);
           setStartNodeName(locationName);
           setEndNodeID("");
           setEndNodeName("");
-        }
 
-        // if (startLocation) {
-        //   const x: number = startLocation.xCoord;
-        //   const y: number = startLocation.yCoord;
-        //   console.log(Layers[startLocation.floor]);
-        //   addMarker(
-        //     [3400 - y, x],
-        //     GreenStar,
-        //     Layers[startLocation.floor],
-        //     false,
-        //   );
-        // } else if (endLocation) {
-        //   const x: number = endLocation.xCoord;
-        //   const y: number = endLocation.yCoord;
-        //   console.log(Layers[endLocation.floor]);
-        //   addMarker([3400 - y, x], RedStar, Layers[endLocation.floor], false);
-        // } else {
-        //   const x: number = startLocation!.xCoord;
-        //   const y: number = startLocation!.yCoord;
-        //   console.log(Layers[startLocation!.floor]);
-        //   addMarker(
-        //     [3400 - y, x],
-        //     GreenStar,
-        //     Layers[startLocation!.floor],
-        //     false,
-        //   );
-        // }
+          //add start marker
+
+          StartMarker[locationFloor].clearLayers();
+          EndMarker[locationFloor].clearLayers();
+          addMarker(
+            [3400 - locationyCoord, locationxCoord],
+            GreenStar,
+            StartMarker[locationFloor],
+            false,
+          );
+        }
       };
 
       const addMarkersToLayerGroups = (hospitalData: HospitalData[]) => {
@@ -338,7 +357,13 @@ export const MapBlock: React.FC = () => {
           //marker.options.attribution = node.nodeID;
           // Event listener for clicking on markers
           marker.on("click", function () {
-            setStartEndLocation(node.nodeID, node.name);
+            setStartEndLocation(
+              node.nodeID,
+              node.name,
+              node.xCoord,
+              node.yCoord,
+              node.floor,
+            );
           });
         });
       };
@@ -348,6 +373,8 @@ export const MapBlock: React.FC = () => {
       Object.keys(Layers).forEach((key) => {
         Markers[key].addTo(Layers[key]);
         SpecialMarkers[key].addTo(Layers[key]);
+        StartMarker[key].addTo(Layers[key]);
+        EndMarker[key].addTo(Layers[key]);
         Paths[key].addTo(Layers[key]);
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
@@ -365,6 +392,8 @@ export const MapBlock: React.FC = () => {
     isDataLoaded,
     startNodeID,
     searchPath,
+    StartMarker,
+    EndMarker,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -613,6 +642,8 @@ export const MapBlock: React.FC = () => {
 
     Object.keys(SpecialMarkers).forEach((key) => {
       SpecialMarkers[key].clearLayers();
+      StartMarker[key].clearLayers();
+      EndMarker[key].clearLayers();
       Paths[key].clearLayers();
     });
     setTextDirections([]);
