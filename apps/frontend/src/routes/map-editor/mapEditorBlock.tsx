@@ -11,7 +11,7 @@ import L, {
   LatLngBoundsExpression,
   LatLngExpression,
   Map,
-  Polyline,
+  // Polyline,
 } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
@@ -42,9 +42,64 @@ export interface HospitalData {
 // Define the map component
 export const MapEditor: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
-  const [paths, setPaths] = useState<Polyline[]>([]);
+  // const [paths, setPaths] = useState<Polyline[]>([]);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
+  const [isSetUp, setIsSetUp] = useState(false);
   const { nodes, edges } = useGraphContext();
+
+  const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
+  const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
+  const [LayerF1] = useState<L.FeatureGroup>(new L.FeatureGroup());
+  const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
+  const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
+
+  const Layers: { [key: string]: L.FeatureGroup } = useMemo(
+    () =>
+      ({
+        L1: LayerL1,
+        L2: LayerL2,
+        1: LayerF1,
+        2: LayerF2,
+        3: LayerF3,
+      }) as const,
+    [LayerF1, LayerF2, LayerF3, LayerL1, LayerL2],
+  );
+
+  // special markers (floor icons, start, and end)
+  const Nodes: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
+  const Edges: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
+  const baseLayers = useMemo(
+    () => ({
+      L1: LayerL1,
+      L2: LayerL2,
+      F1: LayerF1,
+      F2: LayerF2,
+      F3: LayerF3,
+    }),
+    [LayerL1, LayerL2, LayerF1, LayerF2, LayerF3],
+  );
 
   // avoid making a bunch of new icons
   const customIcon = useMemo(
@@ -56,13 +111,17 @@ export const MapEditor: React.FC = () => {
       }),
     [],
   );
-  const floorMaps: { [key: string]: string } = {
-    lowerLevel1: lowerLevelMap1,
-    lowerLevel2: lowerLevelMap2,
-    theFirstFloor: theFirstFloor,
-    theSecondFloor: theSecondFloor,
-    theThirdFloor: theThirdFloor,
-  } as const;
+  const floorMaps: { [key: string]: string } = useMemo(
+    () =>
+      ({
+        L1: lowerLevelMap1,
+        L2: lowerLevelMap2,
+        1: theFirstFloor,
+        2: theSecondFloor,
+        3: theThirdFloor,
+      }) as const,
+    [],
+  );
 
   const drawLine = useCallback(
     (startHospital: HospitalData, endHospital: HospitalData) => {
@@ -86,10 +145,12 @@ export const MapEditor: React.FC = () => {
         color: "red",
         weight: 3,
       });
-      newPath.addTo(map);
-      addToPaths(newPath); // Add the new path to the paths list
+      if (startHospital.floor === endHospital.floor) {
+        newPath.addTo(Edges[startHospital.floor]);
+      }
+      // addToPaths(newPath); // Add the new path to the paths list
     },
-    [],
+    [Edges],
   );
 
   const findLines = useCallback(
@@ -115,83 +176,48 @@ export const MapEditor: React.FC = () => {
   );
 
   // Create a Set to store unique nodes outside of the useCallback hook
-  const uniqueNodes = useRef(new Set());
+  // const uniqueNodes = useRef(new Set());
 
   const addMarkers = useCallback(
-    (map: Map, nodesOnFloor: HospitalData[]) => {
-      // Sort nodesOnFloor by nodeID before adding edges
-      const sortedNodes = [...nodesOnFloor].sort((a, b) =>
-        a.nodeID.localeCompare(b.nodeID),
-      );
-
-      // Create an array to store edges
-      const edges: Edge[] = [];
-      const paths: globalThis.Map<string, L.Polyline> = new globalThis.Map();
-
-      sortedNodes.forEach((node, index) => {
+    (map: Map, hospitalData: HospitalData[]) => {
+      hospitalData.forEach((node) => {
         const [lat, lng] = node.geocode.split(",").map(parseFloat);
-        const nLat = 3400 - lng;
+        const coords: [number, number] = [3400 - lng, lat];
+        const marker = L.marker(coords, {
+          icon: customIcon,
+          draggable: true,
+        });
+        //marker.options.attribution = node.nodeID;
+        // Event listener for clicking on markers
+        marker.on("dragend", function () {
+          const position = marker.getLatLng();
+          const newGeocode = `${position.lng},${3400 - position.lat}`;
 
-        // Check if the node is already in the Set
-        if (!uniqueNodes.current.has(node.nodeID)) {
-          // If the node is not in the Set, add it to the Set and the map
-          uniqueNodes.current.add(node.nodeID);
-          const marker = L.marker([nLat, lat], {
-            icon: customIcon,
-            draggable: true,
-          }).addTo(map);
+          // Update the hospitalData state
+          setHospitalData((prevData) =>
+            prevData.map((item) =>
+              item.nodeID === node.nodeID
+                ? { ...item, geocode: newGeocode }
+                : item,
+            ),
+          );
+        });
 
-          // Add a dragend event handler to update the node's geocode when the marker is dragged
-          marker.on("dragend", function () {
-            const position = marker.getLatLng();
-            const newGeocode = `${position.lng},${3400 - position.lat}`;
+        // Add a click event handler to toggle popup visibility
+        const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
+        marker.bindPopup(popupContent);
 
-            // Update the hospitalData state
-            setHospitalData((prevData) =>
-              prevData.map((item) =>
-                item.nodeID === node.nodeID
-                  ? { ...item, geocode: newGeocode }
-                  : item,
-              ),
-            );
-
-            // Update the path to follow the marker
-            const path = paths.get(`${node.nodeID}_${node.nodeID}`);
-            if (path) {
-              const latLngs = path.getLatLngs();
-              latLngs[1] = position;
-              path.setLatLngs(latLngs);
-            }
-          });
-
-          // Add a click event handler to toggle popup visibility
-          const popupContent = `<b>${node.name}</b><br/>Latitude: ${lat}, Longitude: ${lng}`;
-          marker.bindPopup(popupContent);
-
-          marker.on("click", function (this: L.Marker) {
-            // Specify the type of 'this' as L.Marker
-            if (!this.isPopupOpen()) {
-              // Check if the popup is not already open
-              this.openPopup(); // Open the popup when the marker is clicked
-            }
-          });
-        }
-
-        // Add edges between consecutive nodes
-        const previousNode = sortedNodes[index - 1];
-        if (previousNode) {
-          edges.push({
-            edgeID: `${previousNode.nodeID}_${node.nodeID}`,
-            start: previousNode.nodeID,
-            end: node.nodeID,
-          });
-        }
+        marker.on("click", function (this: L.Marker) {
+          // Specify the type of 'this' as L.Marker
+          if (!this.isPopupOpen()) {
+            // Check if the popup is not already open
+            this.openPopup(); // Open the popup when the marker is clicked
+          }
+        });
+        marker.addTo(Nodes[node.floor]);
       });
-
-      // Log the edges to the console
-      console.log(edges);
     },
-    [customIcon],
+    [Nodes, customIcon],
   );
 
   useEffect(() => {
@@ -212,87 +238,69 @@ export const MapEditor: React.FC = () => {
 
   useEffect(() => {
     let map: Map | null = mapRef.current;
-    if (!map) {
-      map = L.map("map-container", {
-        crs: CRS.Simple,
-        minZoom: -2,
-        maxZoom: 2,
-        zoomControl: true,
-      }).setView([3400, 5000], -2);
-      mapRef.current = map;
-    }
-    const bounds: LatLngBoundsExpression = [
-      [0, 0],
-      [3400, 5000], // change to resolution of the image
-    ];
-
-    L.imageOverlay(theFirstFloor, bounds).addTo(map);
-    map.setMaxBounds(bounds);
-
-    const newNodesOnCurrentFloor = hospitalData.filter(
-      (node) => node.floor == "1",
-    );
-
-    memoizedFindLines(newNodesOnCurrentFloor);
-    memoizedAddMarkers(map!, newNodesOnCurrentFloor);
-  }, [hospitalData, memoizedAddMarkers, memoizedFindLines]);
-
-  function clearMarkers() {
-    const map = mapRef.current;
-    if (!map) return;
-
-    map.eachLayer((layer) => {
-      if (layer instanceof L.Marker) {
-        map.removeLayer(layer);
+    if (!isSetUp && hospitalData.length != 0) {
+      if (!map) {
+        map = L.map("map-container", {
+          crs: CRS.Simple,
+          minZoom: -2,
+          maxZoom: 2,
+          zoomControl: true,
+          layers: [LayerF1],
+        }).setView([3400, 5000], -2);
+        mapRef.current = map;
       }
-    });
-  }
-
-  function clearLines() {
-    const map = mapRef.current;
-    if (!map || paths.length === 0) return;
-
-    paths.forEach((path) => path.removeFrom(map));
-    setPaths([]);
-  }
-
-  function addToPaths(newPath: Polyline) {
-    setPaths((prevPaths) => [...prevPaths, newPath]);
-  }
-
-  function changeFloor(floorName: string) {
-    const map = mapRef.current;
-    if (!map) return;
-    const convertedFloorName =
-      {
-        lowerLevel2: "L2",
-        lowerLevel1: "L1",
-        theFirstFloor: "1",
-        theSecondFloor: "2",
-        theThirdFloor: "3",
-      }[floorName] || "";
-
-    // Remove existing markers from the map
-    clearMarkers();
-    clearLines();
-
-    const initialFloorImage = floorMaps[floorName];
-    if (initialFloorImage) {
       const bounds: LatLngBoundsExpression = [
         [0, 0],
-        [3400, 5000], // Update with actual resolution
+        [3400, 5000], // change to resolution of the image
       ];
-      L.imageOverlay(initialFloorImage, bounds).addTo(map);
       map.setMaxBounds(bounds);
+      L.control.layers(baseLayers).addTo(map);
 
-      // Draw new markers for the selected floor after adding the image overlay
-      const newNodesOnCurrentFloor = hospitalData.filter(
-        (node) => node.floor === convertedFloorName,
-      );
-      memoizedAddMarkers(map, newNodesOnCurrentFloor);
-      memoizedFindLines(newNodesOnCurrentFloor);
+      // const newNodesOnCurrentFloor = hospitalData.filter(
+      //   (node) => node.floor == "1",
+      // );
+
+      Object.keys(Layers).forEach((key) => {
+        Nodes[key].addTo(Layers[key]);
+        Edges[key].addTo(Layers[key]);
+        L.imageOverlay(floorMaps[key], bounds).addTo(Layers[key]);
+      });
+      setIsSetUp(true);
     }
-  }
+    memoizedFindLines(hospitalData);
+    memoizedAddMarkers(map!, hospitalData);
+  }, [
+    Edges,
+    LayerF1,
+    Layers,
+    Nodes,
+    baseLayers,
+    floorMaps,
+    hospitalData,
+    isSetUp,
+    memoizedAddMarkers,
+    memoizedFindLines,
+  ]);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    Object.keys(Layers).forEach((key) => {
+      Nodes[key].clearLayers();
+      Edges[key].clearLayers();
+    });
+
+    // and then addd
+    memoizedFindLines(hospitalData);
+    memoizedAddMarkers(map!, hospitalData);
+  }, [
+    Edges,
+    Layers,
+    Nodes,
+    hospitalData,
+    memoizedAddMarkers,
+    memoizedFindLines,
+  ]);
 
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
@@ -319,36 +327,6 @@ export const MapEditor: React.FC = () => {
             color: "black",
           }}
         >
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("lowerLevel2")}
-          >
-            Lower Level 2
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("lowerLevel1")}
-          >
-            Lower Level 1
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("theFirstFloor")}
-          >
-            First Floor
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("theSecondFloor")}
-          >
-            Second Floor
-          </Button>
-          <Button
-            variant={"secondary"}
-            onClick={() => changeFloor("theThirdFloor")}
-          >
-            Third Floor
-          </Button>
           <Button onClick={() => (window.location.href = "/map-editor/table")}>
             <EditIcon className="mr-2 h-4 w-4" />
             <span>Table View</span>
