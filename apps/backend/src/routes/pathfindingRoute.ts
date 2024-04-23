@@ -17,7 +17,6 @@ router.post("/", async (req, res) => {
   const data: { strategy: string; start: string; end: string } = req.body;
   let searchStrategy;
   const pathFindingContext: PathingContext = new PathingContext(new aStar());
-
   console.log(data);
 
   // Choose the strategy based on the provided parameter
@@ -26,6 +25,7 @@ router.post("/", async (req, res) => {
       searchStrategy = new BFS();
       break;
     case "AStar":
+      pathFindingContext.pathFindingStrategy = new aStar();
       searchStrategy = new aStar();
       break;
     case "DFS":
@@ -34,7 +34,6 @@ router.post("/", async (req, res) => {
     case "Dijkstra":
       pathFindingContext.pathFindingStrategy = new Dijkstra();
       searchStrategy = new Dijkstra();
-      console.log("Dijkstra");
       break;
     default:
       return res.status(400).json({ error: "Invalid search strategy" });
