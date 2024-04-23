@@ -141,7 +141,7 @@ export const FlowerContent = () => {
   return (
     <>
       <div
-        className="flex items-center justify-between"
+        className="flex items-center justify-center"
         style={{
           backgroundImage: `url(${bannerImage})`,
           backgroundSize: "cover",
@@ -152,12 +152,13 @@ export const FlowerContent = () => {
       >
         <div
           className="space-y-1"
-          style={{ color: "white", marginLeft: "20px" }}
+          style={{
+            color: "white",
+            marginLeft: "20px",
+            textShadow: "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+          }}
         >
-          <h2
-            className="text-2xl font-semibold tracking-tight"
-            style={{ fontSize: "30px" }}
-          >
+          <h2 className="text-2xl font-semibold tracking-tight">
             Flower Request
           </h2>
           <p

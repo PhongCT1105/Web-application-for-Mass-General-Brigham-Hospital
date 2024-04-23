@@ -108,24 +108,40 @@ export default function ServiceRequestPage() {
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                             height: "100px",
+                            borderRadius: "10px",
                           }}
                         >
                           <div className="space-y-1">
                             <h2
                               className="text-2xl font-semibold tracking-tight"
-                              style={{ color: "white", marginLeft: "20px" }}
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
                             >
                               Medication Request
                             </h2>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white", marginLeft: "20px" }}
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
                             >
                               By Mina Boktor & Alexander Kraemling
                             </p>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white", marginLeft: "20px" }}
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
                             >
                               Order and deliver a patient's medication from the
                               pharmacy
@@ -152,24 +168,40 @@ export default function ServiceRequestPage() {
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                             height: "100px",
+                            borderRadius: "10px",
                           }}
                         >
                           <div className="space-y-1">
                             <h2
                               className="text-2xl font-semibold tracking-tight"
-                              style={{ color: "white", marginLeft: "20px" }}
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
                             >
                               Internal Patient Transport
                             </h2>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white", marginLeft: "20px" }}
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
                             >
                               By Trang Tran & Phong Cao
                             </p>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white", marginLeft: "20px" }}
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
                             >
                               Move patients to a different room
                             </p>
@@ -183,15 +215,38 @@ export default function ServiceRequestPage() {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                          }}
+                        >
+                          <div
+                            className="space-y-1"
+                            style={{
+                              color: "white",
+                              marginLeft: "20px",
+                              textShadow:
+                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                            }}
+                          >
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Sanitation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white" }}
+                            >
                               By Alex Shettler & Tracy Yang
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white" }}
+                            >
                               Get sanitation services for an issue.
                             </p>
                           </div>
@@ -205,12 +260,32 @@ export default function ServiceRequestPage() {
                           "w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                          }}
+                        >
+                          <div
+                            className="space-y-1"
+                            style={{
+                              color: "white",
+                              marginLeft: "20px",
+                              textShadow:
+                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                            }}
+                          >
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Security Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white" }}
+                            >
                               Request Security services and optionally call 911.
                             </p>
                           </div>
@@ -224,12 +299,32 @@ export default function ServiceRequestPage() {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                          }}
+                        >
+                          <div
+                            className="space-y-1"
+                            style={{
+                              color: "white",
+                              marginLeft: "20px",
+                              textShadow:
+                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                            }}
+                          >
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Maintenance Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white" }}
+                            >
                               Request Security services and optionally call 911.
                             </p>
                           </div>
