@@ -186,11 +186,19 @@ export const nodeColumns: ColumnDef<Node>[] = [
   {
     // accessorKey
     id: "Edit",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Edit" />
-    ),
-    cell: ({ row, table }) => (
-      <EditCellActionButton row={row} table={table}></EditCellActionButton>
-    ),
+    header: ({ column }) => {
+      return (
+        <div className={""}>
+          <DataTableColumnHeader column={column} title="Edit" />
+        </div>
+      );
+    },
+    cell: ({ row, table }) => {
+      return (
+        // <div className={"min-w-[100px] text-right"}>
+        <EditCellActionButton row={row} table={table}></EditCellActionButton>
+        // </div>
+      );
+    },
   },
 ];
