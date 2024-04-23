@@ -27,23 +27,6 @@ export const columnsMedicationFormLog: ColumnDef<MedicationForm>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "medication",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Medication Name" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          {/*{label && <Badge variant="outline">{label.label}</Badge>}*/}
-          <span className="max-w-[300px] truncate font-medium">
-            {row.getValue("medication")}
-          </span>
-        </div>
-      );
-    },
-    enableHiding: false,
-  },
-  {
     accessorKey: "employee",
     header: ({ column }) => (
       <DataTableColumnHeaderEmployee column={column} title="Employee Name" />

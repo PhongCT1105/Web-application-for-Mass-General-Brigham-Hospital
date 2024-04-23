@@ -467,7 +467,7 @@ export const MapBlock: React.FC = () => {
         (b.ycoord - a.ycoord) * (c.xcoord - a.xcoord);
       console.log(crossProduct);
 
-      const tolerance = 700;
+      const tolerance = 500;
       if (Math.abs(crossProduct) < tolerance) {
         return { text: "Continue Straight at " + b.longName, icon: UpArrow };
       } else if (crossProduct > 0) {
