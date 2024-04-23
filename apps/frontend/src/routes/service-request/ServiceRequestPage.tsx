@@ -17,7 +17,7 @@ import {
   Biohazard,
   Hammer,
 } from "lucide-react";
-import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
+import { FlowerContent } from "@/routes/service-request/flower-request/flower-request-content.tsx";
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
 import { Maintenance } from "@/routes/service-request/MaintenanceRequestPage.tsx";

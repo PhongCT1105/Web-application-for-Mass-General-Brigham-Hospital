@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { cartItem } from "./flower-request-content";
+import { cartItem } from "./flower-request/flower-request-content.tsx";
 
 interface props {
   form: cartItem[];
