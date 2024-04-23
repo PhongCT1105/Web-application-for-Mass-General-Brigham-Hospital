@@ -120,10 +120,10 @@ export const MapBlock: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<string>("AStar");
-  const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
+  //const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
-  const [searchPath, setSearchPath] = useState<Node[]>([]);
+  //const [searchPath, setSearchPath] = useState<Node[]>([]);
   const [startNodeName, setStartNodeName] = useState("");
   const [endNodeName, setEndNodeName] = useState("");
   const [startNodeID, setStartNodeID] = useState("");
@@ -300,7 +300,9 @@ export const MapBlock: React.FC = () => {
         const startLocation: HospitalData | undefined = hospitalData.find(
           (h) => h.nodeID === startNodeID,
         );
-        const endLocation = hospitalData.find((h) => h.nodeID === endNodeID);
+        const endLocation: HospitalData | undefined = hospitalData.find(
+          (h) => h.nodeID === endNodeID,
+        );
 
         if (!startLocation) {
           setStartNodeID(locationID);
@@ -375,7 +377,7 @@ export const MapBlock: React.FC = () => {
         SpecialMarkers[key].addTo(Layers[key]);
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
-        Paths[key].addTo(Layers[key]);
+        //Paths[key].addTo(Layers[key]);
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -391,7 +393,6 @@ export const MapBlock: React.FC = () => {
     hospitalData,
     isDataLoaded,
     startNodeID,
-    searchPath,
     StartMarker,
     EndMarker,
   ]); // Dependency array
@@ -399,11 +400,12 @@ export const MapBlock: React.FC = () => {
   function drawPath(start: string, end: string) {
     const startHospital = hospitalData.find((h) => h.nodeID === start);
     const endHospital = hospitalData.find((h) => h.nodeID === end);
+
     if (!startHospital || !endHospital) {
       console.error("Start or end location not found in hospital data.");
       return;
     }
-    setCurrentFloor(currentFloor);
+    // setCurrentFloor(currentFloor);
 
     const startCoords: [number, number] = [
       3400 - startHospital.yCoord,
@@ -471,6 +473,12 @@ export const MapBlock: React.FC = () => {
   }
 
   function placeFloorMarkers(searchPath: Node[]) {
+    //const reversePath = searchPath.reverse();
+    changeFloor(searchPath[searchPath.length - 1].floor, searchPath);
+    console.log(
+      "searchPath.length - 2 :" + searchPath[searchPath.length - 1].floor,
+    );
+    console.log("changeFloor here:" + searchPath[0].floor);
     for (let i = 0; i < searchPath.length - 1; i++) {
       const current = searchPath[i];
       const currentCoord: LatLngExpression = [
@@ -494,11 +502,13 @@ export const MapBlock: React.FC = () => {
         );
       }
     }
-    changeFloor(searchPath[0].floor);
   }
 
-  function createTextDirections(nodeArray: Node[], currentFloor: string) {
-    setCurrentFloor(currentFloor);
+  function createTextDirections(
+    nodeArray: Node[],
+    //, currentFloor: string
+  ) {
+    //setCurrentFloor(currentFloor);
     console.log("Text directions should be created now");
 
     const paths: Node[][] = parsePath(nodeArray);
@@ -580,9 +590,10 @@ export const MapBlock: React.FC = () => {
         }
       }
     }
-
     Object.keys(Layers).forEach((key) => {
       Paths[key].addTo(Layers[key]);
+      StartMarker[key].clearLayers();
+      EndMarker[key].clearLayers();
     });
 
     placeStartEndMarkers(searchPath);
@@ -656,9 +667,8 @@ export const MapBlock: React.FC = () => {
       end: end,
     };
     console.log(test);
-
     const nodeArray: Node[] = [];
-
+    handleClear();
     async function path() {
       const { data: response } = await axios.post("/api/search", test, {
         headers: {
@@ -682,21 +692,20 @@ export const MapBlock: React.FC = () => {
     }
 
     path().then(() => {
-      setSearchPath(nodeArray);
+      //setSearchPath(nodeArray);
       console.log(nodeArray);
-      console.log(searchPath);
       addPathPolylines(nodeArray);
-      createTextDirections(nodeArray, nodeArray[0].floor);
+      createTextDirections(nodeArray); //nodeArray[0].floor);
     });
   }
 
-  function changeFloor(floor: string) {
+  function changeFloor(floor: string, searchPath: Node[]) {
     const map = mapRef.current;
     if (!map) return;
     const layer: L.FeatureGroup = Layers[floor];
     if (!layer) return;
     map.removeLayer(Layers[floor]);
-    layer.addTo(map);
+    Layers[searchPath[0].floor].addTo(map);
 
     const searchPathOnThisFloor = searchPath.filter(
       (node) => node.floor === searchPath[0].floor,
@@ -791,7 +800,7 @@ export const MapBlock: React.FC = () => {
             onClear={handleClear}
             //onChange={changeMarker}
             changePathfindingStrategy={changePathfindingStrategy}
-            currentFloor={currentFloor}
+            //currentFloor={currentFloor}
             textDirections={textDirections}
           />
         </div>

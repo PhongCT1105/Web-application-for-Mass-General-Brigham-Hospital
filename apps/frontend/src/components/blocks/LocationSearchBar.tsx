@@ -40,7 +40,7 @@ interface SearchBarProps {
   onSearch: (startID: string, endID: string) => void;
   onClear: () => void;
   changePathfindingStrategy: (strat: string) => void;
-  currentFloor: string;
+  //currentFloor: string;
   textDirections: direction[];
   children?: React.ReactNode; // Add this line
 }
