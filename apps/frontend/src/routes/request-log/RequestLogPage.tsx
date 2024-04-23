@@ -288,8 +288,13 @@ export const RequestLogPage = () => {
                             </p>
                           </div>
                         </div>
+
                         <Separator className="my-4" />
                         <DataTable
+                          searchBar={{
+                            title: "employee name",
+                            columnId: "employeeName",
+                          }}
                           data={tranportLog}
                           columns={TransportRequestColumns}
                         />
@@ -312,6 +317,10 @@ export const RequestLogPage = () => {
                         </div>
                         <Separator className="my-4" />
                         <DataTable
+                          searchBar={{
+                            title: "employee name",
+                            columnId: "name",
+                          }}
                           columns={columnsSanitationFormLog}
                           data={sanitationLog}
                         />
@@ -356,6 +365,10 @@ export const RequestLogPage = () => {
                         </div>
                         <Separator className="my-4" />
                         <DataTable
+                          searchBar={{
+                            title: "employee name",
+                            columnId: "employeeName",
+                          }}
                           columns={columnsMaintenanceLog}
                           data={maintenanceLog}
                         />
