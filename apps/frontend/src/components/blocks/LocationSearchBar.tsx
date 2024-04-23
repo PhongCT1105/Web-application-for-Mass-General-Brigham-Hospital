@@ -16,38 +16,41 @@ import {
 } from "@/components/ui/card.tsx";
 import { CircleDot, CirclePlay, EllipsisVertical } from "lucide-react";
 // import { Node } from "@/context/nodeContext.tsx";
-import { useSearchContext } from "@/components/blocks/MapBlock.tsx";
+import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 
 // import {Label} from "@/components/ui/label.tsx";
 
-interface changeMarker {
-  start: string;
-  end: string;
-  setStart: React.Dispatch<React.SetStateAction<string>>;
-  setEnd: React.Dispatch<React.SetStateAction<string>>;
-}
-
-interface locationData {
-  nodeID: string;
-  longName: string;
-}
+// interface changeMarker {
+//   start: string;
+//   end: string;
+//   setStart: React.Dispatch<React.SetStateAction<string>>;
+//   setEnd: React.Dispatch<React.SetStateAction<string>>;
+// }
+//
+// interface locationData {
+//   nodeID: string;
+//   longName: string;
+// }
 
 interface SearchBarProps {
-  locations: locationData[];
-  //hospitalData: HospitalData[];
-  onSearch: (start: string, end: string) => void;
+  locations: {
+    nodeID: string;
+    longName: string;
+  }[];
+  onSearch: (startID: string, endID: string) => void;
   onClear: () => void;
-  currentFloor: string;
   changePathfindingStrategy: (strat: string) => void;
-  //nodesOnFloor: HospitalData[];
-  onChange?: changeMarker;
+  currentFloor: string;
+  textDirections: direction[];
+  children?: React.ReactNode; // Add this line
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
   locations,
   onSearch,
   onClear,
-  changePathfindingStrategy, // New prop
+  changePathfindingStrategy,
+  textDirections, // New prop
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -243,18 +246,19 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
       <Card className={"m-4 w-full shadow"}>
         <CardHeader>
-          <CardTitle className={"font-bold"}>Instructions:</CardTitle>
+          <CardTitle className={"font-bold"}>Directions:</CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className={"font-semibold"}>
-            Before attempting to find a path, ensure that you have a floor
-            selected.
-          </p>
-          <p className={"font-light"}>
-            Click once on a node to set it as your start node, click twice to
-            set it as your end node. Please click twice on "Find Path" to get
-            directions.
-          </p>
+        <CardContent style={{ maxHeight: "45vh", overflowY: "auto" }}>
+          {textDirections.map((direction, index) => (
+            <div key={index} style={{ display: "flex", alignItems: "center" }}>
+              <img
+                src={direction.icon}
+                alt="arrow-icon"
+                style={{ width: "24px", height: "24px", marginRight: "8px" }}
+              />
+              <span>{direction.text}</span>
+            </div>
+          ))}
         </CardContent>
       </Card>
       {/*  <h3 className="mb-3 mt-0 text-center text-2xl">Directions</h3>*/}

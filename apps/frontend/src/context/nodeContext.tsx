@@ -71,7 +71,6 @@ export const GraphStateProvider = ({ children }: GraphStateProviderProps) => {
         }));
 
         setNodes(updatedNodes);
-
         console.log("Successfully loaded node data");
         // console.log(nodeData);
       } catch (error) {

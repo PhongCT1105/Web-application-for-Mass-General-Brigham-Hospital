@@ -80,10 +80,12 @@ router.post("/node", async (req, res) => {
     // Iterate over nodeData and create or update nodes
     for (let i = 0; i < nodeData.length; i++) {
       const node = nodeData[i];
-      // Check if node exists in the database
-      const existingNode = existingNodes.find(
-        (existingNode) => existingNode.nodeID === node.nodeID,
-      );
+      // Find existing node by nodeID
+      const existingNode = await prisma.nodes.findUnique({
+        where: {
+          nodeID: node.nodeID,
+        },
+      });
 
       if (existingNode) {
         // If node exists, update it
