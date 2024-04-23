@@ -66,7 +66,12 @@ export default function ServiceRequestPage() {
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
               {/*<Sidebar className="hidden lg:block"/>*/}
-              <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
+              <div
+                className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto"
+                style={{
+                  backgroundColor: "#F1F1F1",
+                }}
+              >
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs

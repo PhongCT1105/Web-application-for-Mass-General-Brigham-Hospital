@@ -307,10 +307,9 @@ export const SheduleContent = () => {
   return (
     <>
       <Separator className="my-4" />
-
-      <div className=" flex  border rounded-md  text mx-10 my-5">
-        <div className="w-3/4 justify-center items-center">
-          <Card className=" border-none">
+      <div className="flex  border rounded-md  text mx-10 my-5">
+        <div className=" w-3/4 justify-center items-center">
+          <Card className=" border-none p-4">
             {/*<CardHeader>*/}
             {/*  /!*<CardTitle>Request Information</CardTitle>*!/*/}
             {/*  /!*<CardDescription>*!/*/}
@@ -318,7 +317,7 @@ export const SheduleContent = () => {
             {/*  /!*</CardDescription>*!/*/}
             {/*</CardHeader>*/}
             <CardContent>
-              <div className="space-y-6 mt-6">
+              <div className="space-y-6 mt-3">
                 <h1 className="text-2xl font-bold my-2">Employee</h1>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
@@ -560,9 +559,9 @@ export const SheduleContent = () => {
           </Card>
         </div>
 
-        <div className="w-2/5 items-center bg-secondary">
+        <div className="w-2/5 items-center justify-center bg-secondary">
           <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
-          <div className="max-w-md md:max-w-none mt-6 items-center">
+          <div className="flex items-center justify-center">
             <Calendar
               className={"w-full transform scale-150 md:ml-40 my-6 md:my-20"}
               mode="single"
@@ -575,7 +574,9 @@ export const SheduleContent = () => {
             />
           </div>
 
-          <h2 className={"ml-10"}>You picked {formattedDate}</h2>
+          <h2 className={"ml-10 flex items-center justify-center"}>
+            You picked {formattedDate}
+          </h2>
         </div>
       </div>
       <div>

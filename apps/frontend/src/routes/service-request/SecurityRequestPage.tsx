@@ -258,7 +258,7 @@ export const SecurityForm = () => {
 
   return (
     <>
-      <Card className={" flex flex-col border rounded-md text mx-10 my-5"}>
+      <Card className={" flex flex-col border rounded-md text mx-10 my-5 p-4"}>
         <CardContent className={"grid gap-4"}>
           <div className="space-y-1">
             {/* Name Input */}

@@ -265,7 +265,7 @@ export function Sanitation() {
     <>
       <div className="flex flex-col border rounded-md text mx-10 my-5 p-6">
         <div className=" justify-center items-center">
-          <Card className="border-none">
+          <Card className="border-none p-4">
             <CardContent>
               <div className="w-1/4">
                 <h1 className="text-2xl font-bold my-2 pb-2">Employee Name</h1>
