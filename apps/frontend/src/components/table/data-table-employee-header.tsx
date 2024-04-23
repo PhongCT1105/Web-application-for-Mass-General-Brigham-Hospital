@@ -92,17 +92,20 @@ export function DataTableColumnHeaderEmployee<TData, TValue>({
           </DropdownMenuItem>
           <DropdownMenuSeparator />
 
-          {employees.map((employee, index) => (
-            <DropdownMenuRadioItem
-              key={index}
-              value={employee}
-              onClick={() => {
-                column.toggleVisibility(true);
-              }}
-            >
-              {employee}
-            </DropdownMenuRadioItem>
-          ))}
+          <div className="max-h-60 overflow-y-auto">
+            {employees.map((employee, index) => (
+              <DropdownMenuRadioItem
+                className="max-h-60 overflow-y-auto"
+                key={index}
+                value={employee}
+                onClick={() => {
+                  column.toggleVisibility(true);
+                }}
+              >
+                {employee}
+              </DropdownMenuRadioItem>
+            ))}
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>
