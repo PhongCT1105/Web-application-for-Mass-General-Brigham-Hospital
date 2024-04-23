@@ -302,17 +302,6 @@ export const SheduleContent = () => {
 
   return (
     <>
-      <div className="flex">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Internal Patient Transport
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            By Trang Tran & Phong Cao
-          </p>
-        </div>
-      </div>
-
       <Separator className="my-4" />
 
       <div className=" flex  border rounded-md  text mx-10 my-5">

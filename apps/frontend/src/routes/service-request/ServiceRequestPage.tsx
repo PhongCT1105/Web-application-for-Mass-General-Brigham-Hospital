@@ -35,6 +35,12 @@ const MedicineContext = createContext<MedicineContextType>({
   setData: () => {}, // A dummy function
 });
 
+// const carouselSlides = createContext<TabsTriggerProps>({
+//     value: '',
+//     // eslint-disable-next-line no-empty-function
+//     className: '', // A dummy function
+// });
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const useMedicineData = () => useContext(MedicineContext);
 
@@ -51,10 +57,7 @@ export default function ServiceRequestPage() {
               <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
-                    <Tabs
-                      defaultValue="Flower Request"
-                      className="h-full space-y-6"
-                    >
+                    <Tabs value="Flower Request" className="h-full space-y-6">
                       <div className="space-between flex items-center">
                         <TabsList>
                           <TabsTrigger value="Flower Request">
@@ -98,6 +101,10 @@ export default function ServiceRequestPage() {
                             <p className="text-sm text-muted-foreground">
                               By Mina Boktor & Alexander Kraemling
                             </p>
+                            <p className="text-sm text-muted-foreground">
+                              Order and deliver a patient's medication from the
+                              pharmacy
+                            </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
@@ -113,6 +120,19 @@ export default function ServiceRequestPage() {
                         value="Patient Transport Request"
                         className="w-full flex-col border-none p-0 data-[state=active]:flex"
                       >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              Internal Patient Transport
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                              By Trang Tran & Phong Cao
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              Move patients to a different room
+                            </p>
+                          </div>
+                        </div>
                         <SheduleContent />
                       </TabsContent>
                       <TabsContent
@@ -127,7 +147,10 @@ export default function ServiceRequestPage() {
                               Sanitation Request
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                              Get sanitation services for an Issue.
+                              By Alex Shettler & Tracy Yang
+                            </p>
+                            <p className="text-sm text-muted-foreground">
+                              Get sanitation services for an issue.
                             </p>
                           </div>
                         </div>
@@ -137,7 +160,7 @@ export default function ServiceRequestPage() {
                       <TabsContent
                         value={"Security Request"}
                         className={
-                          " w-full flex-col border-none p-0 data-[state=active]:flex"
+                          "w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
                         <div className="flex items-center justify-between">
