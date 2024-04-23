@@ -1,6 +1,6 @@
 import * as React from "react";
 import { HomeCarousel } from "@/components/blocks/HomeCarousel.tsx";
-
+import { CircleX } from "lucide-react";
 import {
   FlowerSlide,
   SanitationSlide,
@@ -10,16 +10,47 @@ import {
 // import { MapBlock } from "@/components/blocks/MapBlock.tsx";
 // import securityGuard from "@/assets/cops.jpg";
 import mapPic from "@/assets/01_thefirstfloor.png";
+import "react-bootstrap";
+import { useState } from "react";
 // import { Footer } from "@/components/blocks/Footer.tsx";
 
 export default function StartPage() {
+  const [showPopup, setShowPopup] = useState(true);
+  const toggleShowInfoPopup = () => {
+    setShowPopup(!showPopup);
+  };
   return (
     <>
-      <div className="text-white text-bold bg-red-500 mb-0 p-0 text-s w-full text-center">
-        * * * This website is a term project exercise for WPI CS 3733 Software
-        Engineering (Prof. Wong) and is not to be confused with the actual
-        Brigham & Women’s Hospital website. * * *
-      </div>
+      {(() => {
+        if (showPopup) {
+          return (
+            <div
+              className="text-white
+                            text-bold bg-red-500
+                            mb-0 p-0 text-s w-full
+                            text-center alert alert-warning
+                            alert-dismissible
+                            fade show"
+              role="alert"
+            >
+              <strong>Notice! </strong>
+              This website is a term project exercise for WPI CS 3733 Software
+              Engineering (Prof. Wong) and is not to be confused with the actual
+              Brigham & Women’s Hospital website.
+              <CircleX
+                type="button"
+                className="rounded-circle"
+                data-dismiss="alert"
+                aria-label="Close"
+                style={{ float: "right" }}
+                onClick={toggleShowInfoPopup}
+              >
+                <span aria-hidden="true">&times;</span>
+              </CircleX>
+            </div>
+          );
+        }
+      })()}
       {/*<HeaderHome />*/}
       <HomeCarousel
         data={[
