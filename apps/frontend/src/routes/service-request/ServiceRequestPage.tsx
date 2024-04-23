@@ -1,5 +1,4 @@
 // "use client";
-
 import "../../styles/globals.css";
 import { Separator } from "@/components/ui/separator.tsx";
 // import { Sidebar } from "@/components/blocks/sidebar.tsx";
@@ -58,7 +57,10 @@ export default function ServiceRequestPage() {
               <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
-                    <Tabs value="Flower Request" className="h-full space-y-6">
+                    <Tabs
+                      defaultValue="Flower Request"
+                      className="h-full space-y-6"
+                    >
                       <div className="space-between flex items-center">
                         <TabsList>
                           <TabsTrigger value="Flower Request">
