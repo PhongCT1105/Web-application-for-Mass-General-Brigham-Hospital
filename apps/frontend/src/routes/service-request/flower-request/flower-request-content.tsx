@@ -114,6 +114,9 @@ export const FlowerContent = () => {
           },
         );
 
+        // alphabetizing location list
+        filteredLocations.sort((a: string, b: string) => a.localeCompare(b));
+        // set locations to filtered alphabetized location list
         setLocations(filteredLocations);
 
         console.log("Successfully fetched data from the API.");
