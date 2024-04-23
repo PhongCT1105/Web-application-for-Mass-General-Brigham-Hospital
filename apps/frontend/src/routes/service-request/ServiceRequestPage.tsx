@@ -9,7 +9,14 @@ import {
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
 
-import { Badge, FlowerIcon, PillIcon, Calendar, Biohazard } from "lucide-react";
+import {
+  Badge,
+  FlowerIcon,
+  PillIcon,
+  Calendar,
+  Biohazard,
+  Hammer,
+} from "lucide-react";
 import { FlowerContent } from "@/routes/service-request/flower-request-content.tsx";
 import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import { SecurityForm } from "@/routes/service-request/SecurityRequestPage.tsx";
@@ -84,7 +91,7 @@ export default function ServiceRequestPage() {
                             Security Request
                           </TabsTrigger>
                           <TabsTrigger value="Maintenance Request">
-                            <Badge className="mr-2 h-4 w-4" />
+                            <Hammer className="mr-2 h-4 w-4" />
                             Maintenance Request
                           </TabsTrigger>
                         </TabsList>
@@ -195,7 +202,7 @@ export default function ServiceRequestPage() {
                               Maintenance Request
                             </h2>
                             <p className="text-sm text-muted-foreground">
-                              Request Security services and optionally call 911.
+                              Report a maintenance issue
                             </p>
                           </div>
                         </div>
