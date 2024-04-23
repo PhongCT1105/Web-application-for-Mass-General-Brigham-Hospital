@@ -19,7 +19,7 @@ export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
   {
     accessorKey: "ename",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="Employee Name" />
     ),
     cell: ({ row }) => {
       return (
@@ -43,22 +43,6 @@ export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
         <div className="flex space-x-2">
           <span className="max-w-[200px] truncate font-medium">
             {row.getValue("location")}
-          </span>
-        </div>
-      );
-    },
-    enableHiding: false,
-  },
-  {
-    accessorKey: "employee",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Employee" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[200px] truncate font-medium">
-            {row.getValue("employee")}
           </span>
         </div>
       );
