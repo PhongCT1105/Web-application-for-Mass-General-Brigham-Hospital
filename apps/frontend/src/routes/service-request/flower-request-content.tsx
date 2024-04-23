@@ -39,7 +39,7 @@ import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
 import ten from "@/assets/discount-tags/ten-percent-discount.webp";
 import twenty from "@/assets/discount-tags/twenty-percent-discount.webp";
 import thirty from "@/assets/discount-tags/thirty-percent-discount.webp";
-import bannerImage from "@/assets/fe4c1f01-7035-4446-90af-29e95990b337.jpg";
+import bannerImage from "@/assets/flower-banner.jpg";
 
 import {
   Table,
@@ -147,6 +147,7 @@ export const FlowerContent = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           height: "100px",
+          borderRadius: "10px",
         }}
       >
         <div

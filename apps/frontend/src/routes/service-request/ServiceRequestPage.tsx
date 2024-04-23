@@ -20,6 +20,7 @@ import { Medication } from "@/interfaces/medicationReq.ts";
 import { pillData } from "@/interfaces/dataTypes/testData.ts";
 import React, { createContext, useContext, useState } from "react";
 import { SheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
+import bannerImage from "@/assets/hospital-floor-banner.jpg";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -100,15 +101,32 @@ export default function ServiceRequestPage() {
                         value="Medication Request"
                         className=" flex-col border-none p-0 data-[state=active]:flex"
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{ color: "white", marginLeft: "20px" }}
+                            >
                               Medication Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white", marginLeft: "20px" }}
+                            >
                               By Mina Boktor & Alexander Kraemling
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white", marginLeft: "20px" }}
+                            >
                               Order and deliver a patient's medication from the
                               pharmacy
                             </p>
@@ -127,15 +145,32 @@ export default function ServiceRequestPage() {
                         value="Patient Transport Request"
                         className="w-full flex-col border-none p-0 data-[state=active]:flex"
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{ color: "white", marginLeft: "20px" }}
+                            >
                               Internal Patient Transport
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white", marginLeft: "20px" }}
+                            >
                               By Trang Tran & Phong Cao
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white", marginLeft: "20px" }}
+                            >
                               Move patients to a different room
                             </p>
                           </div>
