@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
 import { MaintenanceForm } from "@/interfaces/maintenanceReq.ts";
+import { DataTableColumnHeaderEmployee } from "@/components/table/data-table-employee-header.tsx";
 export const columnsMaintenanceLog: ColumnDef<MaintenanceForm>[] = [
   {
     accessorKey: "reqId",
@@ -15,7 +16,7 @@ export const columnsMaintenanceLog: ColumnDef<MaintenanceForm>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Employee Name" />
+      <DataTableColumnHeaderEmployee column={column} title="Employee Name" />
     ),
     cell: ({ row }) => {
       return (
