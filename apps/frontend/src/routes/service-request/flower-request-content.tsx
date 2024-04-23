@@ -39,6 +39,7 @@ import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
 import ten from "@/assets/discount-tags/ten-percent-discount.webp";
 import twenty from "@/assets/discount-tags/twenty-percent-discount.webp";
 import thirty from "@/assets/discount-tags/thirty-percent-discount.webp";
+import bannerImage from "@/assets/fe4c1f01-7035-4446-90af-29e95990b337.jpg";
 
 import {
   Table,
@@ -139,19 +140,36 @@ export const FlowerContent = () => {
 
   return (
     <>
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">
+      <div
+        className="flex items-center justify-between"
+        style={{
+          backgroundImage: `url(${bannerImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          height: "100px",
+        }}
+      >
+        <div
+          className="space-y-1"
+          style={{ color: "white", marginLeft: "20px" }}
+        >
+          <h2
+            className="text-2xl font-semibold tracking-tight"
+            style={{ fontSize: "30px" }}
+          >
             Flower Request
           </h2>
-          <p className="text-sm text-muted-foreground">
+          <p
+            className="text-sm text-muted-foreground"
+            style={{ color: "#D3D3D3" }}
+          >
             Send a loved one a special gift
           </p>
         </div>
         <div className="ml-auto mr-4">
           <Popover>
             <PopoverTrigger>
-              <Button className={"px-5 mr-3"} variant={"outline"}>
+              <Button className={"px-5 mr-3"} variant={"default"}>
                 <ShoppingCart className={"mr-2 h-4 w-4"} />
                 Cart
               </Button>
