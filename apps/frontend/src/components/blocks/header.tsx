@@ -309,6 +309,7 @@ export function Header() {
                 </ul>
               )}
             </form>
+
             <ModeToggle />
             {!isLoading && isAuthenticated ? (
               <Button

@@ -39,6 +39,7 @@ import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
+
 declare module "leaflet" {
   interface Polyline {
     snakeIn: () => void;
@@ -468,6 +469,12 @@ export const MapBlock: React.FC = () => {
         return { text: "Turn Right at " + b.longName, icon: RightArrow };
       } else {
         return { text: "Turn Left at " + b.longName, icon: LeftArrow };
+        //   return (
+        //       <>
+        //       <p>Turn Left at</p>
+        //       <CornerLeftUp></CornerLeftUp>
+        //       </>
+        //   );
       }
     }
   }
@@ -533,7 +540,7 @@ export const MapBlock: React.FC = () => {
           icon: Hospital,
         };
         directionsArray.push(directionObject);
-        directionsArray.push({ text: "\n", icon: Circle });
+        directionsArray.push({ text: "\n\n", icon: Circle });
 
         for (let j = 0; j < paths[i].length - 1; j++) {
           const directionObject: direction = {
