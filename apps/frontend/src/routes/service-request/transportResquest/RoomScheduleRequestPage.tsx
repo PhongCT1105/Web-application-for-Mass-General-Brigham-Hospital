@@ -39,7 +39,8 @@ import {
 } from "@/components/ui/tooltip.tsx";
 
 export interface scheduleForm {
-  name: string;
+  employeeName: string;
+  patientName: string;
   priority: string;
   locationFrom: string;
   locationTo: string;
@@ -63,7 +64,8 @@ export interface scheduleForm {
 
 export const SheduleContent = () => {
   const [form, setForm] = useState<scheduleForm>({
-    name: "",
+    employeeName: "",
+    patientName: "",
     priority: "",
     locationFrom: "",
     locationTo: "",
@@ -80,6 +82,7 @@ export const SheduleContent = () => {
   const [locationsFrom, setLocationsFrom] = useState<string[]>([]);
   const [locationsTo, setLocationsTo] = useState<string[]>([]);
   const [buttonState, setButtonState] = useState<buttonColor>("ghost");
+  const [employees, setEmployees] = useState<string[]>([]);
 
   type buttonColor = "ghost" | "default";
 
@@ -128,6 +131,28 @@ export const SheduleContent = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get("/api/employeeData");
+        const rawData = response.data;
+
+        const extractedEmployees = rawData.map(
+          (item: { id: number; fName: string; lName: string; title: string }) =>
+            item.lName,
+        );
+
+        setEmployees(extractedEmployees);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchEmployees();
+  }, []);
+
   const handleLocationFromChange = (selectedLocation: string) => {
     setForm((prevState) => ({
       ...prevState,
@@ -140,6 +165,14 @@ export const SheduleContent = () => {
     setForm((prevState) => ({
       ...prevState,
       locationTo: selectedLocation,
+    }));
+    checkEmpty() ? setButtonState("ghost") : setButtonState("default");
+  };
+
+  const handleEmployee = (selectedEmployee: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      employeeName: selectedEmployee,
     }));
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
@@ -163,7 +196,8 @@ export const SheduleContent = () => {
   const clearForm = () => {
     setForm((prevState) => ({
       ...prevState,
-      name: "",
+      employeeName: "",
+      patientName: "",
       priority: "",
       locationFrom: "",
       locationTo: "",
@@ -219,7 +253,8 @@ export const SheduleContent = () => {
 
   const checkEmpty = () => {
     return (
-      form.name === "" ||
+      form.employeeName === "" ||
+      form.patientName === "" ||
       form.priority === "" ||
       form.locationFrom === "" ||
       form.locationTo === "" ||
@@ -233,7 +268,8 @@ export const SheduleContent = () => {
   //submit
   const handleSubmit = async () => {
     if (
-      form.name === "" ||
+      form.employeeName === "" ||
+      form.patientName === "" ||
       form.priority === "" ||
       form.locationFrom === "" ||
       form.locationTo === "" ||
@@ -267,17 +303,6 @@ export const SheduleContent = () => {
 
   return (
     <>
-      <div className="flex">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Internal Patient Transport
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            By Trang Tran & Phong Cao
-          </p>
-        </div>
-      </div>
-
       <Separator className="my-4" />
 
       <div className=" flex  border rounded-md  text mx-10 my-5">
@@ -291,14 +316,36 @@ export const SheduleContent = () => {
             {/*</CardHeader>*/}
             <CardContent>
               <div className="space-y-6 mt-6">
+                <h1 className="text-2xl font-bold my-2">Employee</h1>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="outline">
+                      {form.employeeName
+                        ? form.employeeName
+                        : "Select Your Name"}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                    {employees.map((employee, index) => (
+                      <DropdownMenuRadioItem
+                        key={index}
+                        value={employee}
+                        onClick={() => handleEmployee(employee)}
+                      >
+                        {employee}
+                      </DropdownMenuRadioItem>
+                    ))}
+                  </DropdownMenuContent>
+                </DropdownMenu>
+
                 <div>
                   <h1 className="text-2xl font-bold">Patient Name</h1>
                   <Input
                     type="text"
-                    id="name"
-                    placeholder="Enter Your Name Here"
+                    id="patientName"
+                    placeholder="Enter The Patient's Name Here"
                     onChange={handleFormChange}
-                    value={form.name}
+                    value={form.patientName}
                   />
                 </div>
 
@@ -548,7 +595,8 @@ export const SheduleContent = () => {
               {submittedForms.map((request) => {
                 return (
                   <TableRow>
-                    <TableCell>{request.name}</TableCell>
+                    <TableCell>{request.employeeName}</TableCell>
+                    <TableCell>{request.patientName}</TableCell>
                     <TableCell>{request.locationFrom}</TableCell>
                     <TableCell>{request.locationTo}</TableCell>
                     <TableCell>

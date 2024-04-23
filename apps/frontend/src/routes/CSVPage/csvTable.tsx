@@ -162,7 +162,7 @@ const CSVTable: React.FC = () => {
 
     console.log("Ok");
     fetchData().then(); // Fetch data when the component mounts
-  }, []); // Empty dependency array to fetch data only once
+  }, [nodes, edges, employees]); // Empty dependency array to fetch data only once
 
   const importCSV = async (file: File): Promise<CSVData[]> => {
     return new Promise<CSVData[]>((resolve, reject) => {
@@ -336,6 +336,9 @@ const CSVTable: React.FC = () => {
     }
     if (columns.length === 8) {
       return "Node";
+    }
+    if (columns.length === 4) {
+      return "Employee";
     }
     return "";
   };

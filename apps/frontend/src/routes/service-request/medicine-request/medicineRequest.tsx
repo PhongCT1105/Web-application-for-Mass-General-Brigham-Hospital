@@ -40,6 +40,13 @@ import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
 import axios from "axios";
+import { useEffect } from "react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 interface DataTableProps {
   columns: ColumnDef<Medication>[];
 }
@@ -47,8 +54,10 @@ interface DataTableProps {
 export function MedicineRequest({ columns }: DataTableProps) {
   const now = new Date();
 
+  const [employees, setEmployees] = React.useState<string[]>([]);
   const [submission, setSubmission] = React.useState<Medication[]>([]);
   const [form, setForm] = React.useState<MedicationForm>({} as MedicationForm);
+  const [locations, setLocations] = React.useState<string[]>([]);
 
   const handleAddRow = (item: Medication) => {
     setSubmission((prev) => [
@@ -83,6 +92,78 @@ export function MedicineRequest({ columns }: DataTableProps) {
     if (res.status == 200) {
       console.log("success");
     }
+  };
+
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get("/api/employeeData");
+        const rawData = response.data;
+
+        const extractedEmployees = rawData.map(
+          (item: { id: number; fName: string; lName: string; title: string }) =>
+            item.lName,
+        );
+
+        setEmployees(extractedEmployees);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchEmployees();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/mapreq/nodes");
+        const rawData = response.data;
+
+        const extractedLocations = rawData.map(
+          (item: {
+            nodeID: string;
+            xcoord: number;
+            ycoord: number;
+            floor: string;
+            building: string;
+            nodeType: string;
+            longName: string;
+            shortName: string;
+          }) => item.longName,
+        );
+        const filteredLocations = extractedLocations.filter(
+          (location: string) => {
+            return !location.startsWith("Hall");
+          },
+        );
+
+        setLocations(filteredLocations);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchData();
+  }, []);
+
+  const handleLocation = (selectedLocation: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      location: selectedLocation,
+    }));
+    //checkEmpty() ? setButtonState("ghost") : setButtonState("default");
+  };
+
+  const handleEmployeeChange = (selectedEmployee: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      employee: selectedEmployee,
+    }));
   };
 
   const [rowSelection, setRowSelection] = React.useState({});
@@ -193,20 +274,44 @@ export function MedicineRequest({ columns }: DataTableProps) {
           </Button>
         </DialogTrigger>
         <DialogContent>
-          <Label>Signature</Label>
-          <Input
-            type={"text"}
-            id={"employee"}
-            placeholder={"Sign here"}
-            onChange={handleFormChange}
-          />
+          <Label>Employee Name</Label>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" className="">
+                {form.employee ? form.employee : "Select Your Name"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+              {employees.map((employee, index) => (
+                <DropdownMenuRadioItem
+                  key={index}
+                  value={employee}
+                  onClick={() => handleEmployeeChange(employee)}
+                >
+                  {employee}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Label>Patient Location</Label>
-          <Input
-            type={"text"}
-            id={"location"}
-            placeholder={"Location"}
-            onChange={handleFormChange}
-          />
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline">
+                {form.location ? form.location : "Select Location"}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+              {locations.map((location, index) => (
+                <DropdownMenuRadioItem
+                  key={index}
+                  value={location}
+                  onClick={() => handleLocation(location)}
+                >
+                  {location}
+                </DropdownMenuRadioItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
           <Label>Patient Name</Label>
           <Input
             type={"text"}

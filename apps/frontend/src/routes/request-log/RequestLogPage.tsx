@@ -1,8 +1,6 @@
 import React from "react";
-import { cartItem } from "@/routes/service-request/flower-request-content.tsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { FlowerLogPage } from "@/routes/request-log/flowerLogPage.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import {
   Tabs,
@@ -10,10 +8,18 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs.tsx";
-import { Badge, Biohazard, Calendar, FlowerIcon, PillIcon } from "lucide-react";
+import {
+  Badge,
+  Biohazard,
+  Calendar,
+  FlowerIcon,
+  PillIcon,
+  Hammer,
+} from "lucide-react";
 import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 import { SecurityFormLogTable } from "@/routes/request-log/securityLogPage.tsx";
+import { MaintenanceForm } from "@/interfaces/maintenanceReq.ts";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
 import { columnsSecurityFormLog } from "@/routes/service-request/securityColumns.tsx";
 import { SecurityForm } from "@/interfaces/securityReq.ts";
@@ -22,61 +28,17 @@ import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 import { TransportRequestColumns } from "@/routes/service-request/transportResquest/transportTable.tsx";
 import { DataTable } from "@/components/table/data-table.tsx";
-export interface requestFormWID {
-  reqID: number;
-  cartItems: cartItem[];
-  sender: string;
-  recipient: string;
-  location: string;
-  message?: string;
-  total: number;
-}
-interface CartItem {
-  name: string;
-  cost: number;
-}
-function parseCartItems(input: string): CartItem[] {
-  const items: CartItem[] = [];
-  const parts = input.split(",");
-
-  for (let i = 0; i < parts.length; i += 2) {
-    const name = parts[i];
-    const cost = parseFloat(parts[i + 1]);
-
-    if (!isNaN(cost)) {
-      items.push({ name, cost });
-    }
-  }
-  return items;
-}
-
-export interface RequestFormWID {
-  reqID: number;
-  cartItems: CartItem[];
-  sender: string;
-  recipient: string;
-  location: string;
-  message?: string;
-  total: number;
-}
-
-interface securityRequest {
-  reqID: number;
-  ename: string;
-  location: string;
-  employee: string;
-  situation: string;
-  call: boolean;
-  status: string;
-  priority: string;
-}
+import { FlowerForm } from "@/interfaces/flowerReq.ts";
+import { columnsFlowerFormLog } from "@/routes/service-request/flower-request/flowerFormColumn.tsx";
+import { columnsMaintenanceLog } from "@/routes/service-request/MaintenanceColumns.tsx";
 
 export const RequestLogPage = () => {
-  const [flowerLog, setFlowerLog] = useState<requestFormWID[]>([]);
+  const [flowerLog, setFlowerLog] = useState<FlowerForm[]>([]);
   const [medicineLog, setMedicineLog] = useState<MedicationForm[]>([]);
   const [securityLog, setSecurityLog] = useState<SecurityForm[]>([]);
   const [tranportLog, setTransportLog] = useState<ScheduleForm[]>([]);
   const [sanitationLog, setSanitationLog] = useState<SanitationForm[]>([]);
+  const [maintenanceLog, setMaintenanceLog] = useState<MaintenanceForm[]>([]);
 
   useEffect(() => {
     async function fetchData() {
@@ -107,27 +69,19 @@ export const RequestLogPage = () => {
       try {
         const res = await axios.get("/api/flowerReq");
         const rawData = res.data;
-        /* eslint-disable */
-        const cleanedData: RequestFormWID[] = rawData.map(
-          (item: {
-            reqID: number;
-            cartItems: any;
-            sender: string;
-            recipient: string;
-            location: string;
-            message: string;
-            total: number;
-          }) => ({
-            reqID: item.reqID,
-            cartItems: parseCartItems(item.cartItems),
-            sender: item.sender,
-            recipient: item.recipient,
-            location: item.location,
-            message: item.message,
-            total: item.total,
-          }),
-        );
-        /* eslint-enable */
+
+        const cleanedData: FlowerForm[] = rawData.map((item: FlowerForm) => ({
+          reqID: item.reqID,
+          cartItems: item.cartItems,
+          sender: item.sender,
+          recipient: item.recipient,
+          location: item.location,
+          message: item.message,
+          total: item.total,
+          dateSubmitted: item.dateSubmitted,
+          priority: item.priority,
+          status: item.status,
+        }));
         setFlowerLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -143,8 +97,8 @@ export const RequestLogPage = () => {
         const res = await axios.get("/api/securityReq");
         const rawData = res.data;
 
-        const cleanedData: securityRequest[] = rawData.map(
-          (item: securityRequest) => ({
+        const cleanedData: SecurityForm[] = rawData.map(
+          (item: SecurityForm) => ({
             reqID: item.reqID,
             ename: item.ename,
             location: item.location,
@@ -200,7 +154,8 @@ export const RequestLogPage = () => {
         const cleanedData: ScheduleForm[] = rawData.map(
           (item: ScheduleForm) => ({
             reqID: item.reqID,
-            name: item.name,
+            employeeName: item.employeeName,
+            patientName: item.patientName,
             locationFrom: item.locationFrom,
             locationTo: item.locationTo,
             reason: item.reason,
@@ -219,6 +174,31 @@ export const RequestLogPage = () => {
     }
     fetchData().then(() => console.log(tranportLog));
   }, [tranportLog]);
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await axios.get("/api/maintenanceReq");
+        const rawData = res.data;
+        const cleanedData: MaintenanceForm[] = rawData.map(
+          (item: MaintenanceForm) => ({
+            reqId: item.reqId,
+            name: item.name,
+            location: item.location,
+            typeOfIssue: item.typeOfIssue,
+            severity: item.severity,
+            status: item.status,
+            description: item.description,
+          }),
+        );
+        setMaintenanceLog(cleanedData);
+        console.log("successfully got data from get request");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData().then(() => console.log(maintenanceLog));
+  }, [maintenanceLog]);
 
   return (
     <div className={" scrollbar-hide"}>
@@ -256,6 +236,10 @@ export const RequestLogPage = () => {
                             <Badge className="mr-2 h-4 w-4" />
                             Security Request
                           </TabsTrigger>
+                          <TabsTrigger value="Maintenance Request">
+                            <Hammer className="mr-2 h-4 w-4" />
+                            Maintenance Request
+                          </TabsTrigger>
                         </TabsList>
                       </div>
                       <TabsContent
@@ -263,7 +247,10 @@ export const RequestLogPage = () => {
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
-                        <FlowerLogPage data={flowerLog} />
+                        <DataTable
+                          data={flowerLog}
+                          columns={columnsFlowerFormLog}
+                        />
                       </TabsContent>
                       <TabsContent
                         value="Medication Request"
@@ -349,6 +336,28 @@ export const RequestLogPage = () => {
                         <SecurityFormLogTable
                           columns={columnsSecurityFormLog}
                           data={securityLog}
+                        />
+                      </TabsContent>
+                      <TabsContent
+                        value={"Maintenance Request"}
+                        className={
+                          " w-full flex-col border-none p-0 data-[state=active]:flex"
+                        }
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              Maintenance Request
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                              Get maintenance services for an Issue.
+                            </p>
+                          </div>
+                        </div>
+                        <Separator className="my-4" />
+                        <DataTable
+                          columns={columnsMaintenanceLog}
+                          data={maintenanceLog}
                         />
                       </TabsContent>
                     </Tabs>

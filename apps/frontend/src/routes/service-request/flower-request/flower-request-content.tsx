@@ -12,10 +12,10 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { ShoppingCart, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { ToastAction } from "@/components/ui/toast";
+import { ToastAction } from "@/components/ui/toast.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import {
@@ -32,7 +32,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui/popover.tsx";
 
 import { Textarea } from "@/components/ui/textarea.tsx";
 import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
@@ -50,6 +50,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 
 export interface cartItem {
   cost: number;
@@ -65,20 +71,66 @@ export interface requestForm {
   total: number;
   priority: string;
   status: string;
+  dateSubmitted: Date;
 }
 
 export const FlowerContent = () => {
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
   const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
+  const [locations, setLocations] = useState<string[]>([]);
   const [form, setForm] = useState<requestForm>({
     cartItems: cartItems,
     sender: "",
     recipient: "",
     location: "",
     total: totalCost,
-    priority: "",
-    status: "",
+    priority: "Low",
+    status: "Unassigned",
+    dateSubmitted: new Date(),
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/mapreq/nodes");
+        const rawData = response.data;
+
+        const extractedLocations = rawData.map(
+          (item: {
+            nodeID: string;
+            xcoord: number;
+            ycoord: number;
+            floor: string;
+            building: string;
+            nodeType: string;
+            longName: string;
+            shortName: string;
+          }) => item.longName,
+        );
+        const filteredLocations = extractedLocations.filter(
+          (location: string) => {
+            return !location.startsWith("Hall");
+          },
+        );
+
+        setLocations(filteredLocations);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchData();
+  }, []);
+
+  const handleLocation = (selectedLocation: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      location: selectedLocation,
+    }));
+    //checkEmpty() ? setButtonState("ghost") : setButtonState("default");
+  };
 
   const handleForm = (
     event: React.ChangeEvent<
@@ -198,12 +250,28 @@ export const FlowerContent = () => {
                           <Label htmlFor="location" className="text-right">
                             Recipient's Location
                           </Label>
-                          <Input
-                            onChange={handleForm}
-                            id="location"
-                            placeholder="Location"
-                            className="col-span-3"
-                          />
+                          <div className="w-1/5">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="outline">
+                                  {form.location
+                                    ? form.location
+                                    : "Select Location"}
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                                {locations.map((location, index) => (
+                                  <DropdownMenuRadioItem
+                                    key={index}
+                                    value={location}
+                                    onClick={() => handleLocation(location)}
+                                  >
+                                    {location}
+                                  </DropdownMenuRadioItem>
+                                ))}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
                           <Label htmlFor="message" className="text-right">
                             Message to Recipient's (Optional)
                           </Label>
@@ -224,17 +292,17 @@ export const FlowerContent = () => {
                             value={form.priority}
                             onChange={handleForm}
                           >
-                            <option id="emergency" value="emergency">
-                              Emergency
-                            </option>
-                            <option id="high" value="high">
-                              High
+                            <option id="low" value="low">
+                              Low
                             </option>
                             <option id="medium" value="medium">
                               Medium
                             </option>
-                            <option id="low" value="low">
-                              Low
+                            <option id="high" value="high">
+                              High
+                            </option>
+                            <option id="emergency" value="emergency">
+                              Emergency
                             </option>
                           </select>
                           <Label htmlFor="Priority" className="text-right">
@@ -451,28 +519,28 @@ export const FlowerContent = () => {
                 <CardContent className={"relative w-[300px] mt-2"}>
                   {addon.discountAmt === 10 && (
                     <img
-                      src="src/assets/discount-tags/ten-percent-discount.webp"
+                      src="../../../assets/discount-tags/ten-percent-discount.webp"
                       alt="10% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 20 && (
                     <img
-                      src="src/assets/discount-tags/twenty-percent-discount.webp"
+                      src="../../../assets/discount-tags/twenty-percent-discount.webp"
                       alt="20% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 30 && (
                     <img
-                      src="src/assets/discount-tags/thirty-percent-discount.webp"
+                      src="../../../assets/discount-tags/thirty-percent-discount.webp"
                       alt="30% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 50 && (
                     <img
-                      src="src/assets/discount-tags/fifty-percent-discount.png"
+                      src="../../../assets/discount-tags/fifty-percent-discount.png"
                       alt="50% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
