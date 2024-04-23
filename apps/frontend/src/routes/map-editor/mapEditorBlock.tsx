@@ -26,7 +26,15 @@ import { Button } from "@/components/ui/button.tsx";
 import { EditIcon } from "lucide-react";
 import GrayDot from "@/assets/gray-dot.png";
 import axios from "axios";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export interface Edge {
   edgeID: string;
@@ -37,13 +45,13 @@ export interface Edge {
 interface HospitalData {
   nodeID: string;
   name: string;
+  shortName: string;
   geocode: string;
   floor: string;
   xcoord: number;
   ycoord: number;
   nodeType: string;
   building: string;
-  shortName: string;
 }
 
 // Define the map component
@@ -51,6 +59,10 @@ export const MapEditor: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
   // const [paths, setPaths] = useState<Polyline[]>([]);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
+  const [originalHospitalData, setOriginalHospitalData] = useState<
+    HospitalData[]
+  >([]);
+  const [selectedNode, setSelectedNode] = useState<HospitalData | null>(null);
   const [isSetUp, setIsSetUp] = useState(false);
   const { nodes, edges, setNodes } = useGraphContext();
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -59,17 +71,53 @@ export const MapEditor: React.FC = () => {
   const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
 
+  const handleFinalize = () => {
+    if (selectedNode) {
+      // Find the index of the selected node in the node array
+      const index = nodes.findIndex(
+        (node) => node.nodeID === selectedNode.nodeID,
+      );
+      if (index !== -1) {
+        // Update the node at the found index with the selected node
+        setNodes((prevNodes) =>
+          prevNodes.map((item) =>
+            item.nodeID === selectedNode.nodeID
+              ? {
+                  longName: selectedNode.name,
+                  xcoord: selectedNode.xcoord,
+                  ycoord: selectedNode.ycoord,
+                  floor: selectedNode.floor,
+                  building: selectedNode.building,
+                  nodeID: selectedNode.nodeID,
+                  nodeType: selectedNode.nodeType,
+                  shortName: selectedNode.nodeType,
+                }
+              : item,
+          ),
+        );
+        setHospitalData((prevData) =>
+          prevData.map((item) =>
+            item.nodeID === selectedNode.nodeID
+              ? {
+                  ...item,
+                  name: selectedNode.name,
+                  xcoord: selectedNode.xcoord,
+                  ycoord: selectedNode.ycoord,
+                  geocode: `${selectedNode.xcoord},${selectedNode.ycoord}`,
+                }
+              : item,
+          ),
+        );
+      } else {
+        console.log("Selected node not found in the node array.");
+      }
+      setSelectedNode(null); // Clear the selected node after finalizing
+    } else {
+      console.log("No node selected.");
+    }
+  };
+
   const handleSubmit = () => {
-    const filteredData = hospitalData.map((node) => ({
-      xcoord: node.xcoord.toFixed(0),
-      ycoord: node.xcoord.toFixed(0),
-      longName: node.name,
-      shortName: node.shortName,
-      nodeType: node.nodeType,
-      building: node.building,
-      floor: node.floor,
-      nodeID: node.nodeID,
-    }));
     const handleUpdateNodes = async () => {
       const res = await axios.post("/api/csvFetch/node", nodes, {
         headers: {
@@ -84,7 +132,7 @@ export const MapEditor: React.FC = () => {
     };
     handleUpdateNodes().then(() => {
       console.log("Request was sent to database.");
-      console.log("Node array length: " + filteredData.length);
+      setOriginalHospitalData(hospitalData);
     });
   };
 
@@ -210,9 +258,6 @@ export const MapEditor: React.FC = () => {
     [drawLine, edges],
   );
 
-  // Create a Set to store unique nodes outside of the useCallback hook
-  // const uniqueNodes = useRef(new Set());
-
   const addMarkers = useCallback(
     (map: Map, hospitalData: HospitalData[]) => {
       hospitalData.forEach((node) => {
@@ -222,7 +267,6 @@ export const MapEditor: React.FC = () => {
           icon: customIcon,
           draggable: true,
         });
-        //marker.options.attribution = node.nodeID;
         // Event listener for clicking on markers
         marker.on("dragend", function () {
           const position = marker.getLatLng();
@@ -261,6 +305,14 @@ export const MapEditor: React.FC = () => {
             // Check if the popup is not already open
             this.openPopup(); // Open the popup when the marker is clicked
           }
+          const foundNode = hospitalData.find(
+            (item) => node.nodeID === item.nodeID,
+          );
+          if (foundNode) {
+            setSelectedNode(foundNode);
+          } else {
+            console.log("could not find node");
+          }
         });
         marker.addTo(Nodes[node.floor]);
       });
@@ -274,17 +326,20 @@ export const MapEditor: React.FC = () => {
         nodes.map((node) => ({
           nodeID: node.nodeID,
           name: node.longName,
+          shortName: node.shortName,
           geocode: `${node.xcoord},${node.ycoord}`,
           floor: node.floor,
           building: node.building,
           nodeType: node.nodeType,
           xcoord: node.xcoord,
           ycoord: node.ycoord,
-          shortName: node.shortName,
         })),
       );
     }
-  }, [hospitalData.length, nodes]);
+    if (originalHospitalData.length === 0) {
+      setOriginalHospitalData(hospitalData);
+    }
+  }, [hospitalData, hospitalData.length, nodes, originalHospitalData.length]);
 
   const memoizedAddMarkers = useCallback(addMarkers, [addMarkers]);
   const memoizedFindLines = useCallback(findLines, [findLines]);
@@ -308,10 +363,6 @@ export const MapEditor: React.FC = () => {
       ];
       map.setMaxBounds(bounds);
       L.control.layers(baseLayers).addTo(map);
-
-      // const newNodesOnCurrentFloor = hospitalData.filter(
-      //   (node) => node.floor == "1",
-      // );
 
       Object.keys(Layers).forEach((key) => {
         Nodes[key].addTo(Layers[key]);
@@ -343,7 +394,6 @@ export const MapEditor: React.FC = () => {
       Edges[key].clearLayers();
     });
 
-    // and then addd
     memoizedFindLines(hospitalData);
     memoizedAddMarkers(map!, hospitalData);
   }, [
@@ -357,25 +407,104 @@ export const MapEditor: React.FC = () => {
 
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
-      <div className="flex flex-col items-center bg-transparent p-4 w-[350px] space-y-4">
+      <div className="flex flex-col items-center bg-transparent p-4 w-[400px] space-y-4 overflow-y-scroll">
         <Card className={"w-full shadow"}>
           <CardHeader>
-            <CardTitle></CardTitle>
+            <CardTitle>Map Editor</CardTitle>
+            <CardDescription>
+              Move and drag nodes to change their position. Click on a node to
+              edit. Click "Submit Changes" to override all node data.
+            </CardDescription>
           </CardHeader>
-
-          <CardContent>
+          <CardContent className={"flex flex-col align-items-lg-end space-y-4"}>
             <Button
               onClick={() => (window.location.href = "/map-editor/table")}
+              className={"mb-5"}
             >
               <EditIcon className="mr-2 h-4 w-4" />
               <span>Table View</span>
             </Button>
-            <Button onClick={handleSubmit}>
-              {/*<EditIcon className="mr-2 h-4 w-4" />*/}
+            <Button
+              variant={
+                originalHospitalData == hospitalData ? "outline" : "default"
+              }
+              onClick={handleSubmit}
+              className={"mt-5"}
+            >
               <span>Submit Changes</span>
+            </Button>
+            <Button
+              variant={"destructive"}
+              onClick={() => {
+                setHospitalData(originalHospitalData);
+                console.log("reverted to old data.");
+              }}
+            >
+              <span>Revert Changes</span>
             </Button>
           </CardContent>
         </Card>
+        {selectedNode && (
+          <Card className={"w-full shadow"}>
+            <CardHeader>
+              <CardTitle className={"gap-1"}>Node Information</CardTitle>
+              <CardDescription>
+                <p>ID: {selectedNode.nodeID}</p>
+              </CardDescription>
+            </CardHeader>
+            <CardContent
+              className={"flex flex-col align-items-lg-end space-y-4"}
+            >
+              {selectedNode &&
+                Object.entries(selectedNode).map(
+                  ([key, value]) =>
+                    key !== "geocode" &&
+                    key !== "nodeID" && (
+                      <div key={key} className={"flex flex-col space-y-1"}>
+                        <strong>
+                          {key.charAt(0).toUpperCase() + key.slice(1)}:
+                        </strong>
+                        {["name", "xcoord", "ycoord"].includes(key) ? (
+                          <Input
+                            value={value}
+                            onChange={(e) =>
+                              setSelectedNode((prevState) => ({
+                                ...(prevState as HospitalData),
+                                [key]: e.target.value,
+                              }))
+                            }
+                            type={
+                              key === "xcoord" || key === "ycoord"
+                                ? "number"
+                                : "text"
+                            }
+                          />
+                        ) : (
+                          <span> {value}</span>
+                        )}
+                      </div>
+                    ),
+                )}
+              <CardDescription>
+                <p className={"mt-2 -mb-4"}>
+                  Editing does not permanently change the node.
+                </p>
+              </CardDescription>
+            </CardContent>
+            <CardFooter className={"w-full space-x-2"}>
+              <Button
+                className={"w-full"}
+                variant={"destructive"}
+                onClick={() => setSelectedNode(null)}
+              >
+                Cancel
+              </Button>
+              <Button className={"w-full"} onClick={handleFinalize}>
+                Finalize
+              </Button>
+            </CardFooter>
+          </Card>
+        )}
       </div>
       <div
         id="map-container"
