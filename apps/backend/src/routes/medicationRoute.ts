@@ -18,6 +18,26 @@ router.post("/", async function (req: Request, res: Response) {
     console.log(requestForm);
 
     const medicationData: Medication[] = requestForm.medication;
+
+    // if (medicationData.length == 1) {
+    //   const medicationObject: Medication = medicationData[0];
+    //   const { id, ...medicationCreateData } = medicationObject;
+    //   console.log(medicationObject);
+    //   console.log(medicationCreateData);
+    //   await PrismaClient.medicationRequest.create({
+    //     data: {
+    //       medication: {
+    //         create: {
+    //           data: medicationCreateData,
+    //         },
+    //       },
+    //       employee: requestForm.employee,
+    //       location: requestForm.location,
+    //       patient: requestForm.patient,
+    //       dateSubmitted: requestForm.dateSubmitted,
+    //     },
+    //   });
+    // } else {
     const medicationCreateData = medicationData.map((medication) => ({
       name: medication.name,
       priority: medication.priority,
@@ -39,6 +59,8 @@ router.post("/", async function (req: Request, res: Response) {
         dateSubmitted: requestForm.dateSubmitted,
       },
     });
+    // }
+
     console.info("Successfully requested medication services");
     res
       .status(200)
