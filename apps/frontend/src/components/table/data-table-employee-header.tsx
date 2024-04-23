@@ -90,6 +90,10 @@ export function DataTableColumnHeaderEmployee<TData, TValue>({
             <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Hide
           </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => column.setFilterValue(null)}>
+            <div className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Reset
+          </DropdownMenuItem>
           <DropdownMenuSeparator />
 
           <div className="max-h-60 overflow-y-auto">
@@ -100,7 +104,7 @@ export function DataTableColumnHeaderEmployee<TData, TValue>({
                   key={index}
                   value={employee}
                   onClick={() => {
-                    column.toggleVisibility(true);
+                    column.setFilterValue(employee);
                   }}
                 >
                   {employee}
