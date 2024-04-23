@@ -188,6 +188,40 @@ router.post("/edge/add", async (req, res) => {
     res.status(400).send("Bad request");
   }
 });
+router.post("/edge/delete", async (req, res) => {
+  const edgeID = req.body;
+
+  try {
+    // Ensure that edgeData contains edgeID
+    if (!edgeID) {
+      throw new Error("edgeID is required.");
+    }
+
+    // Find the edge to delete
+    const edge = await prisma.edges.findUnique({
+      where: {
+        edgeID: edgeID.edgeID,
+      },
+    });
+
+    // Check if edge exists
+    if (!edge) {
+      throw new Error("Edge not found.");
+    }
+
+    // Delete the edge
+    await prisma.edges.delete({
+      where: {
+        edgeID: edgeID.edgeID,
+      },
+    });
+
+    res.status(200).send("Edge deleted successfully.");
+  } catch (error) {
+    console.error("Error processing edge deletion:", error);
+    res.status(400).send("Bad request");
+  }
+});
 
 router.get("/node", async (req, res) => {
   try {

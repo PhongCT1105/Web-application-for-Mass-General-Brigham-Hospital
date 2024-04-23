@@ -30,7 +30,7 @@ import { Input } from "@/components/ui/input.tsx";
 import { useGraphContext } from "@/context/nodeContext.tsx";
 import axios from "axios";
 import { Button } from "@/components/ui/button.tsx";
-import { PlusIcon } from "lucide-react";
+import { MinusIcon, PlusIcon } from "lucide-react";
 import {
   Dialog,
   DialogClose,
@@ -68,7 +68,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
     [],
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
-  const { nodes: data, setNodes } = useGraphContext();
+  const { nodes: data, setNodes, edges } = useGraphContext();
   const [originalData, setOriginalData] = useState(() => [...data]);
   const [editedRows, setEditedRows] = useState({});
   // const [uniqueNodeIds, setUniqueNodeIds] = useState<string[]>([]);
@@ -113,11 +113,23 @@ export function NodeDataTable({ columns }: DataTableProps) {
       .min(1, { message: "Required." }),
   });
 
+  const edgeDeleteFormSchema = z.object({
+    edgeID: z
+      .string({ required_error: "Must enter an edge ID." })
+      .min(1, { message: "Required." }),
+  });
+
   const edgeForm = useForm<z.infer<typeof edgeFormSchema>>({
     resolver: zodResolver(edgeFormSchema),
     defaultValues: {
       startNodeID: "",
       endNodeID: "",
+    },
+  });
+  const edgeDeleteForm = useForm<z.infer<typeof edgeDeleteFormSchema>>({
+    resolver: zodResolver(edgeDeleteFormSchema),
+    defaultValues: {
+      edgeID: "",
     },
   });
 
@@ -145,8 +157,30 @@ export function NodeDataTable({ columns }: DataTableProps) {
       ),
     });
 
-    setNodes((prevNodes) => [...prevNodes, values]);
     console.log("New node array length: " + data.length);
+  };
+  const onEdgeDeleteForm = async (
+    values: z.infer<typeof edgeDeleteFormSchema>,
+  ) => {
+    toast({
+      title: "You submitted the following values:",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+        </pre>
+      ),
+    });
+
+    const res = await axios.post("/api/csvFetch/edge/delete", values, {
+      headers: {
+        "content-type": "Application/json",
+      },
+    });
+    if (res.status == 200) {
+      console.log("success");
+    } else {
+      console.log(res.status);
+    }
   };
 
   const onEdgeFormSubmit = async (values: z.infer<typeof edgeFormSchema>) => {
@@ -453,6 +487,56 @@ export function NodeDataTable({ columns }: DataTableProps) {
                     )}
                   />
                 ))}
+                <DialogClose asChild>
+                  <Button type={"submit"}>Submit</Button>
+                </DialogClose>
+              </form>
+            </Form>
+          </DialogContent>
+        </Dialog>
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button
+              variant={"destructive"}
+              className={"h-8 mb-2 space-between items-center"}
+            >
+              <MinusIcon className={"mr-2 -ml-1 h-5 w-5"} />
+              Delete Edge
+            </Button>
+          </DialogTrigger>
+          <DialogContent className={"w-[500px] "}>
+            <Form {...edgeDeleteForm}>
+              <form
+                onSubmit={edgeDeleteForm.handleSubmit(onEdgeDeleteForm)}
+                className={"space-y-4"}
+              >
+                <FormField
+                  name={"edgeID"}
+                  control={edgeDeleteForm.control}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Edge ID</FormLabel>
+                      <Select
+                        defaultValue={field.value}
+                        onValueChange={field.onChange}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder={"Select Edge ID..."} />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          {edges.map((edge) => (
+                            <SelectItem key={edge.edgeID} value={edge.edgeID}>
+                              {edge.edgeID}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
                 <DialogClose asChild></DialogClose>
                 <Button type={"submit"}>Submit</Button>
               </form>
