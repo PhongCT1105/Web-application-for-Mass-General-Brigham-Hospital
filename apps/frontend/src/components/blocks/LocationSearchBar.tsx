@@ -40,7 +40,7 @@ interface SearchBarProps {
   onSearch: (startID: string, endID: string) => void;
   onClear: () => void;
   changePathfindingStrategy: (strat: string) => void;
-  currentFloor: string;
+  //currentFloor: string;
   textDirections: direction[];
   children?: React.ReactNode; // Add this line
 }
@@ -75,8 +75,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     onClear();
     console.log("startSearch === " + startPoint);
     console.log("endSearch === " + endPoint);
-    //setStartPoint(onChange.start);
-    //setEndPoint(onChange.end);
     onSearch(startPointID, endPointID);
   };
 

@@ -15,7 +15,7 @@ import { ShoppingCart, X } from "lucide-react";
 import React, { useState } from "react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { ToastAction } from "@/components/ui/toast";
+import { ToastAction } from "@/components/ui/toast.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import {
@@ -32,7 +32,7 @@ import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
+} from "@/components/ui/popover.tsx";
 
 import { Textarea } from "@/components/ui/textarea.tsx";
 import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
@@ -65,6 +65,7 @@ export interface requestForm {
   total: number;
   priority: string;
   status: string;
+  dateSubmitted: Date;
 }
 
 export const FlowerContent = () => {
@@ -76,8 +77,9 @@ export const FlowerContent = () => {
     recipient: "",
     location: "",
     total: totalCost,
-    priority: "",
-    status: "",
+    priority: "Low",
+    status: "Unassigned",
+    dateSubmitted: new Date(),
   });
 
   const handleForm = (
@@ -224,17 +226,17 @@ export const FlowerContent = () => {
                             value={form.priority}
                             onChange={handleForm}
                           >
-                            <option id="emergency" value="emergency">
-                              Emergency
-                            </option>
-                            <option id="high" value="high">
-                              High
+                            <option id="low" value="low">
+                              Low
                             </option>
                             <option id="medium" value="medium">
                               Medium
                             </option>
-                            <option id="low" value="low">
-                              Low
+                            <option id="high" value="high">
+                              High
+                            </option>
+                            <option id="emergency" value="emergency">
+                              Emergency
                             </option>
                           </select>
                           <Label htmlFor="Priority" className="text-right">
@@ -451,28 +453,28 @@ export const FlowerContent = () => {
                 <CardContent className={"relative w-[300px] mt-2"}>
                   {addon.discountAmt === 10 && (
                     <img
-                      src="src/assets/discount-tags/ten-percent-discount.webp"
+                      src="../../../assets/discount-tags/ten-percent-discount.webp"
                       alt="10% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 20 && (
                     <img
-                      src="src/assets/discount-tags/twenty-percent-discount.webp"
+                      src="../../../assets/discount-tags/twenty-percent-discount.webp"
                       alt="20% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 30 && (
                     <img
-                      src="src/assets/discount-tags/thirty-percent-discount.webp"
+                      src="../../../assets/discount-tags/thirty-percent-discount.webp"
                       alt="30% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 50 && (
                     <img
-                      src="src/assets/discount-tags/fifty-percent-discount.png"
+                      src="../../../assets/discount-tags/fifty-percent-discount.png"
                       alt="50% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
