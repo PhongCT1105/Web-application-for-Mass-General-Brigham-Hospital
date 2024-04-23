@@ -9,7 +9,7 @@ export const edgeColumns: ColumnDef<Edge>[] = [
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[100px] font-normal">#{row.getValue("edgeID")}</div>
+      <div className="w-[100px] font-normal">#{row?.getValue("edgeID")}</div>
     ),
     enableSorting: false,
     enableHiding: false,
@@ -23,7 +23,7 @@ export const edgeColumns: ColumnDef<Edge>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[100px] truncate font-medium">
-            {row.getValue("startNode")}
+            {row?.getValue("startNode")}
           </span>
         </div>
       );
@@ -39,7 +39,7 @@ export const edgeColumns: ColumnDef<Edge>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[100px] truncate font-medium">
-            {row.getValue("endNode")}
+            {row?.getValue("endNode")}
           </span>
         </div>
       );

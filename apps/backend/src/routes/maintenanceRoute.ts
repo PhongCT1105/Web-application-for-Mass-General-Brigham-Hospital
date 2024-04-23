@@ -7,12 +7,10 @@ const router: Router = express.Router();
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
 type rTypeOfIssue =
-  | "Spill"
-  | "Leak"
-  | "BodilyFluid"
-  | "FoulOdor"
-  | "Garbage"
   | "BrokenEquipment"
+  | "PowerIssue"
+  | "PlumbingIssue"
+  | "ElevatorIssue"
   | "Other"
   | "";
 
