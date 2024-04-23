@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
+import { DataTableColumnHeaderEmployee } from "@/components/table/data-table-employee-header.tsx";
 import { Medication, MedicationForm } from "@/interfaces/medicationReq.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
@@ -28,7 +29,7 @@ export const columnsMedicationFormLog: ColumnDef<MedicationForm>[] = [
   {
     accessorKey: "employee",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Employee Name" />
+      <DataTableColumnHeaderEmployee column={column} title="Employee Name" />
     ),
     cell: ({ row }) => {
       return (

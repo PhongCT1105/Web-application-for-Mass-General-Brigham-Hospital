@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
 import { SanitationForm } from "@/interfaces/sanitationReq.ts";
+import { DataTableColumnHeaderEmployee } from "@/components/table/data-table-employee-header.tsx";
 // import { Button } from "@/components/ui/button.tsx";
 // import { DotsHorizontalIcon } from "@radix-ui/react-icons";
 // import {
@@ -26,7 +27,7 @@ export const columnsSanitationFormLog: ColumnDef<SanitationForm>[] = [
   {
     accessorKey: "name",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Employee Name" />
+      <DataTableColumnHeaderEmployee column={column} title="Employee Name" />
     ),
     cell: ({ row }) => {
       return (

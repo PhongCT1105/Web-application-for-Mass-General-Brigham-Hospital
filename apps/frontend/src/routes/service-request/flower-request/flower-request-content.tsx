@@ -12,7 +12,7 @@ import {
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { ShoppingCart, X } from "lucide-react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useToast } from "@/components/ui/use-toast.ts";
 import { ToastAction } from "@/components/ui/toast.tsx";
@@ -50,6 +50,12 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuRadioItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.tsx";
 
 export interface cartItem {
   cost: number;
@@ -71,6 +77,7 @@ export interface requestForm {
 export const FlowerContent = () => {
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
   const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
+  const [locations, setLocations] = useState<string[]>([]);
   const [form, setForm] = useState<requestForm>({
     cartItems: cartItems,
     sender: "",
@@ -81,6 +88,52 @@ export const FlowerContent = () => {
     status: "Unassigned",
     dateSubmitted: new Date(),
   });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("/api/mapreq/nodes");
+        const rawData = response.data;
+
+        const extractedLocations = rawData.map(
+          (item: {
+            nodeID: string;
+            xcoord: number;
+            ycoord: number;
+            floor: string;
+            building: string;
+            nodeType: string;
+            longName: string;
+            shortName: string;
+          }) => item.longName,
+        );
+        const filteredLocations = extractedLocations.filter(
+          (location: string) => {
+            return !location.startsWith("Hall");
+          },
+        );
+
+        // alphabetizing location list
+        filteredLocations.sort((a: string, b: string) => a.localeCompare(b));
+        // set locations to filtered alphabetized location list
+        setLocations(filteredLocations);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchData();
+  }, []);
+
+  const handleLocation = (selectedLocation: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      location: selectedLocation,
+    }));
+    //checkEmpty() ? setButtonState("ghost") : setButtonState("default");
+  };
 
   const handleForm = (
     event: React.ChangeEvent<
@@ -200,12 +253,28 @@ export const FlowerContent = () => {
                           <Label htmlFor="location" className="text-right">
                             Recipient's Location
                           </Label>
-                          <Input
-                            onChange={handleForm}
-                            id="location"
-                            placeholder="Location"
-                            className="col-span-3"
-                          />
+                          <div className="w-1/5">
+                            <DropdownMenu>
+                              <DropdownMenuTrigger asChild>
+                                <Button variant="outline">
+                                  {form.location
+                                    ? form.location
+                                    : "Select Location"}
+                                </Button>
+                              </DropdownMenuTrigger>
+                              <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                                {locations.map((location, index) => (
+                                  <DropdownMenuRadioItem
+                                    key={index}
+                                    value={location}
+                                    onClick={() => handleLocation(location)}
+                                  >
+                                    {location}
+                                  </DropdownMenuRadioItem>
+                                ))}
+                              </DropdownMenuContent>
+                            </DropdownMenu>
+                          </div>
                           <Label htmlFor="message" className="text-right">
                             Message to Recipient's (Optional)
                           </Label>

@@ -12,10 +12,12 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 interface DataTableColumnHeaderProps<TData, TValue>
   extends React.HTMLAttributes<HTMLDivElement> {
@@ -23,11 +25,34 @@ interface DataTableColumnHeaderProps<TData, TValue>
   title: string;
 }
 
-export function DataTableColumnHeader<TData, TValue>({
+export function DataTableColumnHeaderEmployee<TData, TValue>({
   column,
   title,
   className,
 }: DataTableColumnHeaderProps<TData, TValue>) {
+  const [employees, setEmployees] = useState<string[]>([]);
+  useEffect(() => {
+    const fetchEmployees = async () => {
+      try {
+        const response = await axios.get("/api/employeeData");
+        const rawData = response.data;
+
+        const extractedEmployees = rawData.map(
+          (item: { id: number; fName: string; lName: string; title: string }) =>
+            item.lName,
+        );
+
+        setEmployees(extractedEmployees);
+
+        console.log("Successfully fetched data from the API.");
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+    // Fetch data on component mount
+    fetchEmployees();
+  }, []);
+
   if (!column.getCanSort()) {
     return <div className={cn(className)}>{title}</div>;
   }
@@ -65,11 +90,27 @@ export function DataTableColumnHeader<TData, TValue>({
             <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
             Hide
           </DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => column.toggleVisibility(true)}>
-            <EyeNoneIcon className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
-            Hide
+          <DropdownMenuItem onClick={() => column.setFilterValue(null)}>
+            <div className="mr-2 h-3.5 w-3.5 text-muted-foreground/70" />
+            Reset
           </DropdownMenuItem>
+          <DropdownMenuSeparator />
+
+          <div className="max-h-60 overflow-y-auto">
+            {employees
+              .sort((a, b) => a.localeCompare(b)) // Sort the employees array alphabetically
+              .map((employee, index) => (
+                <DropdownMenuRadioItem
+                  key={index}
+                  value={employee}
+                  onClick={() => {
+                    column.setFilterValue(employee);
+                  }}
+                >
+                  {employee}
+                </DropdownMenuRadioItem>
+              ))}
+          </div>
         </DropdownMenuContent>
       </DropdownMenu>
     </div>

@@ -8,7 +8,7 @@ import {
   // Key,
   // LogOut,
   MapIcon,
-  Package,
+  // Package,
   Search,
   // Settings,
   // User,
@@ -18,6 +18,7 @@ import "../../styles/globals.css";
 
 import { Button } from "@/components/ui/button";
 import Logo from "@/assets/brighamJlogo.png";
+import WordLogo from "@/assets/brighamLogo.svg";
 
 import {
   DropdownMenu,
@@ -110,18 +111,22 @@ export function Header() {
     <div className="flex w-full flex-col" style={{ zIndex: 1000 }}>
       <header className="sticky top-0 flex flex-col items-center -gap-4 bg-blue-900">
         <div className="h-20 w-full flex items-center justify-center border-b-4 border-yellow-500 px-4 md:px-6 text-nowrap">
-          <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
+          <nav className="hidden flex-col gap-4 text-base font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
             <a
               href=""
-              className="flex items-center gap-2 text-lg font-semibold md:text-base"
+              className="flex items-center gap-1 text-lg font-semibold md:text-base"
             >
-              <img src={Logo} alt={"brigham logo"} className={"w-10"} />
-              <Package className="h-6 w-6" />
+              <img
+                src={WordLogo}
+                alt={"brigham logo"}
+                style={{ width: 750, paddingTop: 25 }}
+              />
+              {/*<Package className="h-6 w-6" />*/}
               <span className="sr-only">Acme Inc</span>
             </a>
             <div
               className={
-                "flex w-full items-center justify-end gap-4 pr-4 text-nowrap"
+                "flex w-min items-left justify-end gap-4 pr-4 text-nowrap"
               }
             >
               {!isLoading && isAuthenticated && (
