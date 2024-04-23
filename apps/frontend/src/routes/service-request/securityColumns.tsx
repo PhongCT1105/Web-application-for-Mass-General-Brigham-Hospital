@@ -19,7 +19,7 @@ export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
   {
     accessorKey: "ename",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Name" />
+      <DataTableColumnHeader column={column} title="Employee Name" />
     ),
     cell: ({ row }) => {
       return (
