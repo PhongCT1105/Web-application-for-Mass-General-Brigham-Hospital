@@ -1,6 +1,7 @@
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
 import { ColumnDef } from "@tanstack/react-table";
 import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
+import { DataTableColumnHeaderEmployee } from "@/components/table/data-table-employee-header.tsx";
 import {
   Dialog,
   DialogContent,
@@ -27,7 +28,7 @@ export const TransportRequestColumns: ColumnDef<ScheduleForm>[] = [
   {
     accessorKey: "employeeName",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Employee Name" />
+      <DataTableColumnHeaderEmployee column={column} title="Employee Name" />
     ),
     cell: ({ row }) => {
       return (
