@@ -25,6 +25,8 @@ import { useGraphContext } from "@/context/nodeContext.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { EditIcon } from "lucide-react";
 import GrayDot from "@/assets/gray-dot.png";
+import axios from "axios";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 export interface Edge {
   edgeID: string;
@@ -32,11 +34,16 @@ export interface Edge {
   end: string;
 }
 
-export interface HospitalData {
+interface HospitalData {
   nodeID: string;
   name: string;
   geocode: string;
   floor: string;
+  xcoord: number;
+  ycoord: number;
+  nodeType: string;
+  building: string;
+  shortName: string;
 }
 
 // Define the map component
@@ -45,13 +52,41 @@ export const MapEditor: React.FC = () => {
   // const [paths, setPaths] = useState<Polyline[]>([]);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [isSetUp, setIsSetUp] = useState(false);
-  const { nodes, edges } = useGraphContext();
-
+  const { nodes, edges, setNodes } = useGraphContext();
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
+
+  const handleSubmit = () => {
+    const filteredData = hospitalData.map((node) => ({
+      xcoord: node.xcoord.toFixed(0),
+      ycoord: node.xcoord.toFixed(0),
+      longName: node.name,
+      shortName: node.shortName,
+      nodeType: node.nodeType,
+      building: node.building,
+      floor: node.floor,
+      nodeID: node.nodeID,
+    }));
+    const handleUpdateNodes = async () => {
+      const res = await axios.post("/api/csvFetch/node", nodes, {
+        headers: {
+          "content-type": "Application/json",
+        },
+      });
+      if (res.status == 200) {
+        console.log("success");
+      } else {
+        console.log(res.status);
+      }
+    };
+    handleUpdateNodes().then(() => {
+      console.log("Request was sent to database.");
+      console.log("Node array length: " + filteredData.length);
+    });
+  };
 
   const Layers: { [key: string]: L.FeatureGroup } = useMemo(
     () =>
@@ -92,11 +127,11 @@ export const MapEditor: React.FC = () => {
 
   const baseLayers = useMemo(
     () => ({
-      L1: LayerL1,
-      L2: LayerL2,
-      F1: LayerF1,
-      F2: LayerF2,
-      F3: LayerF3,
+      "Lower Level 2": LayerL2,
+      "Lower Level 1": LayerL1,
+      "First Floor": LayerF1,
+      "Second Floor": LayerF2,
+      "Third Floor": LayerF3,
     }),
     [LayerL1, LayerL2, LayerF1, LayerF2, LayerF3],
   );
@@ -197,7 +232,20 @@ export const MapEditor: React.FC = () => {
           setHospitalData((prevData) =>
             prevData.map((item) =>
               item.nodeID === node.nodeID
-                ? { ...item, geocode: newGeocode }
+                ? {
+                    ...item,
+                    geocode: newGeocode,
+                    xcoord: position.lng,
+                    ycoord: position.lat,
+                  }
+                : item,
+            ),
+          );
+
+          setNodes((prevState) =>
+            prevState.map((item) =>
+              item.nodeID === node.nodeID
+                ? { ...item, xcoord: position.lng, ycoord: 3400 - position.lat }
                 : item,
             ),
           );
@@ -217,7 +265,7 @@ export const MapEditor: React.FC = () => {
         marker.addTo(Nodes[node.floor]);
       });
     },
-    [Nodes, customIcon],
+    [Nodes, customIcon, setNodes],
   );
 
   useEffect(() => {
@@ -228,6 +276,11 @@ export const MapEditor: React.FC = () => {
           name: node.longName,
           geocode: `${node.xcoord},${node.ycoord}`,
           floor: node.floor,
+          building: node.building,
+          nodeType: node.nodeType,
+          xcoord: node.xcoord,
+          ycoord: node.ycoord,
+          shortName: node.shortName,
         })),
       );
     }
@@ -304,6 +357,26 @@ export const MapEditor: React.FC = () => {
 
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
+      <div className="flex flex-col items-center bg-transparent p-4 w-[350px] space-y-4">
+        <Card className={"w-full shadow"}>
+          <CardHeader>
+            <CardTitle></CardTitle>
+          </CardHeader>
+
+          <CardContent>
+            <Button
+              onClick={() => (window.location.href = "/map-editor/table")}
+            >
+              <EditIcon className="mr-2 h-4 w-4" />
+              <span>Table View</span>
+            </Button>
+            <Button onClick={handleSubmit}>
+              {/*<EditIcon className="mr-2 h-4 w-4" />*/}
+              <span>Submit Changes</span>
+            </Button>
+          </CardContent>
+        </Card>
+      </div>
       <div
         id="map-container"
         style={{
@@ -326,12 +399,7 @@ export const MapEditor: React.FC = () => {
             zIndex: 1000,
             color: "black",
           }}
-        >
-          <Button onClick={() => (window.location.href = "/map-editor/table")}>
-            <EditIcon className="mr-2 h-4 w-4" />
-            <span>Table View</span>
-          </Button>
-        </div>
+        ></div>
       </div>
     </div>
   );
