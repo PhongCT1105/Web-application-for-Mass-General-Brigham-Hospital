@@ -20,7 +20,11 @@ import { Medication } from "@/interfaces/medicationReq.ts";
 import { pillData } from "@/interfaces/dataTypes/testData.ts";
 import React, { createContext, useContext, useState } from "react";
 import { SheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
-import bannerImage from "@/assets/hospital-floor-banner.jpg";
+import bannerMedicationImage from "@/assets/hospital-floor-banner.jpg";
+import bannerTransportImage from "@/assets/transport-banner.jpg";
+import bannerSanitationImage from "@/assets/sanitation-banner.png";
+import bannerMaintenanceImage from "@/assets/maintenance-banner.jpg";
+import bannerSecurityImage from "@/assets/security-banner.jpg";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -104,7 +108,7 @@ export default function ServiceRequestPage() {
                         <div
                           className="flex items-center justify-between"
                           style={{
-                            backgroundImage: `url(${bannerImage})`,
+                            backgroundImage: `url(${bannerMedicationImage})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                             height: "100px",
@@ -164,9 +168,9 @@ export default function ServiceRequestPage() {
                         <div
                           className="flex items-center justify-between"
                           style={{
-                            backgroundImage: `url(${bannerImage})`,
+                            backgroundImage: `url(${bannerTransportImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
+                            backgroundPosition: "center 50%",
                             height: "100px",
                             borderRadius: "10px",
                           }}
@@ -218,9 +222,9 @@ export default function ServiceRequestPage() {
                         <div
                           className="flex items-center justify-between"
                           style={{
-                            backgroundImage: `url(${bannerImage})`,
+                            backgroundImage: `url(${bannerSanitationImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
+                            backgroundPosition: "center 65%",
                             height: "100px",
                             borderRadius: "10px",
                           }}
@@ -263,9 +267,9 @@ export default function ServiceRequestPage() {
                         <div
                           className="flex items-center justify-between"
                           style={{
-                            backgroundImage: `url(${bannerImage})`,
+                            backgroundImage: `url(${bannerSecurityImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
+                            backgroundPosition: "center 40%",
                             height: "100px",
                             borderRadius: "10px",
                           }}
@@ -302,9 +306,9 @@ export default function ServiceRequestPage() {
                         <div
                           className="flex items-center justify-between"
                           style={{
-                            backgroundImage: `url(${bannerImage})`,
+                            backgroundImage: `url(${bannerMaintenanceImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
+                            backgroundPosition: "center 45%",
                             height: "100px",
                             borderRadius: "10px",
                           }}

@@ -39,7 +39,7 @@ import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
 import ten from "@/assets/discount-tags/ten-percent-discount.webp";
 import twenty from "@/assets/discount-tags/twenty-percent-discount.webp";
 import thirty from "@/assets/discount-tags/thirty-percent-discount.webp";
-import bannerImage from "@/assets/flower-banner.jpg";
+import bannerFlowerImage from "@/assets/flower-banner.jpg";
 
 import {
   Table,
@@ -143,7 +143,7 @@ export const FlowerContent = () => {
       <div
         className="flex items-center justify-center"
         style={{
-          backgroundImage: `url(${bannerImage})`,
+          backgroundImage: `url(${bannerFlowerImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           height: "100px",
