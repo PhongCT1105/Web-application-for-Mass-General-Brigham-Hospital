@@ -550,11 +550,31 @@ export const MapBlock: React.FC = () => {
         directionsArray.push({ text: "\n\n", icon: Circle });
 
         for (let j = 0; j < paths[i].length - 1; j++) {
-          const directionObject: direction = {
-            text: directionFromCurrentLine(paths[i], j).text,
-            icon: directionFromCurrentLine(paths[i], j).icon,
-          };
-          directionsArray.push(directionObject);
+          if (
+            j != paths[i].length - 2 &&
+            nodeArray[nodeArray.indexOf(paths[i][j])].floor !=
+              nodeArray[nodeArray.indexOf(paths[i][j]) + 1].floor
+          ) {
+            directionsArray.push({
+              text: "\n",
+              icon: Circle,
+            });
+          } else if (
+            j != 0 &&
+            nodeArray[nodeArray.indexOf(paths[i][j])].floor !=
+              nodeArray[nodeArray.indexOf(paths[i][j]) - 1].floor
+          ) {
+            directionsArray.push({
+              text: "Continue Towards " + paths[i][j + 1].longName,
+              icon: UpArrow,
+            });
+          } else {
+            const directionObject: direction = {
+              text: directionFromCurrentLine(paths[i], j).text,
+              icon: directionFromCurrentLine(paths[i], j).icon,
+            };
+            directionsArray.push(directionObject);
+          }
         }
         directionsArray.push({ text: "\n", icon: Circle });
       }
@@ -682,6 +702,8 @@ export const MapBlock: React.FC = () => {
     };
     console.log(test);
     const nodeArray: Node[] = [];
+    handleClear();
+
     async function path() {
       const { data: response } = await axios.post("/api/search", test, {
         headers: {

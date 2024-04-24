@@ -3,6 +3,7 @@ import securityGuard from "@/assets/cops.jpg";
 import flowerPic from "@/assets/Birthday-Flowers-Colors.jpg";
 import sanitation from "@/assets/Healthcare+Facility+Cleaning-1920w.webp";
 import medicationPic from "@/assets/Medications.jpg";
+import heroPic from "@/assets/cropped-first-floor.png";
 import { Button } from "@/components/ui/button.tsx";
 
 export const SecuritySlide = () => {
@@ -146,6 +147,33 @@ export const MedicationSlide = () => {
           className="text-xl mt-8"
         >
           <a href="/service-requests">Request Medication Delivery</a>
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+export const HeroSlide = () => {
+  return (
+    <div className="w-full h-[400px] absolute overflow-hidden ">
+      <img
+        className="absolute inset-0 w-full brightness-75 h-[400px] object-cover"
+        // style={{ objectPosition: 'center top', top: '50%'}}
+        src={heroPic}
+        alt="Map Picture"
+      />
+      <div
+        className="absolute inset-0 flex flex-col justify-end items-end p-8 mr-8 ml-8"
+        // style={{ transform: 'translateY(50%)' }}
+      >
+        <span
+          // style={{ backdropFilter: 'blur(8px)' }}
+          className="text-black text-[64px] font-black font-['League Spartan']"
+        >
+          Feeling lost? Our map can help!
+        </span>
+        <Button variant="default" type="button" size="lg" className="text-xl">
+          <a href="/home">Navigation Page</a>
         </Button>
       </div>
     </div>
