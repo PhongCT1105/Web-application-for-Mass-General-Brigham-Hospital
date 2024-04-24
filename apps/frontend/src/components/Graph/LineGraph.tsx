@@ -9,7 +9,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { lineChartData } from "@/data/chartValue/lineChartData.ts";
 import { AnimationSpec } from "chart.js/auto";
 
 ChartJS.register(
@@ -21,7 +20,29 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-function LineGraph() {
+
+interface requestData {
+  months: string;
+  user: number;
+  staff: number;
+}
+function LineGraph({ props }: { props: requestData[] }) {
+  const lineChartData = {
+    labels: props.map((map) => map.months),
+    datasets: [
+      {
+        label: "Users",
+        data: props.map((map) => map.user),
+        borderColor: "rgb(75, 192, 192)",
+      },
+      {
+        label: "Staff",
+        data: props.map((map) => map.staff),
+        borderColor: "red",
+      },
+    ],
+  };
+
   const options = {
     animations: {
       tension: {

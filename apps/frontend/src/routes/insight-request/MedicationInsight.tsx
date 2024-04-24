@@ -3,23 +3,27 @@
 import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import DoughnutChart from "@/components/Graph/PolorAreaGraph.tsx";
+import { medicationLineData } from "@/data/medicationData/lineChartData.ts";
+import { medicationChartData } from "@/data/medicationData/barChartData.ts";
+import { medicationPieData } from "@/data/medicationData/pieChartData";
+import { medicationPolarData } from "@/data/medicationData/polarAreaChartData";
+import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 
 function MedicationInsight() {
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
         <div className="rounded-lg bg-gray-200">
-          <LineGraph />
+          <LineGraph props={medicationLineData} />
         </div>
         <div className="rounded-lg bg-gray-200">
-          <BarGraph />
+          <BarGraph props={medicationChartData} />
         </div>
         <div className="rounded-lg bg-gray-200 scale-0.25">
-          <PieGraph />
+          <PieGraph props={medicationPieData} />
         </div>
         <div className="rounded-lg bg-gray-200 scale-0.25">
-          <DoughnutChart />
+          <PolarAreaChart props={medicationPolarData} />
         </div>
       </div>
     </>

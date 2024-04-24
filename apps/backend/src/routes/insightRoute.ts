@@ -1,27 +1,23 @@
 import express, { Router } from "express";
 import axios from "axios";
-
 const router: Router = express.Router();
-interface RequestData {
-  request: string;
-  total: number;
-}
 
-const dataToSend: RequestData[] = [
+const parsedata = [
   { request: "Flower Request", total: 500 },
   { request: "MedicationRequest", total: 300 },
   { request: "Patient Transport Request", total: 150 },
   { request: "Sanitation Request", total: 180 },
   { request: "Security Request", total: 100 },
 ];
-
 router.post("/", async (req, res) => {
+  console.log("Test for insight");
   try {
-    const response = await axios.post("/", dataToSend);
-    res.status(200).json(response.data);
+    const response = await axios.post("/", parsedata);
+    console.log(response.data);
+    res.status(200).send("Node data imported successfully.");
   } catch (error) {
-    console.log(error);
-    res.status(500).send("Error");
+    console.error("Error processing node data:", error);
+    res.status(400).send("Bad request");
   }
 });
 

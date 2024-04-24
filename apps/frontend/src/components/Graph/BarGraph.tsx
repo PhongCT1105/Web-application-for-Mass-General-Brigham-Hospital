@@ -9,9 +9,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { barChartData } from "@/data/chartValue/barChartData.ts";
-import { useEffect, useState } from "react";
-import axios from "axios";
 
 ChartJS.register(
   CategoryScale,
@@ -22,22 +19,35 @@ ChartJS.register(
   Legend,
 );
 
-function BarGraph() {
-  const [data, setData] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("api/insight");
-        console.log(response);
-        setData(response.data);
-      } catch (error) {
-        console.log("Error fetching data: ", error);
-      }
-    };
-    fetchData().then(() => console.log("Success"));
-  }, []);
-
-  console.log(data);
+interface requestData {
+  request: string;
+  total: number;
+}
+function BarGraph({ props }: { props: requestData[] }) {
+  const barChartData = {
+    labels: props.map((map) => map.request),
+    datasets: [
+      {
+        label: "Total Used",
+        data: props.map((map) => map.total),
+        backgroundColor: [
+          "rgba(255, 99, 13, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
 
   const options = {
     type: "bar" as ChartType,
