@@ -242,13 +242,25 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         </CardContent>
       </Card>
 
-      <Card className={"m-4 w-full shadow"}>
-        <CardHeader>
-          <CardTitle className={"font-bold"}>Directions:</CardTitle>
-        </CardHeader>
-        <CardContent style={{ maxHeight: "40vh", overflowY: "auto" }}>
+      <Card
+        className={"m-4 w-full h-full  border-none bg-transparent shadow-none"}
+      >
+        {/*<CardHeader>*/}
+        {/*  <div >Text Directions:</div>*/}
+        {/*</CardHeader>*/}
+        <CardContent
+          // style={{ maxHeight: "40vh", overflowY: "auto" }}
+          className={"overflow-y-auto max-h-[40vh]"}
+        >
           {textDirections.map((direction, index) => (
-            <div key={index} style={{ display: "flex", alignItems: "center" }}>
+            <div
+              key={index}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                // backgroundColor: index % 2 === 0 ? "#ADD8E6" : "#f3f4f6"
+              }}
+            >
               <img
                 src={direction.icon}
                 alt="arrow-icon"

@@ -26,10 +26,10 @@ export default function StartPage() {
             <div
               className="text-white
                             text-bold bg-red-500
-                            mb-0 p-0 text-s w-full
-                            text-center alert alert-warning
+                            mb-0 p-0 text-s h-full
+                            text-center
                             alert-dismissible
-                            fade show"
+                            fade show pb-2"
               role="alert"
             >
               <strong>Notice! </strong>
