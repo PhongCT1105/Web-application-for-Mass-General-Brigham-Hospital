@@ -680,7 +680,6 @@ export const MapBlock: React.FC = () => {
     };
     console.log(test);
     const nodeArray: Node[] = [];
-    handleClear();
     async function path() {
       const { data: response } = await axios.post("/api/search", test, {
         headers: {
@@ -704,7 +703,7 @@ export const MapBlock: React.FC = () => {
     }
 
     path().then(() => {
-      //setSearchPath(nodeArray);
+      handleClear();
       console.log(nodeArray);
       addPathPolylines(nodeArray);
       createTextDirections(nodeArray); //nodeArray[0].floor);
@@ -715,8 +714,10 @@ export const MapBlock: React.FC = () => {
     const map = mapRef.current;
     if (!map) return;
     const layer: L.FeatureGroup = Layers[floor];
+    // const markers = Markers[1];
     if (!layer) return;
-    map.removeLayer(Layers[floor]);
+    map.removeLayer(Layers[searchPath[0].floor]);
+    map.removeLayer(Markers[1]);
     Layers[searchPath[0].floor].addTo(map);
 
     const searchPathOnThisFloor = searchPath.filter(
