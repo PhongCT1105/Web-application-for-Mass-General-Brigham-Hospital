@@ -11,7 +11,6 @@ import L, {
   LatLngBoundsExpression,
   LatLngExpression,
   Map,
-  // Polyline,
 } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
@@ -20,7 +19,6 @@ import theFirstFloor from "@/assets/01_thefirstfloor.png";
 import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import "@/styles/mapBlock.modules.css";
-//import axios from "axios";
 import { useGraphContext } from "@/context/nodeContext.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { EditIcon } from "lucide-react";
@@ -41,7 +39,6 @@ export interface Edge {
   start: string;
   end: string;
 }
-
 interface HospitalData {
   nodeID: string;
   name: string;
@@ -57,7 +54,6 @@ interface HospitalData {
 // Define the map component
 export const MapEditor: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
-  // const [paths, setPaths] = useState<Polyline[]>([]);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [originalHospitalData, setOriginalHospitalData] = useState<
     HospitalData[]
@@ -70,6 +66,44 @@ export const MapEditor: React.FC = () => {
   const [LayerF1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
+
+  // function to compare the original and updated data
+  const findDataDifferences = () => {
+    return originalHospitalData.reduce((differences, originalNode) => {
+      const updatedNode = hospitalData.find(
+        (node) => node.nodeID === originalNode.nodeID,
+      );
+
+      if (updatedNode) {
+        const nodeDifferences: {
+          [key: string]: {
+            oldValue: string | number;
+            newValue: string | number;
+          };
+        } = {};
+
+        Object.entries(originalNode).forEach(([key, value]) => {
+          if (updatedNode[key as keyof HospitalData] !== value) {
+            nodeDifferences[key] = {
+              oldValue: value,
+              newValue: updatedNode[key as keyof HospitalData],
+            };
+          }
+        });
+
+        if (Object.keys(nodeDifferences).length > 0) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          differences[originalNode.nodeID] = nodeDifferences;
+        }
+      }
+
+      return differences;
+    }, {});
+  };
+
+  // Call the function to find data differences
+  const differences = findDataDifferences();
 
   const handleFinalize = () => {
     if (selectedNode) {
@@ -85,7 +119,7 @@ export const MapEditor: React.FC = () => {
               ? {
                   longName: selectedNode.name,
                   xcoord: selectedNode.xcoord,
-                  ycoord: Number(selectedNode.ycoord.toFixed(0)),
+                  ycoord: selectedNode.ycoord,
                   floor: selectedNode.floor,
                   building: selectedNode.building,
                   nodeID: selectedNode.nodeID,
@@ -101,9 +135,9 @@ export const MapEditor: React.FC = () => {
               ? {
                   ...item,
                   name: selectedNode.name,
-                  xcoord: Number(selectedNode.xcoord.toFixed(0)),
-                  ycoord: Number(selectedNode.ycoord.toFixed(0)),
-                  geocode: `${Number(selectedNode.xcoord.toFixed(0))},${Number(selectedNode.ycoord.toFixed(0))}`,
+                  xcoord: selectedNode.xcoord,
+                  ycoord: selectedNode.ycoord,
+                  geocode: `${selectedNode.xcoord},${selectedNode.ycoord}`,
                 }
               : item,
           ),
@@ -232,7 +266,6 @@ export const MapEditor: React.FC = () => {
       if (startHospital.floor === endHospital.floor) {
         newPath.addTo(Edges[startHospital.floor]);
       }
-      // addToPaths(newPath); // Add the new path to the paths list
     },
     [Edges],
   );
@@ -241,7 +274,6 @@ export const MapEditor: React.FC = () => {
     (hospitalData: HospitalData[]) => {
       for (const edge of edges) {
         const edgeID = edge.edgeID;
-        //console.log(edgeID);
         const edgeSplit = edgeID.split("_", 2);
         if (hospitalData.find((h) => h.nodeID == edgeSplit[0])) {
           const startHospital = hospitalData.find(
@@ -326,7 +358,7 @@ export const MapEditor: React.FC = () => {
             (item) => node.nodeID === item.nodeID,
           );
           if (foundNode) {
-            setSelectedNode({ ...foundNode, ycoord: Number(lng.toFixed(0)) });
+            setSelectedNode({ ...foundNode, ycoord: lng });
           } else {
             console.log("could not find node");
           }
@@ -434,7 +466,8 @@ export const MapEditor: React.FC = () => {
             <CardTitle>Map Editor</CardTitle>
             <CardDescription>
               Move and drag nodes to change their position. Click on a node to
-              edit. Click "Submit Changes" to override all node data.
+              edit. Click "Submit Changes" to override all node data. You may
+              view your changes at the bottom of the page.
             </CardDescription>
           </CardHeader>
           <CardContent className={"flex flex-col align-items-lg-end space-y-4"}>
@@ -505,9 +538,9 @@ export const MapEditor: React.FC = () => {
                     ),
                 )}
               <CardDescription>
-                <p className={"mt-2 -mb-4"}>
-                  Editing does not permanently change the node.
-                </p>
+                <div className={"mt-3 -mb-4"}>
+                  Edited nodes are not finalized until you submit all changes.
+                </div>
               </CardDescription>
             </CardContent>
             <CardFooter className={"w-full space-x-2"}>
@@ -526,7 +559,40 @@ export const MapEditor: React.FC = () => {
         ) : (
           <></>
         )}
+        {Object.entries(differences).map(([nodeID, changes]) => (
+          <Card className={"w-full shadow"}>
+            <CardHeader>
+              <CardTitle>History</CardTitle>
+            </CardHeader>
+            <CardContent
+              className={"flex flex-col align-items-lg-end space-y-4"}
+            >
+              <div key={nodeID} className={"pb-4"}>
+                <strong>Node ID: {nodeID}</strong>
+                {typeof changes === "object" && changes !== null ? (
+                  Object.entries(changes).map(
+                    ([key, { oldValue, newValue }]) =>
+                      key !== "geocode" ? ( // Fix here
+                        <div className={"flex flex-col py-1"}>
+                          <div key={key} className={"flex flex-col"}>
+                            <strong>{key}: </strong>
+                            <span>Old Value: {oldValue}, </span>
+                            <span>New Value: {newValue}</span> {/* Fix here */}
+                          </div>
+                        </div>
+                      ) : (
+                        <></>
+                      ),
+                  )
+                ) : (
+                  <div>No changes</div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
       </div>
+
       <div
         id="map-container"
         style={{
