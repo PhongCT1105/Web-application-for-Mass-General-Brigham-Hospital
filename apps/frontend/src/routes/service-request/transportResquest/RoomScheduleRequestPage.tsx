@@ -310,45 +310,43 @@ export const SheduleContent = () => {
       <div className="flex  border rounded-md  text mx-10 my-5">
         <div className=" w-3/4 justify-center items-center">
           <Card className=" border-none p-4">
-            {/*<CardHeader>*/}
-            {/*  /!*<CardTitle>Request Information</CardTitle>*!/*/}
-            {/*  /!*<CardDescription>*!/*/}
-            {/*  /!*  Enter the details for your request*!/*/}
-            {/*  /!*</CardDescription>*!/*/}
-            {/*</CardHeader>*/}
             <CardContent>
-              <div className="space-y-6 mt-3">
-                <h1 className="text-2xl font-bold my-2">Employee</h1>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                      {form.employeeName
-                        ? form.employeeName
-                        : "Select Your Name"}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                    {employees.map((employee, index) => (
-                      <DropdownMenuRadioItem
-                        key={index}
-                        value={employee}
-                        onClick={() => handleEmployee(employee)}
-                      >
-                        {employee}
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
+              <div className="space-y-1 mt-3">
+                <div className="flex space-x-4 mt-3">
+                  <div className="w-1/2">
+                    <h1 className="text-2xl font-bold">Patient Name</h1>
+                    <Input
+                      type="text"
+                      id="patientName"
+                      placeholder="Enter The Patient's Name Here"
+                      onChange={handleFormChange}
+                      value={form.patientName}
+                    />
+                  </div>
 
-                <div>
-                  <h1 className="text-2xl font-bold">Patient Name</h1>
-                  <Input
-                    type="text"
-                    id="patientName"
-                    placeholder="Enter The Patient's Name Here"
-                    onChange={handleFormChange}
-                    value={form.patientName}
-                  />
+                  <div className="w-1/2">
+                    <h1 className="text-2xl font-bold">Employee</h1>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                          {form.employeeName
+                            ? form.employeeName
+                            : "Select Your Name"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                        {employees.map((employee, index) => (
+                          <DropdownMenuRadioItem
+                            key={index}
+                            value={employee}
+                            onClick={() => handleEmployee(employee)}
+                          >
+                            {employee}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
                 </div>
 
                 <div className="flex">
