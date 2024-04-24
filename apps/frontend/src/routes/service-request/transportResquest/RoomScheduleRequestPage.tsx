@@ -142,6 +142,9 @@ export const SheduleContent = () => {
             item.lName,
         );
 
+        // alphabetizing employee list
+        extractedEmployees.sort((a: string, b: string) => a.localeCompare(b));
+        // set locations to filtered alphabetized employee list
         setEmployees(extractedEmployees);
 
         console.log("Successfully fetched data from the API.");
@@ -404,15 +407,17 @@ export const SheduleContent = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70  overflow-y-auto">
-                        {locationsFrom.map((location, index) => (
-                          <DropdownMenuRadioItem
-                            key={index}
-                            value={location}
-                            onClick={() => handleLocationFromChange(location)}
-                          >
-                            {location}
-                          </DropdownMenuRadioItem>
-                        ))}
+                        {locationsFrom
+                          .sort((a, b) => a.localeCompare(b))
+                          .map((location, index) => (
+                            <DropdownMenuRadioItem
+                              key={index}
+                              value={location}
+                              onClick={() => handleLocationFromChange(location)}
+                            >
+                              {location}
+                            </DropdownMenuRadioItem>
+                          ))}
                       </DropdownMenuContent>
                     </DropdownMenu>
                     <h2 className={"text-sm"}>To: </h2>
@@ -425,15 +430,17 @@ export const SheduleContent = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70  overflow-y-auto">
-                        {locationsTo.map((location, index) => (
-                          <DropdownMenuRadioItem
-                            key={index}
-                            value={location}
-                            onClick={() => handleLocationToChange(location)}
-                          >
-                            {location}
-                          </DropdownMenuRadioItem>
-                        ))}
+                        {locationsTo
+                          .sort((a, b) => a.localeCompare(b))
+                          .map((location, index) => (
+                            <DropdownMenuRadioItem
+                              key={index}
+                              value={location}
+                              onClick={() => handleLocationToChange(location)}
+                            >
+                              {location}
+                            </DropdownMenuRadioItem>
+                          ))}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </div>

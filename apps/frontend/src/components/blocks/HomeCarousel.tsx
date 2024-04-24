@@ -26,7 +26,7 @@ export const HomeCarousel: React.FC<HomeCarouselProps> = ({ data }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       nextSlide();
-    }, 8000);
+    }, 30000);
 
     // Clear the interval when the component unmounts
     return () => clearInterval(interval);

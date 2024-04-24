@@ -2,6 +2,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
+import { DataTableColumnHeaderEmployee } from "@/components/table/data-table-employee-header.tsx";
 import { Medication, MedicationForm } from "@/interfaces/medicationReq.ts";
 import { Button } from "@/components/ui/button.tsx";
 import { DotsHorizontalIcon } from "@radix-ui/react-icons";
@@ -26,26 +27,9 @@ export const columnsMedicationFormLog: ColumnDef<MedicationForm>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "medication",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Medication Name" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          {/*{label && <Badge variant="outline">{label.label}</Badge>}*/}
-          <span className="max-w-[300px] truncate font-medium">
-            {row.getValue("medication")}
-          </span>
-        </div>
-      );
-    },
-    enableHiding: false,
-  },
-  {
     accessorKey: "employee",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Employee Name" />
+      <DataTableColumnHeaderEmployee column={column} title="Employee Name" />
     ),
     cell: ({ row }) => {
       return (

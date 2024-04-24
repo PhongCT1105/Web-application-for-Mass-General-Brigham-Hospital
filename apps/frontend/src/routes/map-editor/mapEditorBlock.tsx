@@ -210,11 +210,11 @@ export const MapEditor: React.FC = () => {
 
   const baseLayers = useMemo(
     () => ({
-      "Lower Level 2": LayerL2,
-      "Lower Level 1": LayerL1,
-      "First Floor": LayerF1,
-      "Second Floor": LayerF2,
       "Third Floor": LayerF3,
+      "Second Floor": LayerF2,
+      "First Floor": LayerF1,
+      "Lower Level 1": LayerL1,
+      "Lower Level 2": LayerL2,
     }),
     [LayerL1, LayerL2, LayerF1, LayerF2, LayerF3],
   );
@@ -615,7 +615,12 @@ export const MapEditor: React.FC = () => {
             zIndex: 1000,
             color: "black",
           }}
-        ></div>
+        >
+          <Button onClick={() => (window.location.href = "/map-editor/table")}>
+            <EditIcon className="mr-2 h-4 w-4" />
+            <span>Table View</span>
+          </Button>
+        </div>
       </div>
     </div>
   );

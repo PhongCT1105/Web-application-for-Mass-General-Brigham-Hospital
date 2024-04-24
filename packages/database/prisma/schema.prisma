@@ -114,7 +114,7 @@ model medicationInfo {
   name                String
   priority            String
   status              String
-  price               Int
+  price               Float
   quantity            Int
   medicationRequest   medicationRequest? @relation(fields: [medicationRequestId], references: [id])
   medicationRequestId Int?

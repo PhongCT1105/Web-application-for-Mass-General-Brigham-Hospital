@@ -37,7 +37,8 @@ export class DFS implements PathfindingStrategy {
 
     for (const neighbor of currentNode.neighbors) {
       if (!visited.includes(neighbor)) {
-        const path = this.dfsRecursive(neighbor, endNode, visited.slice());
+        console.log(neighbor);
+        const path = this.dfsRecursive(neighbor, endNode, visited);
         if (path.length > 0 && path[path.length - 1] === endNode) {
           return path;
         }

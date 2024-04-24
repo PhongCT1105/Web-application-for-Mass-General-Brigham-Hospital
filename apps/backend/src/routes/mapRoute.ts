@@ -17,6 +17,13 @@ router.get("/nodes", async (req, res) => {
   }
 });
 
+router.get("/nodes/location", async (req, res) => {
+  const location = await client.nodes.findMany({
+    select: { longName: true },
+  });
+  res.status(200).json(location);
+});
+
 router.get("/nodes/:nodeid", async (req, res) => {
   const nodeID = req.params.nodeid;
 

@@ -72,6 +72,14 @@ export function MedicineRequest({ columns }: DataTableProps) {
       },
     ]);
   };
+
+  const handleLocationChange = (selectedLocation: string) => {
+    setForm((prevState) => ({
+      ...prevState,
+      location: selectedLocation,
+    }));
+  };
+
   const handleFormChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prevState) => ({
       ...prevState,
@@ -95,7 +103,7 @@ export function MedicineRequest({ columns }: DataTableProps) {
   };
 
   useEffect(() => {
-    const fetchEmployees = async () => {
+    const fetchData = async () => {
       try {
         const response = await axios.get("/api/employeeData");
         const rawData = response.data;
@@ -105,43 +113,26 @@ export function MedicineRequest({ columns }: DataTableProps) {
             item.lName,
         );
 
+        const res = await axios.get("/api/mapreq/nodes/location");
+        const location = res.data.map(
+          (item: { longName: string }) => item.longName,
+        );
+        const filteredLocations = location.filter((longName: string) => {
+          return (
+            !longName.includes("Hallway") &&
+            !longName.startsWith("Hall") &&
+            !longName.includes("Restroom") &&
+            !longName.includes("Elevator") &&
+            !longName.includes("Staircase") &&
+            !longName.includes("Stair")
+          );
+        });
+
+        // alphabetizing employee list
+        extractedEmployees.sort((a: string, b: string) => a.localeCompare(b));
+        // set locations to filtered alphabetized employee list
         setEmployees(extractedEmployees);
-
-        console.log("Successfully fetched data from the API.");
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    // Fetch data on component mount
-    fetchEmployees();
-  }, []);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get("/api/mapreq/nodes");
-        const rawData = response.data;
-
-        const extractedLocations = rawData.map(
-          (item: {
-            nodeID: string;
-            xcoord: number;
-            ycoord: number;
-            floor: string;
-            building: string;
-            nodeType: string;
-            longName: string;
-            shortName: string;
-          }) => item.longName,
-        );
-        const filteredLocations = extractedLocations.filter(
-          (location: string) => {
-            return !location.startsWith("Hall");
-          },
-        );
-
         setLocations(filteredLocations);
-
         console.log("Successfully fetched data from the API.");
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -149,15 +140,7 @@ export function MedicineRequest({ columns }: DataTableProps) {
     };
     // Fetch data on component mount
     fetchData();
-  }, []);
-
-  const handleLocation = (selectedLocation: string) => {
-    setForm((prevState) => ({
-      ...prevState,
-      location: selectedLocation,
-    }));
-    //checkEmpty() ? setButtonState("ghost") : setButtonState("default");
-  };
+  }, [employees, locations]);
 
   const handleEmployeeChange = (selectedEmployee: string) => {
     setForm((prevState) => ({
@@ -300,16 +283,18 @@ export function MedicineRequest({ columns }: DataTableProps) {
                 {form.location ? form.location : "Select Location"}
               </Button>
             </DropdownMenuTrigger>
-            <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-              {locations.map((location, index) => (
-                <DropdownMenuRadioItem
-                  key={index}
-                  value={location}
-                  onClick={() => handleLocation(location)}
-                >
-                  {location}
-                </DropdownMenuRadioItem>
-              ))}
+            <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70  overflow-y-auto">
+              {locations
+                .sort((a, b) => a.localeCompare(b))
+                .map((location, index) => (
+                  <DropdownMenuRadioItem
+                    key={index}
+                    value={location}
+                    onClick={() => handleLocationChange(location)}
+                  >
+                    {location}
+                  </DropdownMenuRadioItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
           <Label>Patient Name</Label>

@@ -39,6 +39,7 @@ import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
+
 declare module "leaflet" {
   interface Polyline {
     snakeIn: () => void;
@@ -254,11 +255,11 @@ export const MapBlock: React.FC = () => {
 
   const baseLayers = useMemo(
     () => ({
-      L1: LayerL1,
-      L2: LayerL2,
-      F1: LayerF1,
-      F2: LayerF2,
-      F3: LayerF3,
+      "Third Floor": LayerF3,
+      "Second Floor": LayerF2,
+      "First Floor": LayerF1,
+      "Lower Level 1": LayerL1,
+      "Lower Level 2": LayerL2,
     }),
     [LayerL1, LayerL2, LayerF1, LayerF2, LayerF3],
   );
@@ -280,13 +281,18 @@ export const MapBlock: React.FC = () => {
         map = L.map("map-container", {
           crs: CRS.Simple,
           minZoom: -2,
-          maxZoom: 2,
+          maxZoom: 3,
           zoomControl: true,
           preferCanvas: true,
           layers: [LayerF1],
         }).setView([3400, 5000], -2);
         mapRef.current = map;
-        L.control.layers(baseLayers).addTo(map);
+        L.control
+          .layers(baseLayers, undefined, {
+            collapsed: false,
+            position: "bottomright",
+          })
+          .addTo(map);
         map.setMaxBounds(bounds);
       }
 
@@ -461,13 +467,19 @@ export const MapBlock: React.FC = () => {
         (b.ycoord - a.ycoord) * (c.xcoord - a.xcoord);
       console.log(crossProduct);
 
-      const tolerance = 700;
+      const tolerance = 500;
       if (Math.abs(crossProduct) < tolerance) {
         return { text: "Continue Straight at " + b.longName, icon: UpArrow };
       } else if (crossProduct > 0) {
         return { text: "Turn Right at " + b.longName, icon: RightArrow };
       } else {
         return { text: "Turn Left at " + b.longName, icon: LeftArrow };
+        //   return (
+        //       <>
+        //       <p>Turn Left at</p>
+        //       <CornerLeftUp></CornerLeftUp>
+        //       </>
+        //   );
       }
     }
   }
@@ -533,14 +545,34 @@ export const MapBlock: React.FC = () => {
           icon: Hospital,
         };
         directionsArray.push(directionObject);
-        directionsArray.push({ text: "\n", icon: Circle });
+        directionsArray.push({ text: "\n\n", icon: Circle });
 
         for (let j = 0; j < paths[i].length - 1; j++) {
-          const directionObject: direction = {
-            text: directionFromCurrentLine(paths[i], j).text,
-            icon: directionFromCurrentLine(paths[i], j).icon,
-          };
-          directionsArray.push(directionObject);
+          if (
+            j != paths[i].length - 2 &&
+            nodeArray[nodeArray.indexOf(paths[i][j])].floor !=
+              nodeArray[nodeArray.indexOf(paths[i][j]) + 1].floor
+          ) {
+            directionsArray.push({
+              text: "\n",
+              icon: Circle,
+            });
+          } else if (
+            j != 0 &&
+            nodeArray[nodeArray.indexOf(paths[i][j])].floor !=
+              nodeArray[nodeArray.indexOf(paths[i][j]) - 1].floor
+          ) {
+            directionsArray.push({
+              text: "Continue Towards " + paths[i][j + 1].longName,
+              icon: UpArrow,
+            });
+          } else {
+            const directionObject: direction = {
+              text: directionFromCurrentLine(paths[i], j).text,
+              icon: directionFromCurrentLine(paths[i], j).icon,
+            };
+            directionsArray.push(directionObject);
+          }
         }
         directionsArray.push({ text: "\n", icon: Circle });
       }
@@ -669,6 +701,7 @@ export const MapBlock: React.FC = () => {
     console.log(test);
     const nodeArray: Node[] = [];
     handleClear();
+
     async function path() {
       const { data: response } = await axios.post("/api/search", test, {
         headers: {
@@ -692,7 +725,7 @@ export const MapBlock: React.FC = () => {
     }
 
     path().then(() => {
-      //setSearchPath(nodeArray);
+      handleClear();
       console.log(nodeArray);
       addPathPolylines(nodeArray);
       createTextDirections(nodeArray); //nodeArray[0].floor);
@@ -703,8 +736,10 @@ export const MapBlock: React.FC = () => {
     const map = mapRef.current;
     if (!map) return;
     const layer: L.FeatureGroup = Layers[floor];
+    // const markers = Markers[1];
     if (!layer) return;
-    map.removeLayer(Layers[floor]);
+    map.removeLayer(Layers[searchPath[0].floor]);
+    map.removeLayer(Markers[1]);
     Layers[searchPath[0].floor].addTo(map);
 
     const searchPathOnThisFloor = searchPath.filter(
@@ -759,7 +794,7 @@ export const MapBlock: React.FC = () => {
       // Handle the case when searchPath is empty or undefined
       console.error("searchPath is empty or undefined");
       // Set a default map view
-      map.setView([0, 0], -2);
+      map.setView([0, 0], -3);
     }
   }
 
