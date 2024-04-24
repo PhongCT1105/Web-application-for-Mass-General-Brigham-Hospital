@@ -306,7 +306,6 @@ export const MapEditor: React.FC = () => {
           const newGeocode = `${position.lng},${3400 - position.lat}`;
 
           const updatedNode = {
-            ...selectedNode!,
             geocode: newGeocode,
             xcoord: Number(position.lng.toFixed(0)),
             ycoord: 3400 - Number(position.lat.toFixed(0)),
@@ -329,7 +328,7 @@ export const MapEditor: React.FC = () => {
             (item) => node.nodeID === item.nodeID,
           );
 
-          setSelectedNode({ ...foundNode, ...updatedNode });
+          setSelectedNode({ ...foundNode!, ...updatedNode });
 
           setNodes((prevState) =>
             prevState.map((item) =>
@@ -366,7 +365,7 @@ export const MapEditor: React.FC = () => {
         marker.addTo(Nodes[node.floor]);
       });
     },
-    [Nodes, customIcon, selectedNode, setNodes],
+    [Nodes, customIcon, setNodes],
   );
 
   useEffect(() => {
@@ -559,38 +558,44 @@ export const MapEditor: React.FC = () => {
         ) : (
           <></>
         )}
-        {Object.entries(differences).map(([nodeID, changes]) => (
+        {Object.keys(differences).length > 0 && (
           <Card className={"w-full shadow"}>
             <CardHeader>
               <CardTitle>History</CardTitle>
+              <CardDescription>
+                These are the changes you have made so far.
+              </CardDescription>
             </CardHeader>
             <CardContent
-              className={"flex flex-col align-items-lg-end space-y-4"}
+              className={"flex flex-col align-items-lg-end space-y-4 -mb-3"}
             >
-              <div key={nodeID} className={"pb-4"}>
-                <strong>Node ID: {nodeID}</strong>
-                {typeof changes === "object" && changes !== null ? (
-                  Object.entries(changes).map(
-                    ([key, { oldValue, newValue }]) =>
-                      key !== "geocode" ? ( // Fix here
-                        <div className={"flex flex-col py-1"}>
-                          <div key={key} className={"flex flex-col"}>
-                            <strong>{key}: </strong>
-                            <span>Old Value: {oldValue}, </span>
-                            <span>New Value: {newValue}</span> {/* Fix here */}
+              {Object.entries(differences).map(([nodeID, changes]) => (
+                <div key={nodeID} className={"pb-4"}>
+                  <strong>Node ID: {nodeID}</strong>
+                  {typeof changes === "object" && changes !== null ? (
+                    Object.entries(changes).map(
+                      ([key, { oldValue, newValue }]) =>
+                        key !== "geocode" ? ( // Fix here
+                          <div className={"flex flex-col py-1"}>
+                            <div key={key} className={"flex flex-col"}>
+                              <strong>{key}: </strong>
+                              <span>Old Value: {oldValue}, </span>
+                              <span>New Value: {newValue}</span>{" "}
+                              {/* Fix here */}
+                            </div>
                           </div>
-                        </div>
-                      ) : (
-                        <></>
-                      ),
-                  )
-                ) : (
-                  <div>No changes</div>
-                )}
-              </div>
+                        ) : (
+                          <></>
+                        ),
+                    )
+                  ) : (
+                    <div>No changes</div>
+                  )}
+                </div>
+              ))}
             </CardContent>
           </Card>
-        ))}
+        )}
       </div>
 
       <div
