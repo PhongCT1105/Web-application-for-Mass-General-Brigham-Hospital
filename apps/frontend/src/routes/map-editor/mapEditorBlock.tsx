@@ -85,7 +85,7 @@ export const MapEditor: React.FC = () => {
               ? {
                   longName: selectedNode.name,
                   xcoord: selectedNode.xcoord,
-                  ycoord: selectedNode.ycoord,
+                  ycoord: Number(selectedNode.ycoord.toFixed(0)),
                   floor: selectedNode.floor,
                   building: selectedNode.building,
                   nodeID: selectedNode.nodeID,
@@ -101,9 +101,9 @@ export const MapEditor: React.FC = () => {
               ? {
                   ...item,
                   name: selectedNode.name,
-                  xcoord: selectedNode.xcoord,
-                  ycoord: selectedNode.ycoord,
-                  geocode: `${selectedNode.xcoord},${selectedNode.ycoord}`,
+                  xcoord: Number(selectedNode.xcoord.toFixed(0)),
+                  ycoord: Number(selectedNode.ycoord.toFixed(0)),
+                  geocode: `${Number(selectedNode.xcoord.toFixed(0))},${Number(selectedNode.ycoord.toFixed(0))}`,
                 }
               : item,
           ),
@@ -133,6 +133,7 @@ export const MapEditor: React.FC = () => {
     handleUpdateNodes().then(() => {
       console.log("Request was sent to database.");
       setOriginalHospitalData(hospitalData);
+      setSelectedNode(null);
     });
   };
 
@@ -272,6 +273,13 @@ export const MapEditor: React.FC = () => {
           const position = marker.getLatLng();
           const newGeocode = `${position.lng},${3400 - position.lat}`;
 
+          const updatedNode = {
+            ...selectedNode!,
+            geocode: newGeocode,
+            xcoord: Number(position.lng.toFixed(0)),
+            ycoord: 3400 - Number(position.lat.toFixed(0)),
+          };
+
           // Update the hospitalData state
           setHospitalData((prevData) =>
             prevData.map((item) =>
@@ -279,17 +287,26 @@ export const MapEditor: React.FC = () => {
                 ? {
                     ...item,
                     geocode: newGeocode,
-                    xcoord: position.lng,
-                    ycoord: position.lat,
+                    xcoord: Number(position.lng.toFixed(0)),
+                    ycoord: Number(position.lat.toFixed(0)),
                   }
                 : item,
             ),
           );
+          const foundNode = hospitalData.find(
+            (item) => node.nodeID === item.nodeID,
+          );
+
+          setSelectedNode({ ...foundNode, ...updatedNode });
 
           setNodes((prevState) =>
             prevState.map((item) =>
               item.nodeID === node.nodeID
-                ? { ...item, xcoord: position.lng, ycoord: 3400 - position.lat }
+                ? {
+                    ...item,
+                    xcoord: Number(position.lng.toFixed(0)),
+                    ycoord: 3400 - Number(position.lat.toFixed(0)),
+                  }
                 : item,
             ),
           );
@@ -309,7 +326,7 @@ export const MapEditor: React.FC = () => {
             (item) => node.nodeID === item.nodeID,
           );
           if (foundNode) {
-            setSelectedNode(foundNode);
+            setSelectedNode({ ...foundNode, ycoord: Number(lng.toFixed(0)) });
           } else {
             console.log("could not find node");
           }
@@ -317,7 +334,7 @@ export const MapEditor: React.FC = () => {
         marker.addTo(Nodes[node.floor]);
       });
     },
-    [Nodes, customIcon, setNodes],
+    [Nodes, customIcon, selectedNode, setNodes],
   );
 
   useEffect(() => {
@@ -387,6 +404,10 @@ export const MapEditor: React.FC = () => {
   ]);
 
   useEffect(() => {
+    console.log(selectedNode);
+  }, [selectedNode]);
+
+  useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
     Object.keys(Layers).forEach((key) => {
@@ -444,13 +465,11 @@ export const MapEditor: React.FC = () => {
             </Button>
           </CardContent>
         </Card>
-        {selectedNode && (
+        {selectedNode ? (
           <Card className={"w-full shadow"}>
             <CardHeader>
               <CardTitle className={"gap-1"}>Node Information</CardTitle>
-              <CardDescription>
-                <p>ID: {selectedNode.nodeID}</p>
-              </CardDescription>
+              <CardDescription>ID: {selectedNode.nodeID}</CardDescription>
             </CardHeader>
             <CardContent
               className={"flex flex-col align-items-lg-end space-y-4"}
@@ -504,6 +523,8 @@ export const MapEditor: React.FC = () => {
               </Button>
             </CardFooter>
           </Card>
+        ) : (
+          <></>
         )}
       </div>
       <div
