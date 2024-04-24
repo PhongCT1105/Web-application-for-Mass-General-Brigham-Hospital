@@ -27,8 +27,8 @@ import { Medication } from "@/interfaces/medicationReq.ts";
 import { pillData } from "@/interfaces/dataTypes/testData.ts";
 import React, { createContext, useContext, useState } from "react";
 import { SheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
-import bannerMedicationImage from "@/assets/hospital-floor-banner.jpg";
-import bannerTransportImage from "@/assets/transport-banner.jpg";
+import bannerMedicationImage from "@/assets/medication-banner.jpg";
+import bannerTransportImage from "@/assets/transportation-banner.webp";
 import bannerSanitationImage from "@/assets/sanitation-banner.png";
 import bannerMaintenanceImage from "@/assets/maintenance-banner.jpg";
 import bannerSecurityImage from "@/assets/security-banner.jpg";
@@ -122,7 +122,7 @@ export default function ServiceRequestPage() {
                           style={{
                             backgroundImage: `url(${bannerMedicationImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
+                            backgroundPosition: "center 80%",
                             height: "100px",
                             borderRadius: "10px",
                           }}
@@ -182,7 +182,7 @@ export default function ServiceRequestPage() {
                           style={{
                             backgroundImage: `url(${bannerTransportImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center 50%",
+                            backgroundPosition: "center 37%",
                             height: "100px",
                             borderRadius: "10px",
                           }}
@@ -281,7 +281,7 @@ export default function ServiceRequestPage() {
                           style={{
                             backgroundImage: `url(${bannerSecurityImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center 40%",
+                            backgroundPosition: "center",
                             height: "100px",
                             borderRadius: "10px",
                           }}
@@ -320,7 +320,7 @@ export default function ServiceRequestPage() {
                           style={{
                             backgroundImage: `url(${bannerMaintenanceImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center 45%",
+                            backgroundPosition: "center 35%",
                             height: "100px",
                             borderRadius: "10px",
                           }}
