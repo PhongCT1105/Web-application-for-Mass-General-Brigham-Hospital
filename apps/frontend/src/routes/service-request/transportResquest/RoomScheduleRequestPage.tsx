@@ -312,9 +312,9 @@ export const SheduleContent = () => {
           <Card className=" border-none p-4">
             <CardContent>
               <div className="space-y-1 mt-3">
-                <div className="flex space-x-4 mt-3">
+                <div className="flex justify-between space-x-4 mt-3">
                   <div className="w-1/2">
-                    <h1 className="text-2xl font-bold">Patient Name</h1>
+                    <h1 className="text-2xl font-bold py-2">Patient Name</h1>
                     <Input
                       type="text"
                       id="patientName"
@@ -323,35 +323,11 @@ export const SheduleContent = () => {
                       value={form.patientName}
                     />
                   </div>
-
-                  <div className="w-1/2">
-                    <h1 className="text-2xl font-bold">Employee</h1>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
-                          {form.employeeName
-                            ? form.employeeName
-                            : "Select Your Name"}
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                        {employees.map((employee, index) => (
-                          <DropdownMenuRadioItem
-                            key={index}
-                            value={employee}
-                            onClick={() => handleEmployee(employee)}
-                          >
-                            {employee}
-                          </DropdownMenuRadioItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </div>
                 </div>
 
-                <div className="flex">
-                  <div className="w-1/4">
-                    <h1 className="text-2xl font-bold">Priority Level</h1>
+                <div className="flex py-2">
+                  <div className="w-1/4 py-2">
+                    <h1 className="text-2xl font-bold py-2">Priority Level</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -392,8 +368,8 @@ export const SheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/3 mr-2">
-                    <h1 className="text-2xl font-bold">Location</h1>
+                  <div className="w-1/3 mr-2 py-2">
+                    <h1 className="text-2xl font-bold py-2">Location</h1>
                     <h2 className={"text-sm"}>From: </h2>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -438,19 +414,44 @@ export const SheduleContent = () => {
                     </DropdownMenu>
                   </div>
 
-                  <div className={"w-1/6 "}>
-                    <h1 className="w-1/4 text-2xl font-bold">Time</h1>
-                    <Input
-                      type="time"
-                      placeholder="Time of Issue"
-                      id="time"
-                      onChange={handleFormChange}
-                      value={form.time}
-                    />
+                  <div className="flex flex-col">
+                    <div className="w-1/2 py-2">
+                      <h1 className="text-2xl font-bold py-2">Employee</h1>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline">
+                            {form.employeeName
+                              ? form.employeeName
+                              : "Select Your Name"}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                          {employees.map((employee, index) => (
+                            <DropdownMenuRadioItem
+                              key={index}
+                              value={employee}
+                              onClick={() => handleEmployee(employee)}
+                            >
+                              {employee}
+                            </DropdownMenuRadioItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                    <div className={"py-2"}>
+                      <h1 className="w-1/4 text-2xl font-bold py-2">Time</h1>
+                      <Input
+                        type="time"
+                        placeholder="Time of Issue"
+                        id="time"
+                        onChange={handleFormChange}
+                        value={form.time}
+                      />
+                    </div>
                   </div>
 
-                  <div className="w-1/4 ml-12">
-                    <h1 className="text-2xl font-bold">Status</h1>
+                  <div className="w-1/4 ml-12 py-2">
+                    <h1 className="text-2xl font-bold py-2">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem

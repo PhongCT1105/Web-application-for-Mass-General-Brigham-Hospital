@@ -498,47 +498,44 @@ export function Maintenance() {
               </div>
             </CardContent>
 
-            <CardFooter className="flex justify-end">
-              {" "}
-              {/* Use justify-end to align items to the end */}
-              <div className="flex space-x">
-                {" "}
-                {/* Use space-x-4 for horizontal spacing between buttons */}
-                <Button
-                  variant="destructive"
-                  className="mr-10"
-                  onClick={handleFormClear}
-                >
-                  Clear
-                </Button>
-                <TooltipProvider>
-                  {buttonState === "ghost" && (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={buttonState}
-                          className="p-5 border"
-                          onClick={handleSubmit}
-                        >
-                          Submit
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Please fill out all fields</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-                  {buttonState !== "ghost" && (
-                    <Button
-                      variant={buttonState}
-                      className="p-5"
-                      onClick={handleSubmit}
-                    >
-                      Submit
-                    </Button>
-                  )}
-                </TooltipProvider>
-              </div>
+            <CardFooter className="flex justify-between">
+              <Button
+                variant={"destructive"}
+                className="mr-20"
+                onClick={handleFormClear}
+              >
+                Clear
+              </Button>
+              {/*<Button className="p-5" onClick={handleSubmit}>*/}
+              {/*  Submit*/}
+              {/*</Button>*/}
+              <TooltipProvider>
+                {buttonState === "ghost" && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={buttonState}
+                        className="p-5 border"
+                        onClick={handleSubmit}
+                      >
+                        Submit
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Please fill out all fields</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {buttonState !== "ghost" && (
+                  <Button
+                    variant={buttonState}
+                    className="p-5"
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                )}
+              </TooltipProvider>
             </CardFooter>
           </Card>
         </div>
