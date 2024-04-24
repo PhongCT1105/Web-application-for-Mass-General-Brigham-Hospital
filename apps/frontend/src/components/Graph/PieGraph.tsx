@@ -37,7 +37,7 @@ function PieGraph({ props }: { props: requestData[] }) {
   const options = {
     animation: {
       easing: "easeInOutSine" as AnimationSpec<never>["easing"], // Corrected easing value
-      loop: true,
+      loop: false,
       duration: 2500,
     },
     responsive: true,

@@ -25,7 +25,7 @@ const PolarAreaChart = ({ props }: { props: requestData[] }) => {
   const options = {
     animation: {
       easing: "easeInBounce" as AnimationSpec<never>["easing"], // Corrected easing value
-      loop: true,
+      loop: false,
       duration: 2500,
     },
     responsive: true,

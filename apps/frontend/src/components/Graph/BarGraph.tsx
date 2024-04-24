@@ -56,7 +56,7 @@ function BarGraph({ props }: { props: requestData[] }) {
     aspectRatio: 2.5,
     animation: {
       easing: "easeOutCubic" as AnimationSpec<never>["easing"], // Corrected easing value
-      loop: true,
+      loop: false,
       duration: 2500,
     },
     plugins: {

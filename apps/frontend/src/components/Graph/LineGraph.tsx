@@ -50,7 +50,7 @@ function LineGraph({ props }: { props: requestData[] }) {
         easing: "linear" as AnimationSpec<never>["easing"],
         from: 1,
         to: 0,
-        loop: true,
+        loop: false,
       },
     },
     responsive: true,
