@@ -615,12 +615,7 @@ export const MapEditor: React.FC = () => {
             zIndex: 1000,
             color: "black",
           }}
-        >
-          <Button onClick={() => (window.location.href = "/map-editor/table")}>
-            <EditIcon className="mr-2 h-4 w-4" />
-            <span>Table View</span>
-          </Button>
-        </div>
+        ></div>
       </div>
     </div>
   );
