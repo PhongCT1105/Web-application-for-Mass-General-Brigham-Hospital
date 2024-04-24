@@ -130,7 +130,7 @@ export function Header() {
                     <img
                       src={Logo}
                       alt={"brigham logo"}
-                      className="min-w-[40px]"
+                      className="min-w-[30px]"
                     />
                   </a>
                   <a
