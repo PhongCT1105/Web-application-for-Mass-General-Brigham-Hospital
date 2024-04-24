@@ -203,6 +203,8 @@ export const FlowerContent = () => {
           backgroundPosition: "center",
           height: "100px",
           borderRadius: "10px",
+          width: "83.5%",
+          marginLeft: "8%",
         }}
       >
         <div

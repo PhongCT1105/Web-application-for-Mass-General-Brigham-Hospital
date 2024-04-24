@@ -298,9 +298,9 @@ export const SheduleContent = () => {
 
   return (
     <>
-      <Separator className="my-4" />
-      <div className="flex  border rounded-md text my-5">
-        <div className=" w-2/3 justify-center items-center">
+      <Separator className="my-4 w-5/6 mx-auto" />
+      <div className="flex border-none rounded-md text my-5 justify-center">
+        <div className="w-1/2 justify-center items-center">
           <Card className=" border-none p-4">
             <CardContent>
               <div className="space-y-1 mt-3">
@@ -360,7 +360,7 @@ export const SheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/3 mr-2 py-2">
+                  <div className="py-2 w-1/4">
                     <h1 className="text-2xl font-bold py-2">Location</h1>
                     <h2 className={"text-sm"}>From: </h2>
                     <DropdownMenu>
@@ -410,8 +410,8 @@ export const SheduleContent = () => {
                     </DropdownMenu>
                   </div>
 
-                  <div className="flex flex-col">
-                    <div className="w-1/2 py-2">
+                  <div className="flex flex-col w-1/4">
+                    <div className=" py-2">
                       <h1 className="text-2xl font-bold py-2">Employee</h1>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
@@ -435,18 +435,19 @@ export const SheduleContent = () => {
                       </DropdownMenu>
                     </div>
                     <div className={"py-2"}>
-                      <h1 className="w-1/4 text-2xl font-bold py-2">Time</h1>
+                      <h1 className="text-2xl font-bold py-2">Time</h1>
                       <Input
                         type="time"
                         placeholder="Time of Issue"
                         id="time"
                         onChange={handleFormChange}
                         value={form.time}
+                        className="w-2/3"
                       />
                     </div>
                   </div>
 
-                  <div className="w-1/2 ml-12 py-2">
+                  <div className="w-1/4 py-2">
                     <h1 className="text-2xl font-bold py-2">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">

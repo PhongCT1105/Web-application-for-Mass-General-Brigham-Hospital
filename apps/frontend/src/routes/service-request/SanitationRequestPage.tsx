@@ -263,7 +263,7 @@ export function Sanitation() {
 
   return (
     <>
-      <div className="flex flex-col border-none rounded-md text my-5 py-1">
+      <div className="flex rounded-md text my-5 justify-center">
         <div className=" justify-center items-center">
           <Card className="border-none p-4">
             <CardContent>

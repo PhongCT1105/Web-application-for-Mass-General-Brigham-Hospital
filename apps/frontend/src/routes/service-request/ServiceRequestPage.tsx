@@ -60,25 +60,25 @@ export default function ServiceRequestPage() {
   const [data, setData] = useState<Medication[]>(pillData);
 
   return (
-    <div className={" scrollbar-hide"}>
+    <div className={"scrollbar-hide"}>
       <div className="hidden md:block">
         <div className="border-t">
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
               {/*<Sidebar className="hidden lg:block"/>*/}
-              <div
-                className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto"
-                style={{
-                  backgroundColor: "#F1F1F1",
-                }}
-              >
-                <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
+              <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
+                <div className="col-span-5 lg:col-span-5 lg:border-l mt-2">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs
                       defaultValue="Flower Request"
                       className="h-full space-y-6"
                     >
-                      <div className="space-between flex items-center">
+                      <div
+                        className="space-between flex items-center"
+                        style={{
+                          marginLeft: "7.8%",
+                        }}
+                      >
                         <TabsList>
                           <TabsTrigger value="Flower Request">
                             <FlowerIcon className="mr-2 h-4 w-4" />
@@ -125,6 +125,8 @@ export default function ServiceRequestPage() {
                             backgroundPosition: "center 80%",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div className="space-y-1">
@@ -164,7 +166,7 @@ export default function ServiceRequestPage() {
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <div className={"p-3"}>
                           <MedicineContext.Provider value={{ data, setData }}>
                             <div className={"space-y-4"}>
@@ -178,13 +180,15 @@ export default function ServiceRequestPage() {
                         className="w-full flex-col border-none p-0 data-[state=active]:flex"
                       >
                         <div
-                          className="flex items-center justify-between"
+                          className=" flex items-center justify-between"
                           style={{
                             backgroundImage: `url(${bannerTransportImage})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center 37%",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div className="space-y-1">
@@ -223,7 +227,9 @@ export default function ServiceRequestPage() {
                             </p>
                           </div>
                         </div>
-                        <SheduleContent />
+                        <div className=" justify-center items-center">
+                          <SheduleContent />
+                        </div>
                       </TabsContent>
                       <TabsContent
                         value={"Sanitation Request"}
@@ -239,6 +245,8 @@ export default function ServiceRequestPage() {
                             backgroundPosition: "center 65%",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div
@@ -267,7 +275,7 @@ export default function ServiceRequestPage() {
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <Sanitation />
                       </TabsContent>
                       <TabsContent
@@ -284,6 +292,8 @@ export default function ServiceRequestPage() {
                             backgroundPosition: "center",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div
@@ -316,7 +326,7 @@ export default function ServiceRequestPage() {
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <SecurityForm />
                       </TabsContent>
                       <TabsContent
@@ -333,6 +343,8 @@ export default function ServiceRequestPage() {
                             backgroundPosition: "center 35%",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div
@@ -365,7 +377,7 @@ export default function ServiceRequestPage() {
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <Maintenance />
                       </TabsContent>
                     </Tabs>
