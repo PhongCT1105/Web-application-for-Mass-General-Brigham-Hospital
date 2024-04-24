@@ -367,7 +367,7 @@ export const RequestLogPage = () => {
                         <DataTable
                           searchBar={{
                             title: "employee name",
-                            columnId: "employeeName",
+                            columnId: "name",
                           }}
                           columns={columnsMaintenanceLog}
                           data={maintenanceLog}
