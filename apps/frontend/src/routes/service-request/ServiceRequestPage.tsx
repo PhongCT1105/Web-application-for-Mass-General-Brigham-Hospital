@@ -27,6 +27,11 @@ import { Medication } from "@/interfaces/medicationReq.ts";
 import { pillData } from "@/interfaces/dataTypes/testData.ts";
 import React, { createContext, useContext, useState } from "react";
 import { SheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
+import bannerMedicationImage from "@/assets/medication-banner.jpg";
+import bannerTransportImage from "@/assets/transportation-banner.webp";
+import bannerSanitationImage from "@/assets/sanitation-banner.png";
+import bannerMaintenanceImage from "@/assets/maintenance-banner.jpg";
+import bannerSecurityImage from "@/assets/security-banner.jpg";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -61,7 +66,12 @@ export default function ServiceRequestPage() {
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
               {/*<Sidebar className="hidden lg:block"/>*/}
-              <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
+              <div
+                className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto"
+                style={{
+                  backgroundColor: "#F1F1F1",
+                }}
+              >
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs
@@ -107,15 +117,48 @@ export default function ServiceRequestPage() {
                         value="Medication Request"
                         className=" flex-col border-none p-0 data-[state=active]:flex"
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerMedicationImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center 80%",
+                            height: "100px",
+                            borderRadius: "10px",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
                               Medication Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
                               By Mina Boktor & Alexander Kraemling
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
                               Order and deliver a patient's medication from the
                               pharmacy
                             </p>
@@ -134,15 +177,48 @@ export default function ServiceRequestPage() {
                         value="Patient Transport Request"
                         className="w-full flex-col border-none p-0 data-[state=active]:flex"
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerTransportImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center 37%",
+                            height: "100px",
+                            borderRadius: "10px",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
                               Internal Patient Transport
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
                               By Trang Tran & Phong Cao
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
                               Move patients to a different room
                             </p>
                           </div>
@@ -155,15 +231,38 @@ export default function ServiceRequestPage() {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerSanitationImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center 65%",
+                            height: "100px",
+                            borderRadius: "10px",
+                          }}
+                        >
+                          <div
+                            className="space-y-1"
+                            style={{
+                              color: "white",
+                              marginLeft: "20px",
+                              textShadow:
+                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                            }}
+                          >
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Sanitation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white" }}
+                            >
                               By Alex Shettler & Tracy Yang
                             </p>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white" }}
+                            >
                               Get sanitation services for an issue.
                             </p>
                           </div>
@@ -177,12 +276,42 @@ export default function ServiceRequestPage() {
                           "w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerSecurityImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                          }}
+                        >
+                          <div
+                            className="space-y-1"
+                            style={{
+                              color: "white",
+                              marginLeft: "20px",
+                              textShadow:
+                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                            }}
+                          >
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Security Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
+                              By Owen Lacey & Tracy Yang
+                            </p>
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white" }}
+                            >
                               Request Security services and optionally call 911.
                             </p>
                           </div>
@@ -196,12 +325,42 @@ export default function ServiceRequestPage() {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerMaintenanceImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center 35%",
+                            height: "100px",
+                            borderRadius: "10px",
+                          }}
+                        >
+                          <div
+                            className="space-y-1"
+                            style={{
+                              color: "white",
+                              marginLeft: "20px",
+                              textShadow:
+                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                            }}
+                          >
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Maintenance Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
+                              June Whittall & Alex Shettler
+                            </p>
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{ color: "white" }}
+                            >
                               Report a maintenance issue
                             </p>
                           </div>

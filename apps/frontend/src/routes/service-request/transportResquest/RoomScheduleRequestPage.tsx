@@ -24,14 +24,6 @@ import {
 import { format } from "date-fns";
 import axios from "axios";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table.tsx";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -307,54 +299,27 @@ export const SheduleContent = () => {
   return (
     <>
       <Separator className="my-4" />
-
-      <div className=" flex  border rounded-md  text mx-10 my-5">
-        <div className="w-3/4 justify-center items-center">
-          <Card className=" border-none">
-            {/*<CardHeader>*/}
-            {/*  /!*<CardTitle>Request Information</CardTitle>*!/*/}
-            {/*  /!*<CardDescription>*!/*/}
-            {/*  /!*  Enter the details for your request*!/*/}
-            {/*  /!*</CardDescription>*!/*/}
-            {/*</CardHeader>*/}
+      <div className="flex  border rounded-md text my-5">
+        <div className=" w-2/3 justify-center items-center">
+          <Card className=" border-none p-4">
             <CardContent>
-              <div className="space-y-6 mt-6">
-                <h1 className="text-2xl font-bold my-2">Employee</h1>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                      {form.employeeName
-                        ? form.employeeName
-                        : "Select Your Name"}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                    {employees.map((employee, index) => (
-                      <DropdownMenuRadioItem
-                        key={index}
-                        value={employee}
-                        onClick={() => handleEmployee(employee)}
-                      >
-                        {employee}
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-
-                <div>
-                  <h1 className="text-2xl font-bold">Patient Name</h1>
-                  <Input
-                    type="text"
-                    id="patientName"
-                    placeholder="Enter The Patient's Name Here"
-                    onChange={handleFormChange}
-                    value={form.patientName}
-                  />
+              <div className="space-y-1 mt-3">
+                <div className="flex justify-between space-x-4 mt-3">
+                  <div className="w-1/2">
+                    <h1 className="text-2xl font-bold py-2">Patient Name</h1>
+                    <Input
+                      type="text"
+                      id="patientName"
+                      placeholder="Enter The Patient's Name Here"
+                      onChange={handleFormChange}
+                      value={form.patientName}
+                    />
+                  </div>
                 </div>
 
-                <div className="flex">
-                  <div className="w-1/4">
-                    <h1 className="text-2xl font-bold">Priority Level</h1>
+                <div className="flex py-2">
+                  <div className="w-1/4 py-2">
+                    <h1 className="text-2xl font-bold py-2">Priority Level</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -395,8 +360,8 @@ export const SheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/3 mr-2">
-                    <h1 className="text-2xl font-bold">Location</h1>
+                  <div className="w-1/3 mr-2 py-2">
+                    <h1 className="text-2xl font-bold py-2">Location</h1>
                     <h2 className={"text-sm"}>From: </h2>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -445,19 +410,44 @@ export const SheduleContent = () => {
                     </DropdownMenu>
                   </div>
 
-                  <div className={"w-1/6 "}>
-                    <h1 className="w-1/4 text-2xl font-bold">Time</h1>
-                    <Input
-                      type="time"
-                      placeholder="Time of Issue"
-                      id="time"
-                      onChange={handleFormChange}
-                      value={form.time}
-                    />
+                  <div className="flex flex-col">
+                    <div className="w-1/2 py-2">
+                      <h1 className="text-2xl font-bold py-2">Employee</h1>
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline">
+                            {form.employeeName
+                              ? form.employeeName
+                              : "Select Your Name"}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                          {employees.map((employee, index) => (
+                            <DropdownMenuRadioItem
+                              key={index}
+                              value={employee}
+                              onClick={() => handleEmployee(employee)}
+                            >
+                              {employee}
+                            </DropdownMenuRadioItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
+                    <div className={"py-2"}>
+                      <h1 className="w-1/4 text-2xl font-bold py-2">Time</h1>
+                      <Input
+                        type="time"
+                        placeholder="Time of Issue"
+                        id="time"
+                        onChange={handleFormChange}
+                        value={form.time}
+                      />
+                    </div>
                   </div>
 
-                  <div className="w-1/4 ml-12">
-                    <h1 className="text-2xl font-bold">Status</h1>
+                  <div className="w-1/2 ml-12 py-2">
+                    <h1 className="text-2xl font-bold py-2">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
                         <RadioGroupItem
@@ -564,11 +554,13 @@ export const SheduleContent = () => {
           </Card>
         </div>
 
-        <div className="w-2/5 items-center bg-secondary">
+        <div className="w-1/3 rounded-md items-center justify-center bg-secondary overflow-hidden">
           <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
-          <div className="max-w-md md:max-w-none mt-6 items-center">
+          <div className="flex items-center justify-center">
             <Calendar
-              className={"w-full transform scale-150 md:ml-40 my-6 md:my-20"}
+              className={
+                "w-full transform scale-150 md:ml-40 my-6 md:my-20 p-4"
+              }
               mode="single"
               selected={form.date}
               onSelect={handleDateChange}
@@ -579,48 +571,12 @@ export const SheduleContent = () => {
             />
           </div>
 
-          <h2 className={"ml-10"}>You picked {formattedDate}</h2>
+          <h2 className={"ml-10 flex items-center justify-center"}>
+            You picked {formattedDate}
+          </h2>
         </div>
       </div>
-      <div>
-        <Card className={"mx-10 mb-5 mt-[120px]"}>
-          <Table>
-            <TableHeader>
-              <TableRow className={""}>
-                <TableHead className="">Patient Name</TableHead>
-                <TableHead className="">From</TableHead>
-                <TableHead className="">To</TableHead>
-                <TableHead className="">Date</TableHead>
-                <TableHead className="">Time</TableHead>
-                <TableHead className="">Reason</TableHead>
-                <TableHead className="">Note</TableHead>
-                <TableHead className="">Priority</TableHead>
-                <TableHead className="">Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {submittedForms.map((request) => {
-                return (
-                  <TableRow>
-                    <TableCell>{request.employeeName}</TableCell>
-                    <TableCell>{request.patientName}</TableCell>
-                    <TableCell>{request.locationFrom}</TableCell>
-                    <TableCell>{request.locationTo}</TableCell>
-                    <TableCell>
-                      {format(request.date, "MMMM do, yyyy")}
-                    </TableCell>
-                    <TableCell>{request.time}</TableCell>
-                    <TableCell>{request.reason}</TableCell>
-                    <TableCell>{request.note}</TableCell>
-                    <TableCell>{request.priority}</TableCell>
-                    <TableCell>{request.status}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Card>
-      </div>
+      <div></div>
     </>
   );
 };
