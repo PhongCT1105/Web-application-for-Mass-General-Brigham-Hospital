@@ -92,11 +92,11 @@ export const MapEditor: React.FC = () => {
 
   const baseLayers = useMemo(
     () => ({
-      L1: LayerL1,
-      L2: LayerL2,
-      F1: LayerF1,
-      F2: LayerF2,
-      F3: LayerF3,
+      "Third Floor": LayerF3,
+      "Second Floor": LayerF2,
+      "First Floor": LayerF1,
+      "Lower Level 1": LayerL1,
+      "Lower Level 2": LayerL2,
     }),
     [LayerL1, LayerL2, LayerF1, LayerF2, LayerF3],
   );
@@ -254,7 +254,12 @@ export const MapEditor: React.FC = () => {
         [3400, 5000], // change to resolution of the image
       ];
       map.setMaxBounds(bounds);
-      L.control.layers(baseLayers).addTo(map);
+      L.control
+        .layers(baseLayers, undefined, {
+          collapsed: false,
+          position: "bottomright",
+        })
+        .addTo(map);
 
       // const newNodesOnCurrentFloor = hospitalData.filter(
       //   (node) => node.floor == "1",
