@@ -256,7 +256,7 @@ export function MedicineRequest({ columns }: DataTableProps) {
             Submit
           </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className={"w-[500px]"}>
           <Label>Employee Name</Label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

@@ -3,23 +3,27 @@
 import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import DoughnutChart from "@/components/Graph/PolorAreaGraph.tsx";
+import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
+import { securityLineData } from "@/data/securityData/lineChartData.ts";
+import { securityChartData } from "@/data/securityData/barChartData.ts";
+import { securityPieData } from "@/data/securityData/pieChartData.ts";
+import { securityPolarData } from "@/data/securityData/polarAreaChartData.ts";
 
 function SecurityInsight() {
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
         <div className="rounded-lg bg-gray-200">
-          <LineGraph />
+          <LineGraph props={securityLineData} />
         </div>
         <div className="rounded-lg bg-gray-200">
-          <BarGraph />
+          <BarGraph props={securityChartData} />
         </div>
         <div className="rounded-lg bg-gray-200 scale-0.25">
-          <PieGraph />
+          <PieGraph props={securityPieData} />
         </div>
         <div className="rounded-lg bg-gray-200 scale-0.25">
-          <DoughnutChart />
+          <PolarAreaChart props={securityPolarData} />
         </div>
       </div>
     </>

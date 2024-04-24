@@ -9,7 +9,6 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
-import { barChartData } from "@/data/chartValue/barChartData.ts";
 
 ChartJS.register(
   CategoryScale,
@@ -20,7 +19,36 @@ ChartJS.register(
   Legend,
 );
 
-function BarGraph() {
+interface requestData {
+  request: string;
+  total: number;
+}
+function BarGraph({ props }: { props: requestData[] }) {
+  const barChartData = {
+    labels: props.map((map) => map.request),
+    datasets: [
+      {
+        label: "Total Used",
+        data: props.map((map) => map.total),
+        backgroundColor: [
+          "rgba(255, 99, 13, 0.2)",
+          "rgba(54, 162, 235, 0.2)",
+          "rgba(255, 206, 86, 0.2)",
+          "rgba(75, 192, 192, 0.2)",
+          "rgba(153, 102, 255, 0.2)",
+        ],
+        borderColor: [
+          "rgba(255, 99, 132, 1)",
+          "rgba(54, 162, 235, 1)",
+          "rgba(255, 206, 86, 1)",
+          "rgba(75, 192, 192, 1)",
+          "rgba(153, 102, 255, 1)",
+        ],
+        borderWidth: 1,
+      },
+    ],
+  };
+
   const options = {
     type: "bar" as ChartType,
     responsive: true,
@@ -28,7 +56,7 @@ function BarGraph() {
     aspectRatio: 2.5,
     animation: {
       easing: "easeOutCubic" as AnimationSpec<never>["easing"], // Corrected easing value
-      loop: true,
+      loop: false,
       duration: 2500,
     },
     plugins: {

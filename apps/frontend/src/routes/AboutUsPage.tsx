@@ -119,7 +119,7 @@ const AboutMePage = () => {
             />
             <AboutBlock
               Name={"Alexsandra Antoski"}
-              role={"Product Manager"}
+              role={"Project Manager"}
               devrole={"Full-Stack Engineer"}
               ClassYear={"2025"}
               major={"CS"}
