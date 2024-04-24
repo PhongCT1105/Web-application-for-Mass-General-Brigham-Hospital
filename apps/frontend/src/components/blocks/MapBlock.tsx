@@ -674,7 +674,6 @@ export const MapBlock: React.FC = () => {
     marker.on("click", () => {
       changeFloor(floor, searchPath);
     });
-    // add clickable marker here
   }
 
   function addMarker(
@@ -768,7 +767,11 @@ export const MapBlock: React.FC = () => {
     // TODO: at this point it pans to the correct spot for the floor markers
     // still need to have the correct floor displayed
 
-    Layers[floor].bringToFront();
+    // map.removeLayer(Layers[searchPath[0].floor]);
+    // map.removeLayer(Markers[1]);
+    // Layers[searchPath[0].floor].addTo(map);
+
+    Layers[floor].addTo(map);
 
     const searchPathOnThisFloor = searchPath.filter(
       (node) => node.floor === floor,
