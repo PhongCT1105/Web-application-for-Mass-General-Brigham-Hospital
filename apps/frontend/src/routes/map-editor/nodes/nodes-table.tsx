@@ -157,6 +157,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
       ),
     });
 
+    setNodes((prevNodes) => [...prevNodes, values]);
     console.log("New node array length: " + data.length);
   };
   const onEdgeDeleteForm = async (
@@ -335,6 +336,7 @@ export function NodeDataTable({ columns }: DataTableProps) {
     getFacetedUniqueValues: getFacetedUniqueValues(),
   });
 
+  // for commit
   return (
     <div className="space-y-2">
       <div className="flex flex-1 items-center space-x-2">
