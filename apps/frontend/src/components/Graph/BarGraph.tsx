@@ -10,6 +10,8 @@ import {
   Legend,
 } from "chart.js";
 import { barChartData } from "@/data/chartValue/barChartData.ts";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 ChartJS.register(
   CategoryScale,
@@ -21,6 +23,22 @@ ChartJS.register(
 );
 
 function BarGraph() {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get("api/insight");
+        console.log(response);
+        setData(response.data);
+      } catch (error) {
+        console.log("Error fetching data: ", error);
+      }
+    };
+    fetchData().then(() => console.log("Success"));
+  }, []);
+
+  console.log(data);
+
   const options = {
     type: "bar" as ChartType,
     responsive: true,

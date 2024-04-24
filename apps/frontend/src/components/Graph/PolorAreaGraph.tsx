@@ -1,6 +1,6 @@
 import { PolarArea } from "react-chartjs-2";
 import { AnimationSpec } from "chart.js/auto";
-import { data } from "@/data/chartValue/polarAreaChartData.ts";
+import { polarAreaChartData } from "@/data/chartValue/polarAreaChartData.ts";
 
 const PolarAreaChart = () => {
   const options = {
@@ -23,7 +23,7 @@ const PolarAreaChart = () => {
     },
   };
 
-  return <PolarArea data={data} options={options} />;
+  return <PolarArea data={polarAreaChartData} options={options} />;
 };
 
 export default PolarAreaChart;

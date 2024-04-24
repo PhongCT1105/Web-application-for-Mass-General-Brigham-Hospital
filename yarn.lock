@@ -5820,6 +5820,7 @@ __metadata:
     "@types/node": "npm:^20.2.3"
     "@types/pg": "npm:^8.10.1"
     "@types/supertest": "npm:^2.0.12"
+    axios: "npm:^1.6.8"
     common: "workspace:*"
     cookie-parser: "npm:~1.4.4"
     csv-parse: "npm:^5.5.5"
