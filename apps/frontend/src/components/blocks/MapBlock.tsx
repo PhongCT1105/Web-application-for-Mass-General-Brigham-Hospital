@@ -425,6 +425,8 @@ export const MapBlock: React.FC = () => {
     return L.polyline([startCoords, endCoords], {
       color: "blue",
       weight: 5,
+      snakingSpeed: 100,
+      snakeRepeat: true,
     });
   }
 
@@ -718,6 +720,10 @@ export const MapBlock: React.FC = () => {
     if (!layer) return;
     map.removeLayer(Layers[searchPath[0].floor]);
     map.removeLayer(Markers[1]);
+    Object.keys(Layers).forEach((key) => {
+      map.removeLayer(Paths[key]);
+      map.removeLayer(SpecialMarkers[key]);
+    });
     Layers[searchPath[0].floor].addTo(map);
 
     const searchPathOnThisFloor = searchPath.filter(
@@ -753,11 +759,11 @@ export const MapBlock: React.FC = () => {
 
       // Adjust zoom level based on path length
       let zoomLevel = 0;
-      if (totalDistance < 500) {
+      if (totalDistance < 1000) {
         zoomLevel = 0;
-      } else if (totalDistance >= 500 && totalDistance < 1000) {
+      } else if (totalDistance >= 1000 && totalDistance < 2000) {
         zoomLevel = -1;
-      } else if (totalDistance >= 1000) {
+      } else if (totalDistance >= 2000) {
         zoomLevel = -2;
       }
 

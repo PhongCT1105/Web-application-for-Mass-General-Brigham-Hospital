@@ -28,23 +28,29 @@ export class DFS implements PathfindingStrategy {
     return visited;
   }
 
-  dfsRecursive(currentNode: Node, endNode: Node, visited: Node[]): Node[] {
+  dfsRecursive(
+    currentNode: Node,
+    endNode: Node,
+    visited: Node[],
+    path: Node[] = [],
+  ): Node[] {
     visited.push(currentNode);
+    path.push(currentNode);
 
     if (currentNode === endNode) {
-      return visited;
+      return path;
     }
 
     for (const neighbor of currentNode.neighbors) {
       if (!visited.includes(neighbor)) {
         console.log(neighbor);
-        const path = this.dfsRecursive(neighbor, endNode, visited);
-        if (path.length > 0 && path[path.length - 1] === endNode) {
+        const newPath = this.dfsRecursive(neighbor, endNode, visited, path);
+        if (newPath.length > 0 && newPath[newPath.length - 1] === endNode) {
           return path;
         }
       }
     }
-
+    path.pop();
     return [];
   }
 }
