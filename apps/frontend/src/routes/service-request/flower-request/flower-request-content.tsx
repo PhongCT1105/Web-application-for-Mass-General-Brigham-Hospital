@@ -253,7 +253,7 @@ export const FlowerContent = () => {
                           <Label htmlFor="location" className="text-right">
                             Recipient's Location
                           </Label>
-                          <div className="w-1/5">
+                          <div className="col-span-3">
                             <DropdownMenu>
                               <DropdownMenuTrigger asChild>
                                 <Button variant="outline">
