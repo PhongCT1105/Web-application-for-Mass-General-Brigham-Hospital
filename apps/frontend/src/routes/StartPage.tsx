@@ -6,13 +6,12 @@ import {
   SanitationSlide,
   SecuritySlide,
   MedicationSlide,
+  HeroSlide,
 } from "@/components/blocks/CarouselServiceSlides.tsx";
-// import { MapBlock } from "@/components/blocks/MapBlock.tsx";
-// import securityGuard from "@/assets/cops.jpg";
-import mapPic from "@/assets/01_thefirstfloor.png";
 import "react-bootstrap";
 import { useState } from "react";
-// import { Footer } from "@/components/blocks/Footer.tsx";
+import { Footer } from "@/components/blocks/Footer.tsx";
+import sidePic from "@/assets/BWH-HaleBuilding-770x950-Copyright_AntonGrassl-Esto_1-1.jpg";
 
 export default function StartPage() {
   const [showPopup, setShowPopup] = useState(true);
@@ -27,10 +26,10 @@ export default function StartPage() {
             <div
               className="text-white
                             text-bold bg-red-500
-                            mb-0 p-0 text-s w-full
-                            text-center alert alert-warning
+                            mb-0 p-0 text-s h-full
+                            text-center
                             alert-dismissible
-                            fade show"
+                            fade show pb-2"
               role="alert"
             >
               <strong>Notice! </strong>
@@ -54,6 +53,7 @@ export default function StartPage() {
       {/*<HeaderHome />*/}
       <HomeCarousel
         data={[
+          <HeroSlide />,
           <SecuritySlide />,
           <FlowerSlide />,
           <SanitationSlide />,
@@ -61,34 +61,47 @@ export default function StartPage() {
           // Add more components here
         ]}
       />
-      <div className="flex justify-center items-center h-screen">
-        <div className="relative">
-          <a href={"/home"}>
-            <div
-              id="bottom-map"
-              className="flex flex-col h-[90vh] w-[90vw] justify-center relative"
+      <div className="flex flex-row items-center justify-end">
+        <div className="container m-8 flex flex-col leading-loose w-full">
+          <h1 className="text-3xl font-bold text-gray-800 mb-4 text-center pb-4">
+            About Brigham Women's Hospital
+          </h1>
+          <p className="text-lg text-gray-700 mb-4 leading-loose">
+            Brigham Women's Hospital, located in Boston, Massachusetts, is one
+            of the premier teaching hospitals in the United States. It is a
+            major teaching affiliate of Harvard Medical School and is renowned
+            for its outstanding patient care, innovative medical research, and
+            world-class medical education.
+          </p>
+          <p className="text-lg text-gray-700 mb-4 leading-loose">
+            With a legacy dating back to 1832, Brigham Women's Hospital has been
+            at the forefront of medical advancements. The hospital is known for
+            its specialized services in areas such as women's health, cancer
+            care, cardiology, neurology, orthopedics, and many more.
+          </p>
+          <p className="text-lg text-gray-700 mb-4 leading-loose">
+            Brigham Women's Hospital is committed to providing compassionate and
+            personalized care to its patients while pushing the boundaries of
+            medical science through groundbreaking research and clinical trials.
+          </p>
+          <p className="text-lg text-gray-700 mb-4">
+            For more information, visit{" "}
+            <a
+              href="https://www.brighamandwomens.org/"
+              target="_blank"
+              className="text-blue-600 hover:underline"
             >
-              {/*<MapBlock />*/}
-              <img
-                className="absolute inset-0 w-full object-cover object-top"
-                src={mapPic}
-                alt="Map Hero"
-              />
-              <div className="absolute inset-0 flex flex-col justify-start items-center">
-                <div className="text-center">
-                  <p className="text-black text-[48px] font-['League Spartan']">
-                    Feeling Lost? Our Map Can Help!
-                  </p>
-                  <p className="text-black text-[24px] font-['League Spartan']">
-                    Click anywhere to go to our mapping page!
-                  </p>
-                </div>
-              </div>
-            </div>
-          </a>
-          {/*<Footer/>*/}
+              Brigham Women's Hospital website
+            </a>
+            .
+          </p>
+        </div>
+        <div className={"w-auto"}>
+          <img src={sidePic} alt={"pic"} className={"w-[35vw] "} />
         </div>
       </div>
+
+      <Footer />
     </>
   );
 }

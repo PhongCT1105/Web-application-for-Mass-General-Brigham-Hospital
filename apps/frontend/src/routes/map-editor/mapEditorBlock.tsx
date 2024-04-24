@@ -11,7 +11,6 @@ import L, {
   LatLngBoundsExpression,
   LatLngExpression,
   Map,
-  // Polyline,
 } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
@@ -20,38 +19,157 @@ import theFirstFloor from "@/assets/01_thefirstfloor.png";
 import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
 import "@/styles/mapBlock.modules.css";
-//import axios from "axios";
 import { useGraphContext } from "@/context/nodeContext.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { EditIcon } from "lucide-react";
 import GrayDot from "@/assets/gray-dot.png";
+import axios from "axios";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 export interface Edge {
   edgeID: string;
   start: string;
   end: string;
 }
-
-export interface HospitalData {
+interface HospitalData {
   nodeID: string;
   name: string;
+  shortName: string;
   geocode: string;
   floor: string;
+  xcoord: number;
+  ycoord: number;
+  nodeType: string;
+  building: string;
 }
 
 // Define the map component
 export const MapEditor: React.FC = () => {
   const mapRef = useRef<Map | null>(null);
-  // const [paths, setPaths] = useState<Polyline[]>([]);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
+  const [originalHospitalData, setOriginalHospitalData] = useState<
+    HospitalData[]
+  >([]);
+  const [selectedNode, setSelectedNode] = useState<HospitalData | null>(null);
   const [isSetUp, setIsSetUp] = useState(false);
-  const { nodes, edges } = useGraphContext();
-
+  const { nodes, edges, setNodes } = useGraphContext();
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
+
+  // function to compare the original and updated data
+  const findDataDifferences = () => {
+    return originalHospitalData.reduce((differences, originalNode) => {
+      const updatedNode = hospitalData.find(
+        (node) => node.nodeID === originalNode.nodeID,
+      );
+
+      if (updatedNode) {
+        const nodeDifferences: {
+          [key: string]: {
+            oldValue: string | number;
+            newValue: string | number;
+          };
+        } = {};
+
+        Object.entries(originalNode).forEach(([key, value]) => {
+          if (updatedNode[key as keyof HospitalData] !== value) {
+            nodeDifferences[key] = {
+              oldValue: value,
+              newValue: updatedNode[key as keyof HospitalData],
+            };
+          }
+        });
+
+        if (Object.keys(nodeDifferences).length > 0) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          differences[originalNode.nodeID] = nodeDifferences;
+        }
+      }
+
+      return differences;
+    }, {});
+  };
+
+  // Call the function to find data differences
+  const differences = findDataDifferences();
+
+  const handleFinalize = () => {
+    if (selectedNode) {
+      // Find the index of the selected node in the node array
+      const index = nodes.findIndex(
+        (node) => node.nodeID === selectedNode.nodeID,
+      );
+      if (index !== -1) {
+        // Update the node at the found index with the selected node
+        setNodes((prevNodes) =>
+          prevNodes.map((item) =>
+            item.nodeID === selectedNode.nodeID
+              ? {
+                  longName: selectedNode.name,
+                  xcoord: selectedNode.xcoord,
+                  ycoord: selectedNode.ycoord,
+                  floor: selectedNode.floor,
+                  building: selectedNode.building,
+                  nodeID: selectedNode.nodeID,
+                  nodeType: selectedNode.nodeType,
+                  shortName: selectedNode.nodeType,
+                }
+              : item,
+          ),
+        );
+        setHospitalData((prevData) =>
+          prevData.map((item) =>
+            item.nodeID === selectedNode.nodeID
+              ? {
+                  ...item,
+                  name: selectedNode.name,
+                  xcoord: selectedNode.xcoord,
+                  ycoord: selectedNode.ycoord,
+                  geocode: `${selectedNode.xcoord},${selectedNode.ycoord}`,
+                }
+              : item,
+          ),
+        );
+      } else {
+        console.log("Selected node not found in the node array.");
+      }
+      setSelectedNode(null); // Clear the selected node after finalizing
+    } else {
+      console.log("No node selected.");
+    }
+  };
+
+  const handleSubmit = () => {
+    const handleUpdateNodes = async () => {
+      const res = await axios.post("/api/csvFetch/node", nodes, {
+        headers: {
+          "content-type": "Application/json",
+        },
+      });
+      if (res.status == 200) {
+        console.log("success");
+      } else {
+        console.log(res.status);
+      }
+    };
+    handleUpdateNodes().then(() => {
+      console.log("Request was sent to database.");
+      setOriginalHospitalData(hospitalData);
+      setSelectedNode(null);
+    });
+  };
 
   const Layers: { [key: string]: L.FeatureGroup } = useMemo(
     () =>
@@ -148,7 +266,6 @@ export const MapEditor: React.FC = () => {
       if (startHospital.floor === endHospital.floor) {
         newPath.addTo(Edges[startHospital.floor]);
       }
-      // addToPaths(newPath); // Add the new path to the paths list
     },
     [Edges],
   );
@@ -157,7 +274,6 @@ export const MapEditor: React.FC = () => {
     (hospitalData: HospitalData[]) => {
       for (const edge of edges) {
         const edgeID = edge.edgeID;
-        //console.log(edgeID);
         const edgeSplit = edgeID.split("_", 2);
         if (hospitalData.find((h) => h.nodeID == edgeSplit[0])) {
           const startHospital = hospitalData.find(
@@ -175,9 +291,6 @@ export const MapEditor: React.FC = () => {
     [drawLine, edges],
   );
 
-  // Create a Set to store unique nodes outside of the useCallback hook
-  // const uniqueNodes = useRef(new Set());
-
   const addMarkers = useCallback(
     (map: Map, hospitalData: HospitalData[]) => {
       hospitalData.forEach((node) => {
@@ -187,17 +300,45 @@ export const MapEditor: React.FC = () => {
           icon: customIcon,
           draggable: true,
         });
-        //marker.options.attribution = node.nodeID;
         // Event listener for clicking on markers
         marker.on("dragend", function () {
           const position = marker.getLatLng();
           const newGeocode = `${position.lng},${3400 - position.lat}`;
 
+          const updatedNode = {
+            ...selectedNode!,
+            geocode: newGeocode,
+            xcoord: Number(position.lng.toFixed(0)),
+            ycoord: 3400 - Number(position.lat.toFixed(0)),
+          };
+
           // Update the hospitalData state
           setHospitalData((prevData) =>
             prevData.map((item) =>
               item.nodeID === node.nodeID
-                ? { ...item, geocode: newGeocode }
+                ? {
+                    ...item,
+                    geocode: newGeocode,
+                    xcoord: Number(position.lng.toFixed(0)),
+                    ycoord: Number(position.lat.toFixed(0)),
+                  }
+                : item,
+            ),
+          );
+          const foundNode = hospitalData.find(
+            (item) => node.nodeID === item.nodeID,
+          );
+
+          setSelectedNode({ ...foundNode, ...updatedNode });
+
+          setNodes((prevState) =>
+            prevState.map((item) =>
+              item.nodeID === node.nodeID
+                ? {
+                    ...item,
+                    xcoord: Number(position.lng.toFixed(0)),
+                    ycoord: 3400 - Number(position.lat.toFixed(0)),
+                  }
                 : item,
             ),
           );
@@ -213,11 +354,19 @@ export const MapEditor: React.FC = () => {
             // Check if the popup is not already open
             this.openPopup(); // Open the popup when the marker is clicked
           }
+          const foundNode = hospitalData.find(
+            (item) => node.nodeID === item.nodeID,
+          );
+          if (foundNode) {
+            setSelectedNode({ ...foundNode, ycoord: lng });
+          } else {
+            console.log("could not find node");
+          }
         });
         marker.addTo(Nodes[node.floor]);
       });
     },
-    [Nodes, customIcon],
+    [Nodes, customIcon, selectedNode, setNodes],
   );
 
   useEffect(() => {
@@ -226,12 +375,20 @@ export const MapEditor: React.FC = () => {
         nodes.map((node) => ({
           nodeID: node.nodeID,
           name: node.longName,
+          shortName: node.shortName,
           geocode: `${node.xcoord},${node.ycoord}`,
           floor: node.floor,
+          building: node.building,
+          nodeType: node.nodeType,
+          xcoord: node.xcoord,
+          ycoord: node.ycoord,
         })),
       );
     }
-  }, [hospitalData.length, nodes]);
+    if (originalHospitalData.length === 0) {
+      setOriginalHospitalData(hospitalData);
+    }
+  }, [hospitalData, hospitalData.length, nodes, originalHospitalData.length]);
 
   const memoizedAddMarkers = useCallback(addMarkers, [addMarkers]);
   const memoizedFindLines = useCallback(findLines, [findLines]);
@@ -254,16 +411,7 @@ export const MapEditor: React.FC = () => {
         [3400, 5000], // change to resolution of the image
       ];
       map.setMaxBounds(bounds);
-      L.control
-        .layers(baseLayers, undefined, {
-          collapsed: false,
-          position: "bottomright",
-        })
-        .addTo(map);
-
-      // const newNodesOnCurrentFloor = hospitalData.filter(
-      //   (node) => node.floor == "1",
-      // );
+      L.control.layers(baseLayers).addTo(map);
 
       Object.keys(Layers).forEach((key) => {
         Nodes[key].addTo(Layers[key]);
@@ -288,6 +436,10 @@ export const MapEditor: React.FC = () => {
   ]);
 
   useEffect(() => {
+    console.log(selectedNode);
+  }, [selectedNode]);
+
+  useEffect(() => {
     const map = mapRef.current;
     if (!map) return;
     Object.keys(Layers).forEach((key) => {
@@ -295,7 +447,6 @@ export const MapEditor: React.FC = () => {
       Edges[key].clearLayers();
     });
 
-    // and then addd
     memoizedFindLines(hospitalData);
     memoizedAddMarkers(map!, hospitalData);
   }, [
@@ -309,6 +460,139 @@ export const MapEditor: React.FC = () => {
 
   return (
     <div style={{ display: "flex", height: "100%", zIndex: 1 }}>
+      <div className="flex flex-col items-center bg-transparent p-4 w-[400px] space-y-4 overflow-y-scroll">
+        <Card className={"w-full shadow"}>
+          <CardHeader>
+            <CardTitle>Map Editor</CardTitle>
+            <CardDescription>
+              Move and drag nodes to change their position. Click on a node to
+              edit. Click "Submit Changes" to override all node data. You may
+              view your changes at the bottom of the page.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className={"flex flex-col align-items-lg-end space-y-4"}>
+            <Button
+              onClick={() => (window.location.href = "/map-editor/table")}
+              className={"mb-5"}
+            >
+              <EditIcon className="mr-2 h-4 w-4" />
+              <span>Table View</span>
+            </Button>
+            <Button
+              variant={
+                originalHospitalData == hospitalData ? "outline" : "default"
+              }
+              onClick={handleSubmit}
+              className={"mt-5"}
+            >
+              <span>Submit Changes</span>
+            </Button>
+            <Button
+              variant={"destructive"}
+              onClick={() => {
+                setHospitalData(originalHospitalData);
+                console.log("reverted to old data.");
+              }}
+            >
+              <span>Revert Changes</span>
+            </Button>
+          </CardContent>
+        </Card>
+        {selectedNode ? (
+          <Card className={"w-full shadow"}>
+            <CardHeader>
+              <CardTitle className={"gap-1"}>Node Information</CardTitle>
+              <CardDescription>ID: {selectedNode.nodeID}</CardDescription>
+            </CardHeader>
+            <CardContent
+              className={"flex flex-col align-items-lg-end space-y-4"}
+            >
+              {selectedNode &&
+                Object.entries(selectedNode).map(
+                  ([key, value]) =>
+                    key !== "geocode" &&
+                    key !== "nodeID" && (
+                      <div key={key} className={"flex flex-col space-y-1"}>
+                        <strong>
+                          {key.charAt(0).toUpperCase() + key.slice(1)}:
+                        </strong>
+                        {["name", "xcoord", "ycoord"].includes(key) ? (
+                          <Input
+                            value={value}
+                            onChange={(e) =>
+                              setSelectedNode((prevState) => ({
+                                ...(prevState as HospitalData),
+                                [key]: e.target.value,
+                              }))
+                            }
+                            type={
+                              key === "xcoord" || key === "ycoord"
+                                ? "number"
+                                : "text"
+                            }
+                          />
+                        ) : (
+                          <span> {value}</span>
+                        )}
+                      </div>
+                    ),
+                )}
+              <CardDescription>
+                <div className={"mt-3 -mb-4"}>
+                  Edited nodes are not finalized until you submit all changes.
+                </div>
+              </CardDescription>
+            </CardContent>
+            <CardFooter className={"w-full space-x-2"}>
+              <Button
+                className={"w-full"}
+                variant={"destructive"}
+                onClick={() => setSelectedNode(null)}
+              >
+                Cancel
+              </Button>
+              <Button className={"w-full"} onClick={handleFinalize}>
+                Finalize
+              </Button>
+            </CardFooter>
+          </Card>
+        ) : (
+          <></>
+        )}
+        {Object.entries(differences).map(([nodeID, changes]) => (
+          <Card className={"w-full shadow"}>
+            <CardHeader>
+              <CardTitle>History</CardTitle>
+            </CardHeader>
+            <CardContent
+              className={"flex flex-col align-items-lg-end space-y-4"}
+            >
+              <div key={nodeID} className={"pb-4"}>
+                <strong>Node ID: {nodeID}</strong>
+                {typeof changes === "object" && changes !== null ? (
+                  Object.entries(changes).map(
+                    ([key, { oldValue, newValue }]) =>
+                      key !== "geocode" ? ( // Fix here
+                        <div className={"flex flex-col py-1"}>
+                          <div key={key} className={"flex flex-col"}>
+                            <strong>{key}: </strong>
+                            <span>Old Value: {oldValue}, </span>
+                            <span>New Value: {newValue}</span> {/* Fix here */}
+                          </div>
+                        </div>
+                      ) : (
+                        <></>
+                      ),
+                  )
+                ) : (
+                  <div>No changes</div>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+
       <div
         id="map-container"
         style={{
@@ -331,12 +615,7 @@ export const MapEditor: React.FC = () => {
             zIndex: 1000,
             color: "black",
           }}
-        >
-          <Button onClick={() => (window.location.href = "/map-editor/table")}>
-            <EditIcon className="mr-2 h-4 w-4" />
-            <span>Table View</span>
-          </Button>
-        </div>
+        ></div>
       </div>
     </div>
   );

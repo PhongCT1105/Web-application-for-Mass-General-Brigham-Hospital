@@ -130,7 +130,7 @@ export function Header() {
                     <img
                       src={Logo}
                       alt={"brigham logo"}
-                      className="min-w-[40px]"
+                      className="min-w-[30px]"
                     />
                   </a>
                   <a
@@ -454,7 +454,7 @@ export function Header() {
                     ) => (
                       <li
                         key={index}
-                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100 hover:rounded-lg"
                       >
                         <a href={result.url}>{result.mainTitle}</a>
                       </li>

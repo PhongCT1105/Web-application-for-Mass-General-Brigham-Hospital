@@ -26,14 +26,14 @@ router.post("/", async (req, res) => {
       break;
     case "AStar":
       pathFindingContext.pathFindingStrategy = new aStar();
-      searchStrategy = new aStar();
+      searchStrategy = pathFindingContext.pathFindingStrategy;
       break;
     case "DFS":
       searchStrategy = new DFS();
       break;
     case "Dijkstra":
       pathFindingContext.pathFindingStrategy = new Dijkstra();
-      searchStrategy = new Dijkstra();
+      searchStrategy = pathFindingContext.pathFindingStrategy;
       break;
     default:
       return res.status(400).json({ error: "Invalid search strategy" });

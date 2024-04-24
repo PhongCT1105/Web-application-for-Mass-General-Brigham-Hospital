@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
 import { Column, Row, Table } from "@tanstack/react-table";
+// for commit
 
 interface TableMeta {
   editedRows: Record<string, boolean>;
@@ -45,9 +46,9 @@ export function EditableTableCell<TData, TValue>({
     setValue(initialValue);
   }, [initialValue]);
 
-  const onBlur = () => {
-    tableMeta?.updateData(row.index, column.id, value);
-  };
+  // const onBlur = () => {
+  //   tableMeta?.updateData(row.index, column.id, value);
+  // };
   const onSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setValue(e.target.value);
     tableMeta?.updateData(row.index, column.id, e.target.value);
@@ -66,7 +67,7 @@ export function EditableTableCell<TData, TValue>({
       <Input
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        onBlur={onBlur}
+        // onBlur={onBlur}
         type={columnMeta?.type || "text"}
       />
     );

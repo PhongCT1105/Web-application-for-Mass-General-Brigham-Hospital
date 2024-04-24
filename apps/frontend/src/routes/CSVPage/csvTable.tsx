@@ -162,7 +162,7 @@ const CSVTable: React.FC = () => {
 
     console.log("Ok");
     fetchData().then(); // Fetch data when the component mounts
-  }, [nodes, edges, employees]); // Empty dependency array to fetch data only once
+  }, []); // Empty dependency array to fetch data only once
 
   const importCSV = async (file: File): Promise<CSVData[]> => {
     return new Promise<CSVData[]>((resolve, reject) => {
@@ -205,8 +205,8 @@ const CSVTable: React.FC = () => {
 
   //hi
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  async function handleSubmit() {
+    //e.preventDefault();
     if (!selectedFile) {
       console.error("No file selected.");
       return;
@@ -493,51 +493,6 @@ const CSVTable: React.FC = () => {
                     ></DataTable>
                   </TabsContent>
                 </Tabs>
-                {/*<Separator className="my-4" />*/}
-
-                {/*<DataTable columns={() => getType(columns) === "Edge" ? edgeColumns : nodeColumns} data={setData}/>*/}
-                {/*<Table>*/}
-                {/*    <TableHeader>*/}
-                {/*        <TableRow>*/}
-                {/*            {columns.map((column) => (*/}
-                {/*                <TableCell key={column.dataIndex}>*/}
-                {/*                    {column.title}*/}
-                {/*                </TableCell>*/}
-                {/*            ))}*/}
-                {/*        </TableRow>*/}
-                {/*    </TableHeader>*/}
-                {/*    <TableBody>*/}
-                {/*        {jsonData*/}
-                {/*            .slice(indexOfFirstRow, indexOfLastRow)*/}
-                {/*            .map((row, rowIndex) => (*/}
-                {/*                <TableRow key={rowIndex}>*/}
-                {/*                    {columns.map((column) => (*/}
-                {/*                        <TableCell key={column.dataIndex}>*/}
-                {/*                            {row[column.dataIndex]}*/}
-                {/*                        </TableCell>*/}
-                {/*                    ))}*/}
-                {/*                </TableRow>*/}
-                {/*            ))}*/}
-                {/*    </TableBody>*/}
-                {/*</Table>*/}
-                {/* Pagination */}
-                {/*{jsonData.length > 0 && (*/}
-                {/*    <div className="flex justify-center my-4">*/}
-                {/*        {Array.from({ length: paginationButtonCount }).map(*/}
-                {/*            (_, index) => {*/}
-                {/*                const pageNumber = index + 1;*/}
-                {/*                return (*/}
-                {/*                    <Button*/}
-                {/*                        key={index}*/}
-                {/*                        onClick={() => paginate(pageNumber)}*/}
-                {/*                    >*/}
-                {/*                        {pageNumber}*/}
-                {/*                    </Button>*/}
-                {/*                );*/}
-                {/*            },*/}
-                {/*        )}*/}
-                {/*    </div>*/}
-                {/*)}*/}
               </div>
             </div>
           </div>

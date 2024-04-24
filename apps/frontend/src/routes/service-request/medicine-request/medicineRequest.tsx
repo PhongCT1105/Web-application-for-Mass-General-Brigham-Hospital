@@ -284,15 +284,17 @@ export function MedicineRequest({ columns }: DataTableProps) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70  overflow-y-auto">
-              {locations.map((location, index) => (
-                <DropdownMenuRadioItem
-                  key={index}
-                  value={location}
-                  onClick={() => handleLocationChange(location)}
-                >
-                  {location}
-                </DropdownMenuRadioItem>
-              ))}
+              {locations
+                .sort((a, b) => a.localeCompare(b))
+                .map((location, index) => (
+                  <DropdownMenuRadioItem
+                    key={index}
+                    value={location}
+                    onClick={() => handleLocationChange(location)}
+                  >
+                    {location}
+                  </DropdownMenuRadioItem>
+                ))}
             </DropdownMenuContent>
           </DropdownMenu>
           <Label>Patient Name</Label>
