@@ -488,7 +488,6 @@ export const MapBlock: React.FC = () => {
 
   function placeFloorMarkers(searchPath: Node[]) {
     //const reversePath = searchPath.reverse();
-    changeFloor(searchPath[searchPath.length - 1].floor, searchPath);
     console.log(
       "searchPath.length - 2 :" + searchPath[searchPath.length - 1].floor,
     );
@@ -502,20 +501,23 @@ export const MapBlock: React.FC = () => {
       const next = searchPath[i + 1];
       const nextCoord: LatLngExpression = [3400 - next.ycoord, next.xcoord];
       if (current.floor != next.floor) {
-        addMarker(
+        addFloorMarker(
           currentCoord,
           FloorMarkers[next.floor],
           SpecialMarkers[current.floor],
-          true,
+          next.floor,
+          searchPath,
         );
-        addMarker(
+        addFloorMarker(
           nextCoord,
           FloorMarkers[current.floor],
           SpecialMarkers[next.floor],
-          true,
+          current.floor,
+          searchPath,
         );
       }
     }
+    changeFloor(searchPath[0].floor, searchPath);
   }
 
   function createTextDirections(
@@ -652,6 +654,29 @@ export const MapBlock: React.FC = () => {
     return true;
   }
 
+  function addFloorMarker(
+    location: LatLngExpression,
+    iconPath: string,
+    floorLayer: L.LayerGroup,
+    floor: string,
+    searchPath: Node[],
+  ) {
+    const map = mapRef.current;
+    if (!map) return;
+
+    // floor markers have a different anchor point
+    const customIcon = new Icon({
+      iconUrl: iconPath,
+      iconSize: [25, 30],
+      iconAnchor: [13, 30],
+    });
+    const marker = L.marker(location, { icon: customIcon }).addTo(floorLayer);
+    marker.on("click", () => {
+      changeFloor(floor, searchPath);
+    });
+    // add clickable marker here
+  }
+
   function addMarker(
     location: LatLngExpression,
     iconPath: string,
@@ -661,23 +686,25 @@ export const MapBlock: React.FC = () => {
     const map = mapRef.current;
     if (!map) return;
 
+    console.log(floorMarker);
+
     // floor markers have a different anchor point
-    if (floorMarker) {
-      const customIcon = new Icon({
-        iconUrl: iconPath,
-        iconSize: [25, 30],
-        iconAnchor: [13, 30],
-      });
-      L.marker(location, { icon: customIcon }).addTo(floorLayer);
-      // add clickable marker here
-    } else {
-      const customIcon = new Icon({
-        iconUrl: iconPath,
-        iconSize: [25, 25],
-        iconAnchor: [12.5, 12.5],
-      });
-      L.marker(location, { icon: customIcon }).addTo(floorLayer);
-    }
+    // if (floorMarker) {
+    //   const customIcon = new Icon({
+    //     iconUrl: iconPath,
+    //     iconSize: [25, 30],
+    //     iconAnchor: [13, 30],
+    //   });
+    //   L.marker(location, { icon: customIcon }).addTo(floorLayer);
+    //   // add clickable marker here
+    // } else {
+    const customIcon = new Icon({
+      iconUrl: iconPath,
+      iconSize: [25, 25],
+      iconAnchor: [12.5, 12.5],
+    });
+    L.marker(location, { icon: customIcon }).addTo(floorLayer);
+    // }
   }
 
   function handleClear() {
@@ -737,19 +764,14 @@ export const MapBlock: React.FC = () => {
   function changeFloor(floor: string, searchPath: Node[]) {
     const map = mapRef.current;
     if (!map) return;
-    const layer: L.FeatureGroup = Layers[floor];
-    // const markers = Markers[1];
-    if (!layer) return;
-    map.removeLayer(Layers[searchPath[0].floor]);
-    map.removeLayer(Markers[1]);
-    Object.keys(Layers).forEach((key) => {
-      map.removeLayer(Paths[key]);
-      map.removeLayer(SpecialMarkers[key]);
-    });
-    Layers[searchPath[0].floor].addTo(map);
+
+    // TODO: at this point it pans to the correct spot for the floor markers
+    // still need to have the correct floor displayed
+
+    Layers[floor].bringToFront();
 
     const searchPathOnThisFloor = searchPath.filter(
-      (node) => node.floor === searchPath[0].floor,
+      (node) => node.floor === floor,
     );
 
     // Check if searchPath is defined and not empty
@@ -781,11 +803,11 @@ export const MapBlock: React.FC = () => {
 
       // Adjust zoom level based on path length
       let zoomLevel = 0;
-      if (totalDistance < 1000) {
+      if (totalDistance < 750) {
         zoomLevel = 0;
-      } else if (totalDistance >= 1000 && totalDistance < 2000) {
+      } else if (totalDistance >= 750 && totalDistance < 1500) {
         zoomLevel = -1;
-      } else if (totalDistance >= 2000) {
+      } else if (totalDistance >= 1500) {
         zoomLevel = -2;
       }
 
