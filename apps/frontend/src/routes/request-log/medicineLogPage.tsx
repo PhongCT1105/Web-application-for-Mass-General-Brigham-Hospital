@@ -24,8 +24,9 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
-import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
+// import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
+import { Input } from "@/components/ui/input.tsx";
 interface DataTableProps<TCols, TData> {
   columns: ColumnDef<TData, TCols>[];
   data: TData[];
@@ -66,7 +67,15 @@ export function MedicineFormLogTable<TCols, TData>({
 
   return (
     <div className="space-y-4">
-      <DataTableToolbar table={table} />
+      {/*<DataTableToolbar table={table} />*/}
+      <Input
+        placeholder={`Search items by employee name...`}
+        value={(table.getColumn("employee")?.getFilterValue() as string) ?? ""}
+        onChange={(event) =>
+          table.getColumn("employee")?.setFilterValue(event.target.value)
+        }
+        className="h-8 w-[150px] lg:w-[250px]"
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
