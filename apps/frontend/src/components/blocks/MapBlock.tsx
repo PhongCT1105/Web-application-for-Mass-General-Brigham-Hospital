@@ -39,6 +39,7 @@ import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
+
 declare module "leaflet" {
   interface Polyline {
     snakeIn: () => void;
@@ -536,11 +537,22 @@ export const MapBlock: React.FC = () => {
         directionsArray.push({ text: "\n", icon: Circle });
 
         for (let j = 0; j < paths[i].length - 1; j++) {
-          const directionObject: direction = {
-            text: directionFromCurrentLine(paths[i], j).text,
-            icon: directionFromCurrentLine(paths[i], j).icon,
-          };
-          directionsArray.push(directionObject);
+          const current: Node = paths[i][j];
+          if (
+            nodeArray[nodeArray.indexOf(current)].floor !=
+            nodeArray[nodeArray.indexOf(current) + 1].floor
+          )
+            directionsArray.push({
+              text: "\n",
+              icon: Circle,
+            });
+          else {
+            const directionObject: direction = {
+              text: directionFromCurrentLine(paths[i], j).text,
+              icon: directionFromCurrentLine(paths[i], j).icon,
+            };
+            directionsArray.push(directionObject);
+          }
         }
         directionsArray.push({ text: "\n", icon: Circle });
       }
@@ -669,6 +681,7 @@ export const MapBlock: React.FC = () => {
     console.log(test);
     const nodeArray: Node[] = [];
     handleClear();
+
     async function path() {
       const { data: response } = await axios.post("/api/search", test, {
         headers: {
