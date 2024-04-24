@@ -24,14 +24,6 @@ import {
 import { format } from "date-fns";
 import axios from "axios";
 import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table.tsx";
-import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
@@ -307,8 +299,8 @@ export const SheduleContent = () => {
   return (
     <>
       <Separator className="my-4" />
-      <div className="flex  border rounded-md  text mx-10 my-5">
-        <div className=" w-3/4 justify-center items-center">
+      <div className="flex  border rounded-md text my-5">
+        <div className=" w-2/3 justify-center items-center">
           <Card className=" border-none p-4">
             <CardContent>
               <div className="space-y-1 mt-3">
@@ -379,7 +371,7 @@ export const SheduleContent = () => {
                             : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
-                      <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70  overflow-y-auto">
+                      <DropdownMenuContent className="w-56 md:max-h-56 lg:max-h-70">
                         {locationsFrom.map((location, index) => (
                           <DropdownMenuRadioItem
                             key={index}
@@ -450,7 +442,7 @@ export const SheduleContent = () => {
                     </div>
                   </div>
 
-                  <div className="w-1/4 ml-12 py-2">
+                  <div className="w-1/2 ml-12 py-2">
                     <h1 className="text-2xl font-bold py-2">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
@@ -558,11 +550,13 @@ export const SheduleContent = () => {
           </Card>
         </div>
 
-        <div className="w-2/5 items-center justify-center bg-secondary">
+        <div className="w-1/3 rounded-md items-center justify-center bg-secondary overflow-hidden">
           <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
           <div className="flex items-center justify-center">
             <Calendar
-              className={"w-full transform scale-150 md:ml-40 my-6 md:my-20"}
+              className={
+                "w-full transform scale-150 md:ml-40 my-6 md:my-20 p-4"
+              }
               mode="single"
               selected={form.date}
               onSelect={handleDateChange}
@@ -578,45 +572,7 @@ export const SheduleContent = () => {
           </h2>
         </div>
       </div>
-      <div>
-        <Card className={"mx-10 mb-5 mt-[120px]"}>
-          <Table>
-            <TableHeader>
-              <TableRow className={""}>
-                <TableHead className="">Patient Name</TableHead>
-                <TableHead className="">From</TableHead>
-                <TableHead className="">To</TableHead>
-                <TableHead className="">Date</TableHead>
-                <TableHead className="">Time</TableHead>
-                <TableHead className="">Reason</TableHead>
-                <TableHead className="">Note</TableHead>
-                <TableHead className="">Priority</TableHead>
-                <TableHead className="">Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {submittedForms.map((request) => {
-                return (
-                  <TableRow>
-                    <TableCell>{request.employeeName}</TableCell>
-                    <TableCell>{request.patientName}</TableCell>
-                    <TableCell>{request.locationFrom}</TableCell>
-                    <TableCell>{request.locationTo}</TableCell>
-                    <TableCell>
-                      {format(request.date, "MMMM do, yyyy")}
-                    </TableCell>
-                    <TableCell>{request.time}</TableCell>
-                    <TableCell>{request.reason}</TableCell>
-                    <TableCell>{request.note}</TableCell>
-                    <TableCell>{request.priority}</TableCell>
-                    <TableCell>{request.status}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </Card>
-      </div>
+      <div></div>
     </>
   );
 };

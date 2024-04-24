@@ -300,6 +300,16 @@ export default function ServiceRequestPage() {
                             </h2>
                             <p
                               className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
+                              By Owen Lacey & Tracy Yang
+                            </p>
+                            <p
+                              className="text-sm text-muted-foreground"
                               style={{ color: "white" }}
                             >
                               Request Security services and optionally call 911.
@@ -337,6 +347,16 @@ export default function ServiceRequestPage() {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Maintenance Request
                             </h2>
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                textShadow:
+                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              }}
+                            >
+                              June Whittall & Alex Shettler
+                            </p>
                             <p
                               className="text-sm text-muted-foreground"
                               style={{ color: "white" }}

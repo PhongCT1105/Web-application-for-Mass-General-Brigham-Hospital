@@ -255,7 +255,7 @@ export function Maintenance() {
 
   return (
     <>
-      <div className="flex flex-col border rounded-md text mx-10 my-5 p-6">
+      <div className="flex flex-col border-none rounded-md text mx-10 my-5 py-1">
         <div className=" justify-center items-center">
           <Card className="border-none p-4">
             <CardContent>
@@ -499,16 +499,6 @@ export function Maintenance() {
             </CardContent>
 
             <CardFooter className="flex justify-between">
-              <Button
-                variant={"destructive"}
-                className="mr-20"
-                onClick={handleFormClear}
-              >
-                Clear
-              </Button>
-              {/*<Button className="p-5" onClick={handleSubmit}>*/}
-              {/*  Submit*/}
-              {/*</Button>*/}
               <TooltipProvider>
                 {buttonState === "ghost" && (
                   <Tooltip>
@@ -536,13 +526,17 @@ export function Maintenance() {
                   </Button>
                 )}
               </TooltipProvider>
+              <Button
+                variant={"destructive"}
+                className="mr-20"
+                onClick={handleFormClear}
+              >
+                Clear
+              </Button>
             </CardFooter>
           </Card>
         </div>
       </div>
-      <h2 className="mt-8 text-small ml-4">
-        June Whittall and Alex Shettler (Team Awesome)
-      </h2>
     </>
   );
 }

@@ -218,6 +218,16 @@ export const FlowerContent = () => {
           </h2>
           <p
             className="text-sm text-muted-foreground"
+            style={{
+              color: "white",
+              textShadow:
+                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+            }}
+          >
+            By Mina Boktor & Alexander Kraemling
+          </p>
+          <p
+            className="text-sm text-muted-foreground"
             style={{ color: "white" }}
           >
             Send a loved one a special gift
