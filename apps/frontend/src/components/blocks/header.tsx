@@ -274,7 +274,7 @@ export function Header() {
                 About Us
               </a>
               <a
-                href="/service-request/DashBoard/DashBoard"
+                href="/dashboard"
                 className={`transition-colors hover:text-yellow-500 text-gray-300 ${
                   location.pathname === "/dashboard"
                     ? "text-yellow-500"
