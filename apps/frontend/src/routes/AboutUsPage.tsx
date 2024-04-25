@@ -158,7 +158,9 @@ const AboutMePage = () => {
                 Github={"https://github.com/alexshettler"}
                 Linkdin={""}
                 Imagepath={Shettler}
-                quote={""}
+                quote={
+                  '"You have never been given sufficient evidence that worms can\'t fly" - Sun Tzu'
+                }
               />
               <AboutBlock
                 Name={"Owen Lacey"}
@@ -231,7 +233,7 @@ const AboutMePage = () => {
           educational purposes.
         </h6>
         <div className={"logo-container"}>
-          <img src={WPI_Logo} alt="WPI Logo" style={{ maxWidth: "150px" }} />
+          <img src={WPI_Logo} alt="WPI Logo" style={{ maxWidth: "125px" }} />
         </div>
       </div>
     </div>

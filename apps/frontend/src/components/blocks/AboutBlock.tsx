@@ -59,7 +59,7 @@ const AboutBlock = ({
         <h4 className={"text-center font-bold"}>{Name}</h4>
         {role && <p>Role: {role}</p>}
         {devrole && <p>Software Role: {devrole}</p>}
-        <p>Class Year: {ClassYear}</p>
+        {ClassYear && <p>Class Year: {ClassYear}</p>}
         {major && <p>Major: {major}</p>}
         <p>
           Email: <a href={"mailto:" + Email}>{Email}</a>
