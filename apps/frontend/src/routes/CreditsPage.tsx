@@ -10,7 +10,7 @@ import CreditBlock from "@/components/blocks/CreditBlock.tsx";
 const CreditsPage = () => {
   return (
     <div>
-      <div className=" w-5/6 pt-10 pb-5 gap-5 m-auto">
+      <div className=" w-5/6 pt-2 pb-5 gap-5 m-auto">
         <h1 className="text-2xl font-bold my-2 text-center">
           Tools and Libraries Used
         </h1>

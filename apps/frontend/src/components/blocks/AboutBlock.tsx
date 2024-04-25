@@ -3,6 +3,11 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Card } from "@/components/ui/card.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover.tsx";
 
 interface AboutInfo {
   Name: string;
@@ -14,7 +19,7 @@ interface AboutInfo {
   Github?: string;
   Linkdin?: string;
   Imagepath: string;
-  FunFact?: string;
+  quote?: string;
 }
 
 const AboutBlock = ({
@@ -27,6 +32,7 @@ const AboutBlock = ({
   Github,
   Linkdin,
   Imagepath,
+  quote,
 }: AboutInfo) => {
   return (
     <Card
@@ -34,12 +40,21 @@ const AboutBlock = ({
         "flex flex-col justify-space-between mw-700 p-5 bg-secondary shadow-lg"
       }
     >
-      <img
-        src={Imagepath}
-        alt={Name}
-        style={{ height: 250, width: 250, objectFit: "cover" }}
-        className={"object-fit-cover rounded-md"}
-      />
+      <Popover>
+        <PopoverTrigger>
+          <img
+            src={Imagepath}
+            alt={Name}
+            style={{ height: 250, width: 250, objectFit: "cover" }}
+            className={"object-fit-cover rounded-md"}
+          />
+        </PopoverTrigger>
+        {quote && (
+          <PopoverContent>
+            <div className={""}>Quote: {quote}</div>
+          </PopoverContent>
+        )}
+      </Popover>
       <div>
         <h4 className={"text-center font-bold"}>{Name}</h4>
         {role && <p>Role: {role}</p>}
