@@ -255,13 +255,19 @@ export function Maintenance() {
 
   return (
     <>
-      <div className="flex flex-col border-none rounded-md text mx-10 my-5 py-1">
-        <div className=" justify-center items-center">
+      <div
+        className="border-none rounded-md text mx-10 my-5 py-1"
+        style={{
+          paddingLeft: "6%",
+          paddingRight: "6%",
+        }}
+      >
+        <div className="justify-center items-center">
           <Card className="border-none p-4">
             <CardContent>
               <div className="space-y-6">
                 <div className="w-1/4">
-                  <h1 className="text-2xl font-bold my-2 pb-2">
+                  <h1 className="text-2xl font-bold my-2 pb-2 ">
                     Employee Name
                   </h1>
                   <DropdownMenu>
@@ -283,16 +289,6 @@ export function Maintenance() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                {/*<div className="w-1/4">*/}
-                {/*  <h1 className="text-2xl font-bold ">Employee Name</h1>*/}
-                {/*  <Input*/}
-                {/*    type="text"*/}
-                {/*    id="name"*/}
-                {/*    placeholder="Select Your Name Here"*/}
-                {/*    onChange={handleFormChange}*/}
-                {/*    value={form.name}*/}
-                {/*  />*/}
-                {/*</div>*/}
                 <div className="flex">
                   <div className="w-1/3  ">
                     <h1 className="text-2xl font-bold my-2 pb-2">

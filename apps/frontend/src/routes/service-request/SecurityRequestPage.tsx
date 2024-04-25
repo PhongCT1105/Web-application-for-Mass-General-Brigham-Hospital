@@ -258,14 +258,20 @@ export const SecurityForm = () => {
 
   return (
     <>
-      <div className="flex flex-col overflow-hidden rounded-md text my-5 py-12">
+      <div
+        className="flex flex-col overflow-hidden rounded-md text my-5 py-1"
+        style={{
+          paddingLeft: "8%",
+          paddingRight: "8%",
+        }}
+      >
         <div className=" justify-center items-center">
           <Card className={"border-none p-4"}>
             <CardContent className={"grid gap-4"}>
               <div className="space-y-1">
                 {/* Name Input */}
                 <div className="w-1/5">
-                  <h1 className="text-2xl font-bold my-2">Employee</h1>
+                  <h1 className="text-2xl font-bold my-2">Employee Name</h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline">

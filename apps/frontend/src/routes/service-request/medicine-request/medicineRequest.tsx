@@ -179,7 +179,13 @@ export function MedicineRequest({ columns }: DataTableProps) {
   });
 
   return (
-    <div className="space-y-4">
+    <div
+      className="space-y-4"
+      style={{
+        paddingLeft: "8%",
+        paddingRight: "8%",
+      }}
+    >
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
