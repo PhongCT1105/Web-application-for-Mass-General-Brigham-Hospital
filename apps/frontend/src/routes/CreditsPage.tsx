@@ -18,14 +18,19 @@ const CreditsPage = () => {
         <Separator></Separator>
         <CreditBlock Tool={"Figma"} Link={"https://www.figma.com/"}>
           Figma was used to design the color scheme and initial page layouts for
-          the site.
+          the site. We designed most pages and got a first look at the component
+          design on Figma so that making the pages would be easier and require
+          less trial and error.
         </CreditBlock>
         <CreditBlock Tool={"ShadCN"} Link={"https://ui.shadcn.com/"}>
-          ShadCN is the UI framework we used for all of our basic components.
+          ShadCN is the UI framework we used for all of our basic components. We
+          used this to avoid spending hours creating custom components and
+          taking time away from the functionality.
         </CreditBlock>
         <CreditBlock Tool={"TailwindCSS"} Link={"https://tailwindcss.com/"}>
           TailwindCSS is the CSS style framework used with ShadCN to style
-          components.
+          components. It allowed us to use a library of styles, simplying the
+          CSS side of designing the site and saving time.
         </CreditBlock>
         <CreditBlock Tool={"Yarn"} Link={"https://yarnpkg.com/"}>
           Yarn is the package manager we used to compile and run our project.
@@ -40,13 +45,17 @@ const CreditsPage = () => {
           PostgreSQL is the database provider we use for the backend database.
         </CreditBlock>
         <CreditBlock Tool={"Auth0"} Link={"https://auth0.com/"}>
-          Auth0 is the login interface we use.
+          Auth0 is the login interface we use. It outsources the security
+          requirements and allows us to have a secure login without extra
+          effort.
         </CreditBlock>
         <CreditBlock
           Tool={"WebStorm"}
           Link={"https://www.jetbrains.com/webstorm/"}
         >
-          WebStorm is the IDE we use to write and run code.
+          WebStorm is the IDE we use to write and run code. It allows easy
+          software development and testing with access to relevant plugins and
+          easy git integration for version control.
         </CreditBlock>
         <CreditBlock Tool={"Taiga"} Link={"https://tree.taiga.io/"}>
           Taiga is the project tracking software we use.
