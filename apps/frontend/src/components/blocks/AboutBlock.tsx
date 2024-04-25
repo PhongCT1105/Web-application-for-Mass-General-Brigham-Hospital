@@ -30,7 +30,9 @@ const AboutBlock = ({
 }: AboutInfo) => {
   return (
     <Card
-      className={"flex flex-col justify-space-between mw-700 p-5 bg-secondary"}
+      className={
+        "flex flex-col justify-space-between mw-700 p-5 bg-secondary shadow-lg"
+      }
     >
       <img
         src={Imagepath}
@@ -44,7 +46,9 @@ const AboutBlock = ({
         {devrole && <p>Software Role: {devrole}</p>}
         <p>Class Year: {ClassYear}</p>
         {major && <p>Major: {major}</p>}
-        <p>Email: {Email}</p>
+        <p>
+          Email: <a href={"mailto:" + Email}>{Email}</a>
+        </p>
       </div>
       <div className={"mx-auto w-1/2"}>
         <div className={"flex justify-between"}>
