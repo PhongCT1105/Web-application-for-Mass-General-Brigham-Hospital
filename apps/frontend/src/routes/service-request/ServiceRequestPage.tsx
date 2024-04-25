@@ -27,11 +27,11 @@ import { Medication } from "@/interfaces/medicationReq.ts";
 import { pillData } from "@/interfaces/dataTypes/testData.ts";
 import React, { createContext, useContext, useState } from "react";
 import { SheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
-import bannerMedicationImage from "@/assets/medication-banner.jpg";
-import bannerTransportImage from "@/assets/transportation-banner.webp";
+import bannerMedicationImage from "@/assets/medication-banner.png";
+import bannerTransportImage from "@/assets/transportation-banner.png";
 import bannerSanitationImage from "@/assets/sanitation-banner.png";
-import bannerMaintenanceImage from "@/assets/maintenance-banner.jpg";
-import bannerSecurityImage from "@/assets/security-banner.jpg";
+import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
+import bannerSecurityImage from "@/assets/security-banner.png";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -135,8 +135,7 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               Medication Request
@@ -146,8 +145,8 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               By Mina Boktor & Alexander Kraemling
@@ -157,8 +156,8 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               Order and deliver a patient's medication from the
@@ -197,8 +196,7 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               Internal Patient Transport
@@ -208,8 +206,8 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               By Trang Tran & Phong Cao
@@ -219,8 +217,8 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               Move patients to a different room
@@ -254,8 +252,7 @@ export default function ServiceRequestPage() {
                             style={{
                               color: "white",
                               marginLeft: "20px",
-                              textShadow:
-                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                             }}
                           >
                             <h2 className="text-2xl font-semibold tracking-tight">
@@ -263,13 +260,21 @@ export default function ServiceRequestPage() {
                             </h2>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white" }}
+                              style={{
+                                color: "white",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
                             >
                               By Alex Shettler & Tracy Yang
                             </p>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white" }}
+                              style={{
+                                color: "white",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
                             >
                               Get sanitation services for an issue.
                             </p>
@@ -301,8 +306,7 @@ export default function ServiceRequestPage() {
                             style={{
                               color: "white",
                               marginLeft: "20px",
-                              textShadow:
-                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                             }}
                           >
                             <h2 className="text-2xl font-semibold tracking-tight">
@@ -312,15 +316,19 @@ export default function ServiceRequestPage() {
                               className="text-sm text-muted-foreground"
                               style={{
                                 color: "white",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               By Owen Lacey & Tracy Yang
                             </p>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white" }}
+                              style={{
+                                color: "white",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
                             >
                               Request Security services and optionally call 911.
                             </p>
@@ -352,8 +360,7 @@ export default function ServiceRequestPage() {
                             style={{
                               color: "white",
                               marginLeft: "20px",
-                              textShadow:
-                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                             }}
                           >
                             <h2 className="text-2xl font-semibold tracking-tight">
@@ -363,15 +370,19 @@ export default function ServiceRequestPage() {
                               className="text-sm text-muted-foreground"
                               style={{
                                 color: "white",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
-                              June Whittall & Alex Shettler
+                              By June Whittall & Alex Shettler
                             </p>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white" }}
+                              style={{
+                                color: "white",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
                             >
                               Report a maintenance issue
                             </p>

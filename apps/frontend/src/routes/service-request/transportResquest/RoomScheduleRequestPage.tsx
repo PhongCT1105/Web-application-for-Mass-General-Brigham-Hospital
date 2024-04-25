@@ -360,7 +360,7 @@ export const SheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="py-2 w-1/4">
+                  <div className="py-2 w-1/4 px-2">
                     <h1 className="text-2xl font-bold py-2">Location</h1>
                     <h2 className={"text-sm"}>From: </h2>
                     <DropdownMenu>
@@ -410,9 +410,9 @@ export const SheduleContent = () => {
                     </DropdownMenu>
                   </div>
 
-                  <div className="flex flex-col w-1/4">
+                  <div className="flex flex-col w-1/3">
                     <div className=" py-2">
-                      <h1 className="text-2xl font-bold py-2">Employee</h1>
+                      <h1 className="text-2xl font-bold py-2">Employee Name</h1>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button variant="outline">
