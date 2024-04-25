@@ -15,26 +15,30 @@ const Dashboard = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {/* Card 1 */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-2">Total Users</h2>
-            <p className="text-3xl font-bold">1,000</p>
+            <h2 className="text-lg font-semibold mb-2">Days</h2>
+            <p className="text-3xl font-bold">255</p>
           </div>
 
           {/* Card 2 */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-2">Total Sales</h2>
+            <h2 className="text-lg font-semibold mb-2">Total amount</h2>
             <p className="text-3xl font-bold">$10,000</p>
           </div>
 
           {/* Card 3 */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-2">Total Orders</h2>
-            <p className="text-3xl font-bold">500</p>
+            <h2 className="text-lg font-semibold mb-2">
+              Service requests made
+            </h2>
+            <p className="text-3xl font-bold">10</p>
           </div>
 
           {/* Card 4 */}
           <div className="bg-white p-6 rounded-lg shadow-md">
-            <h2 className="text-lg font-semibold mb-2">Total Revenue</h2>
-            <p className="text-3xl font-bold">$20,000</p>
+            <h2 className="text-lg font-semibold mb-2">
+              Success service requests
+            </h2>
+            <p className="text-3xl font-bold">5</p>
           </div>
         </div>
         <BarGraph props={overallChartData} />
