@@ -137,7 +137,6 @@ export const MapBlock: React.FC = () => {
   const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
 
-  // floor images
   const FloorMarkers: { [key: string]: string } = useMemo(
     () =>
       ({
@@ -383,7 +382,7 @@ export const MapBlock: React.FC = () => {
         SpecialMarkers[key].addTo(Layers[key]);
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
-        //Paths[key].addTo(Layers[key]);
+        Paths[key].addTo(Layers[key]);
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -770,8 +769,25 @@ export const MapBlock: React.FC = () => {
     // map.removeLayer(Layers[searchPath[0].floor]);
     // map.removeLayer(Markers[1]);
     // Layers[searchPath[0].floor].addTo(map);
+    //   const layer = Layers[floor];
+    //   let index: number = 0;
+    //
+    // map.eachLayer(() => {
+    //     index++;
+    // });
+    //
+    // console.log(index);
 
-    Layers[floor].addTo(map);
+    console.log(Layers[3]);
+    console.log(Layers[2]);
+    console.log(Layers[1]);
+    console.log(Layers["L1"]);
+    console.log(Layers["L2"]);
+
+    // map.removeLayer(layer);
+    // layer.addTo(map);
+
+    // layer.bringToFront();
 
     const searchPathOnThisFloor = searchPath.filter(
       (node) => node.floor === floor,
