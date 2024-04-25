@@ -97,6 +97,7 @@
     "react-router-dom": "^6.11.2",
     "react-zoom-pan-pinch": "^3.1.0",
     "reactt": "^1.0.1",
+    "recharts": "^2.12.6",
     "serve": "^14.2.0",
     "sonner": "^1.4.41",
     "sort-by": "^1.2.0",
