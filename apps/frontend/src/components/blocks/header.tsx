@@ -264,16 +264,6 @@ export function Header() {
                 </>
               )}
               <a
-                href="/about-us"
-                className={`transition-colors hover:text-yellow-500 text-gray-300 ${
-                  location.pathname === "/about-us"
-                    ? "text-yellow-500"
-                    : "text-gray-300"
-                }`}
-              >
-                About Us
-              </a>
-              <a
                 href="/dashboard"
                 className={`transition-colors hover:text-yellow-500 text-gray-300 ${
                   location.pathname === "/dashboard"
@@ -282,6 +272,16 @@ export function Header() {
                 }`}
               >
                 DashBoard
+              </a>
+              <a
+                href="/about-us"
+                className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                  location.pathname === "/about-us"
+                    ? "text-yellow-500"
+                    : "text-gray-300"
+                }`}
+              >
+                About Us
               </a>
             </div>
           </nav>
