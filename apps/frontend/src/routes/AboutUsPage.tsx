@@ -164,8 +164,8 @@ const AboutMePage = () => {
                 Name={"Owen Lacey"}
                 role={"Documentation Analyst"}
                 devrole={"Full-Stack Engineer"}
-                ClassYear={"2026"}
-                major={"IMGD"}
+                ClassYear={"2025"}
+                major={"IMGD Tech"}
                 Email={"oelacey@wpi.edu"}
                 Github={"https://github.com/echoct21"}
                 Linkdin={"https://www.linkedin.com/in/owen-lacey-721205250/"}
