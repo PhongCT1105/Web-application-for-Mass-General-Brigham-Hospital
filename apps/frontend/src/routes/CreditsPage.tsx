@@ -61,7 +61,9 @@ const CreditsPage = () => {
           Taiga is the project tracking software we use.
         </CreditBlock>
         <CreditBlock Tool={"GitHub"} Link={"https://github.com"}>
-          GitHub is the version control software we are using.
+          GitHub is the version control software we are using. It allows us to
+          simultaneously work on different branches and merge work together with
+          minimal effort.
         </CreditBlock>
 
         <h6 style={{ textAlign: "center", marginTop: "75px" }}>
