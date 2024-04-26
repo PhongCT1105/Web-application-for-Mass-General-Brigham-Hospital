@@ -14,7 +14,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import { CircleDot, CirclePlay, EllipsisVertical } from "lucide-react";
+import { CircleDot, CirclePlay, Clover, EllipsisVertical } from "lucide-react";
 // import { Node } from "@/context/nodeContext.tsx";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 
@@ -78,6 +78,23 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     onSearch(startPointID, endPointID);
   };
 
+  const feelingLucky = () => {
+    const randStart = Math.floor(Math.random() * locations.length);
+    let randEnd = Math.floor(Math.random() * locations.length);
+    while (randStart === randEnd) {
+      // If they are the same, get new randEnd value until no longer true
+      randEnd = Math.floor(Math.random() * locations.length);
+    }
+    setStartPoint(locations[randStart].nodeID);
+    setStartPointID(startPoint);
+    setEndPoint(locations[randEnd].nodeID);
+    setEndPointID(endPoint);
+    // console.log("startSearch === " + startPoint);
+    // console.log("endSearch === " + endPoint);
+    // handleSearch();
+    // changePathfindingStrategy("");
+  };
+
   useEffect(() => {
     setStartPoint(startNodeName);
     setEndPoint(endNodeName);
@@ -98,10 +115,17 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     >
       <Card className={"w-full shadow"}>
         <CardHeader>
-          <CardTitle
-          // className={"text-4xl font-semibold"}
-          >
-            Directions
+          <CardTitle className="flex justify-between items-center">
+            <div>Directions</div>
+            <Button
+              variant="ghost"
+              title="Feeling Lucky?"
+              onClick={feelingLucky}
+            >
+              <div className="flex items-center w-auto">
+                <Clover />
+              </div>
+            </Button>
           </CardTitle>
         </CardHeader>
         <CardContent>
