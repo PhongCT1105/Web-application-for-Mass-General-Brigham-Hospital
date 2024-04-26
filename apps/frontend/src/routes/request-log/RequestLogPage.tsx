@@ -32,6 +32,11 @@ import { DataTable } from "@/components/table/data-table.tsx";
 import { FlowerForm } from "@/interfaces/flowerReq.ts";
 import { columnsFlowerFormLog } from "@/routes/service-request/flower-request/flowerFormColumn.tsx";
 import { columnsMaintenanceLog } from "@/routes/service-request/MaintenanceColumns.tsx";
+import bannerSecurityImage from "@/assets/security-banner.png";
+import bannerSanitationImage from "@/assets/sanitation-banner.png";
+import bannerTransportationImage from "@/assets/transportation-banner.png";
+import bannerMedicationImage from "@/assets/medication-banner.png";
+import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
 
 export const RequestLogPage = () => {
   const [flowerLog, setFlowerLog] = useState<FlowerForm[]>([]);
@@ -202,7 +207,7 @@ export const RequestLogPage = () => {
   }, []);
 
   return (
-    <div className={" scrollbar-hide"}>
+    <div className={"scrollbar-hide"}>
       <div className="hidden md:block">
         <div className="border-t">
           <div className="bg-background">
@@ -257,17 +262,42 @@ export const RequestLogPage = () => {
                         value="Medication Request"
                         className=" flex-col border-none p-0 data-[state=active]:flex"
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerMedicationImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Medication Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               By Mina Boktor & Alexander Kraemling
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <MedicineFormLogTable
                           columns={columnsMedicationFormLog}
                           data={medicineLog}
@@ -279,18 +309,43 @@ export const RequestLogPage = () => {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerTransportationImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Transportation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Get transportation to a local drop-off point.
                             </p>
                           </div>
                         </div>
 
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
                           searchBar={{
                             title: "employee name",
@@ -306,17 +361,42 @@ export const RequestLogPage = () => {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerSanitationImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Sanitation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Get sanitation services for an Issue.
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
                           searchBar={{
                             title: "employee name",
@@ -332,17 +412,42 @@ export const RequestLogPage = () => {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerSecurityImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Security Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Request Security services and optionally call 911.
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <SecurityFormLogTable
                           columns={columnsSecurityFormLog}
                           data={securityLog}
@@ -354,17 +459,42 @@ export const RequestLogPage = () => {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerMaintenanceImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Maintenance Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Get maintenance services for an Issue.
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
                           searchBar={{
                             title: "employee name",
