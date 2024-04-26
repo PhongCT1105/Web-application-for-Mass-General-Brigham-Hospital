@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -216,6 +217,10 @@ export const RequestLogPage = () => {
                     >
                       <div className="space-between flex items-center">
                         <TabsList>
+                          <TabsTrigger value="All Requests">
+                            <FlowerIcon className="mr-2 h-4 w-4" />
+                            All Requests
+                          </TabsTrigger>
                           <TabsTrigger value="Flower Request">
                             <FlowerIcon className="mr-2 h-4 w-4" />
                             Flower Request
