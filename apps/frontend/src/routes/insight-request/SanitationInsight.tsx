@@ -5,13 +5,27 @@ import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
 import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 import { sanitationLineData } from "@/data/sanitationData/lineChartData";
-import { sanitationChartData } from "@/data/sanitationData/barChartData";
 import { sanitationPieData } from "@/data/sanitationData/pieChartData.ts";
 import { sanitationPolarData } from "@/data/sanitationData/polarAreaChartData.ts";
 import { SanitationForm } from "@/interfaces/sanitationReq.ts";
+import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 
+function countEmployeeOccurrences(arr: SanitationForm[]): barRequestData[] {
+  const countDictionary: Record<string, number> = {};
+
+  arr.forEach((obj) => {
+    const { name } = obj;
+    countDictionary[name] = (countDictionary[name] || 0) + 1;
+  });
+
+  const chartdata: barRequestData[] = Object.entries(countDictionary).map(
+    ([employeeName, request]) => ({ employeeName, request }),
+  );
+  return chartdata;
+}
 function SanitationInsight({ props }: { props: SanitationForm[] }) {
   console.log(props);
+  const sanitationChartData = countEmployeeOccurrences(props);
 
   return (
     <>

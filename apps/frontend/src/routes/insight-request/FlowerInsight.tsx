@@ -1,9 +1,9 @@
 // import "../styles/example.route.css";
 // import "../styles/globals.css";
 import LineGraph from "@/components/Graph/LineGraph.tsx";
-import BarGraph from "@/components/Graph/BarGraph.tsx";
+// import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import { flowerChartData } from "@/data/flowerData/barChartData";
+// import { flowerChartData } from "@/data/flowerData/barChartData";
 import { flowerLineData } from "@/data/flowerData/lineChartData.ts";
 import { flowerPieData } from "@/data/flowerData/pieChartData";
 import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
@@ -18,9 +18,9 @@ function FlowerInsight({ props }: { props: FlowerForm[] }) {
         <div className="rounded-lg bg-gray-200">
           <LineGraph props={flowerLineData} />
         </div>
-        <div className="rounded-lg bg-gray-200">
-          <BarGraph props={flowerChartData} />
-        </div>
+        {/*<div className="rounded-lg bg-gray-200">*/}
+        {/*  <BarGraph props={flowerChartData} />*/}
+        {/*</div>*/}
         <div className="rounded-lg bg-gray-200 scale-0.25">
           <PieGraph props={flowerPieData} />
         </div>

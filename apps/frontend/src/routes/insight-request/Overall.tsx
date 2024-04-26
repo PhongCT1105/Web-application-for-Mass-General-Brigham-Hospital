@@ -1,9 +1,9 @@
 // import "../styles/example.route.css";
 // import "../styles/globals.css";
 import LineGraph from "@/components/Graph/LineGraph.tsx";
-import BarGraph from "@/components/Graph/BarGraph.tsx";
+// import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import { overallChartData } from "@/data/overallData/barChartData.ts";
+// import { overallChartData } from "@/data/overallData/barChartData.ts";
 import { overallLineData } from "@/data/overallData/lineChartData.ts";
 import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 import { overallPolarData } from "@/data/overallData/polarAreaChartData.ts";
@@ -15,9 +15,9 @@ function OverallInsight() {
         <div className="rounded-lg bg-gray-200">
           <LineGraph props={overallLineData} />
         </div>
-        <div className="rounded-lg bg-gray-200">
-          <BarGraph props={overallChartData} />
-        </div>
+        {/*<div className="rounded-lg bg-gray-200">*/}
+        {/*  <BarGraph props={overallChartData} />*/}
+        {/*</div>*/}
         <div className="rounded-lg bg-gray-200 scale-0.25">
           <PieGraph props={overallPieData} />
         </div>

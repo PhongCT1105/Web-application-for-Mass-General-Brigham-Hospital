@@ -5,13 +5,27 @@ import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
 import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 import { securityLineData } from "@/data/securityData/lineChartData.ts";
-import { securityChartData } from "@/data/securityData/barChartData.ts";
 import { securityPieData } from "@/data/securityData/pieChartData.ts";
 import { securityPolarData } from "@/data/securityData/polarAreaChartData.ts";
 import { SecurityForm } from "@/interfaces/securityReq.ts";
+import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 
+function countEmployeeOccurrences(arr: SecurityForm[]): barRequestData[] {
+  const countDictionary: Record<string, number> = {};
+
+  arr.forEach((obj) => {
+    const { ename } = obj; // Assuming 'employee' property corresponds to 'employeeName'
+    countDictionary[ename] = (countDictionary[ename] || 0) + 1;
+  });
+
+  const chartdata: barRequestData[] = Object.entries(countDictionary).map(
+    ([employeeName, request]) => ({ employeeName, request }),
+  );
+  return chartdata;
+}
 function SecurityInsight({ props }: { props: SecurityForm[] }) {
   console.log(props);
+  const securityChartData = countEmployeeOccurrences(props);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">

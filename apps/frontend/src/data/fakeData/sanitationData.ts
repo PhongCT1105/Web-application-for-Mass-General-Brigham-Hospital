@@ -5,7 +5,7 @@ import { submitDataOnce } from "@/data/fakeData/submissionUtils.ts";
 import { EmployeeNames } from "@/interfaces/dataTypes/employeeNames.ts";
 import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
 
-const sanitationData: SanitationForm[] = Array.from({ length: 100 }, () => ({
+const sanitationData: SanitationForm[] = Array.from({ length: 50 }, () => ({
   reqId: faker.number.int(),
   name: faker.helpers.arrayElement(EmployeeNames).value,
   location: faker.location.city(),
