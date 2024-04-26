@@ -60,6 +60,10 @@ function InsightRoute() {
                             <Badge className="mr-2 h-4 w-4" />
                             Security Insight
                           </TabsTrigger>
+                          <TabsTrigger value="Security Insight">
+                            <Badge className="mr-2 h-4 w-4" />
+                            Maintenance Insight
+                          </TabsTrigger>
                         </TabsList>
                       </div>
                       <TabsContent
@@ -148,6 +152,7 @@ function InsightRoute() {
                             </h2>
                           </div>
                         </div>
+
                         <Separator className="my-4" />
                         <SecurityInsight />
                       </TabsContent>

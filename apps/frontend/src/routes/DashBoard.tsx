@@ -1,9 +1,9 @@
 import React, { ReactNode, useState } from "react";
 import Draggable from "react-draggable";
-import PieGraph from "@/components/Graph/PieGraph";
+import PieGraph from "@/components/Graph/PieGraph.tsx";
 import LineGraph from "@/components/Graph/LineGraph.tsx";
-import { overallLineData } from "@/data/overallData/lineChartData";
-import { overallPieData } from "@/data/overallData/pieChartData";
+import { overallLineData } from "@/data/overallData/lineChartData.ts";
+import { overallPieData } from "@/data/overallData/pieChartData.ts";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 

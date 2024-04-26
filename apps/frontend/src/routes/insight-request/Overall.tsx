@@ -24,6 +24,7 @@ function OverallInsight() {
         <div className="rounded-lg bg-gray-200 scale-0.25">
           <PolarAreaChart props={overallPolarData} />
         </div>
+        {/*<Button onClick = {() => console.log(JSON.stringify(sanitationData))}/>*/}
       </div>
     </>
   );

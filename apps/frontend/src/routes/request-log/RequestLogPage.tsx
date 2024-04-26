@@ -1,6 +1,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import("@/data/fakeData/sanitationData.ts");
 import { Separator } from "@/components/ui/separator.tsx";
 import {
   Tabs,
