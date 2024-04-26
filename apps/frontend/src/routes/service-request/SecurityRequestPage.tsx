@@ -419,7 +419,7 @@ export const SecurityForm = () => {
                         </div>
                       </RadioGroup>
                     </div>
-                    <Separator />
+                    <Separator className={"mt-2"} />
                     {/* Call 911? Input  (this will be a checkbox)*/}
                     <div className={"flex items-center space-x-2 mt-6"}>
                       <Checkbox

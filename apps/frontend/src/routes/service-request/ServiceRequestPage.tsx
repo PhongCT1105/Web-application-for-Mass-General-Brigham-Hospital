@@ -320,7 +320,7 @@ export default function ServiceRequestPage() {
                                 textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
-                              By Owen Lacey & Tracy Yang
+                              By Owen Lacey & June Whittall
                             </p>
                             <p
                               className="text-sm text-muted-foreground"
