@@ -190,7 +190,9 @@ const AboutMePage = () => {
               Github={"https://github.com/wwong2"}
               Linkdin={"https://www.linkedin.com/in/wilson-wong-wpi/"}
               Imagepath={Wong}
-              quote={'"Hello June, I will permit this"'}
+              quote={
+                '"No matter how bad a situation may be, with careful thought it can be turned into an advantage."'
+              }
             />
             <AboutBlock
               Name={"Ari Schechter"}
