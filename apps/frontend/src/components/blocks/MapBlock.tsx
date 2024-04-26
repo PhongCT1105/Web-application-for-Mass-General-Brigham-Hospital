@@ -284,7 +284,7 @@ export const MapBlock: React.FC = () => {
           zoomControl: true,
           preferCanvas: true,
           layers: [LayerF1],
-        }).setView([3400, 5000], -2);
+        }).setView([1750, 2700], -2);
         mapRef.current = map;
         L.control
           .layers(baseLayers, undefined, {
@@ -500,23 +500,21 @@ export const MapBlock: React.FC = () => {
       const next = searchPath[i + 1];
       const nextCoord: LatLngExpression = [3400 - next.ycoord, next.xcoord];
       if (current.floor != next.floor) {
-        addFloorMarker(
+        addMarker(
           currentCoord,
           FloorMarkers[next.floor],
           SpecialMarkers[current.floor],
-          next.floor,
-          searchPath,
+          true,
         );
-        addFloorMarker(
+        addMarker(
           nextCoord,
           FloorMarkers[current.floor],
           SpecialMarkers[next.floor],
-          current.floor,
-          searchPath,
+          true,
         );
       }
     }
-    changeFloor(searchPath[0].floor, searchPath);
+    // changeFloor(searchPath[0].floor, searchPath);
   }
 
   function createTextDirections(
@@ -653,27 +651,27 @@ export const MapBlock: React.FC = () => {
     return true;
   }
 
-  function addFloorMarker(
-    location: LatLngExpression,
-    iconPath: string,
-    floorLayer: L.LayerGroup,
-    floor: string,
-    searchPath: Node[],
-  ) {
-    const map = mapRef.current;
-    if (!map) return;
-
-    // floor markers have a different anchor point
-    const customIcon = new Icon({
-      iconUrl: iconPath,
-      iconSize: [25, 30],
-      iconAnchor: [13, 30],
-    });
-    const marker = L.marker(location, { icon: customIcon }).addTo(floorLayer);
-    marker.on("click", () => {
-      changeFloor(floor, searchPath);
-    });
-  }
+  // function addFloorMarker(
+  //   location: LatLngExpression,
+  //   iconPath: string,
+  //   floorLayer: L.LayerGroup,
+  //   floor: string,
+  //   searchPath: Node[],
+  // ) {
+  //   const map = mapRef.current;
+  //   if (!map) return;
+  //
+  //   // floor markers have a different anchor point
+  //   const customIcon = new Icon({
+  //     iconUrl: iconPath,
+  //     iconSize: [25, 30],
+  //     iconAnchor: [13, 30],
+  //   });
+  //  L.marker(location, { icon: customIcon }).addTo(floorLayer);
+  //   // marker.on("click", () => {
+  //   //   changeFloor(floor, searchPath);
+  //   // });
+  // }
 
   function addMarker(
     location: LatLngExpression,
@@ -687,22 +685,22 @@ export const MapBlock: React.FC = () => {
     console.log(floorMarker);
 
     // floor markers have a different anchor point
-    // if (floorMarker) {
-    //   const customIcon = new Icon({
-    //     iconUrl: iconPath,
-    //     iconSize: [25, 30],
-    //     iconAnchor: [13, 30],
-    //   });
-    //   L.marker(location, { icon: customIcon }).addTo(floorLayer);
-    //   // add clickable marker here
-    // } else {
-    const customIcon = new Icon({
-      iconUrl: iconPath,
-      iconSize: [25, 25],
-      iconAnchor: [12.5, 12.5],
-    });
-    L.marker(location, { icon: customIcon }).addTo(floorLayer);
-    // }
+    if (floorMarker) {
+      const customIcon = new Icon({
+        iconUrl: iconPath,
+        iconSize: [25, 30],
+        iconAnchor: [13, 30],
+      });
+      L.marker(location, { icon: customIcon }).addTo(floorLayer);
+      // add clickable marker here
+    } else {
+      const customIcon = new Icon({
+        iconUrl: iconPath,
+        iconSize: [25, 25],
+        iconAnchor: [12.5, 12.5],
+      });
+      L.marker(location, { icon: customIcon }).addTo(floorLayer);
+    }
   }
 
   function handleClear() {
@@ -759,91 +757,91 @@ export const MapBlock: React.FC = () => {
     });
   }
 
-  function changeFloor(floor: string, searchPath: Node[]) {
-    const map = mapRef.current;
-    if (!map) return;
-
-    // TODO: at this point it pans to the correct spot for the floor markers
-    // still need to have the correct floor displayed
-
-    // map.removeLayer(Layers[searchPath[0].floor]);
-    // map.removeLayer(Markers[1]);
-    // Layers[searchPath[0].floor].addTo(map);
-    //   const layer = Layers[floor];
-    //   let index: number = 0;
-    //
-    // map.eachLayer(() => {
-    //     index++;
-    // });
-    //
-    // console.log(index);
-
-    console.log(Layers[3]);
-    console.log(Layers[2]);
-    console.log(Layers[1]);
-    console.log(Layers["L1"]);
-    console.log(Layers["L2"]);
-
-    // map.removeLayer(layer);
-    // layer.addTo(map);
-
-    // layer.bringToFront();
-
-    const searchPathOnThisFloor = searchPath.filter(
-      (node) => node.floor === floor,
-    );
-
-    // Check if searchPath is defined and not empty
-    if (searchPathOnThisFloor && searchPathOnThisFloor.length > 0) {
-      let totalDistance = 0;
-
-      // Calculate total distance of the path
-      for (let i = 0; i < searchPathOnThisFloor.length - 1; i++) {
-        const node1 = searchPathOnThisFloor[i];
-        const node2 = searchPathOnThisFloor[i + 1];
-        totalDistance += Math.sqrt(
-          Math.pow(node2.xcoord - node1.xcoord, 2) +
-            Math.pow(node2.ycoord - node1.ycoord, 2),
-        );
-      }
-
-      const xSum =
-        searchPathOnThisFloor[0].xcoord +
-        searchPathOnThisFloor[searchPathOnThisFloor.length - 1].xcoord;
-      const ySum =
-        searchPathOnThisFloor[0].ycoord +
-        searchPathOnThisFloor[searchPathOnThisFloor.length - 1].ycoord;
-
-      const lng = ySum / 2;
-      const lat = xSum / 2;
-
-      const nLat = 3400 - lng;
-      const nLng = lat;
-
-      // Adjust zoom level based on path length
-      let zoomLevel = 0;
-      if (totalDistance < 750) {
-        zoomLevel = 0;
-      } else if (totalDistance >= 750 && totalDistance < 1500) {
-        zoomLevel = -1;
-      } else if (totalDistance >= 1500) {
-        zoomLevel = -2;
-      }
-
-      // why are you the way that you are?
-      // honestly every time I try to do something fun or exciting,  you make it not that way.
-      // I hate so much about the things you choose to be.
-      // const coords: [number, number] = [3400 - lng, lat];
-
-      // Set map view to center at calculated coordinates with adjusted zoom level
-      map.setView([nLat, nLng], zoomLevel);
-    } else {
-      // Handle the case when searchPath is empty or undefined
-      console.error("searchPath is empty or undefined");
-      // Set a default map view
-      map.setView([0, 0], -3);
-    }
-  }
+  // function changeFloor(floor: string, searchPath: Node[]) {
+  //   const map = mapRef.current;
+  //   if (!map) return;
+  //
+  //   // TODO: at this point it pans to the correct spot for the floor markers
+  //   // still need to have the correct floor displayed
+  //
+  //   // map.removeLayer(Layers[searchPath[0].floor]);
+  //   // map.removeLayer(Markers[1]);
+  //   // Layers[searchPath[0].floor].addTo(map);
+  //   //   const layer = Layers[floor];
+  //   //   let index: number = 0;
+  //   //
+  //   // map.eachLayer(() => {
+  //   //     index++;
+  //   // });
+  //   //
+  //   // console.log(index);
+  //
+  //   console.log(Layers[3]);
+  //   console.log(Layers[2]);
+  //   console.log(Layers[1]);
+  //   console.log(Layers["L1"]);
+  //   console.log(Layers["L2"]);
+  //
+  //   // map.removeLayer(layer);
+  //   // layer.addTo(map);
+  //
+  //   // layer.bringToFront();
+  //
+  //   const searchPathOnThisFloor = searchPath.filter(
+  //     (node) => node.floor === floor,
+  //   );
+  //
+  //   // Check if searchPath is defined and not empty
+  //   if (searchPathOnThisFloor && searchPathOnThisFloor.length > 0) {
+  //     let totalDistance = 0;
+  //
+  //     // Calculate total distance of the path
+  //     for (let i = 0; i < searchPathOnThisFloor.length - 1; i++) {
+  //       const node1 = searchPathOnThisFloor[i];
+  //       const node2 = searchPathOnThisFloor[i + 1];
+  //       totalDistance += Math.sqrt(
+  //         Math.pow(node2.xcoord - node1.xcoord, 2) +
+  //           Math.pow(node2.ycoord - node1.ycoord, 2),
+  //       );
+  //     }
+  //
+  //     const xSum =
+  //       searchPathOnThisFloor[0].xcoord +
+  //       searchPathOnThisFloor[searchPathOnThisFloor.length - 1].xcoord;
+  //     const ySum =
+  //       searchPathOnThisFloor[0].ycoord +
+  //       searchPathOnThisFloor[searchPathOnThisFloor.length - 1].ycoord;
+  //
+  //     const lng = ySum / 2;
+  //     const lat = xSum / 2;
+  //
+  //     const nLat = 3400 - lng;
+  //     const nLng = lat;
+  //
+  //     // Adjust zoom level based on path length
+  //     let zoomLevel = 0;
+  //     if (totalDistance < 750) {
+  //       zoomLevel = 0;
+  //     } else if (totalDistance >= 750 && totalDistance < 1500) {
+  //       zoomLevel = -1;
+  //     } else if (totalDistance >= 1500) {
+  //       zoomLevel = -2;
+  //     }
+  //
+  //     // why are you the way that you are?
+  //     // honestly every time I try to do something fun or exciting,  you make it not that way.
+  //     // I hate so much about the things you choose to be.
+  //     // const coords: [number, number] = [3400 - lng, lat];
+  //
+  //     // Set map view to center at calculated coordinates with adjusted zoom level
+  //     map.setView([nLat, nLng], zoomLevel);
+  //   } else {
+  //     // Handle the case when searchPath is empty or undefined
+  //     console.error("searchPath is empty or undefined");
+  //     // Set a default map view
+  //     map.setView([0, 0], -3);
+  //   }
+  // }
 
   return (
     <SearchContext.Provider
