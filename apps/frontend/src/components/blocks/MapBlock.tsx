@@ -294,6 +294,8 @@ export const MapBlock: React.FC = () => {
         })
         .addTo(map);
       map.setMaxBounds(bounds);
+      Paths[floor].snakeIn();
+
       mapRef.current = map;
 
       // leaving the below code incase we want it for iteration 5
@@ -353,7 +355,7 @@ export const MapBlock: React.FC = () => {
       //   map.setView([0, 0], -3);
       // }
     },
-    [Layers, baseLayers],
+    [Layers, Paths, baseLayers],
   );
 
   const addMarker = useCallback(
@@ -557,7 +559,8 @@ export const MapBlock: React.FC = () => {
     return L.polyline([startCoords, endCoords], {
       color: "blue",
       weight: 5,
-      snakingSpeed: 100,
+      dashArray: "3, 10",
+      snakingSpeed: 200,
       snakeRepeat: true,
     });
   }
