@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -61,8 +62,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(medicineLog));
-  }, [medicineLog]);
+    fetchData().then();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -88,8 +89,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(flowerLog));
-  }, [flowerLog]);
+    fetchData().then();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -116,8 +117,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(securityLog));
-  }, [securityLog]);
+    fetchData().then();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -143,8 +144,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(sanitationLog));
-  }, [sanitationLog]);
+    fetchData().then();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -172,8 +173,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(tranportLog));
-  }, [tranportLog]);
+    fetchData().then();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -197,8 +198,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(maintenanceLog));
-  }, [maintenanceLog]);
+    fetchData().then();
+  }, []);
 
   return (
     <div className={" scrollbar-hide"}>

@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  // CardDescription,
-  CardFooter,
-  // CardHeader,
-  // CardTitle,
-} from "@/components/ui/card.tsx";
+import { Card, CardContent, CardFooter } from "@/components/ui/card.tsx";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
