@@ -15,6 +15,7 @@ import {
   FlowerIcon,
   PillIcon,
   Hammer,
+  BookOpen,
 } from "lucide-react";
 import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
@@ -211,11 +212,15 @@ export const RequestLogPage = () => {
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs
-                      defaultValue="Flower Request"
+                      defaultValue="All Requests"
                       className="h-full space-y-6"
                     >
                       <div className="space-between flex items-center">
                         <TabsList>
+                          <TabsTrigger value="All Requests">
+                            <BookOpen className="mr-2 h-4 w-4" />
+                            All Requests
+                          </TabsTrigger>
                           <TabsTrigger value="Flower Request">
                             <FlowerIcon className="mr-2 h-4 w-4" />
                             Flower Request
@@ -243,10 +248,29 @@ export const RequestLogPage = () => {
                         </TabsList>
                       </div>
                       <TabsContent
-                        value="Flower Request"
+                        value="All Requests"
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
+                        <DataTable
+                          data={flowerLog}
+                          columns={columnsFlowerFormLog}
+                        />
+                      </TabsContent>
+                      <TabsContent
+                        value="Flower Request"
+                        className="border-none p-0 flex-col data-[state=active]:flex "
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              Flower Request
+                            </h2>
+                            <p className="text-sm text-muted-foreground">
+                              By Mina Boktor & Alexander Kraemling
+                            </p>
+                          </div>
+                        </div>
                         <DataTable
                           data={flowerLog}
                           columns={columnsFlowerFormLog}
