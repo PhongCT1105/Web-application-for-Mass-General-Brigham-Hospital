@@ -12,7 +12,9 @@ export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-normal">#{row.getValue("reqID")}</div>
+      <div className="w-[80px] font-normal">
+        {"SE" + (row.getValue("reqID") as string).toString()}
+      </div>
     ),
     enableSorting: false,
     enableHiding: false,
