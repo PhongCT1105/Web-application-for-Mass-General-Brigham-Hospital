@@ -512,11 +512,11 @@ export const MapBlock: React.FC = () => {
       addMarkersToLayerGroups(hospitalData);
 
       Object.keys(Layers).forEach((key) => {
+        Paths[key].addTo(Layers[key]);
         Markers[key].addTo(Layers[key]);
         SpecialMarkers[key].addTo(Layers[key]);
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
-        Paths[key].addTo(Layers[key]);
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -791,27 +791,6 @@ export const MapBlock: React.FC = () => {
     return true;
   }
 
-  // function addFloorMarker(
-  //   location: LatLngExpression,
-  //   iconPath: string,
-  //   floorLayer: L.LayerGroup,
-  //   floor: string,
-  // ) {
-  //   const map = mapRef.current;
-  //   if (!map) return;
-  //
-  //   // floor markers have a different anchor point
-  //   const customIcon = new Icon({
-  //     iconUrl: iconPath,
-  //     iconSize: [25, 30],
-  //     iconAnchor: [13, 30],
-  //   });
-  //     const marker = L.marker(location, { icon: customIcon }).addTo(floorLayer);
-  //     marker.on("click", () => {
-  //         changeFloor(floor);
-  //     });
-  // }
-
   function handleClear() {
     const map = mapRef.current;
     if (!map) return;
@@ -822,6 +801,7 @@ export const MapBlock: React.FC = () => {
       StartMarker[key].clearLayers();
       EndMarker[key].clearLayers();
       Paths[key].clearLayers();
+      Markers[key].addTo(Layers[key]);
     });
     setTextDirections([]);
   }
@@ -834,7 +814,6 @@ export const MapBlock: React.FC = () => {
     };
     console.log(test);
     const nodeArray: Node[] = [];
-    handleClear();
 
     async function path() {
       const { data: response } = await axios.post("/api/search", test, {
@@ -860,9 +839,29 @@ export const MapBlock: React.FC = () => {
 
     path().then(() => {
       handleClear();
-      console.log(nodeArray);
+      clearMarkers();
+      addMarkersOnPath(nodeArray);
       addPathPolylines(nodeArray);
       createTextDirections(nodeArray); //nodeArray[0].floor);
+    });
+  }
+
+  function addMarkersOnPath(searchPath: Node[]) {
+    searchPath.forEach((node) => {
+      const coords: [number, number] = [3400 - node.ycoord, node.xcoord];
+      const marker = L.circleMarker(coords, {
+        radius: 5,
+        color: "#ebd234",
+        fillColor: "#ebd234",
+        fillOpacity: 1,
+      }).bindPopup(node.longName);
+      marker.addTo(Paths[node.floor]);
+    });
+  }
+
+  function clearMarkers() {
+    Object.keys(Layers).forEach((key) => {
+      Layers[key].removeLayer(Markers[key]);
     });
   }
 
