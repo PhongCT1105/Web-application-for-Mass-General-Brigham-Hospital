@@ -1,7 +1,6 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import("@/data/fakeData/sanitationData.ts");
 import { Separator } from "@/components/ui/separator.tsx";
 import {
   Tabs,
@@ -62,8 +61,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(medicineLog));
-  }, [medicineLog]);
+    fetchData().then(() => console.log("medicineLog"));
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -89,8 +88,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(flowerLog));
-  }, [flowerLog]);
+    fetchData().then(() => console.log("flowerLog"));
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -117,8 +116,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(securityLog));
-  }, [securityLog]);
+    fetchData().then(() => console.log("securityLog"));
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -144,8 +143,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(sanitationLog));
-  }, [sanitationLog]);
+    fetchData().then(() => console.log("sanitationLog"));
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -173,8 +172,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(tranportLog));
-  }, [tranportLog]);
+    fetchData().then(() => console.log("tranportLog"));
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -198,8 +197,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(maintenanceLog));
-  }, [maintenanceLog]);
+    fetchData().then(() => console.log("maintenanceLog"));
+  }, []);
 
   return (
     <div className={" scrollbar-hide"}>

@@ -1,7 +1,9 @@
 import { faker } from "@faker-js/faker";
-import axios from "axios";
+// import axios from "axios";
+import { SanitationForm } from "@/interfaces/sanitationReq.ts";
+import { submitDataOnce } from "@/data/fakeData/submissionUtils.ts";
 
-export const sanitationData = Array.from({ length: 1000 }, () => ({
+const sanitationData: SanitationForm[] = Array.from({ length: 100 }, () => ({
   reqId: faker.number.int(),
   name: faker.person.firstName(),
   location: faker.location.city(),
@@ -13,26 +15,28 @@ export const sanitationData = Array.from({ length: 1000 }, () => ({
     "in-progress",
     "closed",
   ]),
-  typeOfIssue: faker.word,
+  typeOfIssue: faker.word.adjective(),
   description: faker.lorem.sentence(),
   comments: faker.lorem.sentence(),
 }));
 
-async function submit() {
-  try {
-    console.log("Running");
-    const res = await axios.post("/api/sanitationReq", sanitationData, {
-      headers: {
-        "content-type": "application/json",
-      },
-    });
-    console.log("Success:", res.data);
-  } catch (error) {
-    console.error("Error:", error);
-  }
-}
+submitDataOnce("sanitationSubmitted", sanitationData, "/api/sanitationReq");
 
-submit().then(() => {
-  console.log(sanitationData);
-  console.log("Submitted fake data to backend");
-});
+// async function submit() {
+//   try {
+//     console.log("Running");
+//     const res = await axios.post("/api/sanitationReq", sanitationData, {
+//       headers: {
+//         "content-type": "application/json",
+//       },
+//     });
+//     console.log("Success:", res.data);
+//   } catch (error) {
+//     console.error("Error:", error);
+//   }
+// }
+//
+// submit().then(() => {
+//   console.log(sanitationData);
+//   console.log("Submitted fake data to backend");
+// });

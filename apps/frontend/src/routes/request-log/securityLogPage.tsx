@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/table.tsx";
 import { Input } from "@/components/ui/input.tsx";
 //import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
-//import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
+import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 interface DataTableProps<TCols, TData> {
   columns: ColumnDef<TData, TCols>[];
   data: TData[];
@@ -126,7 +126,7 @@ export function SecurityFormLogTable<TCols, TData>({
           </TableBody>
         </Table>
       </div>
-      {/*<DataTablePagination table={table} />*/}
+      <DataTablePagination table={table} />
     </div>
   );
 }
