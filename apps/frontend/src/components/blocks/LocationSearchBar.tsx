@@ -236,7 +236,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               onClick={handleClear}
               className="w-full"
             >
-              Clear
+              Reset
             </Button>
           </div>
         </CardContent>

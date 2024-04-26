@@ -512,11 +512,11 @@ export const MapBlock: React.FC = () => {
       addMarkersToLayerGroups(hospitalData);
 
       Object.keys(Layers).forEach((key) => {
+        Paths[key].addTo(Layers[key]);
         Markers[key].addTo(Layers[key]);
         SpecialMarkers[key].addTo(Layers[key]);
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
-        Paths[key].addTo(Layers[key]);
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -791,16 +791,6 @@ export const MapBlock: React.FC = () => {
     return true;
   }
 
-  // function clearUnusedMarkers(searchPath: Node[]) {
-  //     Object.keys(Markers).forEach((key) => {
-  //         Layeys
-  //     });
-  //     // for every node in the array plot on correct floor
-  //     searchPath.forEach((node) => {
-  //
-  //     });
-  // }
-
   function handleClear() {
     const map = mapRef.current;
     if (!map) return;
@@ -850,8 +840,22 @@ export const MapBlock: React.FC = () => {
     path().then(() => {
       handleClear();
       clearMarkers();
+      addMarkersOnPath(nodeArray);
       addPathPolylines(nodeArray);
       createTextDirections(nodeArray); //nodeArray[0].floor);
+    });
+  }
+
+  function addMarkersOnPath(searchPath: Node[]) {
+    searchPath.forEach((node) => {
+      const coords: [number, number] = [3400 - node.ycoord, node.xcoord];
+      const marker = L.circleMarker(coords, {
+        radius: 5,
+        color: "#ebd234",
+        fillColor: "#ebd234",
+        fillOpacity: 1,
+      }).bindPopup(node.longName);
+      marker.addTo(Paths[node.floor]);
     });
   }
 
