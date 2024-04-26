@@ -130,7 +130,7 @@ export function Header() {
                     <img
                       src={Logo}
                       alt={"brigham logo"}
-                      className="min-w-[40px]"
+                      className="min-w-[30px]"
                     />
                   </a>
                   <a
@@ -263,6 +263,16 @@ export function Header() {
                   </a>
                 </>
               )}
+              <a
+                href="/dashboard"
+                className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                  location.pathname === "/dashboard"
+                    ? "text-yellow-500"
+                    : "text-gray-300"
+                }`}
+              >
+                DashBoard
+              </a>
               <a
                 href="/about-us"
                 className={`transition-colors hover:text-yellow-500 text-gray-300 ${
@@ -444,7 +454,7 @@ export function Header() {
               </div>
               {results.length > 0 && (
                 <ul
-                  className="absolute z-[1000] mt-1 w-auto bg-white border border-gray-200 rounded-lg shadow-lg"
+                  className="absolute z-[1000] mt-1 w-auto bg-secondary border border-gray-200 rounded-lg shadow-lg"
                   ref={dropdownRef}
                 >
                   {results.slice(0, 5).map(
@@ -454,7 +464,7 @@ export function Header() {
                     ) => (
                       <li
                         key={index}
-                        className="px-4 py-2 cursor-pointer hover:bg-gray-100"
+                        className="px-4 py-2 cursor-pointer hover:bg-gray-100 hover:rounded-lg"
                       >
                         <a href={result.url}>{result.mainTitle}</a>
                       </li>

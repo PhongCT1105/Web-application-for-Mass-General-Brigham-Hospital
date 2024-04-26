@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-//import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
@@ -255,13 +254,19 @@ export function Maintenance() {
 
   return (
     <>
-      <div className="flex flex-col border rounded-md text mx-10 my-5 p-6">
-        <div className=" justify-center items-center">
-          <Card className="border-none">
+      <div
+        className="border-none rounded-md text mx-10 my-5 py-1"
+        style={{
+          paddingLeft: "6%",
+          paddingRight: "6%",
+        }}
+      >
+        <div className="justify-center items-center">
+          <Card className="border-none p-4">
             <CardContent>
               <div className="space-y-6">
                 <div className="w-1/4">
-                  <h1 className="text-2xl font-bold my-2 pb-2">
+                  <h1 className="text-2xl font-bold my-2 pb-2 ">
                     Employee Name
                   </h1>
                   <DropdownMenu>
@@ -283,16 +288,6 @@ export function Maintenance() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                {/*<div className="w-1/4">*/}
-                {/*  <h1 className="text-2xl font-bold ">Employee Name</h1>*/}
-                {/*  <Input*/}
-                {/*    type="text"*/}
-                {/*    id="name"*/}
-                {/*    placeholder="Select Your Name Here"*/}
-                {/*    onChange={handleFormChange}*/}
-                {/*    value={form.name}*/}
-                {/*  />*/}
-                {/*</div>*/}
                 <div className="flex">
                   <div className="w-1/3  ">
                     <h1 className="text-2xl font-bold my-2 pb-2">
@@ -498,54 +493,45 @@ export function Maintenance() {
               </div>
             </CardContent>
 
-            <CardFooter className="flex justify-end">
-              {" "}
-              {/* Use justify-end to align items to the end */}
-              <div className="flex space-x">
-                {" "}
-                {/* Use space-x-4 for horizontal spacing between buttons */}
-                <Button
-                  variant="destructive"
-                  className="mr-10"
-                  onClick={handleFormClear}
-                >
-                  Clear
-                </Button>
-                <TooltipProvider>
-                  {buttonState === "ghost" && (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={buttonState}
-                          className="p-5 border"
-                          onClick={handleSubmit}
-                        >
-                          Submit
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Please fill out all fields</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-                  {buttonState !== "ghost" && (
-                    <Button
-                      variant={buttonState}
-                      className="p-5"
-                      onClick={handleSubmit}
-                    >
-                      Submit
-                    </Button>
-                  )}
-                </TooltipProvider>
-              </div>
+            <CardFooter className="flex justify-between">
+              <TooltipProvider>
+                {buttonState === "ghost" && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={buttonState}
+                        className="p-5 border"
+                        onClick={handleSubmit}
+                      >
+                        Submit
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Please fill out all fields</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {buttonState !== "ghost" && (
+                  <Button
+                    variant={buttonState}
+                    className="p-5"
+                    onClick={handleSubmit}
+                  >
+                    Submit
+                  </Button>
+                )}
+              </TooltipProvider>
+              <Button
+                variant={"destructive"}
+                className="mr-20"
+                onClick={handleFormClear}
+              >
+                Clear
+              </Button>
             </CardFooter>
           </Card>
         </div>
       </div>
-      <h2 className="mt-8 text-small ml-4">
-        June Whittall and Alex Shettler (Team Awesome)
-      </h2>
     </>
   );
 }

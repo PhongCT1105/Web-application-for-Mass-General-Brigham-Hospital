@@ -1,11 +1,4 @@
-import {
-  Card,
-  // CardHeader,
-  CardContent,
-  // CardTitle,
-  // CardDescription,
-  CardFooter,
-} from "@/components/ui/card.tsx";
+import { Card, CardContent, CardFooter } from "@/components/ui/card.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { Label } from "@/components/ui/label.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
@@ -258,226 +251,238 @@ export const SecurityForm = () => {
 
   return (
     <>
-      <Card className={" flex flex-col border rounded-md text mx-10 my-5"}>
-        <CardContent className={"grid gap-4"}>
-          <div className={"space-y-1"}>
-            {/* Name Input */}
-            <div className="w-1/5">
-              <h1 className="text-2xl font-bold my-2">Employee</h1>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="outline">
-                    {securityRequest.employee
-                      ? securityRequest.employee
-                      : "Select Employee"}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                  {employees.map((employee, index) => (
-                    <DropdownMenuRadioItem
-                      key={index}
-                      value={employee}
-                      onClick={() => handleEmployee(employee)}
-                    >
-                      {employee}
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-            {/* Data input */}
-            <div className="flex">
-              {/* Assignment Input */}
-              <div className="w-1/5">
-                <div className={"grid gap-4"}>
-                  <h1 className="text-2xl font-bold ">Request Status:</h1>
-                  <RadioGroup
-                    id={"status"}
-                    defaultValue="unassigned"
-                    className={"gap-4"}
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="unassigned"
-                        id="unassigned"
-                        checked={curStatus === "unassigned"}
-                        onClick={() => handleStatus("unassigned")}
-                      />
-                      <Label htmlFor="unassigned">Unassigned</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="assigned"
-                        id="assigned"
-                        checked={curStatus === "assigned"}
-                        onClick={() => handleStatus("assigned")}
-                      />
-                      <Label htmlFor="assigned">Assigned</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="inprogress"
-                        id="inprogress"
-                        checked={curStatus === "inprogress"}
-                        onClick={() => handleStatus("inprogress")}
-                      />
-                      <Label htmlFor="inprogress">In Progress</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="closed"
-                        id="closed"
-                        checked={curStatus === "closed"}
-                        onClick={() => handleStatus("closed")}
-                      />
-                      <Label htmlFor="closed">Closed</Label>
-                    </div>
-                  </RadioGroup>
+      <div
+        className="flex flex-col overflow-hidden rounded-md text my-5 py-1"
+        style={{
+          paddingLeft: "8%",
+          paddingRight: "8%",
+        }}
+      >
+        <div className=" justify-center items-center">
+          <Card className={"border-none p-4"}>
+            <CardContent className={"grid gap-4"}>
+              <div className="space-y-1">
+                {/* Name Input */}
+                <div className="w-1/5">
+                  <h1 className="text-2xl font-bold my-2">Employee Name</h1>
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="outline">
+                        {securityRequest.employee
+                          ? securityRequest.employee
+                          : "Select Employee"}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                      {employees.map((employee, index) => (
+                        <DropdownMenuRadioItem
+                          key={index}
+                          value={employee}
+                          onClick={() => handleEmployee(employee)}
+                        >
+                          {employee}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuContent>
+                  </DropdownMenu>
                 </div>
-              </div>
-
-              {/* Location Input */}
-              <div className="w-1/5">
-                <h1 className="text-2xl font-bold my-2">Location</h1>
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="outline">
-                      {securityRequest.location
-                        ? securityRequest.location
-                        : "Select Location"}
-                    </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                    {locations.map((location, index) => (
-                      <DropdownMenuRadioItem
-                        key={index}
-                        value={location}
-                        onClick={() => handleLocation(location)}
+                {/* Data input */}
+                <div className="flex">
+                  {/* Assignment Input */}
+                  <div className="w-1/5">
+                    <div className={"grid gap-4"}>
+                      <h1 className="text-2xl font-bold ">Request Status:</h1>
+                      <RadioGroup
+                        id={"status"}
+                        defaultValue="unassigned"
+                        className={"gap-4"}
                       >
-                        {location}
-                      </DropdownMenuRadioItem>
-                    ))}
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="unassigned"
+                            id="unassigned"
+                            checked={curStatus === "unassigned"}
+                            onClick={() => handleStatus("unassigned")}
+                          />
+                          <Label htmlFor="unassigned">Unassigned</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="assigned"
+                            id="assigned"
+                            checked={curStatus === "assigned"}
+                            onClick={() => handleStatus("assigned")}
+                          />
+                          <Label htmlFor="assigned">Assigned</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="inprogress"
+                            id="inprogress"
+                            checked={curStatus === "inprogress"}
+                            onClick={() => handleStatus("inprogress")}
+                          />
+                          <Label htmlFor="inprogress">In Progress</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="closed"
+                            id="closed"
+                            checked={curStatus === "closed"}
+                            onClick={() => handleStatus("closed")}
+                          />
+                          <Label htmlFor="closed">Closed</Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                  </div>
 
-              {/* Employee Input */}
+                  {/* Location Input */}
+                  <div className="w-1/5">
+                    <h1 className="text-2xl font-bold my-2">Location</h1>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                          {securityRequest.location
+                            ? securityRequest.location
+                            : "Select Location"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                        {locations.map((location, index) => (
+                          <DropdownMenuRadioItem
+                            key={index}
+                            value={location}
+                            onClick={() => handleLocation(location)}
+                          >
+                            {location}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
 
-              {/* Priority Input */}
-              <div className={"w-1/5 ml-12"}>
-                <div className={"grid gap-4"}>
-                  <h1 className="text-2xl font-bold ">Request Priority:</h1>
-                  {/*<Label htmlFor="priority">Request Priority:</Label>*/}
-                  <RadioGroup
-                    className={"gap-4"}
-                    id={"priority"}
-                    defaultValue="low"
-                  >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="low"
-                        id="low"
-                        checked={curPriority === "low"}
-                        onClick={() => handlePriority("low")}
-                      />
-                      <Label htmlFor="low">Low</Label>
+                  {/* Employee Input */}
+
+                  {/* Priority Input */}
+                  <div className={"w-1/5 ml-12"}>
+                    <div className={"grid gap-4"}>
+                      <h1 className="text-2xl font-bold ">Request Priority:</h1>
+                      {/*<Label htmlFor="priority">Request Priority:</Label>*/}
+                      <RadioGroup
+                        className={"gap-4"}
+                        id={"priority"}
+                        defaultValue="low"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="low"
+                            id="low"
+                            checked={curPriority === "low"}
+                            onClick={() => handlePriority("low")}
+                          />
+                          <Label htmlFor="low">Low</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="medium"
+                            id="medium"
+                            checked={curPriority === "medium"}
+                            onClick={() => handlePriority("medium")}
+                          />
+                          <Label htmlFor="medium">Medium</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="high"
+                            id="high"
+                            checked={curPriority === "high"}
+                            onClick={() => handlePriority("high")}
+                          />
+                          <Label htmlFor="high">High</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="emergency"
+                            id="emergency"
+                            checked={curPriority === "emergency"}
+                            onClick={() => handlePriority("emergency")}
+                          />
+                          <Label htmlFor="emergency">Emergency</Label>
+                        </div>
+                      </RadioGroup>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="medium"
-                        id="medium"
-                        checked={curPriority === "medium"}
-                        onClick={() => handlePriority("medium")}
+                    <Separator className={"mt-2"} />
+                    {/* Call 911? Input  (this will be a checkbox)*/}
+                    <div className={"flex items-center space-x-2 mt-6"}>
+                      <Checkbox
+                        id="call"
+                        onCheckedChange={handleCall}
+                        defaultChecked={false}
+                        checked={securityRequest.call}
                       />
-                      <Label htmlFor="medium">Medium</Label>
+                      <Label
+                        htmlFor="call"
+                        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-red-500"
+                      >
+                        Automatically call 911?
+                      </Label>
                     </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="high"
-                        id="high"
-                        checked={curPriority === "high"}
-                        onClick={() => handlePriority("high")}
-                      />
-                      <Label htmlFor="high">High</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        value="emergency"
-                        id="emergency"
-                        checked={curPriority === "emergency"}
-                        onClick={() => handlePriority("emergency")}
-                      />
-                      <Label htmlFor="emergency">Emergency</Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-                <Separator className={"my-4"} />
-                {/* Call 911? Input  (this will be a checkbox)*/}
-                <div className={"flex items-center space-x-2 mt-6"}>
-                  <Checkbox
-                    id="call"
-                    onCheckedChange={handleCall}
-                    defaultChecked={false}
-                    checked={securityRequest.call}
-                  />
-                  <Label
-                    htmlFor="call"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-red-500"
-                  >
-                    Automatically call 911?
-                  </Label>
+                  </div>
+                  {/* Problem input*/}
+                  <div className={"w-1/5 ml-12"}>
+                    <h1 className="text-2xl font-bold ">
+                      Describe the Problem:
+                    </h1>
+                    <Textarea
+                      id="situation"
+                      placeholder="Enter Your Name Here"
+                      onChange={handleText}
+                      value={securityRequest.situation}
+                    ></Textarea>
+                  </div>
                 </div>
               </div>
-              {/* Problem input*/}
-              <div className={"w-1/5 ml-12"}>
-                <h1 className="text-2xl font-bold ">Describe the Problem:</h1>
-                <Textarea
-                  id="situation"
-                  placeholder="Enter Your Name Here"
-                  onChange={handleText}
-                  value={securityRequest.situation}
-                ></Textarea>
-              </div>
-            </div>
-          </div>
-          <CardFooter className={"flex justify-between"}>
-            <Button
-              variant={"destructive"}
-              className="w-1/7"
-              onClick={clearReq}
-            >
-              Clear
-            </Button>
-            <TooltipProvider>
-              {buttonState === "ghost" && (
-                <Tooltip>
-                  <TooltipTrigger asChild>
+              <CardFooter className="flex justify-between">
+                <TooltipProvider>
+                  {buttonState === "ghost" && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={buttonState}
+                          className="p-5 border"
+                          onClick={submit}
+                        >
+                          Submit
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Please fill out all fields</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                  {buttonState !== "ghost" && (
                     <Button
                       variant={buttonState}
-                      className="w-1/4 p-5 border"
+                      className="p-5"
                       onClick={submit}
                     >
                       Submit
                     </Button>
-                  </TooltipTrigger>
-                  <TooltipContent>
-                    <p>Please fill out all fields</p>
-                  </TooltipContent>
-                </Tooltip>
-              )}
-              {buttonState !== "ghost" && (
+                  )}
+                </TooltipProvider>
                 <Button
-                  variant={buttonState}
-                  className="p-5 w-1/4"
-                  onClick={submit}
+                  variant={"destructive"}
+                  className="mr-20"
+                  onClick={clearReq}
                 >
-                  Submit
+                  Clear
                 </Button>
-              )}
-            </TooltipProvider>
-          </CardFooter>
-        </CardContent>
-      </Card>
+              </CardFooter>
+            </CardContent>
+          </Card>
+        </div>
+      </div>
     </>
   );
 };

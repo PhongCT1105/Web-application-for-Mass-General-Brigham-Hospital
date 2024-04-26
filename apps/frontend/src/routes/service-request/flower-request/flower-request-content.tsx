@@ -39,6 +39,7 @@ import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
 import ten from "@/assets/discount-tags/ten-percent-discount.webp";
 import twenty from "@/assets/discount-tags/twenty-percent-discount.webp";
 import thirty from "@/assets/discount-tags/thirty-percent-discount.webp";
+import bannerFlowerImage from "@/assets/flower-banner.png";
 
 import {
   Table,
@@ -193,224 +194,253 @@ export const FlowerContent = () => {
   };
 
   return (
-    <>
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
+    <div>
+      <div
+        className="flex items-center justify-center"
+        style={{
+          backgroundImage: `url(${bannerFlowerImage})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          height: "100px",
+          borderRadius: "10px",
+          width: "83.5%",
+          marginLeft: "8%",
+        }}
+      >
+        <div
+          className="space-y-1"
+          style={{
+            color: "white",
+            marginLeft: "20px",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+          }}
+        >
           <h2 className="text-2xl font-semibold tracking-tight">
             Flower Request
           </h2>
-          <p className="text-sm text-muted-foreground">
+          <p
+            className="text-sm text-muted-foreground"
+            style={{ color: "white", fontWeight: "bold" }}
+          >
+            By Mina Boktor & Alexander Kraemling
+          </p>
+          <p
+            className="text-sm text-muted-foreground"
+            style={{ color: "white", fontWeight: "bold" }}
+          >
             Send a loved one a special gift
           </p>
         </div>
         <div className="ml-auto mr-4">
           <Popover>
             <PopoverTrigger>
-              <Button className={"px-5 mr-3"} variant={"outline"}>
+              <Button className={"px-5 mr-3"} variant={"default"}>
                 <ShoppingCart className={"mr-2 h-4 w-4"} />
                 Cart
               </Button>
             </PopoverTrigger>
             <PopoverContent className={"w-100"}>
-              <Table>
-                <TableCaption>
-                  <Dialog>
-                    <Button
-                      variant={"destructive"}
-                      onClick={() => setCartItems([])}
-                      className={" w-full mb-2"}
-                    >
-                      Empty cart
-                    </Button>
-                    <DialogContent className="sm:max-w-[600px]">
-                      <DialogHeader>
-                        <DialogTitle>Submission form</DialogTitle>
-                        <DialogDescription>
-                          Enter recipient's information below, then click submit
-                          when done.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div className="grid gap-4 pt-4">
-                        <div className="grid grid-cols-4 items-center gap-4">
-                          <Label htmlFor="sender" className="text-right">
-                            Sender's Name
-                          </Label>
-                          <Input
-                            onChange={handleForm}
-                            id="sender"
-                            placeholder="Sender"
-                            className="col-span-3"
-                          />
-                          <Label htmlFor="recipient" className="text-right">
-                            Recipient's Name
-                          </Label>
-                          <Input
-                            id="recipient"
-                            onChange={handleForm}
-                            placeholder="Recipient"
-                            className="col-span-3"
-                          />
-                          <Label htmlFor="location" className="text-right">
-                            Recipient's Location
-                          </Label>
-                          <div className="col-span-3">
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="outline">
-                                  {form.location
-                                    ? form.location
-                                    : "Select Location"}
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                                {locations.map((location, index) => (
-                                  <DropdownMenuRadioItem
-                                    key={index}
-                                    value={location}
-                                    onClick={() => handleLocation(location)}
-                                  >
-                                    {location}
-                                  </DropdownMenuRadioItem>
-                                ))}
-                              </DropdownMenuContent>
-                            </DropdownMenu>
+              <ScrollArea style={{ maxHeight: "500px", overflowY: "auto" }}>
+                <Table>
+                  <TableCaption>
+                    <Dialog>
+                      <Button
+                        variant={"destructive"}
+                        onClick={() => setCartItems([])}
+                        className={" w-full mb-2"}
+                      >
+                        Empty cart
+                      </Button>
+                      <DialogContent className="sm:max-w-[600px]">
+                        <DialogHeader>
+                          <DialogTitle>Submission form</DialogTitle>
+                          <DialogDescription>
+                            Enter recipient's information below, then click
+                            submit when done.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 pt-4">
+                          <div className="grid grid-cols-4 items-center gap-4">
+                            <Label htmlFor="sender" className="text-right">
+                              Sender's Name
+                            </Label>
+                            <Input
+                              onChange={handleForm}
+                              id="sender"
+                              placeholder="Sender"
+                              className="col-span-3"
+                            />
+                            <Label htmlFor="recipient" className="text-right">
+                              Recipient's Name
+                            </Label>
+                            <Input
+                              id="recipient"
+                              onChange={handleForm}
+                              placeholder="Recipient"
+                              className="col-span-3"
+                            />
+                            <Label htmlFor="location" className="text-right">
+                              Recipient's Location
+                            </Label>
+                            <div className="col-span-3">
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="outline">
+                                    {form.location
+                                      ? form.location
+                                      : "Select Location"}
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                                  {locations.map((location, index) => (
+                                    <DropdownMenuRadioItem
+                                      key={index}
+                                      value={location}
+                                      onClick={() => handleLocation(location)}
+                                    >
+                                      {location}
+                                    </DropdownMenuRadioItem>
+                                  ))}
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                            <Label htmlFor="message" className="text-right">
+                              Message to Recipient's (Optional)
+                            </Label>
+                            <Textarea
+                              onChange={handleForm}
+                              id="message"
+                              placeholder="Message"
+                              className="col-span-3"
+                            />
+                            <Label htmlFor="Priority" className="text-right">
+                              Priority:
+                            </Label>
+                            <select
+                              className={
+                                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              }
+                              id="priority"
+                              value={form.priority}
+                              onChange={handleForm}
+                            >
+                              <option id="low" value="low">
+                                Low
+                              </option>
+                              <option id="medium" value="medium">
+                                Medium
+                              </option>
+                              <option id="high" value="high">
+                                High
+                              </option>
+                              <option id="emergency" value="emergency">
+                                Emergency
+                              </option>
+                            </select>
+                            <Label htmlFor="Priority" className="text-right">
+                              Status:
+                            </Label>
+                            <select
+                              className={
+                                "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                              }
+                              id="status"
+                              value={form.status}
+                              onChange={handleForm}
+                            >
+                              <option id="unassigned" value="unassigned">
+                                Unassigned
+                              </option>
+                              <option id="assigned" value="assigned">
+                                Assigned
+                              </option>
+                              <option id="in-progress" value="in-progress">
+                                In Progress
+                              </option>
+                              <option id="closed" value="closed">
+                                Closed
+                              </option>
+                            </select>
                           </div>
-                          <Label htmlFor="message" className="text-right">
-                            Message to Recipient's (Optional)
-                          </Label>
-                          <Textarea
-                            onChange={handleForm}
-                            id="message"
-                            placeholder="Message"
-                            className="col-span-3"
-                          />
-                          <Label htmlFor="Priority" className="text-right">
-                            Priority:
-                          </Label>
-                          <select
-                            className={
-                              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            }
-                            id="priority"
-                            value={form.priority}
-                            onChange={handleForm}
+                          <div
+                            className={"flex text-center text-bold item-center"}
                           >
-                            <option id="low" value="low">
-                              Low
-                            </option>
-                            <option id="medium" value="medium">
-                              Medium
-                            </option>
-                            <option id="high" value="high">
-                              High
-                            </option>
-                            <option id="emergency" value="emergency">
-                              Emergency
-                            </option>
-                          </select>
-                          <Label htmlFor="Priority" className="text-right">
-                            Status:
-                          </Label>
-                          <select
-                            className={
-                              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                            }
-                            id="status"
-                            value={form.status}
-                            onChange={handleForm}
-                          >
-                            <option id="unassigned" value="unassigned">
-                              Unassigned
-                            </option>
-                            <option id="assigned" value="assigned">
-                              Assigned
-                            </option>
-                            <option id="in-progress" value="in-progress">
-                              In Progress
-                            </option>
-                            <option id="closed" value="closed">
-                              Closed
-                            </option>
-                          </select>
+                            <h1 className={"text-right font-semibold text-xl"}>
+                              Total Cost: $
+                              {totalCost % 1 ? totalCost.toFixed(2) : totalCost}
+                            </h1>
+                          </div>
+                          <DialogClose className={"w-full"}>
+                            <Button
+                              type="submit"
+                              onClick={() => {
+                                submit().then(() => {
+                                  setCartItems([]);
+                                });
+                              }}
+                              className={"px-5 w-full"}
+                            >
+                              Send!
+                            </Button>
+                          </DialogClose>
                         </div>
-                        <div
-                          className={"flex text-center text-bold item-center"}
-                        >
-                          <h1 className={"text-right font-semibold text-xl"}>
-                            Total Cost: $
-                            {totalCost % 1 ? totalCost.toFixed(2) : totalCost}
-                          </h1>
-                        </div>
-                        <DialogClose className={"w-full"}>
+                      </DialogContent>
+                      <DialogTrigger asChild className={"w-full"}>
+                        <Button variant="default">Submit Gift</Button>
+                      </DialogTrigger>
+                    </Dialog>
+                  </TableCaption>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead className="w-20"></TableHead>
+                      <TableHead className={" w-40"}> Name</TableHead>
+                      <TableHead className="text-right">Amount</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {cartItems.map((item: cartItem, index: number) => (
+                      <TableRow key={item.name}>
+                        <TableCell className="font-medium ">
                           <Button
-                            type="submit"
+                            variant={"invisible"}
                             onClick={() => {
-                              submit().then(() => {
-                                setCartItems([]);
-                              });
+                              setCartItems(
+                                cartItems.filter((item, i) => i !== index),
+                              );
                             }}
-                            className={"px-5 w-full"}
+                            className={
+                              "text-center flex flex-col font-bold text-lg w-10"
+                            }
                           >
-                            Send!
+                            <X />
                           </Button>
-                        </DialogClose>
-                      </div>
-                    </DialogContent>
-                    <DialogTrigger asChild className={"w-full"}>
-                      <Button variant="default">Submit Gift</Button>
-                    </DialogTrigger>
-                  </Dialog>
-                </TableCaption>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead className="w-20"></TableHead>
-                    <TableHead className={" w-40"}> Name</TableHead>
-                    <TableHead className="text-right">Amount</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {cartItems.map((item: cartItem, index: number) => (
-                    <TableRow key={item.name}>
-                      <TableCell className="font-medium ">
-                        <Button
-                          variant={"invisible"}
-                          onClick={() => {
-                            setCartItems(
-                              cartItems.filter((item, i) => i !== index),
-                            );
-                          }}
-                          className={
-                            "text-center flex flex-col font-bold text-lg w-10"
-                          }
-                        >
-                          <X />
-                        </Button>
-                      </TableCell>
-                      <TableCell className={" text-nowrap w-40"}>
-                        {item.name}
-                      </TableCell>
-                      <TableCell className="text-center items-end">
-                        ${item.cost}
+                        </TableCell>
+                        <TableCell className={" text-nowrap w-40"}>
+                          {item.name}
+                        </TableCell>
+                        <TableCell className="text-center items-end">
+                          ${item.cost}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                  <TableFooter>
+                    <TableRow>
+                      <TableCell colSpan={2}>Total</TableCell>
+                      <TableCell className="text-center">
+                        ${totalCost % 1 ? totalCost.toFixed(2) : totalCost}
                       </TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-                <TableFooter>
-                  <TableRow>
-                    <TableCell colSpan={2}>Total</TableCell>
-                    <TableCell className="text-center">
-                      ${totalCost % 1 ? totalCost.toFixed(2) : totalCost}
-                    </TableCell>
-                  </TableRow>
-                </TableFooter>
-              </Table>
+                  </TableFooter>
+                </Table>
+              </ScrollArea>
             </PopoverContent>
           </Popover>
         </div>
       </div>
-      <Separator className="my-4" />
+      <Separator className="my-4 w-5/6 mx-auto" />
       <div className="relative">
-        <ScrollArea>
+        <ScrollArea style={{ paddingLeft: "8%", paddingRight: "8%" }}>
           <div className="flex space-x-4 pb-4 my-3 ml-2">
             {flowerCards.map((flower) => (
               <Card
@@ -500,18 +530,30 @@ export const FlowerContent = () => {
               </Card>
             ))}
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar
+            orientation="horizontal"
+            style={{
+              paddingLeft: "8%",
+              paddingRight: "8%",
+            }}
+          />
         </ScrollArea>
       </div>
-      <div className="mt-6 space-y-1">
+      <div
+        className="mt-6 space-y-1"
+        style={{
+          paddingLeft: "8%",
+          paddingRight: "8%",
+        }}
+      >
         <h2 className="text-2xl font-semibold tracking-tight">Add-ons</h2>
         <p className="text-sm text-muted-foreground">
           Give something a little more
         </p>
       </div>
-      <Separator className="my-4" />
+      <Separator className="my-4 w-5/6 mx-auto" />
       <div className="relative">
-        <ScrollArea>
+        <ScrollArea style={{ paddingLeft: "8%", paddingRight: "8%" }}>
           <div className="flex space-x-4 my-3 pb-4 ml-2">
             {addOnCards.map((addon) => (
               <Card
@@ -522,28 +564,28 @@ export const FlowerContent = () => {
                 <CardContent className={"relative w-[300px] mt-2"}>
                   {addon.discountAmt === 10 && (
                     <img
-                      src="../../../assets/discount-tags/ten-percent-discount.webp"
+                      src={ten}
                       alt="10% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 20 && (
                     <img
-                      src="../../../assets/discount-tags/twenty-percent-discount.webp"
+                      src={twenty}
                       alt="20% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 30 && (
                     <img
-                      src="../../../assets/discount-tags/thirty-percent-discount.webp"
+                      src={thirty}
                       alt="30% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
                   )}
                   {addon.discountAmt === 50 && (
                     <img
-                      src="../../../assets/discount-tags/fifty-percent-discount.png"
+                      src={fiftyPercent}
                       alt="50% discount"
                       className="absolute top-0 left-0 w-24 h-auto"
                     />
@@ -600,9 +642,15 @@ export const FlowerContent = () => {
               </Card>
             ))}
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar
+            orientation="horizontal"
+            style={{
+              paddingLeft: "8%",
+              paddingRight: "8%",
+            }}
+          />
         </ScrollArea>
       </div>
-    </>
+    </div>
   );
 };

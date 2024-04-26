@@ -1,12 +1,31 @@
 import { PolarArea } from "react-chartjs-2";
 import { AnimationSpec } from "chart.js/auto";
-import { data } from "@/data/chartValue/polarAreaChartData.ts";
+interface requestData {
+  request: string;
+  total: number;
+}
+const PolarAreaChart = ({ props }: { props: requestData[] }) => {
+  const polarAreaChartData = {
+    labels: props.map((map) => map.request),
+    datasets: [
+      {
+        label: "My First Dataset",
+        data: props.map((map) => map.total),
+        backgroundColor: [
+          "rgb(255, 99, 132)",
+          "rgb(75, 192, 192)",
+          "rgb(255, 205, 86)",
+          "rgb(201, 203, 207)",
+          "rgb(54, 162, 235)",
+        ],
+      },
+    ],
+  };
 
-const PolarAreaChart = () => {
   const options = {
     animation: {
       easing: "easeInBounce" as AnimationSpec<never>["easing"], // Corrected easing value
-      loop: true,
+      loop: false,
       duration: 2500,
     },
     responsive: true,
@@ -23,7 +42,7 @@ const PolarAreaChart = () => {
     },
   };
 
-  return <PolarArea data={data} options={options} />;
+  return <PolarArea data={polarAreaChartData} options={options} />;
 };
 
 export default PolarAreaChart;

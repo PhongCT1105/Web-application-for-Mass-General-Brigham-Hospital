@@ -15,7 +15,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -24,7 +23,6 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table.tsx";
-
 import { Button } from "@/components/ui/button.tsx";
 import {
   Dialog,
@@ -179,7 +177,13 @@ export function MedicineRequest({ columns }: DataTableProps) {
   });
 
   return (
-    <div className="space-y-4">
+    <div
+      className="space-y-4"
+      style={{
+        paddingLeft: "8%",
+        paddingRight: "8%",
+      }}
+    >
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
@@ -256,7 +260,7 @@ export function MedicineRequest({ columns }: DataTableProps) {
             Submit
           </Button>
         </DialogTrigger>
-        <DialogContent>
+        <DialogContent className={"w-[500px]"}>
           <Label>Employee Name</Label>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
