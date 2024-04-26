@@ -252,6 +252,13 @@ export const RequestLogPage = () => {
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              All Service Requests
+                            </h2>
+                          </div>
+                        </div>
                         <DataTable
                           data={flowerLog}
                           columns={columnsFlowerFormLog}
@@ -266,9 +273,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Flower Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              By Mina Boktor & Alexander Kraemling
-                            </p>
                           </div>
                         </div>
                         <DataTable
@@ -285,9 +289,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Medication Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              By Mina Boktor & Alexander Kraemling
-                            </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
@@ -307,9 +308,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Transportation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              Get transportation to a local drop-off point.
-                            </p>
                           </div>
                         </div>
 
@@ -334,9 +332,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Sanitation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              Get sanitation services for an Issue.
-                            </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
@@ -360,9 +355,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Security Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              Request Security services and optionally call 911.
-                            </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
@@ -382,9 +374,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Maintenance Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              Get maintenance services for an Issue.
-                            </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
