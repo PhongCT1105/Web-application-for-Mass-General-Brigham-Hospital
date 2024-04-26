@@ -791,24 +791,13 @@ export const MapBlock: React.FC = () => {
     return true;
   }
 
-  // function addFloorMarker(
-  //   location: LatLngExpression,
-  //   iconPath: string,
-  //   floorLayer: L.LayerGroup,
-  //   floor: string,
-  // ) {
-  //   const map = mapRef.current;
-  //   if (!map) return;
+  // function clearUnusedMarkers(searchPath: Node[]) {
+  //     Object.keys(Markers).forEach((key) => {
+  //         Layeys
+  //     });
+  //     // for every node in the array plot on correct floor
+  //     searchPath.forEach((node) => {
   //
-  //   // floor markers have a different anchor point
-  //   const customIcon = new Icon({
-  //     iconUrl: iconPath,
-  //     iconSize: [25, 30],
-  //     iconAnchor: [13, 30],
-  //   });
-  //     const marker = L.marker(location, { icon: customIcon }).addTo(floorLayer);
-  //     marker.on("click", () => {
-  //         changeFloor(floor);
   //     });
   // }
 
@@ -822,6 +811,7 @@ export const MapBlock: React.FC = () => {
       StartMarker[key].clearLayers();
       EndMarker[key].clearLayers();
       Paths[key].clearLayers();
+      Markers[key].addTo(Layers[key]);
     });
     setTextDirections([]);
   }
@@ -834,7 +824,6 @@ export const MapBlock: React.FC = () => {
     };
     console.log(test);
     const nodeArray: Node[] = [];
-    handleClear();
 
     async function path() {
       const { data: response } = await axios.post("/api/search", test, {
@@ -860,9 +849,15 @@ export const MapBlock: React.FC = () => {
 
     path().then(() => {
       handleClear();
-      console.log(nodeArray);
+      clearMarkers();
       addPathPolylines(nodeArray);
       createTextDirections(nodeArray); //nodeArray[0].floor);
+    });
+  }
+
+  function clearMarkers() {
+    Object.keys(Layers).forEach((key) => {
+      Layers[key].removeLayer(Markers[key]);
     });
   }
 
