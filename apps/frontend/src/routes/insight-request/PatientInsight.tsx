@@ -8,8 +8,10 @@ import { patientLineData } from "@/data/patientData/lineChartData";
 import { patientChartData } from "@/data/patientData/barChartData.ts";
 import { patientPieData } from "@/data/patientData/pieChartData.ts";
 import { patientPolarData } from "@/data/patientData/polarAreaChartData";
+import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 
-function PatientInsight() {
+function PatientInsight({ props }: { props: ScheduleForm[] }) {
+  console.log(props);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">

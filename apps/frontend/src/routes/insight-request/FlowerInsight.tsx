@@ -8,8 +8,10 @@ import { flowerLineData } from "@/data/flowerData/lineChartData.ts";
 import { flowerPieData } from "@/data/flowerData/pieChartData";
 import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 import { flowerPolarData } from "@/data/flowerData/polarAreaChartData";
+import { FlowerForm } from "@/interfaces/flowerReq.ts";
 
-function FlowerInsight() {
+function FlowerInsight({ props }: { props: FlowerForm[] }) {
+  console.log(props);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">

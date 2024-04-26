@@ -8,8 +8,10 @@ import { securityLineData } from "@/data/securityData/lineChartData.ts";
 import { securityChartData } from "@/data/securityData/barChartData.ts";
 import { securityPieData } from "@/data/securityData/pieChartData.ts";
 import { securityPolarData } from "@/data/securityData/polarAreaChartData.ts";
+import { SecurityForm } from "@/interfaces/securityReq.ts";
 
-function SecurityInsight() {
+function SecurityInsight({ props }: { props: SecurityForm[] }) {
+  console.log(props);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">

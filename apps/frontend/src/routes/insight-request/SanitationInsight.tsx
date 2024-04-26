@@ -8,39 +8,10 @@ import { sanitationLineData } from "@/data/sanitationData/lineChartData";
 import { sanitationChartData } from "@/data/sanitationData/barChartData";
 import { sanitationPieData } from "@/data/sanitationData/pieChartData.ts";
 import { sanitationPolarData } from "@/data/sanitationData/polarAreaChartData.ts";
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 
-interface sanitationData {
-  severity: string;
-  comments: string;
-  name: string;
-  description: string;
-  location: string;
-  time: string;
-  typeOfIssue: string;
-  reqId: number;
-  status: string;
-}
-function SanitationInsight() {
-  const [data, setData] = useState<sanitationData>();
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.post("/api/insight/sanitation");
-        const rawData = response.data;
-        console.log(rawData);
-        setData(rawData);
-        console.log("Successfully fetched data from the API.");
-      } catch (error) {
-        console.error("Error fetching data: ", error);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  console.log(data);
+function SanitationInsight({ props }: { props: SanitationForm[] }) {
+  console.log(props);
 
   return (
     <>

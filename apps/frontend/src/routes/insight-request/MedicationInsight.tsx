@@ -8,8 +8,10 @@ import { medicationChartData } from "@/data/medicationData/barChartData.ts";
 import { medicationPieData } from "@/data/medicationData/pieChartData";
 import { medicationPolarData } from "@/data/medicationData/polarAreaChartData";
 import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
+import { MedicationForm } from "@/interfaces/medicationReq.ts";
 
-function MedicationInsight() {
+function MedicationInsight({ props }: { props: MedicationForm[] }) {
+  console.log(props);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
