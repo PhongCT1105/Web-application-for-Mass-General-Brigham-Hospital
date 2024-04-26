@@ -9,6 +9,7 @@ export const _SanitationForm = z.object({
   status: z.string(),
   description: z.string(),
   comments: z.string(),
+  dateSubmitted: z.string(),
 });
 
 export type SanitationForm = z.infer<typeof _SanitationForm>;

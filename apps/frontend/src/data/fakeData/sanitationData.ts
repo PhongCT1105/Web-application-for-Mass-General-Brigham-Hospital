@@ -2,22 +2,20 @@ import { faker } from "@faker-js/faker";
 // import axios from "axios";
 import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 import { submitDataOnce } from "@/data/fakeData/submissionUtils.ts";
+import { EmployeeNames } from "@/interfaces/dataTypes/employeeNames.ts";
+import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
 
 const sanitationData: SanitationForm[] = Array.from({ length: 100 }, () => ({
   reqId: faker.number.int(),
-  name: faker.person.firstName(),
+  name: faker.helpers.arrayElement(EmployeeNames).value,
   location: faker.location.city(),
   time: faker.date.month(),
-  severity: faker.helpers.arrayElement(["low", "medium", "high", "emergency"]),
-  status: faker.helpers.arrayElement([
-    "unassigned",
-    "assigned",
-    "in-progress",
-    "closed",
-  ]),
+  severity: faker.helpers.arrayElement(priorities).value,
+  status: faker.helpers.arrayElement(statuses).value,
   typeOfIssue: faker.word.adjective(),
   description: faker.lorem.sentence(),
   comments: faker.lorem.sentence(),
+  dateSubmitted: faker.date.recent().toDateString(),
 }));
 
 submitDataOnce("sanitationSubmitted", sanitationData, "/api/sanitationReq");
