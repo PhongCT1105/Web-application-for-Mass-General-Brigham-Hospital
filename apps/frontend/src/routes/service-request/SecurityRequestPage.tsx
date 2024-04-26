@@ -37,6 +37,7 @@ interface securityRequest {
 }
 
 export const SecurityForm = () => {
+  const now = new Date();
   const { toast } = useToast();
   const [securityRequest, setSecurityRequest] = useState<securityRequest>({
     ename: "",
@@ -174,6 +175,7 @@ export const SecurityForm = () => {
     setSecurityRequest((prevState) => ({
       ...prevState,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };

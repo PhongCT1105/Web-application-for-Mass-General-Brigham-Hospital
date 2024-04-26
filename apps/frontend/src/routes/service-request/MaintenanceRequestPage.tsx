@@ -41,6 +41,7 @@ interface Form {
 }
 
 export function Maintenance() {
+  const now = new Date();
   const { toast } = useToast();
 
   async function submit() {
@@ -153,6 +154,7 @@ export function Maintenance() {
     setForm((prevState) => ({
       ...prevState,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
 
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");

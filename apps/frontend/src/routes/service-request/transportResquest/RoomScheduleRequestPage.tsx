@@ -47,7 +47,8 @@ export interface scheduleForm {
 //   shortName: string;
 // }
 
-export const SheduleContent = () => {
+export const ScheduleContent = () => {
+  const now = new Date();
   const [form, setForm] = useState<scheduleForm>({
     employeeName: "",
     patientName: "",
@@ -175,6 +176,7 @@ export const SheduleContent = () => {
     setForm((prevState) => ({
       ...prevState,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
 
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");

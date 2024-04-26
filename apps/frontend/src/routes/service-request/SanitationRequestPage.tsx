@@ -44,6 +44,7 @@ interface Form {
 }
 
 export function Sanitation() {
+  const now = new Date();
   const { toast } = useToast();
 
   async function submit() {
@@ -159,6 +160,7 @@ export function Sanitation() {
     setForm((prevState) => ({
       ...prevState,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
 
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
