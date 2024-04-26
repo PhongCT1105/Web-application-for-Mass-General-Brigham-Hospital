@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -16,6 +15,7 @@ import {
   FlowerIcon,
   PillIcon,
   Hammer,
+  BookOpen,
 } from "lucide-react";
 import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
@@ -212,13 +212,13 @@ export const RequestLogPage = () => {
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs
-                      defaultValue="Flower Request"
+                      defaultValue="All Requests"
                       className="h-full space-y-6"
                     >
                       <div className="space-between flex items-center">
                         <TabsList>
                           <TabsTrigger value="All Requests">
-                            <FlowerIcon className="mr-2 h-4 w-4" />
+                            <BookOpen className="mr-2 h-4 w-4" />
                             All Requests
                           </TabsTrigger>
                           <TabsTrigger value="Flower Request">
@@ -248,10 +248,33 @@ export const RequestLogPage = () => {
                         </TabsList>
                       </div>
                       <TabsContent
-                        value="Flower Request"
+                        value="All Requests"
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              All Service Requests
+                            </h2>
+                          </div>
+                        </div>
+                        <DataTable
+                          data={flowerLog}
+                          columns={columnsFlowerFormLog}
+                        />
+                      </TabsContent>
+                      <TabsContent
+                        value="Flower Request"
+                        className="border-none p-0 flex-col data-[state=active]:flex "
+                      >
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-1">
+                            <h2 className="text-2xl font-semibold tracking-tight">
+                              Flower Request
+                            </h2>
+                          </div>
+                        </div>
                         <DataTable
                           data={flowerLog}
                           columns={columnsFlowerFormLog}
@@ -266,9 +289,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Medication Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              By Mina Boktor & Alexander Kraemling
-                            </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
@@ -288,9 +308,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Transportation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              Get transportation to a local drop-off point.
-                            </p>
                           </div>
                         </div>
 
@@ -315,9 +332,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Sanitation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              Get sanitation services for an Issue.
-                            </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
@@ -341,9 +355,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Security Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              Request Security services and optionally call 911.
-                            </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
@@ -363,9 +374,6 @@ export const RequestLogPage = () => {
                             <h2 className="text-2xl font-semibold tracking-tight">
                               Maintenance Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
-                              Get maintenance services for an Issue.
-                            </p>
                           </div>
                         </div>
                         <Separator className="my-4" />
