@@ -1,6 +1,12 @@
-import React, { useState } from "react";
-import { Calendar, dateFnsLocalizer, Event } from "react-big-calendar";
+import React, { useCallback, useState } from "react";
+import {
+  Calendar,
+  dateFnsLocalizer,
+  Event,
+  stringOrDate,
+} from "react-big-calendar";
 import withDragAndDrop, {
+  DragFromOutsideItemArgs,
   withDragAndDropProps,
 } from "react-big-calendar/lib/addons/dragAndDrop";
 import { format } from "date-fns/format";
@@ -8,24 +14,38 @@ import { parse } from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import { enUS } from "date-fns/locale/en-US";
+// import "@/src/styles/tableStyles.css";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import "../../../styles/globals.css";
+// import "../../../styles/globals.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-// import {addHours} from "date-fns/addHours";
+import { addHours } from "date-fns/addHours";
+// import {Requests} from "@/routes/employee-scheduling/data/requests.ts";
+import { DraggableCard } from "@/routes/employee-scheduling/components/draggableCard.tsx";
+import { DraggableReqData } from "@/routes/employee-scheduling/data/requests.ts";
 // import { startOfHour } from "date-fns";
 
 export interface CustomCalendarEvent extends Event {
   color?: string;
 }
-
 interface CalendarProps {
   employeeSchedule: CustomCalendarEvent[];
+  draggableCardData: DraggableReqData[];
 }
-export const BigCalendar = ({ employeeSchedule }: CalendarProps) => {
+export const BigCalendar = ({
+  employeeSchedule,
+  draggableCardData,
+}: CalendarProps) => {
   const [events, setEvents] = useState<CustomCalendarEvent[]>(employeeSchedule);
-
+  const [dragEvent, setDraggedEvent] = useState<CustomCalendarEvent | null>(
+    null,
+  );
+  const handleDragStart = useCallback(
+    (event: CustomCalendarEvent) => setDraggedEvent(event),
+    [],
+  );
+  // const dragFromOutsideItem = useCallback(() => draggedEvent, [draggedEvent]);
   const eventStyleGetter = (event: CustomCalendarEvent) => {
-    const color = event.color || "#000078"; // Default color or use event color if provided
+    const color = event.color || "#000678"; // Default color or use event color if provided
     const style = {
       font: "Ariel",
       backgroundColor: color,
@@ -35,9 +55,7 @@ export const BigCalendar = ({ employeeSchedule }: CalendarProps) => {
       display: "block",
     };
 
-    return {
-      style: style,
-    };
+    return { style: style };
   };
 
   const onEventResize: withDragAndDropProps["onEventResize"] = (data) => {
@@ -67,6 +85,24 @@ export const BigCalendar = ({ employeeSchedule }: CalendarProps) => {
     }
   };
 
+  const newEvent = useCallback(
+    (event: {
+      title: string;
+      start: stringOrDate;
+      end: stringOrDate;
+      isAllDay: boolean;
+    }) => {
+      const start =
+        typeof event.start === "string" ? new Date(event.start) : event.start;
+      const end = addHours(start, 8);
+
+      setEvents((prev) => {
+        return [...prev, { ...event, start, end, color: dragEvent?.color }];
+      });
+    },
+    [dragEvent?.color],
+  );
+
   const onEventDrop: withDragAndDropProps["onEventDrop"] = ({
     event,
     start,
@@ -89,22 +125,58 @@ export const BigCalendar = ({ employeeSchedule }: CalendarProps) => {
       // Create a new array with the updated event
       const updatedEvents = [...currentEvents];
       updatedEvents.splice(index, 1, updatedEvent);
-
       return updatedEvents;
     });
   };
 
+  const onDropFromOutside = useCallback(
+    ({ start, end, allDay: isAllDay }: DragFromOutsideItemArgs) => {
+      const eventTitle: string = String(dragEvent?.title);
+      const eventColor: string = String(dragEvent?.color);
+      const event = {
+        title: eventTitle,
+        color: eventColor,
+        start,
+        end,
+        isAllDay,
+      };
+      setDraggedEvent(null);
+      newEvent(event);
+    },
+    [dragEvent, newEvent],
+  );
+
   return (
-    <DnDCalendar
-      defaultView="week"
-      events={events}
-      localizer={localizer}
-      onEventDrop={onEventDrop}
-      onEventResize={onEventResize}
-      resizable
-      eventPropGetter={eventStyleGetter}
-      style={{ height: "100vh" }}
-    />
+    <div>
+      <div className={"flex flex-col items-center my-2 pb-3"}>
+        <div className={"flex flex-row space-x-2"}>
+          {draggableCardData.map((request, index) => (
+            <div
+              onDragStart={() =>
+                handleDragStart({
+                  title: request.requestType,
+                  color: request.color,
+                })
+              }
+            >
+              <DraggableCard info={request} key={index} />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <DnDCalendar
+        defaultView="week"
+        events={events}
+        localizer={localizer}
+        onEventDrop={onEventDrop}
+        onEventResize={onEventResize}
+        resizable
+        onDropFromOutside={onDropFromOutside}
+        eventPropGetter={eventStyleGetter}
+        style={{ height: "100vh" }}
+      />
+    </div>
   );
 };
 
