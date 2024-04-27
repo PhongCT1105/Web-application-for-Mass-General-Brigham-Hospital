@@ -34,7 +34,8 @@ import UpArrow from "@/assets/arrow-up-solid.svg";
 import LeftArrow from "@/assets/arrow-left-solid.svg";
 import RightArrow from "@/assets/arrow-right-solid.svg";
 import Hospital from "@/assets/hospital-solid.svg";
-import Circle from "@/assets/circle-regular.svg";
+import Empty from "@/assets/empty.svg";
+import Stairs from "@/assets/stairs-solid.svg";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
@@ -696,6 +697,19 @@ export const MapBlock: React.FC = () => {
 
     const paths: Node[][] = parsePath(nodeArray);
     const directionsArray: direction[] = [];
+    let floorPath: string = "Floor Path: " + nodeArray[0].floor;
+
+    for (let i = 0; i < nodeArray.length - 1; i++) {
+      if (nodeArray[i].floor != nodeArray[i + 1].floor) {
+        floorPath += " -> " + nodeArray[i + 1].floor;
+      }
+    }
+
+    directionsArray.push({ text: floorPath, icon: Stairs });
+    directionsArray.push({
+      text: "\n",
+      icon: Empty,
+    });
 
     for (let i = 0; i < paths.length; i++) {
       if (paths[i].length > 1) {
@@ -716,7 +730,7 @@ export const MapBlock: React.FC = () => {
           icon: Hospital,
         };
         directionsArray.push(directionObject);
-        directionsArray.push({ text: "\n\n", icon: Circle });
+        directionsArray.push({ text: "\n\n", icon: Empty });
 
         for (let j = 0; j < paths[i].length - 1; j++) {
           if (
@@ -726,7 +740,7 @@ export const MapBlock: React.FC = () => {
           ) {
             directionsArray.push({
               text: "\n",
-              icon: Circle,
+              icon: Stairs,
             });
           } else if (
             j != 0 &&
@@ -745,7 +759,7 @@ export const MapBlock: React.FC = () => {
             directionsArray.push(directionObject);
           }
         }
-        directionsArray.push({ text: "\n", icon: Circle });
+        directionsArray.push({ text: "\n", icon: Empty });
       }
     }
     setTextDirections(directionsArray);
