@@ -7,60 +7,60 @@ import {
 
 const router: Router = express.Router();
 router.post("/", async function (req: Request, res: Response) {
+  const requestBody: MedicationForm[] = req.body;
   try {
-    const requestBody = req.body;
-    console.log(requestBody);
-    const jsonString = JSON.stringify(requestBody);
-    console.log("JSON String:", jsonString);
+    // console.log(requestBody);
+    // const jsonString = JSON.stringify(requestBody);
+    // console.log("JSON String:", jsonString);
 
     // Parse the JSON string back into an object
-    const requestForm: MedicationForm = JSON.parse(jsonString);
-    console.log(requestForm);
+    // const requestForm: MedicationForm = JSON.parse(jsonString);
+    // console.log(requestForm);
+    for (const requestForm of requestBody) {
+      const medicationData: Medication[] = requestForm.medication;
 
-    const medicationData: Medication[] = requestForm.medication;
+      // if (medicationData.length == 1) {
+      //   const medicationObject: Medication = medicationData[0];
+      //   const { id, ...medicationCreateData } = medicationObject;
+      //   console.log(medicationObject);
+      //   console.log(medicationCreateData);
+      //   await PrismaClient.medicationRequest.create({
+      //     data: {
+      //       medication: {
+      //         create: {
+      //           data: medicationCreateData,
+      //         },
+      //       },
+      //       employee: requestForm.employee,
+      //       location: requestForm.location,
+      //       patient: requestForm.patient,
+      //       dateSubmitted: requestForm.dateSubmitted,
+      //     },
+      //   });
+      // } else {
+      const medicationCreateData = medicationData.map((medication) => ({
+        name: medication.name,
+        priority: medication.priority,
+        status: medication.status,
+        price: medication.price,
+        quantity: medication.quantity,
+      }));
 
-    // if (medicationData.length == 1) {
-    //   const medicationObject: Medication = medicationData[0];
-    //   const { id, ...medicationCreateData } = medicationObject;
-    //   console.log(medicationObject);
-    //   console.log(medicationCreateData);
-    //   await PrismaClient.medicationRequest.create({
-    //     data: {
-    //       medication: {
-    //         create: {
-    //           data: medicationCreateData,
-    //         },
-    //       },
-    //       employee: requestForm.employee,
-    //       location: requestForm.location,
-    //       patient: requestForm.patient,
-    //       dateSubmitted: requestForm.dateSubmitted,
-    //     },
-    //   });
-    // } else {
-    const medicationCreateData = medicationData.map((medication) => ({
-      name: medication.name,
-      priority: medication.priority,
-      status: medication.status,
-      price: medication.price,
-      quantity: medication.quantity,
-    }));
-
-    await PrismaClient.medicationRequest.create({
-      data: {
-        medication: {
-          createMany: {
-            data: medicationCreateData,
+      await PrismaClient.medicationRequest.create({
+        data: {
+          medication: {
+            createMany: {
+              data: medicationCreateData,
+            },
           },
+          employee: requestForm.employee,
+          location: requestForm.location,
+          patient: requestForm.patient,
+          dateSubmitted: requestForm.dateSubmitted,
         },
-        employee: requestForm.employee,
-        location: requestForm.location,
-        patient: requestForm.patient,
-        dateSubmitted: requestForm.dateSubmitted,
-      },
-    });
-    // }
-
+      });
+      // }
+    }
     console.info("Successfully requested medication services");
     res
       .status(200)

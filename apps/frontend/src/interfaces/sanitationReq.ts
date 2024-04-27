@@ -1,6 +1,6 @@
 import { z } from "zod";
 export const _SanitationForm = z.object({
-  reqId: z.string(),
+  reqId: z.number(),
   name: z.string(),
   location: z.string(),
   time: z.string(),
@@ -9,6 +9,7 @@ export const _SanitationForm = z.object({
   status: z.string(),
   description: z.string(),
   comments: z.string(),
+  dateSubmitted: z.string(),
 });
 
 export type SanitationForm = z.infer<typeof _SanitationForm>;
