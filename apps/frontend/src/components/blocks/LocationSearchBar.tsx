@@ -10,27 +10,11 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import {
   Card,
   CardContent,
-  // CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
 import { CircleDot, CirclePlay, Clover, EllipsisVertical } from "lucide-react";
-// import { Node } from "@/context/nodeContext.tsx";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
-
-// import {Label} from "@/components/ui/label.tsx";
-
-// interface changeMarker {
-//   start: string;
-//   end: string;
-//   setStart: React.Dispatch<React.SetStateAction<string>>;
-//   setEnd: React.Dispatch<React.SetStateAction<string>>;
-// }
-//
-// interface locationData {
-//   nodeID: string;
-//   longName: string;
-// }
 
 interface SearchBarProps {
   locations: {
@@ -60,6 +44,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [endPointID, setEndPointID] = useState<string>("");
   const { startNodeName, endNodeName, startNodeID, endNodeID } =
     useSearchContext();
+  const [tabVal, setTabValue] = useState<string>("astar");
+
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
     .filter((location) => {
@@ -73,8 +59,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleSearch = () => {
     onClear();
-    console.log("startSearch === " + startPoint);
-    console.log("endSearch === " + endPoint);
+    // console.log("startSearch === " + startPoint);
+    // console.log("endSearch === " + endPoint);
     onSearch(startPointID, endPointID);
   };
 
@@ -85,10 +71,21 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       // If they are the same, get new randEnd value until no longer true
       randEnd = Math.floor(Math.random() * locations.length);
     }
+    const nZTT = Math.floor(Math.random() * 4);
+    const pathAlgo =
+      nZTT === 0
+        ? "AStar"
+        : nZTT === 1
+          ? "Dijkstra"
+          : nZTT === 2
+            ? "BFS"
+            : "DFS";
     setStartPoint(locations[randStart].longName);
     setStartPointID(locations[randStart].nodeID);
     setEndPoint(locations[randEnd].longName);
     setEndPointID(locations[randEnd].nodeID);
+    changePathfindingStrategy(pathAlgo);
+    setTabValue(pathAlgo.toLowerCase());
     // handleSearch();
     onSearch(locations[randStart].nodeID, locations[randEnd].nodeID);
   };
@@ -99,6 +96,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setStartPointID(startNodeID);
     setEndPointID(endNodeID);
   }, [startNodeName, endNodeName, startNodeID, endNodeID]);
+
+  useEffect(() => {
+    setTabValue(tabVal);
+  }, [tabVal]);
 
   const handleClear = () => {
     setStartPoint("");
@@ -116,12 +117,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <CardTitle className="flex justify-between items-center">
             <div>Directions</div>
             <Button
-              variant="ghost"
+              variant="invisible"
               title="Feeling Lucky?"
               onClick={feelingLucky}
             >
-              <div className="flex items-center w-auto">
-                <Clover />
+              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
+                <Clover color={"green"} />
               </div>
             </Button>
           </CardTitle>
@@ -213,29 +214,41 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           </div>
 
           <div className="flex mb-4 flex-col items-center align-content-center">
-            <Tabs defaultValue="astar" className=" ">
+            <Tabs value={tabVal}>
               <TabsList>
                 <TabsTrigger
                   value="bfs"
-                  onClick={() => changePathfindingStrategy("BFS")}
+                  onClick={() => {
+                    changePathfindingStrategy("BFS");
+                    setTabValue("bfs");
+                  }}
                 >
                   BFS
                 </TabsTrigger>
                 <TabsTrigger
                   value="astar"
-                  onClick={() => changePathfindingStrategy("AStar")}
+                  onClick={() => {
+                    changePathfindingStrategy("AStar");
+                    setTabValue("astar");
+                  }}
                 >
                   A*
                 </TabsTrigger>
                 <TabsTrigger
                   value="dfs"
-                  onClick={() => changePathfindingStrategy("DFS")}
+                  onClick={() => {
+                    changePathfindingStrategy("DFS");
+                    setTabValue("dfs");
+                  }}
                 >
                   DFS
                 </TabsTrigger>
                 <TabsTrigger
                   value="dijkstra"
-                  onClick={() => changePathfindingStrategy("Dijkstra")}
+                  onClick={() => {
+                    changePathfindingStrategy("Dijkstra");
+                    setTabValue("dijkstra");
+                  }}
                 >
                   Dijkstra
                 </TabsTrigger>
