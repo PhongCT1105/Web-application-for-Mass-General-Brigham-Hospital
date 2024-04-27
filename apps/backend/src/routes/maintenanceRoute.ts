@@ -4,46 +4,48 @@ import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
-type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
-type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
-type rTypeOfIssue =
-  | "BrokenEquipment"
-  | "PowerIssue"
-  | "PlumbingIssue"
-  | "ElevatorIssue"
-  | "Other"
-  | "";
+// type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
+// type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
+// type rTypeOfIssue =
+//   | "BrokenEquipment"
+//   | "PowerIssue"
+//   | "PlumbingIssue"
+//   | "ElevatorIssue"
+//   | "Other"
+//   | "";
 
-interface RequestForm {
-  name: string;
-  severity: rSeverity;
-  location: string;
-  typeOfIssue: rTypeOfIssue;
-  status: rStatus;
-  description: string;
-}
+// interface RequestForm {
+//   name: string;
+//   severity: string;
+//   location: string;
+//   typeOfIssue: string;
+//   status: string;
+//   description: string;
+// }
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestBody = req.body;
-    console.log(requestBody);
-    const jsonString = JSON.stringify(requestBody);
-    console.log("JSON String:", jsonString);
-
+    const requestForms = req.body;
+    // console.log(requestBody);
+    // const jsonString = JSON.stringify(requestBody);
+    // console.log("JSON String:", jsonString);
+    //
     // Parse the JSON string back into an object
-    const requestForm: RequestForm = JSON.parse(jsonString);
-    console.log(requestForm);
+    // const requestForms: RequestForm = JSON.parse(jsonString);
+    // console.log(requestForm);
 
-    await PrismaClient.maintenanceRequest.create({
-      data: {
-        name: requestForm.name,
-        severity: requestForm.severity,
-        location: requestForm.location,
-        typeOfIssue: requestForm.typeOfIssue,
-        status: requestForm.status,
-        description: requestForm.description,
-      },
-    });
+    for (const requestForm of requestForms) {
+      await PrismaClient.maintenanceRequest.create({
+        data: {
+          name: requestForm.name,
+          severity: requestForm.severity,
+          location: requestForm.location,
+          typeOfIssue: requestForm.typeOfIssue,
+          status: requestForm.status,
+          description: requestForm.description,
+        },
+      });
+    }
     console.info("Successfully requested maintenance services");
     res
       .status(200)

@@ -4,50 +4,51 @@ import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
-type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
-type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
-type rTypeOfIssue =
-  | "Spill"
-  | "BodilyFluid"
-  | "FoulOdor"
-  | "Garbage"
-  | "Other"
-  | "";
+// type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
+// type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
+// type rTypeOfIssue =
+//   | "Spill"
+//   | "BodilyFluid"
+//   | "FoulOdor"
+//   | "Garbage"
+//   | "Other"
+//   | "";
 
-interface RequestForm {
-  name: string;
-  severity: rSeverity;
-  location: string;
-  typeOfIssue: rTypeOfIssue;
-  time: string;
-  status: rStatus;
-  description: string;
-  comments: string;
-}
+// interface RequestForm {
+//   name: string;
+//   severity: string;
+//   location: string;
+//   typeOfIssue: string;
+//   time: string;
+//   status: string;
+//   description: string;
+//   comments: string;
+// }
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestBody = req.body;
-    console.log(requestBody);
-    const jsonString = JSON.stringify(requestBody);
-    console.log("JSON String:", jsonString);
-
+    const requestData = req.body;
+    // console.log(requestBody);
+    // const jsonString = JSON.stringify(requestBody);
+    // console.log("JSON String:", jsonString);
+    //
     // Parse the JSON string back into an object
-    const requestForm: RequestForm = JSON.parse(jsonString);
-    console.log(requestForm);
-
-    await PrismaClient.sanitationRequest.create({
-      data: {
-        name: requestForm.name,
-        severity: requestForm.severity,
-        location: requestForm.location,
-        typeOfIssue: requestForm.typeOfIssue,
-        time: requestForm.time,
-        status: requestForm.status,
-        description: requestForm.description,
-        comments: requestForm.comments,
-      },
-    });
+    // const requestForm: RequestForm = requestBody;
+    // console.log(requestForm);
+    for (const requestForm of requestData) {
+      await PrismaClient.sanitationRequest.create({
+        data: {
+          name: requestForm.name,
+          severity: requestForm.severity,
+          location: requestForm.location,
+          typeOfIssue: requestForm.typeOfIssue,
+          time: requestForm.time,
+          status: requestForm.status,
+          description: requestForm.description,
+          comments: requestForm.comments,
+        },
+      });
+    }
     console.info("Successfully requested sanitation services");
     res
       .status(200)

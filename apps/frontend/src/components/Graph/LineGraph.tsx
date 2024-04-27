@@ -26,6 +26,7 @@ interface requestData {
   user: number;
   staff: number;
 }
+
 function LineGraph({ props }: { props: requestData[] }) {
   const lineChartData = {
     labels: props.map((map) => map.months),

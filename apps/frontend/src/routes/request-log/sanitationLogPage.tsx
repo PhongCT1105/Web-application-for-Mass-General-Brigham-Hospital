@@ -65,7 +65,7 @@ export function SanitationFormLogTable<TCols, TData>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-5/6 mx-auto">
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
