@@ -3,12 +3,6 @@ export const EmployeeNames = [
     value: "Mina",
   },
   {
-    value: "Mina",
-  },
-  {
-    value: "Mina",
-  },
-  {
     value: "Trang",
   },
   {
@@ -18,7 +12,10 @@ export const EmployeeNames = [
     value: "Lap",
   },
   {
-    value: "Sandi",
+    value: "Lap",
+  },
+  {
+    value: "Lap",
   },
   {
     value: "Sandi",
@@ -39,16 +36,7 @@ export const EmployeeNames = [
     value: "Alex",
   },
   {
-    value: "Alex",
-  },
-  {
-    value: "Alex",
-  },
-  {
     value: "Phong",
-  },
-  {
-    value: "Henry",
   },
   {
     value: "Henry",

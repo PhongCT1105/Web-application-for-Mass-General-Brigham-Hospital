@@ -2,10 +2,13 @@ import { faker } from "@faker-js/faker";
 // import axios from "axios";
 import { MaintenanceForm } from "@/interfaces/maintenanceReq.ts";
 import { submitDataOnce } from "@/data/fakeData/submissionUtils.ts";
-import { EmployeeNames } from "@/interfaces/dataTypes/employeeNames.ts";
-import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
+import { EmployeeNames } from "@/interfaces/dataTypes/maintenanceData/employeeNames.ts";
+import {
+  priorities,
+  statuses,
+} from "@/interfaces/dataTypes/maintenanceData/labels.ts";
 
-const maintenanceData: MaintenanceForm[] = Array.from({ length: 15 }, () => ({
+const maintenanceData: MaintenanceForm[] = Array.from({ length: 10 }, () => ({
   reqId: faker.number.int(),
   name: faker.helpers.arrayElement(EmployeeNames).value,
   location: faker.location.city(),
@@ -13,7 +16,7 @@ const maintenanceData: MaintenanceForm[] = Array.from({ length: 15 }, () => ({
   severity: faker.helpers.arrayElement(priorities).value,
   status: faker.helpers.arrayElement(statuses).value,
   description: faker.lorem.sentence(),
-  dateSubmitted: faker.date.recent().toDateString(),
+  dateSubmitted: faker.date.weekday(),
 }));
 
 submitDataOnce("maintenanceSubmitted", maintenanceData, "/api/maintenanceReq");

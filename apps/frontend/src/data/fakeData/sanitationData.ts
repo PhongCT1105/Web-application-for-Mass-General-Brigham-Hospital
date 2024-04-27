@@ -2,10 +2,13 @@ import { faker } from "@faker-js/faker";
 // import axios from "axios";
 import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 import { submitDataOnce } from "@/data/fakeData/submissionUtils.ts";
-import { EmployeeNames } from "@/interfaces/dataTypes/employeeNames.ts";
-import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
+import { EmployeeNames } from "@/interfaces/dataTypes/sanitationData/employeeNames";
+import {
+  priorities,
+  statuses,
+} from "@/interfaces/dataTypes/sanitationData/labels.ts";
 
-const sanitationData: SanitationForm[] = Array.from({ length: 50 }, () => ({
+const sanitationData: SanitationForm[] = Array.from({ length: 20 }, () => ({
   reqId: faker.number.int(),
   name: faker.helpers.arrayElement(EmployeeNames).value,
   location: faker.location.city(),
@@ -15,7 +18,7 @@ const sanitationData: SanitationForm[] = Array.from({ length: 50 }, () => ({
   typeOfIssue: faker.word.adjective(),
   description: faker.lorem.sentence(),
   comments: faker.lorem.sentence(),
-  dateSubmitted: faker.date.recent().toDateString(),
+  dateSubmitted: faker.date.weekday(),
 }));
 
 submitDataOnce("sanitationSubmitted", sanitationData, "/api/sanitationReq");

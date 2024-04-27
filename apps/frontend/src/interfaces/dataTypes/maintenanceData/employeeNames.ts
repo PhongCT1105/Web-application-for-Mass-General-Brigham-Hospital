@@ -6,7 +6,7 @@ export const EmployeeNames = [
     value: "Mina",
   },
   {
-    value: "Mina",
+    value: "Trang",
   },
   {
     value: "Trang",
@@ -21,13 +21,10 @@ export const EmployeeNames = [
     value: "Sandi",
   },
   {
-    value: "Sandi",
+    value: "Owen",
   },
   {
-    value: "Sandi",
-  },
-  {
-    value: "Sandi",
+    value: "Owen",
   },
   {
     value: "Owen",
@@ -39,25 +36,10 @@ export const EmployeeNames = [
     value: "Alex",
   },
   {
-    value: "Alex",
-  },
-  {
-    value: "Alex",
-  },
-  {
     value: "Phong",
   },
   {
     value: "Henry",
-  },
-  {
-    value: "Henry",
-  },
-  {
-    value: "Henry",
-  },
-  {
-    value: "June",
   },
   {
     value: "June",

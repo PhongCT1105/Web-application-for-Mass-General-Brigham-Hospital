@@ -5,8 +5,13 @@ import { submitDataOnce } from "@/data/fakeData/submissionUtils.ts";
 
 const flowerData: FlowerForm[] = Array.from({ length: 100 }, () => ({
   reqID: faker.number.int(),
-  priority: faker.helpers.arrayElement(["low", "medium", "high"]),
-  status: faker.helpers.arrayElement(["pending", "in-progress", "completed"]),
+  priority: faker.helpers.arrayElement(["low", "medium", "high", "emergency"]),
+  status: faker.helpers.arrayElement([
+    "unassigned",
+    "assigned",
+    "inprogress",
+    "closed",
+  ]),
   cartItems: Array.from({ length: 5 }, () => ({
     fID: faker.number.int(),
     name: faker.commerce.productName(),

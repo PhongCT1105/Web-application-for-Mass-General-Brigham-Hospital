@@ -2,10 +2,13 @@ import { faker } from "@faker-js/faker";
 // import axios from "axios";
 import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 import { submitDataOnce } from "@/data/fakeData/submissionUtils.ts";
-import { EmployeeNames } from "@/interfaces/dataTypes/employeeNames.ts";
-import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
+import {
+  priorities,
+  statuses,
+} from "@/interfaces/dataTypes/patientTransportData/labels";
+import { EmployeeNames } from "@/interfaces/dataTypes/patientTransportData/employeeNames.ts";
 
-const scheduleFormData: ScheduleForm[] = Array.from({ length: 100 }, () => ({
+const scheduleFormData: ScheduleForm[] = Array.from({ length: 30 }, () => ({
   time: faker.date.anytime().toDateString(),
   status: faker.helpers.arrayElement(statuses).value,
   reqID: faker.number.int(),
@@ -17,7 +20,7 @@ const scheduleFormData: ScheduleForm[] = Array.from({ length: 100 }, () => ({
   priority: faker.helpers.arrayElement(priorities).value,
   note: faker.lorem.sentence(),
   date: new Date(faker.date.weekday()),
-  dateSubmitted: faker.date.recent().toDateString(),
+  dateSubmitted: faker.date.weekday(),
 }));
 
 submitDataOnce("transportSubmitted", scheduleFormData, "/api/transport");
