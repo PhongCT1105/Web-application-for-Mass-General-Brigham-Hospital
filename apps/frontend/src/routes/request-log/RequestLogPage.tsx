@@ -37,6 +37,7 @@ import bannerSanitationImage from "@/assets/sanitation-banner.png";
 import bannerTransportationImage from "@/assets/transportation-banner.png";
 import bannerMedicationImage from "@/assets/medication-banner.png";
 import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
+import bannerFlowerImage from "@/assets/flower-banner.png";
 
 export const RequestLogPage = () => {
   const [flowerLog, setFlowerLog] = useState<FlowerForm[]>([]);
@@ -220,7 +221,12 @@ export const RequestLogPage = () => {
                       defaultValue="Flower Request"
                       className="h-full space-y-6"
                     >
-                      <div className="space-between flex items-center">
+                      <div
+                        className="space-between flex items-center"
+                        style={{
+                          marginLeft: "7.8%",
+                        }}
+                      >
                         <TabsList>
                           <TabsTrigger value="Flower Request">
                             <FlowerIcon className="mr-2 h-4 w-4" />
@@ -251,8 +257,43 @@ export const RequestLogPage = () => {
                       <TabsContent
                         value="Flower Request"
                         className="border-none p-0 flex-col data-[state=active]:flex "
-                        // h-full  ^^^^^
                       >
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerFlowerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
+                          <div className="space-y-1">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
+                              Flower Request
+                            </h2>
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
+                              By Mina Boktor & Alexander Kraemling
+                            </p>
+                          </div>
+                        </div>
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
                           data={flowerLog}
                           columns={columnsFlowerFormLog}
@@ -267,7 +308,7 @@ export const RequestLogPage = () => {
                           style={{
                             backgroundImage: `url(${bannerMedicationImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
+                            backgroundPosition: "center 80%",
                             height: "100px",
                             borderRadius: "10px",
                             width: "83.5%",
@@ -314,7 +355,7 @@ export const RequestLogPage = () => {
                           style={{
                             backgroundImage: `url(${bannerTransportationImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
+                            backgroundPosition: "center 37%",
                             height: "100px",
                             borderRadius: "10px",
                             width: "83.5%",
@@ -366,7 +407,7 @@ export const RequestLogPage = () => {
                           style={{
                             backgroundImage: `url(${bannerSanitationImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
+                            backgroundPosition: "center 65%",
                             height: "100px",
                             borderRadius: "10px",
                             width: "83.5%",
@@ -464,7 +505,7 @@ export const RequestLogPage = () => {
                           style={{
                             backgroundImage: `url(${bannerMaintenanceImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center",
+                            backgroundPosition: "center 35%",
                             height: "100px",
                             borderRadius: "10px",
                             width: "83.5%",
