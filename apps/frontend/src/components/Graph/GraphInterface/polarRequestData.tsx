@@ -1,4 +1,4 @@
-export interface polarRequestData {
+export interface polarRequestDataSeverity {
   severity: string;
   request: number;
 }

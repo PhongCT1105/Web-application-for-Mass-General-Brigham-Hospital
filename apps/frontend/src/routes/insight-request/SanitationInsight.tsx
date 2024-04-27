@@ -1,12 +1,12 @@
 import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
+import PolarAreaChart from "@/components/Graph/PolorAreaGraphSeverity.tsx";
 import { sanitationLineData } from "@/data/sanitationData/lineChartData";
 import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 import { pieRequestData } from "@/components/Graph/GraphInterface/pieRequestData";
-import { polarRequestData } from "@/components/Graph/GraphInterface/polarRequestData";
+import { polarRequestDataSeverity } from "@/components/Graph/GraphInterface/polarRequestData";
 
 function countEmployee(arr: SanitationForm[]): barRequestData[] {
   const countDictionary: Record<string, number> = {};
@@ -36,7 +36,7 @@ function countStatus(arr: SanitationForm[]): pieRequestData[] {
   return piedata;
 }
 
-function countPriority(arr: SanitationForm[]): polarRequestData[] {
+function countPriority(arr: SanitationForm[]): polarRequestDataSeverity[] {
   const countDictionary: Record<string, number> = {};
 
   arr.forEach((obj) => {
@@ -44,9 +44,9 @@ function countPriority(arr: SanitationForm[]): polarRequestData[] {
     countDictionary[severity] = (countDictionary[severity] || 0) + 1;
   });
 
-  const polardata: polarRequestData[] = Object.entries(countDictionary).map(
-    ([severity, request]) => ({ severity, request }),
-  );
+  const polardata: polarRequestDataSeverity[] = Object.entries(
+    countDictionary,
+  ).map(([severity, request]) => ({ severity, request }));
   return polardata;
 }
 

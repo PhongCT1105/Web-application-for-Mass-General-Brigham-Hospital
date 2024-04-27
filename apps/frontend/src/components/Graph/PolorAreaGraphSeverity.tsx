@@ -1,8 +1,8 @@
 import { PolarArea } from "react-chartjs-2";
 import { AnimationSpec } from "chart.js/auto";
-import { polarRequestData } from "@/components/Graph/GraphInterface/polarRequestData.tsx";
+import { polarRequestDataSeverity } from "@/components/Graph/GraphInterface/polarRequestData.tsx";
 
-const PolarAreaChart = ({ props }: { props: polarRequestData[] }) => {
+const PolarAreaChart = ({ props }: { props: polarRequestDataSeverity[] }) => {
   const polarAreaChartData = {
     labels: props.map((map) => map.severity),
     datasets: [
