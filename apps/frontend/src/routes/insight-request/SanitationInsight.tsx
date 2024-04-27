@@ -6,7 +6,7 @@ import { sanitationLineData } from "@/data/sanitationData/lineChartData";
 import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 import { pieRequestData } from "@/components/Graph/GraphInterface/pieRequestData";
-import { polarRequestDataSeverity } from "@/components/Graph/GraphInterface/polarRequestData";
+import { polarRequestDataSeverity } from "@/components/Graph/GraphInterface/polarRequestDataSeverity.tsx";
 
 function countEmployee(arr: SanitationForm[]): barRequestData[] {
   const countDictionary: Record<string, number> = {};
@@ -57,7 +57,7 @@ function headerChange(arr: SanitationForm[]): SanitationForm[] {
       obj.status === ""
         ? "None"
         : obj.status === "backlog"
-          ? "Back log"
+          ? "Backlog"
           : obj.status === "todo"
             ? "To do"
             : obj.status === "in progress"

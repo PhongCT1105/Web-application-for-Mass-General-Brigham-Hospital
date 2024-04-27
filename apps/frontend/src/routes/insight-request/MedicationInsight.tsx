@@ -9,7 +9,7 @@ import { medicationLineData } from "@/data/medicationData/lineChartData.ts";
 // import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
-function countEmployeeOccurrences(arr: MedicationForm[]): barRequestData[] {
+function countEmployee(arr: MedicationForm[]): barRequestData[] {
   const countDictionary: Record<string, number> = {};
 
   arr.forEach((obj) => {
@@ -22,9 +22,10 @@ function countEmployeeOccurrences(arr: MedicationForm[]): barRequestData[] {
   );
   return chartdata;
 }
+
 function MedicationInsight({ props }: { props: MedicationForm[] }) {
   console.log(props);
-  const medicationChartData = countEmployeeOccurrences(props);
+  const medicationChartData = countEmployee(props);
   console.log(medicationChartData);
 
   return (

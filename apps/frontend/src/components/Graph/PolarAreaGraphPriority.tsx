@@ -1,9 +1,9 @@
 import { PolarArea } from "react-chartjs-2";
 import { AnimationSpec } from "chart.js/auto";
-import { polarRequestDataSecurity } from "./GraphInterface/polarRequestDataSecurity";
-const PolarAreaChart = ({ props }: { props: polarRequestDataSecurity[] }) => {
+import { polarRequestDataPriority } from "./GraphInterface/polarRequestDataPriority";
+const PolarAreaChart = ({ props }: { props: polarRequestDataPriority[] }) => {
   const polarAreaChartData = {
-    labels: props.map((map) => map.security),
+    labels: props.map((map) => map.priority),
     datasets: [
       {
         label: "My First Dataset",
