@@ -35,6 +35,7 @@ import LeftArrow from "@/assets/arrow-left-solid.svg";
 import RightArrow from "@/assets/arrow-right-solid.svg";
 import Hospital from "@/assets/hospital-solid.svg";
 import Circle from "@/assets/circle-regular.svg";
+import Stairs from "@/assets/stairs-solid.svg";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
@@ -666,6 +667,15 @@ export const MapBlock: React.FC = () => {
 
     const paths: Node[][] = parsePath(nodeArray);
     const directionsArray: direction[] = [];
+    let floorPath: string = "Floor Path: " + nodeArray[0].floor;
+
+    for (let i = 0; i < nodeArray.length - 1; i++) {
+      if (nodeArray[i].floor != nodeArray[i + 1].floor) {
+        floorPath += " -> " + nodeArray[i + 1].floor;
+      }
+    }
+
+    directionsArray.push({ text: floorPath, icon: Stairs });
 
     for (let i = 0; i < paths.length; i++) {
       if (paths[i].length > 1) {
