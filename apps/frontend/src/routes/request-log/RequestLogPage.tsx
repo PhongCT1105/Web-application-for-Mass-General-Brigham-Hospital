@@ -180,7 +180,6 @@ export const RequestLogPage = () => {
       }
     }
     fetchData().then(() => console.log("tranportLog"));
-
   }, []);
 
   useEffect(() => {
