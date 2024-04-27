@@ -20,7 +20,9 @@ export const columnsFlowerFormLog: ColumnDef<FlowerForm>[] = [
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-normal">{"F" + row.getValue("reqID")}</div>
+      <div className="w-[80px] font-normal">
+        {"F" + (row.getValue("reqID") as string).toString()}
+      </div>
     ),
     enableHiding: false,
   },
