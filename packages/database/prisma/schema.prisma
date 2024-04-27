@@ -20,7 +20,7 @@ model HighScore {
 }
 
 model Nodes {
-  nodeID     String  @id
+  nodeID     String          @id
   xcoord     Int
   ycoord     Int
   floor      String
@@ -28,8 +28,9 @@ model Nodes {
   nodeType   String
   longName   String
   shortName  String
-  startEdges Edges[] @relation("StartNode")
-  endEdges   Edges[] @relation("EndNode")
+  startEdges Edges[]         @relation("StartNode")
+  endEdges   Edges[]         @relation("EndNode")
+  nodeHits   nodesTraveled[] @relation("HitCount")
 
   @@unique([xcoord, ycoord, floor])
 }
@@ -40,6 +41,12 @@ model Edges {
   startNode   String
   endNodeID   Nodes  @relation("EndNode", fields: [endNode], references: [nodeID], onDelete: Cascade)
   endNode     String
+}
+
+model nodesTraveled {
+  id     Int    @id @default(autoincrement())
+  node   Nodes  @relation("HitCount", fields: [nodeID], references: [nodeID])
+  nodeID String
 }
 
 model User {
