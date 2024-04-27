@@ -13,7 +13,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import { CircleDot, CirclePlay, Clover, EllipsisVertical } from "lucide-react";
+import {
+  CircleDot,
+  CirclePlay,
+  Clover,
+  EllipsisVertical,
+  Accessibility,
+} from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 
 interface SearchBarProps {
@@ -26,6 +32,7 @@ interface SearchBarProps {
   changePathfindingStrategy: (strat: string) => void;
   //currentFloor: string;
   textDirections: direction[];
+  accessMode: (access: boolean) => void;
   children?: React.ReactNode; // Add this line
 }
 
@@ -35,6 +42,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onClear,
   changePathfindingStrategy,
   textDirections, // New prop
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  accessMode,
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -45,6 +54,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const { startNodeName, endNodeName, startNodeID, endNodeID } =
     useSearchContext();
   const [tabVal, setTabValue] = useState<string>("astar");
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [accessibility, setAccessMode] = useState(false);
 
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
@@ -107,6 +118,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     onClear(); // Clear the line on the map
   };
 
+  const handleAccessMode = () => {
+    setAccessMode(true);
+  };
+
   return (
     <div
       className="flex flex-col items-center bg-transparent p-4 w-[350px]
@@ -123,6 +138,15 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             >
               <div className="flex items-center w-auto group-hover:text-yellow-500 ">
                 <Clover color={"green"} />
+              </div>
+            </Button>
+            <Button
+              variant="invisible"
+              title="Accessibility"
+              onClick={handleAccessMode}
+            >
+              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
+                <Accessibility />
               </div>
             </Button>
           </CardTitle>

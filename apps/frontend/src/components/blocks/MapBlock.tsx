@@ -121,6 +121,10 @@ export const MapBlock: React.FC = () => {
     setPathfindingStrategy(strat);
   };
 
+  const changeAccessibilty = () => {
+    setAccessMode(!accessMode);
+  };
+
   const mapRef = useRef<Map | null>(null);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<string>("AStar");
@@ -137,6 +141,7 @@ export const MapBlock: React.FC = () => {
   const [distance, setDistance] = useState(0);
   const [arrivalTime, setArrivalTime] = useState(new Date());
   const [havePath, setHavePath] = useState(false);
+  const [accessMode, setAccessMode] = useState(false);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -971,6 +976,7 @@ export const MapBlock: React.FC = () => {
             changePathfindingStrategy={changePathfindingStrategy}
             //currentFloor={currentFloor}
             textDirections={textDirections}
+            accessMode={changeAccessibilty}
           />
         </div>
         <div

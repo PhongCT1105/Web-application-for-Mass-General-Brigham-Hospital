@@ -73,6 +73,7 @@ export function Sanitation() {
   const [employees, setEmployees] = useState<string[]>([]);
   const [locations, setLocationsTo] = useState<string[]>([]);
   const [buttonState, setButtonState] = useState<buttonColor>("ghost");
+
   const [locationLong, setLocationLong] = useState<string>("");
   const [locationWithID, setLocationWID] = useState<LocationWID[]>([]);
 
