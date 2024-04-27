@@ -40,6 +40,7 @@ import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
+import { Label } from "@/components/ui/label.tsx";
 
 declare module "leaflet" {
   interface Polyline {
@@ -131,6 +132,10 @@ export const MapBlock: React.FC = () => {
   const [startNodeID, setStartNodeID] = useState("");
   const [endNodeID, setEndNodeID] = useState("");
   const [textDirections, setTextDirections] = useState<direction[]>([]);
+  const [time, setTime] = useState(0);
+  const [distance, setDistance] = useState(0);
+  const [arrivalTime, setArrivalTime] = useState(new Date());
+  const [havePath, setHavePath] = useState(false);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -656,6 +661,31 @@ export const MapBlock: React.FC = () => {
     }
     changeFloor(searchPath[0].floor);
   }
+  function findTotalPathDistance(nodeArray: Node[]) {
+    let prevNode: Node = nodeArray[0];
+    let dist: number = 0;
+    let elevatorCount: number = 0;
+
+    nodeArray.forEach((node) => {
+      const xDiff = Math.abs(prevNode.xcoord - node.xcoord);
+      const yDiff = Math.abs(prevNode.ycoord - node.ycoord);
+      dist = Math.sqrt(xDiff * xDiff + yDiff + yDiff);
+      prevNode = node;
+      if (node.longName.includes("ELEV")) {
+        elevatorCount++;
+      }
+    });
+
+    const distanceInFeet = dist * 20; // turning coords roughly into feet
+    const timeInMinutes = distanceInFeet / 265; // 282 ft per minute as average walking speed
+
+    setDistance(distanceInFeet); // assuming coords are in feet
+    setTime(timeInMinutes + elevatorCount); // 282 ft per minute, assuming 1 extra min for each elevator
+    setArrivalTime(new Date());
+
+    console.log("Total distance:", distanceInFeet, "feet");
+    console.log("Total time:", timeInMinutes + elevatorCount, "minutes");
+  }
 
   function createTextDirections(
     nodeArray: Node[],
@@ -792,6 +822,7 @@ export const MapBlock: React.FC = () => {
   }
 
   function handleClear() {
+    setHavePath(false);
     const map = mapRef.current;
     if (!map) return;
     console.log("Clear lines:");
@@ -843,6 +874,10 @@ export const MapBlock: React.FC = () => {
       addMarkersOnPath(nodeArray);
       addPathPolylines(nodeArray);
       createTextDirections(nodeArray); //nodeArray[0].floor);
+      findTotalPathDistance(nodeArray);
+      if (nodeArray) {
+        setHavePath(true);
+      }
     });
   }
 
@@ -915,28 +950,51 @@ export const MapBlock: React.FC = () => {
             zIndex: -1,
           }}
         >
-          <div
-            style={{
-              position: "absolute",
-              zIndex: 1000,
-              marginLeft: 40,
-            }}
-          ></div>
-          <div
-            style={{
-              position: "absolute",
-              top: "67%", // Position at the vertical center of the page
-              left: "50%",
-              transform: "translate(0%, -100%)", // Center horizontally and vertically
-              display: "flex",
-              flexDirection: "column-reverse",
-              justifyContent: "center",
-              alignItems: "center",
-              width: "87%",
-              zIndex: 1000,
-              color: "black",
-            }}
-          ></div>
+          {havePath && (
+            <div
+              className={
+                "w-full bottom-2 h-auto flex align-middle justify-center"
+              }
+            >
+              <div
+                style={{ zIndex: 1000 }}
+                className={
+                  "absolute bottom-3 rounded-full bg-white py-3 w-auto px-8 shadow-sm shadow-black flex flex-row gap-4 justify-center items-center"
+                }
+              >
+                <div className={"flex flex-col"}>
+                  <Label className={"text-xl text-gray-800"}>
+                    <b>{time < 1 ? "<1" : time.toFixed(0)}</b> min
+                  </Label>
+                  <Label className={"text-m text-gray-500"}>
+                    ({distance.toFixed(2)} ft)
+                  </Label>
+                </div>
+                <Label className={"text-2xl text-gray-800"}>
+                  Arr: {arrivalTime.getHours()}:
+                  {arrivalTime.getMinutes() + time < 10 ? "0" : ""}
+                  {(arrivalTime.getMinutes() + time).toFixed(0)}{" "}
+                </Label>
+              </div>
+            </div>
+          )}
+          {/*<div*/}
+          {/*  style={{*/}
+          {/*    position: "absolute",*/}
+          {/*    top: "67%", // Position at the vertical center of the page*/}
+          {/*    left: "50%",*/}
+          {/*    transform: "translate(0%, -100%)", // Center horizontally and vertically*/}
+          {/*    display: "flex",*/}
+          {/*    flexDirection: "column-reverse",*/}
+          {/*    justifyContent: "center",*/}
+          {/*    alignItems: "center",*/}
+          {/*    width: "87%",*/}
+          {/*    zIndex: 1000,*/}
+          {/*    color: "black",*/}
+          {/*  }}*/}
+          {/*>*/}
+
+          {/*</div>*/}
         </div>
       </div>
     </SearchContext.Provider>
