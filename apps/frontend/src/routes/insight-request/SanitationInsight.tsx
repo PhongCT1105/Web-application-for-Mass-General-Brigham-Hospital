@@ -1,16 +1,14 @@
-// import "../styles/example.route.css";
-// import "../styles/globals.css";
 import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
 import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 import { sanitationLineData } from "@/data/sanitationData/lineChartData";
-import { sanitationPieData } from "@/data/sanitationData/pieChartData.ts";
-import { sanitationPolarData } from "@/data/sanitationData/polarAreaChartData.ts";
 import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
+import { pieRequestData } from "@/components/Graph/GraphInterface/pieRequestData";
+import { polarRequestData } from "@/components/Graph/GraphInterface/polarRequestData";
 
-function countEmployeeOccurrences(arr: SanitationForm[]): barRequestData[] {
+function countEmployee(arr: SanitationForm[]): barRequestData[] {
   const countDictionary: Record<string, number> = {};
 
   arr.forEach((obj) => {
@@ -23,10 +21,72 @@ function countEmployeeOccurrences(arr: SanitationForm[]): barRequestData[] {
   );
   return chartdata;
 }
-function SanitationInsight({ props }: { props: SanitationForm[] }) {
-  console.log(props);
-  const sanitationChartData = countEmployeeOccurrences(props);
 
+function countStatus(arr: SanitationForm[]): pieRequestData[] {
+  const countDictionary: Record<string, number> = {};
+
+  arr.forEach((obj) => {
+    const { status } = obj;
+    countDictionary[status] = (countDictionary[status] || 0) + 1;
+  });
+
+  const piedata: pieRequestData[] = Object.entries(countDictionary).map(
+    ([status, request]) => ({ status, request }),
+  );
+  return piedata;
+}
+
+function countPriority(arr: SanitationForm[]): polarRequestData[] {
+  const countDictionary: Record<string, number> = {};
+
+  arr.forEach((obj) => {
+    const { severity } = obj;
+    countDictionary[severity] = (countDictionary[severity] || 0) + 1;
+  });
+
+  const polardata: polarRequestData[] = Object.entries(countDictionary).map(
+    ([severity, request]) => ({ severity, request }),
+  );
+  return polardata;
+}
+
+function headerChange(arr: SanitationForm[]): SanitationForm[] {
+  return arr.map((obj) => ({
+    ...obj,
+    status:
+      obj.status === ""
+        ? "None"
+        : obj.status === "backlog"
+          ? "Back log"
+          : obj.status === "todo"
+            ? "To do"
+            : obj.status === "in progress"
+              ? "In progress"
+              : obj.status === "canceled"
+                ? "Canceled"
+                : obj.status === "done"
+                  ? "Done"
+                  : obj.status,
+    severity:
+      obj.severity === "high"
+        ? "High"
+        : obj.severity === "low"
+          ? "Low"
+          : obj.severity === "urgent"
+            ? "Urgent"
+            : obj.severity === "medium"
+              ? "Medium"
+              : obj.severity === ""
+                ? "None"
+                : obj.severity,
+  }));
+}
+
+function SanitationInsight({ props }: { props: SanitationForm[] }) {
+  const data = headerChange(props);
+  const sanitationChartData = countEmployee(data);
+  const sanitationPieData = countStatus(data);
+  const sanitationPolarData = countPriority(data);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">

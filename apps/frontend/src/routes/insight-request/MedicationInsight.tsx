@@ -2,11 +2,11 @@
 // import "../styles/globals.css";
 import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
-import PieGraph from "@/components/Graph/PieGraph.tsx";
+// import PieGraph from "@/components/Graph/PieGraph.tsx";
 import { medicationLineData } from "@/data/medicationData/lineChartData.ts";
-import { medicationPieData } from "@/data/medicationData/pieChartData";
-import { medicationPolarData } from "@/data/medicationData/polarAreaChartData";
-import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
+// import { medicationPieData } from "@/data/medicationData/pieChartData";
+// import { medicationPolarData } from "@/data/medicationData/polarAreaChartData";
+// import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 function countEmployeeOccurrences(arr: MedicationForm[]): barRequestData[] {
@@ -36,12 +36,12 @@ function MedicationInsight({ props }: { props: MedicationForm[] }) {
         <div className="rounded-lg bg-gray-200">
           <BarGraph props={medicationChartData} />
         </div>
-        <div className="rounded-lg bg-gray-200 scale-0.25">
-          <PieGraph props={medicationPieData} />
-        </div>
-        <div className="rounded-lg bg-gray-200 scale-0.25">
-          <PolarAreaChart props={medicationPolarData} />
-        </div>
+        {/*<div className="rounded-lg bg-gray-200 scale-0.25">*/}
+        {/*  <PieGraph props={medicationPieData} />*/}
+        {/*</div>*/}
+        {/*<div className="rounded-lg bg-gray-200 scale-0.25">*/}
+        {/*  <PolarAreaChart props={medicationPolarData} />*/}
+        {/*</div>*/}
       </div>
     </>
   );

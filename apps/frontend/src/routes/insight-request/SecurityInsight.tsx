@@ -2,11 +2,11 @@
 // import "../styles/globals.css";
 import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
-import PieGraph from "@/components/Graph/PieGraph.tsx";
-import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
+// import PieGraph from "@/components/Graph/PieGraph.tsx";
+// import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 import { securityLineData } from "@/data/securityData/lineChartData.ts";
-import { securityPieData } from "@/data/securityData/pieChartData.ts";
-import { securityPolarData } from "@/data/securityData/polarAreaChartData.ts";
+// import { securityPieData } from "@/data/securityData/pieChartData.ts";
+// import { securityPolarData } from "@/data/securityData/polarAreaChartData.ts";
 import { SecurityForm } from "@/interfaces/securityReq.ts";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 
@@ -35,12 +35,12 @@ function SecurityInsight({ props }: { props: SecurityForm[] }) {
         <div className="rounded-lg bg-gray-200">
           <BarGraph props={securityChartData} />
         </div>
-        <div className="rounded-lg bg-gray-200 scale-0.25">
-          <PieGraph props={securityPieData} />
-        </div>
-        <div className="rounded-lg bg-gray-200 scale-0.25">
-          <PolarAreaChart props={securityPolarData} />
-        </div>
+        {/*<div className="rounded-lg bg-gray-200 scale-0.25">*/}
+        {/*  <PieGraph props={securityPieData} />*/}
+        {/*</div>*/}
+        {/*<div className="rounded-lg bg-gray-200 scale-0.25">*/}
+        {/*  <PolarAreaChart props={securityPolarData} />*/}
+        {/*</div>*/}
       </div>
     </>
   );
