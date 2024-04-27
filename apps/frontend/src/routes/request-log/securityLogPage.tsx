@@ -66,7 +66,7 @@ export function SecurityFormLogTable<TCols, TData>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-5/6 mx-auto">
       <Input
         placeholder={`Search items by employee name...`}
         value={(table.getColumn("ename")?.getFilterValue() as string) ?? ""}

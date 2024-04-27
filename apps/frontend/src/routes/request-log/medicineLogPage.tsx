@@ -66,7 +66,7 @@ export function MedicineFormLogTable<TCols, TData>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-5/6 mx-auto">
       {/*<DataTableToolbar table={table} />*/}
       <Input
         placeholder={`Search items by employee name...`}

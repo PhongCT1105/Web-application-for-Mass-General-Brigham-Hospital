@@ -29,6 +29,7 @@
     "multer": "^1.4.5-lts.1",
     "pg": "^8.11.0",
     "queue-typescript": "^1.0.1",
+    "react-draggable": "^4.4.6",
     "ts-node": "^10.9.1",
     "tsconfig-custom": "workspace:*",
     "typescript": "^5.0.4"
