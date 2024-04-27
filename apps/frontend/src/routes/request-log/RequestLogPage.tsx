@@ -21,7 +21,7 @@ import {
 import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 import { SecurityFormLogTable } from "@/routes/request-log/securityLogPage.tsx";
-
+import { GenericForm } from "@/interfaces/genericReq.ts";
 import { MaintenanceForm } from "@/interfaces/maintenanceReq.ts";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
 import { columnsSecurityFormLog } from "@/routes/service-request/securityColumns.tsx";
@@ -40,6 +40,7 @@ import bannerTransportationImage from "@/assets/transportation-banner.png";
 import bannerMedicationImage from "@/assets/medication-banner.png";
 import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
 import bannerFlowerImage from "@/assets/flower-banner.png";
+import { columnsGenericLog } from "@/routes/service-request/GenericRequestColumns.tsx";
 
 export const RequestLogPage = () => {
   const [flowerLog, setFlowerLog] = useState<FlowerForm[]>([]);
@@ -48,6 +49,9 @@ export const RequestLogPage = () => {
   const [tranportLog, setTransportLog] = useState<ScheduleForm[]>([]);
   const [sanitationLog, setSanitationLog] = useState<SanitationForm[]>([]);
   const [maintenanceLog, setMaintenanceLog] = useState<MaintenanceForm[]>([]);
+  const [genericLog, setGenericLog] = useState<GenericForm[]>(
+    [] as GenericForm[],
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -64,6 +68,20 @@ export const RequestLogPage = () => {
             dateSubmitted: item.dateSubmitted,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "ME" + item.id.toString(),
+          name: item.employee,
+          location: item.location,
+          severity: item.medication[0].priority,
+          status: item.medication[0].status,
+        }));
+
+        setGenericLog((prevState) => ({
+          ...prevState,
+          ...genericData,
+        }));
+
         setMedicineLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -91,6 +109,17 @@ export const RequestLogPage = () => {
           priority: item.priority,
           status: item.status,
         }));
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "F" + item.reqID.toString(),
+          name: item.sender,
+          location: item.location,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         setFlowerLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -119,6 +148,19 @@ export const RequestLogPage = () => {
           }),
         );
 
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "SE" + item.reqID.toString(),
+          name: item.employee,
+          location: item.location,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => ({
+          ...prevState,
+          ...genericData,
+        }));
+
         setSecurityLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -146,6 +188,20 @@ export const RequestLogPage = () => {
             comments: item.comments,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "SA" + item.reqId.toString(),
+          name: item.name,
+          location: item.location,
+          severity: item.severity,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => ({
+          ...prevState,
+          ...genericData,
+        }));
+        console.log(genericData);
         setSanitationLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -175,6 +231,19 @@ export const RequestLogPage = () => {
             date: item.date,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "T" + item.reqID.toString(),
+          name: item.employeeName,
+          location: item.locationFrom,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => ({
+          ...prevState,
+          ...genericData,
+        }));
         setTransportLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -200,6 +269,20 @@ export const RequestLogPage = () => {
             description: item.description,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "MA" + item.reqId.toString(),
+          name: item.name,
+          location: item.location,
+          severity: item.severity,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => ({
+          ...prevState,
+          ...genericData,
+        }));
+
         setMaintenanceLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -271,10 +354,10 @@ export const RequestLogPage = () => {
                             </h2>
                           </div>
                         </div>
-                        {/*<DataTable*/}
-                        {/*  data={allLogs}*/}
-                        {/*  columns={columnsAllFormLog}*/}
-                        {/*/>*/}
+                        <DataTable
+                          data={genericLog}
+                          columns={columnsGenericLog}
+                        />
                       </TabsContent>
                       <TabsContent
                         value="Flower Request"
