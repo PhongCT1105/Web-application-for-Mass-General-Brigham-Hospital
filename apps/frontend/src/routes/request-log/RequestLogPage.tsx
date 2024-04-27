@@ -77,10 +77,7 @@ export const RequestLogPage = () => {
           status: item.medication[0].status,
         }));
 
-        setGenericLog((prevState) => ({
-          ...prevState,
-          ...genericData,
-        }));
+        setGenericLog((prevState) => [...prevState, ...genericData]);
 
         setMedicineLog(cleanedData);
         console.log("successfully got data from get request");
@@ -156,10 +153,7 @@ export const RequestLogPage = () => {
           status: item.status,
         }));
 
-        setGenericLog((prevState) => ({
-          ...prevState,
-          ...genericData,
-        }));
+        setGenericLog((prevState) => [...prevState, ...genericData]);
 
         setSecurityLog(cleanedData);
         console.log("successfully got data from get request");
@@ -197,10 +191,7 @@ export const RequestLogPage = () => {
           status: item.status,
         }));
 
-        setGenericLog((prevState) => ({
-          ...prevState,
-          ...genericData,
-        }));
+        setGenericLog((prevState) => [...prevState, ...genericData]);
         console.log(genericData);
         setSanitationLog(cleanedData);
         console.log("successfully got data from get request");
@@ -240,10 +231,7 @@ export const RequestLogPage = () => {
           status: item.status,
         }));
 
-        setGenericLog((prevState) => ({
-          ...prevState,
-          ...genericData,
-        }));
+        setGenericLog((prevState) => [...prevState, ...genericData]);
         setTransportLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -278,10 +266,7 @@ export const RequestLogPage = () => {
           status: item.status,
         }));
 
-        setGenericLog((prevState) => ({
-          ...prevState,
-          ...genericData,
-        }));
+        setGenericLog((prevState) => [...prevState, ...genericData]);
 
         setMaintenanceLog(cleanedData);
         console.log("successfully got data from get request");
@@ -347,13 +332,32 @@ export const RequestLogPage = () => {
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerFlowerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
-                              All Service Requests
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
+                              All Requests
                             </h2>
                           </div>
                         </div>
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
                           data={genericLog}
                           columns={columnsGenericLog}
@@ -364,13 +368,6 @@ export const RequestLogPage = () => {
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
-                              Flower Request
-                            </h2>
-                          </div>
-                        </div>
                         <div
                           className="flex items-center justify-between"
                           style={{

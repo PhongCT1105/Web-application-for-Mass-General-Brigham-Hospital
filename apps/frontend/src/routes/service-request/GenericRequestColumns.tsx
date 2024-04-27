@@ -10,9 +10,7 @@ export const columnsGenericLog: ColumnDef<GenericForm>[] = [
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-normal">
-        #{"MA" + row.getValue("reqId")}
-      </div>
+      <div className="w-[80px] font-normal">#{row.getValue("reqId")}</div>
     ),
   },
   {
