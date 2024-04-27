@@ -1,6 +1,6 @@
 import { z } from "zod";
 export const _SanitationForm = z.object({
-  reqId: z.string(),
+  reqId: z.number(),
   name: z.string(),
   location: z.string(),
   time: z.string(),

@@ -17,7 +17,7 @@ const securityData: SecurityForm[] = Array.from({ length: 10 }, () => ({
   priority: faker.helpers.arrayElement(priorities).value,
   status: faker.helpers.arrayElement(statuses).value,
   situation: faker.lorem.sentence(),
-  dateSubmitted: faker.date.weekday(),
+  dateSubmitted: faker.date.anytime().getTime().toString(),
 }));
 
 submitDataOnce("securitySubmitted", securityData, "/api/securityReq");

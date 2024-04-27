@@ -2,11 +2,11 @@ import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
 import PolarAreaChart from "@/components/Graph/PolorAreaGraphSeverity.tsx";
-import { sanitationLineData } from "@/data/sanitationData/lineChartData";
 import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 import { pieRequestData } from "@/components/Graph/GraphInterface/pieRequestData";
 import { polarRequestDataSeverity } from "@/components/Graph/GraphInterface/polarRequestDataSeverity.tsx";
+import { lineRequestData } from "@/components/Graph/GraphInterface/lineRequestData";
 
 function countEmployee(arr: SanitationForm[]): barRequestData[] {
   const countDictionary: Record<string, number> = {};
@@ -82,11 +82,41 @@ function headerChange(arr: SanitationForm[]): SanitationForm[] {
   }));
 }
 
+function convertTimestampToMonth(timestamp: string): string {
+  const date = new Date(parseInt(timestamp));
+  const month = date.toLocaleString("default", { month: "long" });
+  return month;
+}
+
+function convertTimeToMonth(arr: SanitationForm[]): SanitationForm[] {
+  return arr.map((obj) => ({
+    ...obj,
+    timestamp: convertTimestampToMonth(obj.time),
+  }));
+}
+
+function countMonth(arr: SanitationForm[]): lineRequestData[] {
+  const countDictionary: Record<string, number> = {};
+
+  arr.forEach((obj) => {
+    const month = convertTimestampToMonth(obj.time);
+    countDictionary[month] = (countDictionary[month] || 0) + 1;
+  });
+
+  const linedata: lineRequestData[] = Object.entries(countDictionary).map(
+    ([month, request]) => ({ month, request }),
+  );
+  return linedata;
+}
+
 function SanitationInsight({ props }: { props: SanitationForm[] }) {
-  const data = headerChange(props);
+  const headdata = headerChange(props);
+  const data = convertTimeToMonth(headdata); // Convert timestamps to months
   const sanitationChartData = countEmployee(data);
   const sanitationPieData = countStatus(data);
   const sanitationPolarData = countPriority(data);
+  const sanitationLineData = countMonth(data);
+
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">

@@ -9,7 +9,7 @@ import {
 import { EmployeeNames } from "@/interfaces/dataTypes/patientTransportData/employeeNames.ts";
 
 const scheduleFormData: ScheduleForm[] = Array.from({ length: 30 }, () => ({
-  time: faker.date.anytime().toDateString(),
+  time: faker.date.anytime().getTime().toString(),
   status: faker.helpers.arrayElement(statuses).value,
   reqID: faker.number.int(),
   employeeName: faker.helpers.arrayElement(EmployeeNames).value,
@@ -20,7 +20,7 @@ const scheduleFormData: ScheduleForm[] = Array.from({ length: 30 }, () => ({
   priority: faker.helpers.arrayElement(priorities).value,
   note: faker.lorem.sentence(),
   date: new Date(faker.date.weekday()),
-  dateSubmitted: faker.date.weekday(),
+  dateSubmitted: faker.date.anytime().getTime().toString(),
 }));
 
 submitDataOnce("transportSubmitted", scheduleFormData, "/api/transport");

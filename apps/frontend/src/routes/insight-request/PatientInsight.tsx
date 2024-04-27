@@ -1,10 +1,10 @@
 import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 // import "../styles/example.route.css";
 // import "../styles/globals.css";
-import LineGraph from "@/components/Graph/LineGraph.tsx";
+// import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import { patientLineData } from "@/data/patientData/lineChartData";
+// import { patientLineData } from "@/data/patientData/lineChartData";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 import { pieRequestData } from "@/components/Graph/GraphInterface/pieRequestData";
 import PolarAreaChart from "@/components/Graph/PolarAreaGraphPriority.tsx";
@@ -30,8 +30,11 @@ function countStatus(arr: ScheduleForm[]): pieRequestData[] {
   arr.forEach((obj) => {
     let { status } = obj;
     if (status === "") status = "None";
-    else if (status === "done") status = "Dont";
+    else if (status === "done") status = "Done";
     else if (status === "backlog") status = "Backlog";
+    else if (status === "InProgress") status = "In progress";
+    else if (status === "canceled") status = "Canceled";
+    else if (status === "todo") status = "To do";
     countDictionary[status] = (countDictionary[status] || 0) + 1;
   });
 
@@ -69,9 +72,9 @@ function PatientInsight({ props }: { props: ScheduleForm[] }) {
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
-        <div className="rounded-lg bg-gray-200">
-          <LineGraph props={patientLineData} />
-        </div>
+        {/*<div className="rounded-lg bg-gray-200">*/}
+        {/*  <LineGraph props={patientLineData} />*/}
+        {/*</div>*/}
         <div className="rounded-lg bg-gray-200">
           <BarGraph props={patientChartData} />
         </div>

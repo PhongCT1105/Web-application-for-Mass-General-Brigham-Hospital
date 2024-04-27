@@ -1,6 +1,6 @@
 import { z } from "zod";
 export const _SecurityForm = z.object({
-  reqID: z.string(),
+  reqID: z.number(),
   ename: z.string(),
   location: z.string(),
   employee: z.string(),

@@ -1,7 +1,7 @@
-import LineGraph from "@/components/Graph/LineGraph.tsx";
+// import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import { securityLineData } from "@/data/securityData/lineChartData.ts";
+// import { securityLineData } from "@/data/securityData/lineChartData.ts";
 import { SecurityForm } from "@/interfaces/securityReq.ts";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 import PolarAreaChart from "@/components/Graph/PolarAreaGraphPriority";
@@ -68,9 +68,9 @@ function SecurityInsight({ props }: { props: SecurityForm[] }) {
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
-        <div className="rounded-lg bg-gray-200">
-          <LineGraph props={securityLineData} />
-        </div>
+        {/*<div className="rounded-lg bg-gray-200">*/}
+        {/*  <LineGraph props={securityLineData} />*/}
+        {/*</div>*/}
         <div className="rounded-lg bg-gray-200">
           <BarGraph props={securityChartData} />
         </div>
