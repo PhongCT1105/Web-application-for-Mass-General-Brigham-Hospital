@@ -22,36 +22,38 @@ interface RequestForm {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestBody = req.body;
+    const requestForms: RequestForm[] = req.body;
     //console.log(requestBody);
-    const jsonString = JSON.stringify(requestBody);
-    console.log("JSON String:", jsonString);
+    // const jsonString = JSON.stringify(requestBody);
+    // console.log("JSON String:", jsonString);
 
     // Parse the JSON string back into an object
-    const requestForm: RequestForm = JSON.parse(jsonString);
-    const flowers: cartItem[] = requestForm.cartItems;
-    const cartItemCreateData = flowers.map((flower) => ({
-      name: flower.name,
-      cost: flower.cost,
-    }));
+    // const requestForm: RequestForm = JSON.parse(jsonString);
+    for (const requestForm of requestForms) {
+      const flowers: cartItem[] = requestForm.cartItems;
+      const cartItemCreateData = flowers.map((flower) => ({
+        name: flower.name,
+        cost: flower.cost,
+      }));
 
-    await PrismaClient.flowerRequest.create({
-      data: {
-        cartItems: {
-          createMany: {
-            data: cartItemCreateData,
+      await PrismaClient.flowerRequest.create({
+        data: {
+          cartItems: {
+            createMany: {
+              data: cartItemCreateData,
+            },
           },
+          location: requestForm.location,
+          message: requestForm.message,
+          recipient: requestForm.recipient,
+          sender: requestForm.sender,
+          total: requestForm.total,
+          priority: requestForm.priority,
+          status: requestForm.status,
+          dateSubmitted: requestForm.dateSubmitted,
         },
-        location: requestForm.location,
-        message: requestForm.message,
-        recipient: requestForm.recipient,
-        sender: requestForm.sender,
-        total: requestForm.total,
-        priority: requestForm.priority,
-        status: requestForm.status,
-        dateSubmitted: requestForm.dateSubmitted,
-      },
-    });
+      });
+    }
     console.info("Successfully requested flowers");
     res.status(200).json({ message: "Flower requests created successfully" });
   } catch (error) {
