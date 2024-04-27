@@ -25,7 +25,7 @@ import {
   TableRow,
 } from "@/components/ui/table.tsx";
 import { Input } from "@/components/ui/input.tsx";
-//import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
+import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 interface DataTableProps<TCols, TData> {
   columns: ColumnDef<TData, TCols>[];
@@ -75,7 +75,7 @@ export function SecurityFormLogTable<TCols, TData>({
         }
         className="h-8 w-[150px] w-[250px]"
       />
-      {/*<DataTableToolbar table={table} />*/}
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

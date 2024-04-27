@@ -1,11 +1,4 @@
-import {
-  Card,
-  CardContent,
-  // CardDescription,
-  CardFooter,
-  // CardHeader,
-  // CardTitle,
-} from "@/components/ui/card.tsx";
+import { Card, CardContent, CardFooter } from "@/components/ui/card.tsx";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
@@ -15,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea.tsx";
 import { toast } from "@/components/ui/use-toast.ts";
 import { Calendar } from "@/components/ui/calendar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
+import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -30,46 +24,12 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
 
-export interface scheduleForm {
-  employeeName: string;
-  patientName: string;
-  priority: string;
-  locationFrom: string;
-  locationTo: string;
-  date: Date;
-  reason: string;
-  time: string;
-  note: string;
-  status: string;
-}
-
-// interface nodeTable {
-//   nodeID: string;
-//   xcoord: number;
-//   ycoord: number;
-//   floor: string;
-//   building: string;
-//   nodeType: string;
-//   longName: string;
-//   shortName: string;
-// }
-
-export const SheduleContent = () => {
-  const [form, setForm] = useState<scheduleForm>({
-    employeeName: "",
-    patientName: "",
-    priority: "",
-    locationFrom: "",
-    locationTo: "",
-    date: new Date(),
-    reason: "",
-    time: "",
-    note: "",
-    status: "",
-  });
+export const ScheduleContent = () => {
+  const now = new Date();
+  const [form, setForm] = React.useState<ScheduleForm>({} as ScheduleForm);
 
   const [selectedPriority, setSelectedPriority] = useState("");
-  const [submittedForms, setSubmittedForms] = useState<scheduleForm[]>([]);
+  const [submittedForms, setSubmittedForms] = useState<ScheduleForm[]>([]);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [locationsFrom, setLocationsFrom] = useState<string[]>([]);
   const [locationsTo, setLocationsTo] = useState<string[]>([]);
@@ -182,6 +142,7 @@ export const SheduleContent = () => {
     setForm((prevState) => ({
       ...prevState,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
 
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");

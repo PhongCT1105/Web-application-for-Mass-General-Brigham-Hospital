@@ -20,7 +20,9 @@ export const TransportRequestColumns: ColumnDef<ScheduleForm>[] = [
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[25px] font-normal">#{row.getValue("reqID")}</div>
+      <div className="w-[80px] font-normal">
+        {"T" + (row.getValue("reqID") as string).toString()}
+      </div>
     ),
     enableSorting: false,
     enableHiding: false,

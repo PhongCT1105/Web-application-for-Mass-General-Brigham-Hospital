@@ -9,7 +9,7 @@ export const _Medication = z.object({
 });
 
 export const _MedicationForm = z.object({
-  id: z.number(),
+  id: z.string(),
   medication: z.array(_Medication),
   employee: z.string(),
   location: z.string(),
