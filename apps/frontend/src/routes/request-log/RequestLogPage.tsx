@@ -68,7 +68,7 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then();
+    fetchData().then(() => console.log("medicineLog"));
   }, []);
 
   useEffect(() => {
@@ -95,7 +95,7 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then();
+    fetchData().then(() => console.log("flowerLog"));
   }, []);
 
   useEffect(() => {
@@ -123,7 +123,7 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then();
+    fetchData().then(() => console.log("securityLog"));
   }, []);
 
   useEffect(() => {
@@ -150,7 +150,7 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then();
+    fetchData().then(() => console.log("sanitationLog"));
   }, []);
 
   useEffect(() => {
@@ -179,7 +179,8 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then();
+    fetchData().then(() => console.log("tranportLog"));
+
   }, []);
 
   useEffect(() => {
@@ -204,7 +205,7 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then();
+    fetchData().then(() => console.log("maintenanceLog"));
   }, []);
 
   return (

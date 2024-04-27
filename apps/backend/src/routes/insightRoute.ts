@@ -9,10 +9,10 @@ const parsedata = [
   { request: "Sanitation Request", total: 180 },
   { request: "Security Request", total: 100 },
 ];
-router.post("/", async (req, res) => {
+router.post("/sanitation", async (req, res) => {
   console.log("Test for insight");
   try {
-    const response = await axios.post("/", parsedata);
+    const response = await axios.post("/api/sanitation", parsedata);
     console.log(response.data);
     res.status(200).send("Node data imported successfully.");
   } catch (error) {

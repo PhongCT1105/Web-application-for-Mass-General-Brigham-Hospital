@@ -7,6 +7,7 @@ export const _MaintenanceForm = z.object({
   severity: z.string(),
   status: z.string(),
   description: z.string(),
+  dateSubmitted: z.string(),
 });
 
 export type MaintenanceForm = z.infer<typeof _MaintenanceForm>;
