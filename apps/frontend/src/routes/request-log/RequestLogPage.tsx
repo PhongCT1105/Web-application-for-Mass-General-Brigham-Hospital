@@ -202,13 +202,16 @@ export const RequestLogPage = () => {
     fetchData().then();
   }, []);
 
+  // const allLogs = (
+  //     flowerLog && medicineLog && tranportLog && sanitationLog && securityLog && maintenanceLog
+  // );
+
   return (
     <div className={" scrollbar-hide"}>
       <div className="hidden md:block">
         <div className="border-t">
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
-              {/*<Sidebar className="hidden lg:block"/>*/}
               <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
@@ -260,10 +263,10 @@ export const RequestLogPage = () => {
                             </h2>
                           </div>
                         </div>
-                        <DataTable
-                          data={flowerLog}
-                          columns={columnsFlowerFormLog}
-                        />
+                        {/*<DataTable*/}
+                        {/*  data={allLogs}*/}
+                        {/*  columns={columnsAllFormLog}*/}
+                        {/*/>*/}
                       </TabsContent>
                       <TabsContent
                         value="Flower Request"
