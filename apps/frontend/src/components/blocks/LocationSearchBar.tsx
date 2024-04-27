@@ -85,14 +85,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       // If they are the same, get new randEnd value until no longer true
       randEnd = Math.floor(Math.random() * locations.length);
     }
-    setStartPoint(locations[randStart].nodeID);
-    setStartPointID(startPoint);
-    setEndPoint(locations[randEnd].nodeID);
-    setEndPointID(endPoint);
-    // console.log("startSearch === " + startPoint);
-    // console.log("endSearch === " + endPoint);
+    setStartPoint(locations[randStart].longName);
+    setStartPointID(locations[randStart].nodeID);
+    setEndPoint(locations[randEnd].longName);
+    setEndPointID(locations[randEnd].nodeID);
     // handleSearch();
-    // changePathfindingStrategy("");
+    onSearch(locations[randStart].nodeID, locations[randEnd].nodeID);
   };
 
   useEffect(() => {
