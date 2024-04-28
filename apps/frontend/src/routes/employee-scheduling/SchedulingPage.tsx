@@ -5,7 +5,7 @@ import { Requests } from "@/routes/employee-scheduling/data/requests.ts";
 
 export const SchedulingPage = () => {
   return (
-    <div className={"m-3 mt-5"}>
+    <div className={"p-3 mt-6"}>
       <BigCalendar employeeSchedule={[]} draggableCardData={Requests} />
     </div>
   );

@@ -18,6 +18,8 @@ import {
 import { fetchEmployeeData } from "@/routes/employee-scheduling/utils/api.ts";
 import { eventStyleGetter } from "@/routes/employee-scheduling/utils/eventStyling.ts";
 import { localizer } from "../utils/localizer.ts";
+import { toast } from "@/components/ui/use-toast.ts";
+import { CalendarToastDescription } from "@/routes/employee-scheduling/components/toastDescription.tsx";
 
 export interface CustomCalendarEvent extends Event {
   color?: string;
@@ -52,6 +54,16 @@ export const BigCalendar = ({
           employee: newEvents[index].employee,
         })),
       );
+      toast({
+        title: "Algorithm picked the following employees:",
+        description: (
+          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+            <div className="text-white pb-1">
+              {events.map((event) => CalendarToastDescription(event))}
+            </div>
+          </pre>
+        ),
+      });
     } catch (error) {
       console.error("Error: " + error);
     }
@@ -164,9 +176,9 @@ export const BigCalendar = ({
   );
 
   return (
-    <div>
-      <div className={"flex flex-col items-center my-2 pb-3"}>
-        <div className={"flex flex-row space-x-2 "}>
+    <div className={"grid grid-cols-6 grid-rows-5 gap-4"}>
+      <div className={"row-span-5 mt-24"}>
+        <div className={"flex flex-col items-center space-y-4 mt-3"}>
           {draggableCardData.map((request, index) => (
             <div
               key={index}
@@ -180,38 +192,50 @@ export const BigCalendar = ({
               <DraggableCard info={request} key={index} />
             </div>
           ))}
+          <div className={"space-x-3 pt-2"}>
+            <Button
+              className={"p-5"}
+              variant={"destructive"}
+              onClick={() => {
+                setEvents([]);
+              }}
+            >
+              Clear
+            </Button>
+            <Button
+              variant={events.length != 0 ? "default" : "outline"}
+              onClick={getEmployees}
+              className={"p-5"}
+            >
+              Submit
+            </Button>
+          </div>
         </div>
       </div>
-
-      <DnDCalendar
-        popup
-        resizable
-        events={events}
-        defaultView="week"
-        localizer={localizer}
-        onEventDrop={onEventDrop}
-        style={{ height: "100vh" }}
-        onEventResize={onEventResize}
-        eventPropGetter={eventStyleGetter}
-        onDropFromOutside={onDropFromOutside}
-        components={{
-          event: (props) => (
-            <EventPopover
-              event={props.event}
-              onUpdateEvent={handleEventUpdate}
-            />
-          ),
-        }}
-      />
-      <Button
-        variant={"destructive"}
-        onClick={() => {
-          setEvents([]);
-        }}
-      >
-        Clear
-      </Button>
-      <Button onClick={getEmployees}>Submit</Button>
+      <div className={"col-span-5 row-span-5"}>
+        <div>
+          <DnDCalendar
+            popup
+            resizable
+            events={events}
+            defaultView="week"
+            localizer={localizer}
+            onEventDrop={onEventDrop}
+            style={{ height: "100vh" }}
+            onEventResize={onEventResize}
+            eventPropGetter={eventStyleGetter}
+            onDropFromOutside={onDropFromOutside}
+            components={{
+              event: (props) => (
+                <EventPopover
+                  event={props.event}
+                  onUpdateEvent={handleEventUpdate}
+                />
+              ),
+            }}
+          />
+        </div>
+      </div>
     </div>
   );
 };
