@@ -20,11 +20,8 @@ import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
 import theFirstFloor from "@/assets/01_thefirstfloor.png";
 import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
-//import GrayDot from "@/assets/gray-dot.png";
 import GreenStar from "@/assets/start-marker.png";
-//import GreenStar2 from "@/assets/start-marker2.png";
 import RedStar from "@/assets/end-marker.png";
-//import RedStar2 from "@/assets/end-marker2.png";
 import L2 from "@/assets/FloorL2.png";
 import L1 from "@/assets/FloorL1.png";
 import F1 from "@/assets/Floor1.png";
@@ -123,11 +120,11 @@ export const MapBlock: React.FC = () => {
     setPathfindingStrategy(strat);
   };
 
-  const changeAccessibilty = () => {
-    setAccessMode(!accessMode);
+  const changeAccessibilty = (accessMode: boolean) => {
+    setAccessMode(accessMode);
   };
 
-  const handleObstacle = () => {
+  const handleObstacle = (obstacles: boolean) => {
     setObstacles(!obstacles);
     console.log("Changes obstacles handling to " + obstacles);
   };
