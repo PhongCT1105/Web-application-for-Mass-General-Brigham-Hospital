@@ -14,8 +14,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import { CircleDot, CirclePlay, EllipsisVertical } from "lucide-react";
-// import { Node } from "@/context/nodeContext.tsx";
+import {
+  CircleDot,
+  CirclePlay,
+  Clover,
+  EllipsisVertical,
+  Accessibility,
+} from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 // import {Label} from "@/components/ui/label.tsx";
@@ -42,6 +47,7 @@ interface SearchBarProps {
   changePathfindingStrategy: (strat: string) => void;
   //currentFloor: string;
   textDirections: direction[];
+  changeAccessibility: () => void;
   children?: React.ReactNode; // Add this line
 }
 
@@ -51,6 +57,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onClear,
   changePathfindingStrategy,
   textDirections, // New prop
+  changeAccessibility,
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -60,6 +67,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [endPointID, setEndPointID] = useState<string>("");
   const { startNodeName, endNodeName, startNodeID, endNodeID } =
     useSearchContext();
+  const [tabVal, setTabValue] = useState<string>("astar");
+
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
     .filter((location) => {
@@ -73,9 +82,35 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleSearch = () => {
     onClear();
-    console.log("startSearch === " + startPoint);
-    console.log("endSearch === " + endPoint);
+    // console.log("startSearch === " + startPoint);
+    // console.log("endSearch === " + endPoint);
     onSearch(startPointID, endPointID);
+  };
+
+  const feelingLucky = () => {
+    const randStart = Math.floor(Math.random() * locations.length);
+    let randEnd = Math.floor(Math.random() * locations.length);
+    while (randStart === randEnd) {
+      // If they are the same, get new randEnd value until no longer true
+      randEnd = Math.floor(Math.random() * locations.length);
+    }
+    const nZTT = Math.floor(Math.random() * 4);
+    const pathAlgo =
+      nZTT === 0
+        ? "AStar"
+        : nZTT === 1
+          ? "Dijkstra"
+          : nZTT === 2
+            ? "BFS"
+            : "DFS";
+    setStartPoint(locations[randStart].longName);
+    setStartPointID(locations[randStart].nodeID);
+    setEndPoint(locations[randEnd].longName);
+    setEndPointID(locations[randEnd].nodeID);
+    changePathfindingStrategy(pathAlgo);
+    setTabValue(pathAlgo.toLowerCase());
+    // handleSearch();
+    onSearch(locations[randStart].nodeID, locations[randEnd].nodeID);
   };
 
   useEffect(() => {
@@ -84,6 +119,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setStartPointID(startNodeID);
     setEndPointID(endNodeID);
   }, [startNodeName, endNodeName, startNodeID, endNodeID]);
+
+  useEffect(() => {
+    setTabValue(tabVal);
+  }, [tabVal]);
 
   const handleClear = () => {
     setStartPoint("");
@@ -98,8 +137,26 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     >
       <Card className={"w-full shadow"}>
         <CardHeader>
-          <CardTitle className={"flex justify-between items-center"}>
-            Directions
+          <CardTitle className="flex justify-between items-center">
+            <div>Directions</div>
+            <Button
+              variant="invisible"
+              title="Feeling Lucky?"
+              onClick={feelingLucky}
+            >
+              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
+                <Clover color={"green"} />
+              </div>
+            </Button>
+            <Button
+              variant="invisible"
+              title="Accessibility"
+              onClick={changeAccessibility}
+            >
+              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
+                <Accessibility />
+              </div>
+            </Button>
             <InstructionsLink location={"nav"}></InstructionsLink>
           </CardTitle>
         </CardHeader>
@@ -190,29 +247,41 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           </div>
 
           <div className="flex mb-4 flex-col items-center align-content-center">
-            <Tabs defaultValue="astar" className=" ">
+            <Tabs value={tabVal}>
               <TabsList>
                 <TabsTrigger
                   value="bfs"
-                  onClick={() => changePathfindingStrategy("BFS")}
+                  onClick={() => {
+                    changePathfindingStrategy("BFS");
+                    setTabValue("bfs");
+                  }}
                 >
                   BFS
                 </TabsTrigger>
                 <TabsTrigger
                   value="astar"
-                  onClick={() => changePathfindingStrategy("AStar")}
+                  onClick={() => {
+                    changePathfindingStrategy("AStar");
+                    setTabValue("astar");
+                  }}
                 >
                   A*
                 </TabsTrigger>
                 <TabsTrigger
                   value="dfs"
-                  onClick={() => changePathfindingStrategy("DFS")}
+                  onClick={() => {
+                    changePathfindingStrategy("DFS");
+                    setTabValue("dfs");
+                  }}
                 >
                   DFS
                 </TabsTrigger>
                 <TabsTrigger
                   value="dijkstra"
-                  onClick={() => changePathfindingStrategy("Dijkstra")}
+                  onClick={() => {
+                    changePathfindingStrategy("Dijkstra");
+                    setTabValue("dijkstra");
+                  }}
                 >
                   Dijkstra
                 </TabsTrigger>
@@ -235,7 +304,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               onClick={handleClear}
               className="w-full"
             >
-              Clear
+              Reset
             </Button>
           </div>
         </CardContent>

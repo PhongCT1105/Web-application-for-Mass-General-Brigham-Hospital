@@ -21,7 +21,9 @@ export const columnsSanitationFormLog: ColumnDef<SanitationForm>[] = [
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-normal">#{row.getValue("reqId")}</div>
+      <div className="w-[80px] font-normal">
+        #{"SA" + row.getValue("reqId")}
+      </div>
     ),
   },
   {

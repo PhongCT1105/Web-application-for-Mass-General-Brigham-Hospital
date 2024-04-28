@@ -4,51 +4,82 @@ import PrismaClient from "../bin/database-connection.ts";
 
 const router: Router = express.Router();
 
-type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
-type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
-type rTypeOfIssue =
-  | "Spill"
-  | "BodilyFluid"
-  | "FoulOdor"
-  | "Garbage"
-  | "Other"
-  | "";
+// type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
+// type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
+// type rTypeOfIssue =
+//   | "Spill"
+//   | "BodilyFluid"
+//   | "FoulOdor"
+//   | "Garbage"
+//   | "Other"
+//   | "";
 
-interface RequestForm {
-  name: string;
-  severity: rSeverity;
-  location: string;
-  typeOfIssue: rTypeOfIssue;
-  time: string;
-  status: rStatus;
-  description: string;
-  comments: string;
-}
+// interface RequestForm {
+//   name: string;
+//   severity: string;
+//   location: string;
+//   typeOfIssue: string;
+//   time: string;
+//   status: string;
+//   description: string;
+//   comments: string;
+// }
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestBody = req.body;
-    console.log(requestBody);
-    const jsonString = JSON.stringify(requestBody);
-    console.log("JSON String:", jsonString);
+    const requestForms = req.body;
 
-    // Parse the JSON string back into an object
-    const requestForm: RequestForm = JSON.parse(jsonString);
-    console.log(requestForm);
+    if (Array.isArray(requestForms)) {
+      for (const requestForm of requestForms)
+        await PrismaClient.sanitationRequest.create({
+          data: {
+            name: requestForm.name,
+            severity: requestForm.severity,
+            location: requestForm.location,
+            typeOfIssue: requestForm.typeOfIssue,
+            time: requestForm.time,
+            status: requestForm.status,
+            description: requestForm.description,
+            comments: requestForm.comments,
+          },
+        });
+    } else {
+      await PrismaClient.sanitationRequest.create({
+        data: {
+          name: requestForms.name,
+          severity: requestForms.severity,
+          location: requestForms.location,
+          typeOfIssue: requestForms.typeOfIssue,
+          time: requestForms.time,
+          status: requestForms.status,
+          description: requestForms.description,
+          comments: requestForms.comments,
+        },
+      });
 
-    await PrismaClient.sanitationRequest.create({
-      data: {
-        name: requestForm.name,
-        severity: requestForm.severity,
-        location: requestForm.location,
-        typeOfIssue: requestForm.typeOfIssue,
-        time: requestForm.time,
-        status: requestForm.status,
-        description: requestForm.description,
-        comments: requestForm.comments,
-      },
-    });
-    console.info("Successfully requested sanitation services");
+      // Update the state of the Node if severity is high or emergency
+
+      // if (
+      //   requestForms.severity === "High" ||
+      //   requestForms.severity === "Emergency"
+      // ) {
+      //   const updatedNode = PrismaClient.nodes.update({
+      //     where: {
+      //       nodeID: requestForms.location, // Assuming NodeID is provided in the request body
+      //     },
+      //     data: {
+      //       obstacle: true,
+      //     },
+      //   });
+      //   if (!updatedNode) {
+      //     // If the node was not found or not updated, throw an error
+      //     console.log("Node not found or could not be updated");
+      //   }
+      //   console.log(updatedNode);
+      // }
+    }
+
+    console.info("Successfully requested sanitation services and updated node");
     res
       .status(200)
 
@@ -75,9 +106,9 @@ router.get("/", async function (req: Request, res: Response) {
   }
 });
 
-router.get("/", async function (sanitationReq: Request, res: Response) {
-  const sanitationRequest = await PrismaClient.sanitationRequest.findMany();
-  res.send(sanitationRequest);
-});
+// router.get("/", async function (sanitationReq: Request, res: Response) {
+//   const sanitationRequest = await PrismaClient.sanitationRequest.findMany();
+//   res.send(sanitationRequest);
+// });
 
 export default router;

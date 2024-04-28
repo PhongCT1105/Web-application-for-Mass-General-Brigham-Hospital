@@ -26,7 +26,7 @@ import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
 import { Medication } from "@/interfaces/medicationReq.ts";
 import { pillData } from "@/interfaces/dataTypes/testData.ts";
 import React, { createContext, useContext, useState } from "react";
-import { SheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
+import { ScheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
 import bannerMedicationImage from "@/assets/medication-banner.png";
 import bannerTransportImage from "@/assets/transportation-banner.png";
 import bannerSanitationImage from "@/assets/sanitation-banner.png";
@@ -108,7 +108,7 @@ export default function ServiceRequestPage() {
                           </TabsTrigger>
                         </TabsList>
                         <InstructionsLink
-                          location={"service-request"}
+                          location={"service"}
                         ></InstructionsLink>
                       </div>
                       <TabsContent
@@ -231,7 +231,7 @@ export default function ServiceRequestPage() {
                           </div>
                         </div>
                         <div className=" justify-center items-center">
-                          <SheduleContent />
+                          <ScheduleContent />
                         </div>
                       </TabsContent>
                       <TabsContent
@@ -325,7 +325,7 @@ export default function ServiceRequestPage() {
                                 textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
-                              By Owen Lacey & Tracy Yang
+                              By Owen Lacey & June Whittall
                             </p>
                             <p
                               className="text-sm text-muted-foreground"

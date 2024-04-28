@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -15,10 +16,12 @@ import {
   FlowerIcon,
   PillIcon,
   Hammer,
+  BookOpen,
 } from "lucide-react";
 import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 import { SecurityFormLogTable } from "@/routes/request-log/securityLogPage.tsx";
+import { GenericForm } from "@/interfaces/genericReq.ts";
 import { MaintenanceForm } from "@/interfaces/maintenanceReq.ts";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
 import { columnsSecurityFormLog } from "@/routes/service-request/securityColumns.tsx";
@@ -31,6 +34,13 @@ import { DataTable } from "@/components/table/data-table.tsx";
 import { FlowerForm } from "@/interfaces/flowerReq.ts";
 import { columnsFlowerFormLog } from "@/routes/service-request/flower-request/flowerFormColumn.tsx";
 import { columnsMaintenanceLog } from "@/routes/service-request/MaintenanceColumns.tsx";
+import bannerSecurityImage from "@/assets/security-banner.png";
+import bannerSanitationImage from "@/assets/sanitation-banner.png";
+import bannerTransportationImage from "@/assets/transportation-banner.png";
+import bannerMedicationImage from "@/assets/medication-banner.png";
+import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
+import bannerFlowerImage from "@/assets/flower-banner.png";
+import { columnsGenericLog } from "@/routes/service-request/GenericRequestColumns.tsx";
 
 export const RequestLogPage = () => {
   const [flowerLog, setFlowerLog] = useState<FlowerForm[]>([]);
@@ -39,6 +49,9 @@ export const RequestLogPage = () => {
   const [tranportLog, setTransportLog] = useState<ScheduleForm[]>([]);
   const [sanitationLog, setSanitationLog] = useState<SanitationForm[]>([]);
   const [maintenanceLog, setMaintenanceLog] = useState<MaintenanceForm[]>([]);
+  const [genericLog, setGenericLog] = useState<GenericForm[]>(
+    [] as GenericForm[],
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -55,14 +68,25 @@ export const RequestLogPage = () => {
             dateSubmitted: item.dateSubmitted,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "ME" + item.id.toString(),
+          name: item.employee,
+          location: item.location,
+          severity: item.medication[0].priority,
+          status: item.medication[0].status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         setMedicineLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(medicineLog));
-  }, [medicineLog]);
+    fetchData().then(() => console.log("medicineLog"));
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -82,14 +106,25 @@ export const RequestLogPage = () => {
           priority: item.priority,
           status: item.status,
         }));
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "F" + item.reqID.toString(),
+          name: item.sender,
+          location: item.location,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         setFlowerLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(flowerLog));
-  }, [flowerLog]);
+    fetchData().then();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -110,14 +145,24 @@ export const RequestLogPage = () => {
           }),
         );
 
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "SE" + item.reqID.toString(),
+          name: item.employee,
+          location: item.location,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         setSecurityLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(securityLog));
-  }, [securityLog]);
+    fetchData().then();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -137,14 +182,25 @@ export const RequestLogPage = () => {
             comments: item.comments,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "SA" + item.reqId.toString(),
+          name: item.name,
+          location: item.location,
+          severity: item.severity,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+        console.log(genericData);
         setSanitationLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(sanitationLog));
-  }, [sanitationLog]);
+    fetchData().then();
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -166,14 +222,24 @@ export const RequestLogPage = () => {
             date: item.date,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "T" + item.reqID.toString(),
+          name: item.employeeName,
+          location: item.locationFrom,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
         setTransportLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(tranportLog));
-  }, [tranportLog]);
+    fetchData().then(() => console.log("tranportLog"));
+  }, []);
 
   useEffect(() => {
     async function fetchData() {
@@ -191,31 +257,55 @@ export const RequestLogPage = () => {
             description: item.description,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "MA" + item.reqId.toString(),
+          name: item.name,
+          location: item.location,
+          severity: item.severity,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         setMaintenanceLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log(maintenanceLog));
-  }, [maintenanceLog]);
+    fetchData().then();
+  }, []);
+
+  function genericTableData(genericData: GenericForm[]) {
+    // setGenericLog((prevState) => [...prevState, ...genericData.slice(0, genericData.length / 2)]);
+    return genericData.slice(0, genericData.length / 2);
+  }
 
   return (
-    <div className={" scrollbar-hide"}>
+    <div className={"scrollbar-hide"}>
       <div className="hidden md:block">
         <div className="border-t">
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
-              {/*<Sidebar className="hidden lg:block"/>*/}
               <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs
-                      defaultValue="Flower Request"
+                      defaultValue="All Requests"
                       className="h-full space-y-6"
                     >
-                      <div className="space-between flex items-center">
+                      <div
+                        className="space-between flex items-center"
+                        style={{
+                          marginLeft: "7.8%",
+                        }}
+                      >
                         <TabsList>
+                          <TabsTrigger value="All Requests">
+                            <BookOpen className="mr-2 h-4 w-4" />
+                            All Requests
+                          </TabsTrigger>
                           <TabsTrigger value="Flower Request">
                             <FlowerIcon className="mr-2 h-4 w-4" />
                             Flower Request
@@ -243,10 +333,82 @@ export const RequestLogPage = () => {
                         </TabsList>
                       </div>
                       <TabsContent
+                        value="All Requests"
+                        className="border-none p-0 flex-col data-[state=active]:flex "
+                        // h-full  ^^^^^
+                      >
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerFlowerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
+                          <div className="space-y-1">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
+                              All Requests
+                            </h2>
+                          </div>
+                        </div>
+                        <Separator className="my-4 w-5/6 mx-auto" />
+                        <DataTable
+                          data={genericTableData(genericLog)}
+                          columns={columnsGenericLog}
+                        />
+                      </TabsContent>
+                      <TabsContent
                         value="Flower Request"
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerFlowerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
+                          <div className="space-y-1">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
+                              Flower Request
+                            </h2>
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
+                              By Mina Boktor & Alexander Kraemling
+                            </p>
+                          </div>
+                        </div>
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
                           data={flowerLog}
                           columns={columnsFlowerFormLog}
@@ -256,17 +418,42 @@ export const RequestLogPage = () => {
                         value="Medication Request"
                         className=" flex-col border-none p-0 data-[state=active]:flex"
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerMedicationImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center 80%",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Medication Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               By Mina Boktor & Alexander Kraemling
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <MedicineFormLogTable
                           columns={columnsMedicationFormLog}
                           data={medicineLog}
@@ -278,18 +465,43 @@ export const RequestLogPage = () => {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerTransportationImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center 37%",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Transportation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Get transportation to a local drop-off point.
                             </p>
                           </div>
                         </div>
 
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
                           searchBar={{
                             title: "employee name",
@@ -305,17 +517,42 @@ export const RequestLogPage = () => {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerSanitationImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center 65%",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Sanitation Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Get sanitation services for an Issue.
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
                           searchBar={{
                             title: "employee name",
@@ -331,17 +568,42 @@ export const RequestLogPage = () => {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerSecurityImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Security Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Request Security services and optionally call 911.
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <SecurityFormLogTable
                           columns={columnsSecurityFormLog}
                           data={securityLog}
@@ -353,17 +615,42 @@ export const RequestLogPage = () => {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div className="flex items-center justify-between">
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerMaintenanceImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center 35%",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
                           <div className="space-y-1">
-                            <h2 className="text-2xl font-semibold tracking-tight">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Maintenance Request
                             </h2>
-                            <p className="text-sm text-muted-foreground">
+                            <p
+                              className="text-sm text-muted-foreground"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
                               Get maintenance services for an Issue.
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
                           searchBar={{
                             title: "employee name",

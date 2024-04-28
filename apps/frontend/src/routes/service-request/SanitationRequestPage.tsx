@@ -43,7 +43,14 @@ interface Form {
   comments: string;
 }
 
+interface LocationWID {
+  longName: string;
+  nodeID: string;
+}
+
 export function Sanitation() {
+  const now = new Date();
+
   const { toast } = useToast();
 
   async function submit() {
@@ -65,9 +72,11 @@ export function Sanitation() {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [submittedForms, setSubmittedForms] = useState<Form[]>([]);
   const [employees, setEmployees] = useState<string[]>([]);
-
   const [locations, setLocationsTo] = useState<string[]>([]);
   const [buttonState, setButtonState] = useState<buttonColor>("ghost");
+
+  const [locationLong, setLocationLong] = useState<string>("");
+  const [locationWithID, setLocationWID] = useState<LocationWID[]>([]);
 
   // Get locations from database
   useEffect(() => {
@@ -76,7 +85,7 @@ export function Sanitation() {
         const response = await axios.get("/api/mapreq/nodes");
         const rawData = response.data;
 
-        const extractedLocations = rawData.map(
+        const extractedLocations: LocationWID[] = rawData.map(
           (item: {
             nodeID: string;
             xcoord: number;
@@ -86,12 +95,19 @@ export function Sanitation() {
             nodeType: string;
             longName: string;
             shortName: string;
-          }) => item.longName,
+          }) => ({
+            longName: item.longName,
+            nodeID: item.nodeID,
+          }),
         );
-        // alphabetizing location list
-        extractedLocations.sort((a: string, b: string) => a.localeCompare(b));
+
+        // alphabetizing location list by longName
+        extractedLocations.sort((a: LocationWID, b: LocationWID) =>
+          a.longName.localeCompare(b.longName),
+        );
         // set locations to filtered alphabetized location list
-        setLocationsTo(extractedLocations);
+        setLocationsTo(extractedLocations.map((location) => location.longName));
+        setLocationWID(extractedLocations);
 
         console.log("Successfully fetched data from the API.");
       } catch (error) {
@@ -159,6 +175,7 @@ export function Sanitation() {
     setForm((prevState) => ({
       ...prevState,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
 
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
@@ -304,7 +321,7 @@ export function Sanitation() {
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="ml-4">
-                        {form.location ? form.location : "Select Location"}
+                        {locationLong ? locationLong : "Select Location"}
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
@@ -312,7 +329,16 @@ export function Sanitation() {
                         <DropdownMenuRadioItem
                           key={index}
                           value={location}
-                          onClick={() => handleLocationChange(location)}
+                          // this needs to be nodeID
+                          onClick={() => {
+                            const locWithID = locationWithID.find(
+                              (loc) => loc.longName == location,
+                            );
+                            if (locWithID) {
+                              handleLocationChange(locWithID.nodeID);
+                              setLocationLong(locWithID.longName);
+                            }
+                          }}
                         >
                           {location}
                         </DropdownMenuRadioItem>
