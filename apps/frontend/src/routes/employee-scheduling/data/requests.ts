@@ -1,27 +1,24 @@
-export interface DraggableReqData {
-  requestType: string;
-  color: string;
-}
+import { CustomCalendarEvent } from "@/routes/employee-scheduling/components/BigCalendar.tsx";
 
-export const Requests: DraggableReqData[] = [
+export const Requests: CustomCalendarEvent[] = [
   {
-    requestType: "Maintenance",
+    title: "Maintenance",
     color: "#4bc6b9",
   },
   {
-    requestType: "Medication",
+    title: "Medication",
     color: "#73c1c6",
   },
   {
-    requestType: "Room Scheduling",
+    title: "Scheduling",
     color: "#96c3ce",
   },
   {
-    requestType: "Sanitation",
+    title: "Sanitation",
     color: "#a79ab2",
   },
   {
-    requestType: "Security",
+    title: "Security",
     color: "#b57ba6",
   },
 ];

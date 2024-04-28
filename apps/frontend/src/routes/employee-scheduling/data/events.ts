@@ -3,8 +3,9 @@ import { CustomCalendarEvent } from "@/routes/employee-scheduling/components/Big
 export const Events: CustomCalendarEvent[] = [
   {
     title: "Mina",
+    employee: "f u",
     start: new Date("2024-04-23T11:00-05:00"),
-    color: "#45300078",
+    color: "#068078",
     end: new Date("2024-04-23T19:00-05:00"),
   },
   {

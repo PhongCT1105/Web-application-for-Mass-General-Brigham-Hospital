@@ -14,22 +14,28 @@ import { parse } from "date-fns/parse";
 import startOfWeek from "date-fns/startOfWeek";
 import getDay from "date-fns/getDay";
 import { enUS } from "date-fns/locale/en-US";
-// import "@/src/styles/tableStyles.css";
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-// import "../../../styles/globals.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { addHours } from "date-fns/addHours";
-// import {Requests} from "@/routes/employee-scheduling/data/requests.ts";
 import { DraggableCard } from "@/routes/employee-scheduling/components/draggableCard.tsx";
-import { DraggableReqData } from "@/routes/employee-scheduling/data/requests.ts";
+import { EventPopover } from "@/routes/employee-scheduling/components/eventPopover.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { getHours } from "date-fns";
+
 // import { startOfHour } from "date-fns";
 
 export interface CustomCalendarEvent extends Event {
   color?: string;
+  employee?: string;
+  status?: string;
+  priority?: string;
+  shift?: number;
+  weekday?: string;
 }
+
 interface CalendarProps {
   employeeSchedule: CustomCalendarEvent[];
-  draggableCardData: DraggableReqData[];
+  draggableCardData: CustomCalendarEvent[];
 }
 export const BigCalendar = ({
   employeeSchedule,
@@ -39,6 +45,82 @@ export const BigCalendar = ({
   const [dragEvent, setDraggedEvent] = useState<CustomCalendarEvent | null>(
     null,
   );
+
+  const handleEventUpdate = (updatedEvent: CustomCalendarEvent) => {
+    // Find the index of the event being updated
+    const index = events.findIndex((e) => e === updatedEvent);
+
+    if (index !== -1) {
+      // Create a copy of the events array
+      const updatedEvents = [...events];
+      // Replace the event at the found index with the updated event
+      updatedEvents[index] = updatedEvent;
+      setEvents(updatedEvents);
+    }
+  };
+
+  const filterEventsByShift = () => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) => {
+        if (event.start && event.end) {
+          const startHour = getHours(event.start);
+          const endHour = getHours(event.end);
+          if (startHour >= 0 && endHour <= 6) return { ...event, shift: 1 };
+          else if (startHour >= 6 && endHour <= 12)
+            return { ...event, shift: 2 };
+          else if (startHour >= 12 && endHour <= 18)
+            return { ...event, shift: 3 };
+          else if (startHour >= 18 && endHour <= 24)
+            return { ...event, shift: 4 };
+        }
+        return event;
+      }),
+    );
+  };
+
+  const filterEventsByWeekday = () => {
+    setEvents((prevEvents) =>
+      prevEvents.map((event) => {
+        if (event.start) {
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          const startDayOfWeek = getDay(event.start);
+          let weekday = "";
+
+          switch (startDayOfWeek) {
+            case 0:
+              weekday = "sunday";
+              break;
+            case 1:
+              weekday = "monday";
+              break;
+            case 2:
+              weekday = "tuesday";
+              break;
+            case 3:
+              weekday = "wednesday";
+              break;
+            case 4:
+              weekday = "thursday";
+              break;
+            case 5:
+              weekday = "friday";
+              break;
+            case 6:
+              weekday = "saturday";
+              break;
+            default:
+              weekday = "unknown";
+          }
+
+          // Update the event with the weekday
+          return { ...event, weekday };
+        }
+        return event;
+      }),
+    );
+  };
+
   const handleDragStart = useCallback(
     (event: CustomCalendarEvent) => setDraggedEvent(event),
     [],
@@ -149,12 +231,12 @@ export const BigCalendar = ({
   return (
     <div>
       <div className={"flex flex-col items-center my-2 pb-3"}>
-        <div className={"flex flex-row space-x-2"}>
+        <div className={"flex flex-row space-x-2 "}>
           {draggableCardData.map((request, index) => (
             <div
               onDragStart={() =>
                 handleDragStart({
-                  title: request.requestType,
+                  title: request.title,
                   color: request.color,
                 })
               }
@@ -166,16 +248,34 @@ export const BigCalendar = ({
       </div>
 
       <DnDCalendar
-        defaultView="week"
+        popup
+        resizable
         events={events}
+        defaultView="week"
         localizer={localizer}
         onEventDrop={onEventDrop}
-        onEventResize={onEventResize}
-        resizable
-        onDropFromOutside={onDropFromOutside}
-        eventPropGetter={eventStyleGetter}
         style={{ height: "100vh" }}
+        onEventResize={onEventResize}
+        eventPropGetter={eventStyleGetter}
+        onDropFromOutside={onDropFromOutside}
+        components={{
+          event: (props) => (
+            <EventPopover
+              event={props.event}
+              onUpdateEvent={handleEventUpdate}
+            />
+          ),
+        }}
       />
+      <Button
+        onClick={() => {
+          filterEventsByShift();
+          filterEventsByWeekday();
+          console.log(events);
+        }}
+      >
+        click
+      </Button>
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useDroppable } from "@dnd-kit/core";
 // import { EmployeeCardProps } from "@/routes/employee-scheduling/employeeCard.tsx";
 import React from "react";
-import { EmployeeCard } from "@/routes/employee-scheduling/employeeCard.tsx";
+import { EmployeeCard } from "@/routes/employee-scheduling/unused/employeeCard.tsx";
 // import { EmployeeCard } from "@/routes/employee-scheduling/SchedulingPage.tsx";
 import {
   Card,
