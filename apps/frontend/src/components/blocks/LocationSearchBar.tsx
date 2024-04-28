@@ -137,8 +137,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     >
       <Card className={"w-full shadow"}>
         <CardHeader>
-          <CardTitle className="flex justify-between items-center">
+          <CardTitle className={"flex justify-between items-center"}>
             <div>Directions</div>
+            <InstructionsLink location={"nav"}></InstructionsLink>
             <Button
               variant="invisible"
               title="Feeling Lucky?"
@@ -157,7 +158,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 <Accessibility />
               </div>
             </Button>
-            <InstructionsLink location={"nav"}></InstructionsLink>
           </CardTitle>
         </CardHeader>
         <CardContent>
