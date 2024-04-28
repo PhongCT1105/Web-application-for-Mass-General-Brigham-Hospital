@@ -20,8 +20,12 @@ import { addHours } from "date-fns/addHours";
 import { DraggableCard } from "@/routes/employee-scheduling/components/draggableCard.tsx";
 import { EventPopover } from "@/routes/employee-scheduling/components/eventPopover.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import {
+  filterEventsByShift,
+  filterEventsByWeekday,
+} from "../utils/eventFiltering.ts";
+import axios from "axios";
 // import { getHours } from "date-fns";
-
 // import { startOfHour } from "date-fns";
 
 export interface CustomCalendarEvent extends Event {
@@ -46,6 +50,35 @@ export const BigCalendar = ({
     null,
   );
 
+  const getEmployees = () => {
+    const filteredByWeekday = filterEventsByWeekday(events);
+    const filteredByShift = filterEventsByShift(filteredByWeekday);
+    let newEvents: CustomCalendarEvent[] = [];
+    const calculate = async () => {
+      // const filteredEvents = handleFilterSubmit();
+      const { data: response } = await axios.post(
+        "api/scheduling",
+        filteredByShift,
+        {
+          headers: {
+            "content-type": "Application/json",
+          },
+        },
+      );
+      newEvents = response;
+    };
+    calculate().then(() => {
+      setEvents((prevState) =>
+        prevState.map((event, index) => {
+          return {
+            ...event,
+            employee: newEvents[index].employee,
+          };
+        }),
+      );
+    });
+  };
+
   const handleEventUpdate = (updatedEvent: CustomCalendarEvent) => {
     // Find the index of the event being updated
     const index = events.findIndex((e) => e === updatedEvent);
@@ -57,75 +90,6 @@ export const BigCalendar = ({
       updatedEvents[index] = updatedEvent;
       setEvents(updatedEvents);
     }
-  };
-
-  const filterEventsByShift = () => {
-    setEvents((prevEvents) =>
-      prevEvents.map((event) => {
-        const { start } = event;
-        if (!start) return event; // If start time is not available, return the event unchanged
-
-        const startHour = start.getHours();
-
-        // Determine the shift block based on the start hour
-        let shift: number;
-        if (startHour >= 0 && startHour < 6) {
-          shift = 1;
-        } else if (startHour >= 6 && startHour < 12) {
-          shift = 2;
-        } else if (startHour >= 12 && startHour < 18) {
-          shift = 3;
-        } else {
-          shift = 4;
-        }
-
-        // Return the event object with the shift attribute set
-        return { ...event, shift };
-      }),
-    );
-  };
-
-  const filterEventsByWeekday = () => {
-    setEvents((prevEvents) =>
-      prevEvents.map((event) => {
-        if (event.start) {
-          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-          // @ts-expect-error
-          const startDayOfWeek = getDay(event.start);
-          let weekday = "";
-
-          switch (startDayOfWeek) {
-            case 0:
-              weekday = "sunday";
-              break;
-            case 1:
-              weekday = "monday";
-              break;
-            case 2:
-              weekday = "tuesday";
-              break;
-            case 3:
-              weekday = "wednesday";
-              break;
-            case 4:
-              weekday = "thursday";
-              break;
-            case 5:
-              weekday = "friday";
-              break;
-            case 6:
-              weekday = "saturday";
-              break;
-            default:
-              weekday = "unknown";
-          }
-
-          // Update the event with the weekday
-          return { ...event, weekday };
-        }
-        return event;
-      }),
-    );
   };
 
   const handleDragStart = useCallback(
@@ -241,6 +205,7 @@ export const BigCalendar = ({
         <div className={"flex flex-row space-x-2 "}>
           {draggableCardData.map((request, index) => (
             <div
+              key={index}
               onDragStart={() =>
                 handleDragStart({
                   title: request.title,
@@ -282,15 +247,7 @@ export const BigCalendar = ({
       >
         Clear
       </Button>
-      <Button
-        onClick={() => {
-          filterEventsByWeekday();
-          filterEventsByShift();
-          console.log(events);
-        }}
-      >
-        Submit
-      </Button>
+      <Button onClick={getEmployees}>Submit</Button>
     </div>
   );
 };
