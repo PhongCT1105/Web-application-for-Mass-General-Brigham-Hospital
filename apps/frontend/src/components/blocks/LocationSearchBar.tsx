@@ -19,8 +19,10 @@ import {
   Clover,
   EllipsisVertical,
   Accessibility,
+  ShieldPlus,
 } from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
+import { Toggle } from "@/components/ui/toggle.tsx";
 
 interface SearchBarProps {
   locations: {
@@ -33,6 +35,7 @@ interface SearchBarProps {
   //currentFloor: string;
   textDirections: direction[];
   changeAccessibility: () => void;
+  setSecurity: () => void;
   children?: React.ReactNode; // Add this line
 }
 
@@ -43,6 +46,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   changePathfindingStrategy,
   textDirections, // New prop
   changeAccessibility,
+  setSecurity,
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -133,6 +137,15 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 <Clover color={"green"} />
               </div>
             </Button>
+            <Toggle
+              variant="default"
+              title="Set Security Guard Path"
+              onClick={setSecurity}
+            >
+              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
+                <ShieldPlus color={"blue"} />
+              </div>
+            </Toggle>
             <Button
               variant="invisible"
               title="Accessibility"

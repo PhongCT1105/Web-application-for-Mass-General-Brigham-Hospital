@@ -125,6 +125,11 @@ export const MapBlock: React.FC = () => {
     setAccessMode(!accessMode);
   };
 
+  const setSecurity = () => {
+    setSecurityMode(!securityMode);
+    console.log("Security mode changed");
+  };
+
   const mapRef = useRef<Map | null>(null);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<string>("AStar");
@@ -142,6 +147,7 @@ export const MapBlock: React.FC = () => {
   const [arrivalTime, setArrivalTime] = useState(new Date());
   const [havePath, setHavePath] = useState(false);
   const [accessMode, setAccessMode] = useState(false);
+  const [securityMode, setSecurityMode] = useState(false);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -681,6 +687,7 @@ export const MapBlock: React.FC = () => {
     }
     changeFloor(searchPath[0].floor);
   }
+
   function findTotalPathDistance(nodeArray: Node[]) {
     let prevNode: Node = nodeArray[0];
     let dist: number = 0;
@@ -903,17 +910,24 @@ export const MapBlock: React.FC = () => {
       }
     }
 
-    path().then(() => {
-      handleClear();
-      clearMarkers();
-      addPathPolylines(nodeArray);
-      addMarkersOnPath(nodeArray);
-      createTextDirections(nodeArray); //nodeArray[0].floor);
-      findTotalPathDistance(nodeArray);
-      if (nodeArray) {
-        setHavePath(true);
-      }
-    });
+    if (securityMode) {
+      path().then(() => {
+        addPathPolylines(nodeArray);
+        addMarkersOnPath(nodeArray);
+      });
+    } else {
+      path().then(() => {
+        handleClear();
+        clearMarkers();
+        addPathPolylines(nodeArray);
+        addMarkersOnPath(nodeArray);
+        createTextDirections(nodeArray); //nodeArray[0].floor);
+        findTotalPathDistance(nodeArray);
+        if (nodeArray) {
+          setHavePath(true);
+        }
+      });
+    }
   }
 
   function addMarkersOnPath(searchPath: Node[]) {
@@ -979,6 +993,7 @@ export const MapBlock: React.FC = () => {
             //currentFloor={currentFloor}
             textDirections={textDirections}
             changeAccessibility={changeAccessibilty}
+            setSecurity={setSecurity}
           />
         </div>
         <div
