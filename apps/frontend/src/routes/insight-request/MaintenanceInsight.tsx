@@ -121,7 +121,7 @@ function MaintenanceInsight({ props }: { props: MaintenanceForm[] }) {
   const maintenancePolarData = countSeverity(data);
   const maintenancePieData = countStatus(data);
   const maintenanceLineData = countMonth(data);
-
+  console.log(props);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">

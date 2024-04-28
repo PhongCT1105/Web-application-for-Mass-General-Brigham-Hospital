@@ -108,7 +108,7 @@ export function Header() {
     });
   };
 
-  AutoLogout(1000 * 60 * 10);
+  AutoLogout(1000 * 60 * 5);
 
   return (
     <div className="flex w-full flex-col">
