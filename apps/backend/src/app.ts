@@ -15,6 +15,7 @@ import pathfindingRoute from "./routes/pathfindingRoute.ts";
 import employeeRoute from "./routes/employeeRoute.ts";
 import maintenanceRoute from "./routes/maintenanceRoute.ts";
 import insightRoute from "./routes/insightRoute.ts";
+import heatRoute from "./routes/heatRoute.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -36,6 +37,7 @@ app.use(cookieParser()); // Cookie parser
 //app.use("/api/high-score", exampleRouter);
 app.use("/api/flowerReq", flowerRouter);
 app.use("/api/mapreq", mapRoute);
+app.use("/api/heatmap", heatRoute);
 app.use("/api/csvFetch", csvFetch);
 app.use("/api/transport", transportRoute);
 app.use("/api/sanitationReq", sanitationRouter);

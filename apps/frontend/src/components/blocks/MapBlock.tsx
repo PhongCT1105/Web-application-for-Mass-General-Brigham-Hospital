@@ -65,6 +65,10 @@ export interface HospitalData {
   yCoord: number;
   floor: string;
 }
+export interface HeatData {
+  node: Node;
+  count: number;
+}
 
 export interface Node {
   nodeID: string;
@@ -126,6 +130,7 @@ export const MapBlock: React.FC = () => {
   //const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
   const [isDataLoaded, setIsDataLoaded] = useState(false);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
+  const [heatData, setHeatData] = useState<HeatData[]>([]);
   //const [searchPath, setSearchPath] = useState<Node[]>([]);
   const [startNodeName, setStartNodeName] = useState("");
   const [endNodeName, setEndNodeName] = useState("");
@@ -256,6 +261,26 @@ export const MapBlock: React.FC = () => {
       });
     }
     setHospitalData(newHospitalData);
+  };
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const loadHeatMapData = async () => {
+    const res = await axios.get(`/api/heatmap/nodes-traveled`);
+    const heatDataArray: HeatData[] = res.data;
+    const heatMap: HeatData[] = [];
+
+    heatDataArray.forEach((item) => {
+      const existingData = heatMap.find(
+        (data) => data.node.nodeID === item.node.nodeID,
+      );
+      if (existingData) {
+        existingData.count++;
+      } else {
+        heatMap.push({ node: item.node, count: 1 });
+      }
+    });
+
+    setHeatData(heatMap);
+    console.log(heatData);
   };
 
   const baseLayers = useMemo(
@@ -676,7 +701,7 @@ export const MapBlock: React.FC = () => {
       }
     });
 
-    const distanceInFeet = dist * 20; // turning coords roughly into feet
+    const distanceInFeet = dist * 15; // turning coords roughly into feet
     const timeInMinutes = distanceInFeet / 265; // 282 ft per minute as average walking speed
 
     setDistance(distanceInFeet); // assuming coords are in feet

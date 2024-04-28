@@ -30,7 +30,7 @@ model Nodes {
   shortName  String
   startEdges Edges[]         @relation("StartNode")
   endEdges   Edges[]         @relation("EndNode")
-  nodeHits   nodesTraveled[] @relation("HitCount")
+  nodeHits   NodesTraveled[] @relation("HitCount")
 
   @@unique([xcoord, ycoord, floor])
 }
@@ -43,7 +43,7 @@ model Edges {
   endNode     String
 }
 
-model nodesTraveled {
+model NodesTraveled {
   id     Int    @id @default(autoincrement())
   node   Nodes  @relation("HitCount", fields: [nodeID], references: [nodeID])
   nodeID String
