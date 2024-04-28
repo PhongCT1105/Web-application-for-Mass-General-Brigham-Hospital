@@ -875,6 +875,8 @@ export const MapBlock: React.FC = () => {
       strategy: pathfindingStrategy,
       start: start,
       end: end,
+      accessibility: accessMode,
+      obstacles: false,
     };
     console.log(test);
     const nodeArray: Node[] = [];
@@ -976,7 +978,7 @@ export const MapBlock: React.FC = () => {
             changePathfindingStrategy={changePathfindingStrategy}
             //currentFloor={currentFloor}
             textDirections={textDirections}
-            accessMode={changeAccessibilty}
+            changeAccessibility={changeAccessibilty}
           />
         </div>
         <div
