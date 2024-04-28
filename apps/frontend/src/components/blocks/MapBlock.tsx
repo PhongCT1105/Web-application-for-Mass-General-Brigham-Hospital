@@ -121,6 +121,10 @@ export const MapBlock: React.FC = () => {
     setPathfindingStrategy(strat);
   };
 
+  const changeAccessibilty = () => {
+    setAccessMode(!accessMode);
+  };
+
   const mapRef = useRef<Map | null>(null);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<string>("AStar");
@@ -137,6 +141,7 @@ export const MapBlock: React.FC = () => {
   const [distance, setDistance] = useState(0);
   const [arrivalTime, setArrivalTime] = useState(new Date());
   const [havePath, setHavePath] = useState(false);
+  const [accessMode, setAccessMode] = useState(false);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -231,6 +236,18 @@ export const MapBlock: React.FC = () => {
   );
 
   const Paths: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
+  const PathMarkers: { [key: string]: L.LayerGroup } = useMemo(
     () =>
       ({
         L1: new L.LayerGroup(),
@@ -523,6 +540,7 @@ export const MapBlock: React.FC = () => {
         SpecialMarkers[key].addTo(Layers[key]);
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
+        PathMarkers[key].addTo(Layers[key]);
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -541,6 +559,7 @@ export const MapBlock: React.FC = () => {
     StartMarker,
     EndMarker,
     addMarker,
+    PathMarkers,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -565,7 +584,7 @@ export const MapBlock: React.FC = () => {
     return L.polyline([startCoords, endCoords], {
       color: "blue",
       weight: 5,
-      dashArray: "3, 10",
+      // dashArray: "3, 10",
       snakingSpeed: 200,
       snakeRepeat: true,
     });
@@ -812,7 +831,6 @@ export const MapBlock: React.FC = () => {
       StartMarker[key].clearLayers();
       EndMarker[key].clearLayers();
     });
-
     placeStartEndMarkers(searchPath);
     placeFloorMarkers(searchPath);
 
@@ -846,6 +864,7 @@ export const MapBlock: React.FC = () => {
       StartMarker[key].clearLayers();
       EndMarker[key].clearLayers();
       Paths[key].clearLayers();
+      PathMarkers[key].clearLayers();
       Markers[key].addTo(Layers[key]);
     });
     setTextDirections([]);
@@ -856,6 +875,8 @@ export const MapBlock: React.FC = () => {
       strategy: pathfindingStrategy,
       start: start,
       end: end,
+      accessibility: accessMode,
+      obstacles: false,
     };
     console.log(test);
     const nodeArray: Node[] = [];
@@ -885,8 +906,8 @@ export const MapBlock: React.FC = () => {
     path().then(() => {
       handleClear();
       clearMarkers();
-      addMarkersOnPath(nodeArray);
       addPathPolylines(nodeArray);
+      addMarkersOnPath(nodeArray);
       createTextDirections(nodeArray); //nodeArray[0].floor);
       findTotalPathDistance(nodeArray);
       if (nodeArray) {
@@ -896,15 +917,19 @@ export const MapBlock: React.FC = () => {
   }
 
   function addMarkersOnPath(searchPath: Node[]) {
+    let index = 0;
     searchPath.forEach((node) => {
-      const coords: [number, number] = [3400 - node.ycoord, node.xcoord];
-      const marker = L.circleMarker(coords, {
-        radius: 5,
-        color: "#ebd234",
-        fillColor: "#ebd234",
-        fillOpacity: 1,
-      }).bindPopup(node.longName);
-      marker.addTo(Paths[node.floor]);
+      if (index != 0 || index != searchPath.length - 1) {
+        const coords: [number, number] = [3400 - node.ycoord, node.xcoord];
+        const marker = L.circleMarker(coords, {
+          radius: 8,
+          color: "#ebd234",
+          fillColor: "blue",
+          fillOpacity: 1,
+        }).bindPopup(node.longName);
+        marker.addTo(PathMarkers[node.floor]);
+        index++;
+      }
     });
   }
 
@@ -953,6 +978,7 @@ export const MapBlock: React.FC = () => {
             changePathfindingStrategy={changePathfindingStrategy}
             //currentFloor={currentFloor}
             textDirections={textDirections}
+            changeAccessibility={changeAccessibilty}
           />
         </div>
         <div

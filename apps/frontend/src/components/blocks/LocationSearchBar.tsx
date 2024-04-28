@@ -13,7 +13,13 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import { CircleDot, CirclePlay, Clover, EllipsisVertical } from "lucide-react";
+import {
+  CircleDot,
+  CirclePlay,
+  Clover,
+  EllipsisVertical,
+  Accessibility,
+} from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 
 interface SearchBarProps {
@@ -26,6 +32,7 @@ interface SearchBarProps {
   changePathfindingStrategy: (strat: string) => void;
   //currentFloor: string;
   textDirections: direction[];
+  changeAccessibility: () => void;
   children?: React.ReactNode; // Add this line
 }
 
@@ -35,6 +42,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onClear,
   changePathfindingStrategy,
   textDirections, // New prop
+  changeAccessibility,
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -123,6 +131,15 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             >
               <div className="flex items-center w-auto group-hover:text-yellow-500 ">
                 <Clover color={"green"} />
+              </div>
+            </Button>
+            <Button
+              variant="invisible"
+              title="Accessibility"
+              onClick={changeAccessibility}
+            >
+              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
+                <Accessibility />
               </div>
             </Button>
           </CardTitle>

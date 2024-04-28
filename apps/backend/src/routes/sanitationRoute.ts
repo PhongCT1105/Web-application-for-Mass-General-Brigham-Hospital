@@ -27,7 +27,7 @@ const router: Router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestData = req.body;
+    const requestForm = req.body;
     // console.log(requestBody);
     // const jsonString = JSON.stringify(requestBody);
     // console.log("JSON String:", jsonString);
@@ -35,21 +35,42 @@ router.post("/", async (req: Request, res: Response) => {
     // Parse the JSON string back into an object
     // const requestForm: RequestForm = requestBody;
     // console.log(requestForm);
-    for (const requestForm of requestData) {
-      await PrismaClient.sanitationRequest.create({
+    // for (const requestForm of requestData) {
+    await PrismaClient.sanitationRequest.create({
+      data: {
+        name: requestForm.name,
+        severity: requestForm.severity,
+        location: requestForm.location,
+        typeOfIssue: requestForm.typeOfIssue,
+        time: requestForm.time,
+        status: requestForm.status,
+        description: requestForm.description,
+        comments: requestForm.comments,
+      },
+    });
+
+    // Update the state of the Node if severity is high or emergency
+    if (
+      requestForm.severity === "High" ||
+      requestForm.severity === "Emergency"
+    ) {
+      const updatedNode = PrismaClient.nodes.update({
+        where: {
+          nodeID: requestForm.location, // Assuming NodeID is provided in the request body
+        },
         data: {
-          name: requestForm.name,
-          severity: requestForm.severity,
-          location: requestForm.location,
-          typeOfIssue: requestForm.typeOfIssue,
-          time: requestForm.time,
-          status: requestForm.status,
-          description: requestForm.description,
-          comments: requestForm.comments,
+          obstacle: true,
         },
       });
+      if (!updatedNode) {
+        // If the node was not found or not updated, throw an error
+        console.log("Node not found or could not be updated");
+      }
+      console.log(updatedNode);
     }
-    console.info("Successfully requested sanitation services");
+
+    // }
+    console.info("Successfully requested sanitation services and updated node");
     res
       .status(200)
 
@@ -76,9 +97,9 @@ router.get("/", async function (req: Request, res: Response) {
   }
 });
 
-router.get("/", async function (sanitationReq: Request, res: Response) {
-  const sanitationRequest = await PrismaClient.sanitationRequest.findMany();
-  res.send(sanitationRequest);
-});
+// router.get("/", async function (sanitationReq: Request, res: Response) {
+//   const sanitationRequest = await PrismaClient.sanitationRequest.findMany();
+//   res.send(sanitationRequest);
+// });
 
 export default router;
