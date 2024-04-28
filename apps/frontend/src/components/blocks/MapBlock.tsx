@@ -20,11 +20,8 @@ import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
 import theFirstFloor from "@/assets/01_thefirstfloor.png";
 import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
-//import GrayDot from "@/assets/gray-dot.png";
 import GreenStar from "@/assets/start-marker.png";
-//import GreenStar2 from "@/assets/start-marker2.png";
 import RedStar from "@/assets/end-marker.png";
-//import RedStar2 from "@/assets/end-marker2.png";
 import L2 from "@/assets/FloorL2.png";
 import L1 from "@/assets/FloorL1.png";
 import F1 from "@/assets/Floor1.png";
@@ -42,6 +39,7 @@ import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
 import { Label } from "@/components/ui/label.tsx";
+import Caution from "@/assets/caution.png";
 
 declare module "leaflet" {
   interface Polyline {
@@ -65,6 +63,7 @@ export interface HospitalData {
   xCoord: number;
   yCoord: number;
   floor: string;
+  obstacle: boolean;
 }
 
 export interface Node {
@@ -121,8 +120,13 @@ export const MapBlock: React.FC = () => {
     setPathfindingStrategy(strat);
   };
 
-  const changeAccessibilty = () => {
-    setAccessMode(!accessMode);
+  const changeAccessibilty = (accessMode: boolean) => {
+    setAccessMode(accessMode);
+  };
+
+  const handleObstacle = (obstacles: boolean) => {
+    setObstacles(!obstacles);
+    console.log("Changes obstacles handling to " + obstacles);
   };
 
   const mapRef = useRef<Map | null>(null);
@@ -142,6 +146,7 @@ export const MapBlock: React.FC = () => {
   const [arrivalTime, setArrivalTime] = useState(new Date());
   const [havePath, setHavePath] = useState(false);
   const [accessMode, setAccessMode] = useState(false);
+  const [obstacles, setObstacles] = useState(false);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -198,8 +203,19 @@ export const MapBlock: React.FC = () => {
     [LayerF1, LayerF2, LayerF3, LayerL1, LayerL2],
   );
 
-  // special markers (floor icons, start, and end)
   const SpecialMarkers: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
+  const ObstacleMarkers: { [key: string]: L.LayerGroup } = useMemo(
     () =>
       ({
         L1: new L.LayerGroup(),
@@ -271,6 +287,7 @@ export const MapBlock: React.FC = () => {
         xCoord: nodeData[i].xcoord,
         yCoord: nodeData[i].ycoord,
         floor: nodeData[i].floor,
+        obstacle: nodeData[i].obstacle,
       });
     }
     setHospitalData(newHospitalData);
@@ -438,8 +455,9 @@ export const MapBlock: React.FC = () => {
           zoomControl: true,
           preferCanvas: true,
           layers: [LayerF1],
-        }).setView([1750, 2700], -2);
+        });
         mapRef.current = map;
+        map.setView([1750, 2700], -2);
         L.control
           .layers(baseLayers, undefined, {
             collapsed: false,
@@ -511,24 +529,48 @@ export const MapBlock: React.FC = () => {
       const addMarkersToLayerGroups = (hospitalData: HospitalData[]) => {
         hospitalData.forEach((node) => {
           const coords: [number, number] = [3400 - node.yCoord, node.xCoord];
-          const marker = L.circleMarker(coords, {
-            radius: 4,
-            color: "#3B3B3B",
-            fillColor: "#3B3B3B",
-            fillOpacity: 0.8,
-          }).bindPopup(node.name);
-          marker.addTo(Markers[node.floor]);
-          //marker.options.attribution = node.nodeID;
-          // Event listener for clicking on markers
-          marker.on("click", function () {
-            setStartEndLocation(
-              node.nodeID,
+          if (node.obstacle) {
+            console.log("This node is an obstacle: " + node);
+            const customIcon = new Icon({
+              iconUrl: Caution,
+              iconSize: [25, 30],
+              iconAnchor: [13, 30],
+            });
+            const marker = L.marker(coords, { icon: customIcon }).bindPopup(
               node.name,
-              node.xCoord,
-              node.yCoord,
-              node.floor,
             );
-          });
+            // Event listener for clicking on markers
+            marker.on("click", function () {
+              setStartEndLocation(
+                node.nodeID,
+                node.name,
+                node.xCoord,
+                node.yCoord,
+                node.floor,
+              );
+            });
+            marker.addTo(ObstacleMarkers[node.floor]);
+          } else {
+            const marker = L.circleMarker(coords, {
+              radius: 4,
+              color: "#3B3B3B",
+              fillColor: "#3B3B3B",
+              fillOpacity: 0.8,
+            }).bindPopup(node.name);
+            // Event listener for clicking on markers
+            marker.on("click", function () {
+              setStartEndLocation(
+                node.nodeID,
+                node.name,
+                node.xCoord,
+                node.yCoord,
+                node.floor,
+              );
+            });
+            marker.addTo(Markers[node.floor]);
+          }
+
+          //marker.options.attribution = node.nodeID;
         });
       };
 
@@ -541,6 +583,7 @@ export const MapBlock: React.FC = () => {
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
         PathMarkers[key].addTo(Layers[key]);
+        ObstacleMarkers[key].addTo(Layers[key]);
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -560,6 +603,7 @@ export const MapBlock: React.FC = () => {
     EndMarker,
     addMarker,
     PathMarkers,
+    ObstacleMarkers,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -866,6 +910,7 @@ export const MapBlock: React.FC = () => {
       Paths[key].clearLayers();
       PathMarkers[key].clearLayers();
       Markers[key].addTo(Layers[key]);
+      ObstacleMarkers[key].addTo(Layers[key]);
     });
     setTextDirections([]);
   }
@@ -876,7 +921,7 @@ export const MapBlock: React.FC = () => {
       start: start,
       end: end,
       accessibility: accessMode,
-      obstacles: false,
+      obstacles: obstacles,
     };
     console.log(test);
     const nodeArray: Node[] = [];
@@ -936,6 +981,7 @@ export const MapBlock: React.FC = () => {
   function clearMarkers() {
     Object.keys(Layers).forEach((key) => {
       Layers[key].removeLayer(Markers[key]);
+      // Layers[key].removeLayer(ObstacleMarkers[key]);
     });
   }
 
@@ -959,11 +1005,8 @@ export const MapBlock: React.FC = () => {
           zIndex: 1,
           overflow: "hidden",
         }}
-        // className={"flex h-[80vh] z-1"}
       >
-        <div
-        // style={{ flex: 1, padding: "10px" }}
-        >
+        <div>
           <SearchBar
             locations={hospitalData
               .filter((hospital) => !hospital.name.includes("Hall"))
@@ -979,6 +1022,7 @@ export const MapBlock: React.FC = () => {
             //currentFloor={currentFloor}
             textDirections={textDirections}
             changeAccessibility={changeAccessibilty}
+            handleObstacle={handleObstacle}
           />
         </div>
         <div
