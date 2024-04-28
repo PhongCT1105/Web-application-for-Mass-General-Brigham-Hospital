@@ -96,6 +96,21 @@ function convertTimeToMonth(arr: SanitationForm[]): SanitationForm[] {
 }
 
 function countMonth(arr: SanitationForm[]): lineRequestData[] {
+  const monthOrder = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
   const countDictionary: Record<string, number> = {};
 
   arr.forEach((obj) => {
@@ -103,9 +118,17 @@ function countMonth(arr: SanitationForm[]): lineRequestData[] {
     countDictionary[month] = (countDictionary[month] || 0) + 1;
   });
 
-  const linedata: lineRequestData[] = Object.entries(countDictionary).map(
-    ([month, request]) => ({ month, request }),
+  // Sort the months based on the defined order
+  const sortedMonths = monthOrder.filter(
+    (month) => countDictionary[month] !== undefined,
   );
+
+  // Create line data in the sorted order
+  const linedata: lineRequestData[] = sortedMonths.map((month) => ({
+    month,
+    request: countDictionary[month] || 0,
+  }));
+
   return linedata;
 }
 

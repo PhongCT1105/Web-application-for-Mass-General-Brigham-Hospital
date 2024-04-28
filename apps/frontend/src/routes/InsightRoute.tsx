@@ -107,6 +107,7 @@ function InsightRoute() {
             call: item.call.toString(),
             status: item.status,
             priority: item.priority,
+            dateSubmitted: item.dateSubmitted,
           }),
         );
 
@@ -164,6 +165,7 @@ function InsightRoute() {
             status: item.status,
             note: item.note,
             date: item.date,
+            dateSubmitted: item.dateSubmitted,
           }),
         );
         setTransportLog(cleanedData);
@@ -189,6 +191,7 @@ function InsightRoute() {
             severity: item.severity,
             status: item.status,
             description: item.description,
+            dateSubmitted: item.dateSubmitted,
           }),
         );
         setMaintenanceLog(cleanedData);

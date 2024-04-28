@@ -9,6 +9,8 @@ import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData
 import { polarRequestDataSeverity } from "@/components/Graph/GraphInterface/polarRequestDataSeverity";
 import { pieRequestData } from "@/components/Graph/GraphInterface/pieRequestData.tsx";
 import PolarAreaChart from "@/components/Graph/PolorAreaGraphSeverity";
+import { lineRequestData } from "@/components/Graph/GraphInterface/lineRequestData.tsx";
+import LineGraph from "@/components/Graph/LineGraph";
 
 function countEmployee(arr: MaintenanceForm[]): barRequestData[] {
   const countDictionary: Record<string, number> = {};
@@ -63,17 +65,69 @@ function countStatus(arr: MaintenanceForm[]): pieRequestData[] {
   return chartdata;
 }
 
+function convertTimestampToMonth(timestamp: string): string {
+  const date = new Date(parseInt(timestamp));
+  const month = date.toLocaleString("default", { month: "long" });
+  return month;
+}
+
+function convertTimeToMonth(arr: MaintenanceForm[]): MaintenanceForm[] {
+  return arr.map((obj) => ({
+    ...obj,
+    timestamp: convertTimestampToMonth(obj.dateSubmitted),
+  }));
+}
+
+function countMonth(arr: MaintenanceForm[]): lineRequestData[] {
+  const monthOrder = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const countDictionary: Record<string, number> = {};
+
+  arr.forEach((obj) => {
+    const month = convertTimestampToMonth(obj.dateSubmitted);
+    countDictionary[month] = (countDictionary[month] || 0) + 1;
+  });
+
+  // Sort the months based on the defined order
+  const sortedMonths = monthOrder.filter(
+    (month) => countDictionary[month] !== undefined,
+  );
+
+  // Create line data in the sorted order
+  const linedata: lineRequestData[] = sortedMonths.map((month) => ({
+    month,
+    request: countDictionary[month] || 0,
+  }));
+
+  return linedata;
+}
+
 function MaintenanceInsight({ props }: { props: MaintenanceForm[] }) {
-  console.log(props);
-  const maintenanceChartData = countEmployee(props);
-  const maintenancePolarData = countSeverity(props);
-  const maintenancePieData = countStatus(props);
+  const data = convertTimeToMonth(props);
+  const maintenanceChartData = countEmployee(data);
+  const maintenancePolarData = countSeverity(data);
+  const maintenancePieData = countStatus(data);
+  const maintenanceLineData = countMonth(data);
+
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
-        {/*<div className="rounded-lg bg-gray-200">*/}
-        {/*  <LineGraph props={securityLineData} />*/}
-        {/*</div>*/}
+        <div className="rounded-lg bg-gray-200">
+          <LineGraph props={maintenanceLineData} />
+        </div>
         <div className="rounded-lg bg-gray-200">
           <BarGraph props={maintenanceChartData} />
         </div>

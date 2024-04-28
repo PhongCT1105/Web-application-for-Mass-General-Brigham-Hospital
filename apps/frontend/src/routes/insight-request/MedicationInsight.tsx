@@ -9,6 +9,8 @@ import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData
 import { pieRequestData } from "@/components/Graph/GraphInterface/pieRequestData";
 import PolarAreaChart from "@/components/Graph/PolarAreaGraphPriority";
 import { polarRequestDataPriority } from "@/components/Graph/GraphInterface/polarRequestDataPriority.tsx";
+import { lineRequestData } from "@/components/Graph/GraphInterface/lineRequestData.tsx";
+import LineGraph from "@/components/Graph/LineGraph";
 function countEmployee(arr: MedicationForm[]): barRequestData[] {
   const countDictionary: Record<string, number> = {};
 
@@ -75,17 +77,68 @@ function countMedicationPriority(
   return chartdata;
 }
 
+function convertTimestampToMonth(timestamp: string): string {
+  const date = new Date(parseInt(timestamp));
+  const month = date.toLocaleString("default", { month: "long" });
+  return month;
+}
+
+function convertTimeToMonth(arr: MedicationForm[]): MedicationForm[] {
+  return arr.map((obj) => ({
+    ...obj,
+    timestamp: convertTimestampToMonth(obj.dateSubmitted),
+  }));
+}
+
+function countMonth(arr: MedicationForm[]): lineRequestData[] {
+  const monthOrder = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const countDictionary: Record<string, number> = {};
+
+  arr.forEach((obj) => {
+    const month = convertTimestampToMonth(obj.dateSubmitted);
+    countDictionary[month] = (countDictionary[month] || 0) + 1;
+  });
+
+  // Sort the months based on the defined order
+  const sortedMonths = monthOrder.filter(
+    (month) => countDictionary[month] !== undefined,
+  );
+
+  // Create line data in the sorted order
+  const linedata: lineRequestData[] = sortedMonths.map((month) => ({
+    month,
+    request: countDictionary[month] || 0,
+  }));
+
+  return linedata;
+}
+
 function MedicationInsight({ props }: { props: MedicationForm[] }) {
-  console.log(props);
-  const medicationChartData = countEmployee(props);
-  const medicationPieData = countMedicationStatus(props);
-  const medicationPolarData = countMedicationPriority(props);
+  const data = convertTimeToMonth(props);
+  const medicationChartData = countEmployee(data);
+  const medicationPieData = countMedicationStatus(data);
+  const medicationPolarData = countMedicationPriority(data);
+  const medicationLineData = countMonth(data);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
-        {/*<div className="rounded-lg bg-gray-200">*/}
-        {/*  <LineGraph props={medicationLineData} />*/}
-        {/*</div>*/}
+        <div className="rounded-lg bg-gray-200">
+          <LineGraph props={medicationLineData} />
+        </div>
         <div className="rounded-lg bg-gray-200">
           <BarGraph props={medicationChartData} />
         </div>

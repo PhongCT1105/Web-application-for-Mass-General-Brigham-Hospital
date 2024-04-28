@@ -24,6 +24,7 @@ router.post("/", async (req: Request, res: Response) => {
           status: requestForm.status,
           note: requestForm.note,
           date: dateConvert,
+          dateSubmitted: requestForm.dateSubmitted,
         },
       });
     }
