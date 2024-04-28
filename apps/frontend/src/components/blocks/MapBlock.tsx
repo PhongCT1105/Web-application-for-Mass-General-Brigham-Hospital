@@ -336,6 +336,9 @@ export const MapBlock: React.FC = () => {
           position: "bottomright",
         })
         .addTo(map);
+      map.on("baselayerchange", function () {
+        map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
+      });
       map.setMaxBounds(bounds);
       Paths[floor].snakeIn();
 
