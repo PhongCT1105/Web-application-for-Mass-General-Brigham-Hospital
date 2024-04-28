@@ -13,7 +13,7 @@ export const columnsSecurityFormLog: ColumnDef<SecurityForm>[] = [
     ),
     cell: ({ row }) => (
       <div className="w-[80px] font-normal">
-        {"SE" + (row.getValue("reqID") as string).toString()}
+        #{"SE" + row.getValue("reqID")}
       </div>
     ),
     enableSorting: false,

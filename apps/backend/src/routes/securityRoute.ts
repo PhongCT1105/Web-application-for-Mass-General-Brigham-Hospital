@@ -18,20 +18,23 @@ const router: Router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestForm = req.body;
-    console.log(requestForm);
+    const requestForms = req.body;
+    // console.log(requestForm);
 
-    await PrismaClient.securityRequest.create({
-      data: {
-        ename: requestForm.ename,
-        location: requestForm.location,
-        employee: requestForm.employee,
-        situation: requestForm.situation,
-        call: requestForm.call,
-        status: requestForm.status,
-        priority: requestForm.priority,
-      },
-    });
+    for (const requestForm of requestForms) {
+      await PrismaClient.securityRequest.create({
+        data: {
+          ename: requestForm.ename,
+          location: requestForm.location,
+          employee: requestForm.employee,
+          situation: requestForm.situation,
+          call: requestForm.call,
+          status: requestForm.status,
+          priority: requestForm.priority,
+          dateSubmitted: requestForm.dateSubmitted,
+        },
+      });
+    }
     console.info("Successfully requested security services");
     res
       .status(200)

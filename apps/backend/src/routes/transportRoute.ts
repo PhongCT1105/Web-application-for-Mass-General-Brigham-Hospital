@@ -6,25 +6,28 @@ import { ScheduleForm } from "../../../frontend/src/interfaces/roomScheduleReq.t
 const router: Router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
-  const requestForm: ScheduleForm = req.body;
-  console.log(requestForm);
-  const dateConvert = new Date(requestForm.date);
+  const requestForms: ScheduleForm[] = req.body;
+  // console.log(requestForm);
 
   try {
-    await PrismaClient.internalTransportRequest.create({
-      data: {
-        employeeName: requestForm.employeeName,
-        patientName: requestForm.patientName,
-        locationFrom: requestForm.locationFrom,
-        locationTo: requestForm.locationTo,
-        reason: requestForm.reason,
-        time: requestForm.time,
-        priority: requestForm.priority,
-        status: requestForm.status,
-        note: requestForm.note,
-        date: dateConvert,
-      },
-    });
+    for (const requestForm of requestForms) {
+      const dateConvert = new Date(requestForm.date);
+      await PrismaClient.internalTransportRequest.create({
+        data: {
+          employeeName: requestForm.employeeName,
+          patientName: requestForm.patientName,
+          locationFrom: requestForm.locationFrom,
+          locationTo: requestForm.locationTo,
+          reason: requestForm.reason,
+          time: requestForm.time,
+          priority: requestForm.priority,
+          status: requestForm.status,
+          note: requestForm.note,
+          date: dateConvert,
+          dateSubmitted: requestForm.dateSubmitted,
+        },
+      });
+    }
     console.info("Successfully requested flowers");
     res.status(200).json({ message: "Flower requests created successfully" });
   } catch (error) {

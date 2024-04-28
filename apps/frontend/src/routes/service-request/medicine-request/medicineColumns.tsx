@@ -21,9 +21,7 @@ export const columnsMedicationFormLog: ColumnDef<MedicationForm>[] = [
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-normal">
-        {"ME" + (row.getValue("id") as string).toString()}
-      </div>
+      <div className="w-[80px] font-normal">#{"ME" + row.getValue("id")}</div>
     ),
     enableSorting: false,
     enableHiding: false,
