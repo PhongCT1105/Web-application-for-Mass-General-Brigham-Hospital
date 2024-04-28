@@ -68,6 +68,7 @@
     "@iconify/icons-lucide": "^1.2.135",
     "@mui/icons-material": "^5.15.15",
     "@mui/material": "^5.15.15",
+    "@mui/styled-engine-sc": "6.0.0-alpha.18",
     "@prisma/client": "4.15.0",
     "@radix-ui/react-slot": "^1.0.2",
     "@react-leaflet/core": "^2.1.0",
@@ -110,6 +111,7 @@
     "react-leaflet-cluster": "^2.1.0",
     "react-leaflet-markercluster": "^3.0.0-rc1",
     "react-router-dom": "5",
+    "styled-components": "^6.1.8",
     "three": "^0.163.0",
     "workspace": "^0.0.1-preview.1",
     "zod": "^3.22.4"
