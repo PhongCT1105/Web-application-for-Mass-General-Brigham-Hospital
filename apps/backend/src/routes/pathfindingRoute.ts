@@ -116,7 +116,6 @@ router.post("/", async (req, res) => {
           graph.addEdge(edges[i].startNode, edges[i].endNode);
         }
       } else {
-        //newGraph.addNeighbors(edgeData[i].startNode, edgeData[i].endNode);
         graph.addEdge(edges[i].startNode, edges[i].endNode);
       }
     }
