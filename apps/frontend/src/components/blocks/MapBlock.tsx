@@ -42,6 +42,7 @@ import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
 import { Label } from "@/components/ui/label.tsx";
+import Caution from "@/assets/caution.png";
 
 declare module "leaflet" {
   interface Polyline {
@@ -65,6 +66,7 @@ export interface HospitalData {
   xCoord: number;
   yCoord: number;
   floor: string;
+  obstacle: boolean;
 }
 
 export interface Node {
@@ -198,8 +200,19 @@ export const MapBlock: React.FC = () => {
     [LayerF1, LayerF2, LayerF3, LayerL1, LayerL2],
   );
 
-  // special markers (floor icons, start, and end)
   const SpecialMarkers: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
+  const ObstacleMarkers: { [key: string]: L.LayerGroup } = useMemo(
     () =>
       ({
         L1: new L.LayerGroup(),
@@ -271,6 +284,7 @@ export const MapBlock: React.FC = () => {
         xCoord: nodeData[i].xcoord,
         yCoord: nodeData[i].ycoord,
         floor: nodeData[i].floor,
+        obstacle: nodeData[i].obstacle,
       });
     }
     setHospitalData(newHospitalData);
@@ -511,24 +525,47 @@ export const MapBlock: React.FC = () => {
       const addMarkersToLayerGroups = (hospitalData: HospitalData[]) => {
         hospitalData.forEach((node) => {
           const coords: [number, number] = [3400 - node.yCoord, node.xCoord];
-          const marker = L.circleMarker(coords, {
-            radius: 4,
-            color: "#3B3B3B",
-            fillColor: "#3B3B3B",
-            fillOpacity: 0.8,
-          }).bindPopup(node.name);
-          marker.addTo(Markers[node.floor]);
-          //marker.options.attribution = node.nodeID;
-          // Event listener for clicking on markers
-          marker.on("click", function () {
-            setStartEndLocation(
-              node.nodeID,
+          if (node.obstacle) {
+            const customIcon = new Icon({
+              iconUrl: Caution,
+              iconSize: [25, 30],
+              iconAnchor: [13, 30],
+            });
+            const marker = L.marker(coords, { icon: customIcon }).bindPopup(
               node.name,
-              node.xCoord,
-              node.yCoord,
-              node.floor,
             );
-          });
+            // Event listener for clicking on markers
+            marker.on("click", function () {
+              setStartEndLocation(
+                node.nodeID,
+                node.name,
+                node.xCoord,
+                node.yCoord,
+                node.floor,
+              );
+            });
+            marker.addTo(ObstacleMarkers[node.floor]);
+          } else {
+            const marker = L.circleMarker(coords, {
+              radius: 4,
+              color: "#3B3B3B",
+              fillColor: "#3B3B3B",
+              fillOpacity: 0.8,
+            }).bindPopup(node.name);
+            // Event listener for clicking on markers
+            marker.on("click", function () {
+              setStartEndLocation(
+                node.nodeID,
+                node.name,
+                node.xCoord,
+                node.yCoord,
+                node.floor,
+              );
+            });
+            marker.addTo(Markers[node.floor]);
+          }
+
+          //marker.options.attribution = node.nodeID;
         });
       };
 
@@ -541,6 +578,7 @@ export const MapBlock: React.FC = () => {
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
         PathMarkers[key].addTo(Layers[key]);
+        ObstacleMarkers[key].addTo(Layers[key]);
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -560,6 +598,7 @@ export const MapBlock: React.FC = () => {
     EndMarker,
     addMarker,
     PathMarkers,
+    ObstacleMarkers,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -936,6 +975,7 @@ export const MapBlock: React.FC = () => {
   function clearMarkers() {
     Object.keys(Layers).forEach((key) => {
       Layers[key].removeLayer(Markers[key]);
+      Layers[key].removeLayer(ObstacleMarkers[key]);
     });
   }
 

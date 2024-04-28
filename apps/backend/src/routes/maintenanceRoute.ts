@@ -64,7 +64,7 @@ router.post("/", async (req: Request, res: Response) => {
     }
 
     if (update) {
-      const updatedNode = PrismaClient.nodes.update({
+      const updatedNode = await PrismaClient.nodes.update({
         where: {
           nodeID: requestForm.location, // Assuming NodeID is provided in the request body
         },
@@ -72,11 +72,11 @@ router.post("/", async (req: Request, res: Response) => {
           obstacle: true,
         },
       });
+      console.log("Updated Node:", updatedNode);
       if (!updatedNode) {
         // If the node was not found or not updated, throw an error
         console.log("Node not found or could not be updated");
       }
-      console.log(updatedNode);
     }
 
     console.info("Successfully requested maintenance services");
