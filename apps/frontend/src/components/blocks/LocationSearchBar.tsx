@@ -17,7 +17,7 @@ import {
 import { CircleDot, CirclePlay, EllipsisVertical } from "lucide-react";
 // import { Node } from "@/context/nodeContext.tsx";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
-
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 // import {Label} from "@/components/ui/label.tsx";
 
 // interface changeMarker {
@@ -98,10 +98,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     >
       <Card className={"w-full shadow"}>
         <CardHeader>
-          <CardTitle
-          // className={"text-4xl font-semibold"}
-          >
+          <CardTitle className={"flex justify-between items-center"}>
             Directions
+            <InstructionsLink location={"nav"}></InstructionsLink>
           </CardTitle>
         </CardHeader>
         <CardContent>

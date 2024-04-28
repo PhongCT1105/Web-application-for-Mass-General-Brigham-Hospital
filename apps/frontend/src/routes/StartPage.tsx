@@ -29,7 +29,7 @@ export default function StartPage() {
                             mb-0 p-0 text-s h-full
                             text-center
                             alert-dismissible
-                            fade show pb-2"
+                            fade show pb-2 p-2"
               role="alert"
             >
               <strong>Notice! </strong>
