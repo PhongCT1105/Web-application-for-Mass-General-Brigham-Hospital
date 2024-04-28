@@ -70,7 +70,7 @@ export default function ServiceRequestPage() {
                 <div className="col-span-5 lg:col-span-5 lg:border-l mt-2">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs
-                      defaultValue="All Requests"
+                      defaultValue="Flower Request"
                       className="h-full space-y-6"
                     >
                       <div
