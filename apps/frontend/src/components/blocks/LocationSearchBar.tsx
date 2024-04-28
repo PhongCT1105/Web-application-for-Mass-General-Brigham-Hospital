@@ -10,6 +10,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import {
   Card,
   CardContent,
+  // CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
@@ -21,6 +22,20 @@ import {
   Accessibility,
 } from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
+// import {Label} from "@/components/ui/label.tsx";
+
+// interface changeMarker {
+//   start: string;
+//   end: string;
+//   setStart: React.Dispatch<React.SetStateAction<string>>;
+//   setEnd: React.Dispatch<React.SetStateAction<string>>;
+// }
+//
+// interface locationData {
+//   nodeID: string;
+//   longName: string;
+// }
 
 interface SearchBarProps {
   locations: {
@@ -122,8 +137,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     >
       <Card className={"w-full shadow"}>
         <CardHeader>
-          <CardTitle className="flex justify-between items-center">
+          <CardTitle className={"flex justify-between items-center"}>
             <div>Directions</div>
+            <InstructionsLink location={"nav"}></InstructionsLink>
             <Button
               variant="invisible"
               title="Feeling Lucky?"
