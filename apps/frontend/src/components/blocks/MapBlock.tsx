@@ -37,9 +37,13 @@ import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
+import { useAchievements } from "@/context/achievementContext.tsx";
+import { ToastProvider } from "@/components/ui/toast.tsx"; // Importing the Toast component
+
 import "@/components/blocks/SnakeAnim";
 import { Label } from "@/components/ui/label.tsx";
 import Caution from "@/assets/caution.png";
+import { useToast } from "@/components/ui/use-toast.ts";
 
 declare module "leaflet" {
   interface Polyline {
@@ -116,6 +120,8 @@ const SearchContext = createContext<changeMarker>({
 // eslint-disable-next-line
 // @ts-ignore
 export const MapBlock: React.FC = () => {
+  const { achievements, triggerAchievement } = useAchievements();
+  const { toast } = useToast(); // Use the useToast hook
   const changePathfindingStrategy = (strat: string) => {
     setPathfindingStrategy(strat);
   };
@@ -955,6 +961,16 @@ export const MapBlock: React.FC = () => {
     }
 
     path().then(() => {
+      // Check if the "First Path Found" achievement has already been triggered
+      if (!achievements.includes("First Path Found")) {
+        // Trigger the achievement
+        triggerAchievement("First Path Found");
+        // Display a toast notification
+        toast({
+          title: "Path Found!",
+          description: "You found the first path.",
+        });
+      }
       handleClear();
       clearMarkers();
       addPathPolylines(nodeArray);
@@ -992,102 +1008,104 @@ export const MapBlock: React.FC = () => {
   }
 
   return (
-    <SearchContext.Provider
-      value={{
-        startNodeName,
-        endNodeName,
-        startNodeID,
-        endNodeID,
-        setStartNodeName,
-        setEndNodeName,
-        setStartNodeID,
-        setEndNodeID,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          height: "100%",
-          zIndex: 1,
-          overflow: "hidden",
+    <ToastProvider>
+      <SearchContext.Provider
+        value={{
+          startNodeName,
+          endNodeName,
+          startNodeID,
+          endNodeID,
+          setStartNodeName,
+          setEndNodeName,
+          setStartNodeID,
+          setEndNodeID,
         }}
       >
-        <div>
-          <SearchBar
-            locations={hospitalData
-              .filter((hospital) => !hospital.name.includes("Hall"))
-              .map((hospital) => ({
-                nodeID: hospital.nodeID,
-                longName: hospital.name,
-              }))
-              .sort((a, b) => a.longName.localeCompare(b.longName))}
-            onSearch={handleSearch}
-            onClear={handleClear}
-            //onChange={changeMarker}
-            changePathfindingStrategy={changePathfindingStrategy}
-            //currentFloor={currentFloor}
-            textDirections={textDirections}
-            changeAccessibility={changeAccessibilty}
-            handleObstacle={handleObstacle}
-          />
-        </div>
         <div
-          id="map-container"
           style={{
-            flex: 2.5,
-            backgroundColor: "gray-300",
-            position: "relative",
-            zIndex: -1,
+            display: "flex",
+            height: "100%",
+            zIndex: 1,
+            overflow: "hidden",
           }}
         >
-          {havePath && (
-            <div
-              className={
-                "w-full bottom-2 h-auto flex align-middle justify-center"
-              }
-            >
+          <div>
+            <SearchBar
+              locations={hospitalData
+                .filter((hospital) => !hospital.name.includes("Hall"))
+                .map((hospital) => ({
+                  nodeID: hospital.nodeID,
+                  longName: hospital.name,
+                }))
+                .sort((a, b) => a.longName.localeCompare(b.longName))}
+              onSearch={handleSearch}
+              onClear={handleClear}
+              //onChange={changeMarker}
+              changePathfindingStrategy={changePathfindingStrategy}
+              //currentFloor={currentFloor}
+              textDirections={textDirections}
+              changeAccessibility={changeAccessibilty}
+              handleObstacle={handleObstacle}
+            />
+          </div>
+          <div
+            id="map-container"
+            style={{
+              flex: 2.5,
+              backgroundColor: "gray-300",
+              position: "relative",
+              zIndex: -1,
+            }}
+          >
+            {havePath && (
               <div
-                style={{ zIndex: 1000 }}
                 className={
-                  "absolute bottom-3 rounded-full bg-white py-3 w-auto px-8 shadow-sm shadow-black flex flex-row gap-4 justify-center items-center"
+                  "w-full bottom-2 h-auto flex align-middle justify-center"
                 }
               >
-                <div className={"flex flex-col"}>
-                  <Label className={"text-xl text-gray-800"}>
-                    <b>{time < 1 ? "<1" : time.toFixed(0)}</b> min
-                  </Label>
-                  <Label className={"text-m text-gray-500"}>
-                    ({distance.toFixed(2)} ft)
+                <div
+                  style={{ zIndex: 1000 }}
+                  className={
+                    "absolute bottom-3 rounded-full bg-white py-3 w-auto px-8 shadow-sm shadow-black flex flex-row gap-4 justify-center items-center"
+                  }
+                >
+                  <div className={"flex flex-col"}>
+                    <Label className={"text-xl text-gray-800"}>
+                      <b>{time < 1 ? "<1" : time.toFixed(0)}</b> min
+                    </Label>
+                    <Label className={"text-m text-gray-500"}>
+                      ({distance.toFixed(2)} ft)
+                    </Label>
+                  </div>
+                  <Label className={"text-2xl text-gray-800"}>
+                    ETA • {arrivalTime.getHours()}:
+                    {arrivalTime.getMinutes() + time < 10 ? "0" : ""}
+                    {(arrivalTime.getMinutes() + time).toFixed(0)}{" "}
                   </Label>
                 </div>
-                <Label className={"text-2xl text-gray-800"}>
-                  ETA • {arrivalTime.getHours()}:
-                  {arrivalTime.getMinutes() + time < 10 ? "0" : ""}
-                  {(arrivalTime.getMinutes() + time).toFixed(0)}{" "}
-                </Label>
               </div>
-            </div>
-          )}
-          {/*<div*/}
-          {/*  style={{*/}
-          {/*    position: "absolute",*/}
-          {/*    top: "67%", // Position at the vertical center of the page*/}
-          {/*    left: "50%",*/}
-          {/*    transform: "translate(0%, -100%)", // Center horizontally and vertically*/}
-          {/*    display: "flex",*/}
-          {/*    flexDirection: "column-reverse",*/}
-          {/*    justifyContent: "center",*/}
-          {/*    alignItems: "center",*/}
-          {/*    width: "87%",*/}
-          {/*    zIndex: 1000,*/}
-          {/*    color: "black",*/}
-          {/*  }}*/}
-          {/*>*/}
+            )}
+            {/*<div*/}
+            {/*  style={{*/}
+            {/*    position: "absolute",*/}
+            {/*    top: "67%", // Position at the vertical center of the page*/}
+            {/*    left: "50%",*/}
+            {/*    transform: "translate(0%, -100%)", // Center horizontally and vertically*/}
+            {/*    display: "flex",*/}
+            {/*    flexDirection: "column-reverse",*/}
+            {/*    justifyContent: "center",*/}
+            {/*    alignItems: "center",*/}
+            {/*    width: "87%",*/}
+            {/*    zIndex: 1000,*/}
+            {/*    color: "black",*/}
+            {/*  }}*/}
+            {/*>*/}
 
-          {/*</div>*/}
+            {/*</div>*/}
+          </div>
         </div>
-      </div>
-    </SearchContext.Provider>
+      </SearchContext.Provider>
+    </ToastProvider>
   );
 };
 
