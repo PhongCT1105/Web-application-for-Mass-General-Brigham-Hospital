@@ -14,8 +14,8 @@ function countEmployee(arr: SecurityForm[]): barRequestData[] {
   const countDictionary: Record<string, number> = {};
 
   arr.forEach((obj) => {
-    const { ename } = obj; // Assuming 'employee' property corresponds to 'employeeName'
-    countDictionary[ename] = (countDictionary[ename] || 0) + 1;
+    const { employee } = obj; // Assuming 'employee' property corresponds to 'employeeName'
+    countDictionary[employee] = (countDictionary[employee] || 0) + 1;
   });
 
   const chartdata: barRequestData[] = Object.entries(countDictionary).map(
