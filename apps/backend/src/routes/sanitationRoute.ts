@@ -57,26 +57,24 @@ router.post("/", async (req: Request, res: Response) => {
         },
       });
 
-      // Update the state of the Node if severity is high or emergency
-
-      // if (
-      //   requestForms.severity === "High" ||
-      //   requestForms.severity === "Emergency"
-      // ) {
-      //   const updatedNode = PrismaClient.nodes.update({
-      //     where: {
-      //       nodeID: requestForms.location, // Assuming NodeID is provided in the request body
-      //     },
-      //     data: {
-      //       obstacle: true,
-      //     },
-      //   });
-      //   if (!updatedNode) {
-      //     // If the node was not found or not updated, throw an error
-      //     console.log("Node not found or could not be updated");
-      //   }
-      //   console.log(updatedNode);
-      // }
+      if (
+        requestForms.severity === "High" ||
+        requestForms.severity === "Emergency"
+      ) {
+        const updatedNode = await PrismaClient.nodes.update({
+          where: {
+            nodeID: requestForms.location, // Assuming NodeID is provided in the request body
+          },
+          data: {
+            obstacle: true,
+          },
+        });
+        if (!updatedNode) {
+          // If the node was not found or not updated, throw an error
+          console.log("Node not found or could not be updated");
+        }
+        console.log(updatedNode);
+      }
     }
 
     console.info("Successfully requested sanitation services and updated node");

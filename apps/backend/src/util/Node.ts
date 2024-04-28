@@ -11,6 +11,7 @@ export class Node {
   nodeType: string;
   longName: string;
   shortName: string;
+  obstacle: boolean;
   neighbors: Set<Node>;
 
   constructor(
@@ -22,6 +23,7 @@ export class Node {
     nodeType: string,
     longName: string,
     shortName: string,
+    obstacle: boolean,
     neighbors: Set<Node>,
   ) {
     this.nodeID = nodeID;
@@ -33,5 +35,6 @@ export class Node {
     this.longName = longName;
     this.shortName = shortName;
     this.neighbors = neighbors;
+    this.obstacle = obstacle;
   }
 }

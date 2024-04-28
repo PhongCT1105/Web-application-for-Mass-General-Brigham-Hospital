@@ -2,7 +2,7 @@ import { Graph } from "../util/Graph.ts";
 import { Node } from "../util/Node.ts";
 
 import PrismaClient from "../bin/database-connection.ts";
-import express, { Router } from "express";
+import express, { Router, Request, Response } from "express";
 
 import { aStar } from "../util/aStar.ts";
 import { BFS } from "../util/BFS.ts";
@@ -12,40 +12,38 @@ import { PathingContext } from "../util/PathfindingTemplate.ts";
 
 const router: Router = express.Router();
 
-router.post("/", async (req, res) => {
-  //const { strategy, start, end } = req.body;
-  const data: {
-    strategy: string;
-    start: string;
-    end: string;
-    accessibility: boolean;
-    obstacles: boolean;
-  } = req.body;
-  let searchStrategy;
-  const pathFindingContext: PathingContext = new PathingContext(new aStar());
-  console.log(data);
-
-  // Choose the strategy based on the provided parameter
-  switch (data.strategy) {
-    case "BFS":
-      searchStrategy = new BFS();
-      break;
-    case "AStar":
-      pathFindingContext.pathFindingStrategy = new aStar();
-      searchStrategy = pathFindingContext.pathFindingStrategy;
-      break;
-    case "DFS":
-      searchStrategy = new DFS();
-      break;
-    case "Dijkstra":
-      pathFindingContext.pathFindingStrategy = new Dijkstra();
-      searchStrategy = pathFindingContext.pathFindingStrategy;
-      break;
-    default:
-      return res.status(400).json({ error: "Invalid search strategy" });
-  }
-
+router.post("/", async (req: Request, res: Response) => {
   try {
+    const data: {
+      strategy: string;
+      start: string;
+      end: string;
+      accessibility: boolean;
+      obstacles: boolean;
+    } = req.body;
+    let searchStrategy;
+    const pathFindingContext: PathingContext = new PathingContext(new aStar());
+    console.log(data);
+
+    // Choose the strategy based on the provided parameter
+    switch (data.strategy) {
+      case "BFS":
+        searchStrategy = new BFS();
+        break;
+      case "AStar":
+        pathFindingContext.pathFindingStrategy = new aStar();
+        searchStrategy = pathFindingContext.pathFindingStrategy;
+        break;
+      case "DFS":
+        searchStrategy = new DFS();
+        break;
+      case "Dijkstra":
+        pathFindingContext.pathFindingStrategy = new Dijkstra();
+        searchStrategy = pathFindingContext.pathFindingStrategy;
+        break;
+      default:
+        return res.status(400).json({ error: "Invalid search strategy" });
+    }
     // create graph from nodes and edges
     // find start and end ID
     const startNode = await PrismaClient.nodes.findFirst({
@@ -64,11 +62,7 @@ router.post("/", async (req, res) => {
     const endNodeID = endNode!.nodeID;
 
     const edges = await PrismaClient.edges.findMany();
-    const nodes = await PrismaClient.nodes.findMany({
-      where: {
-        obstacle: false,
-      },
-    });
+    const nodes = await PrismaClient.nodes.findMany();
     const stairs: string[] = [];
     const blocked: string[] = [];
 
@@ -83,17 +77,17 @@ router.post("/", async (req, res) => {
         nodes[i].nodeType,
         nodes[i].longName,
         nodes[i].shortName,
+        nodes[i].obstacle,
         new Set<Node>(),
       );
 
       graph.addNode(node);
 
-      if (nodes[i].obstacle) {
-        blocked.push(node.nodeID);
-        console.log(nodes[i].obstacle);
-      }
+      if (node.obstacle) blocked.push(node.nodeID);
       if (node.nodeType == "STAI") stairs.push(node.nodeID);
     }
+
+    console.log(blocked);
 
     for (let i = 0; i < edges.length; i++) {
       if (data.accessibility && data.obstacles) {
@@ -107,8 +101,8 @@ router.post("/", async (req, res) => {
         }
       } else if (data.accessibility) {
         if (
-          !stairs.includes(edges[i].startNode) ||
-          !stairs.includes(edges[i].endNode)
+          !stairs.includes(edges[i].startNode.toString()) ||
+          !stairs.includes(edges[i].endNode.toString())
         ) {
           graph.addEdge(edges[i].startNode, edges[i].endNode);
         }
@@ -117,14 +111,13 @@ router.post("/", async (req, res) => {
           !blocked.includes(edges[i].startNode) ||
           !blocked.includes(edges[i].endNode)
         ) {
+          console.log(edges[i].edgeID);
           graph.addEdge(edges[i].startNode, edges[i].endNode);
         }
       } else {
         graph.addEdge(edges[i].startNode, edges[i].endNode);
       }
     }
-
-    console.log(blocked);
 
     // Run the selected search algorithm
     const nodeArray: Node[] = searchStrategy.findPath(

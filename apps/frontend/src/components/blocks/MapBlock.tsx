@@ -458,8 +458,9 @@ export const MapBlock: React.FC = () => {
           zoomControl: true,
           preferCanvas: true,
           layers: [LayerF1],
-        }).setView([1750, 2700], -2);
+        });
         mapRef.current = map;
+        map.setView([1750, 2700], -2);
         L.control
           .layers(baseLayers, undefined, {
             collapsed: false,
@@ -532,6 +533,7 @@ export const MapBlock: React.FC = () => {
         hospitalData.forEach((node) => {
           const coords: [number, number] = [3400 - node.yCoord, node.xCoord];
           if (node.obstacle) {
+            console.log("This node is an obstacle: " + node);
             const customIcon = new Icon({
               iconUrl: Caution,
               iconSize: [25, 30],
@@ -982,7 +984,7 @@ export const MapBlock: React.FC = () => {
   function clearMarkers() {
     Object.keys(Layers).forEach((key) => {
       Layers[key].removeLayer(Markers[key]);
-      Layers[key].removeLayer(ObstacleMarkers[key]);
+      // Layers[key].removeLayer(ObstacleMarkers[key]);
     });
   }
 
