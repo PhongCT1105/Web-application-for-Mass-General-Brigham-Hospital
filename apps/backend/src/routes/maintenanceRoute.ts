@@ -64,43 +64,43 @@ router.post("/", async (req: Request, res: Response) => {
     // }
     // elevator anything but low
     // plumbing all
-    let update = false;
-
-    if (requestForm.status != "Closed") {
-      if (requestForm.typeOfIssue === "PlumbingIssue") {
-        update = true;
-      }
-
-      if (requestForm.typeOfIssue === "ElevatorIssue") {
-        update = true;
-        if (requestForm.severity === "Low") {
-          update = false;
-        }
-      }
-    }
-
-    if (update) {
-      const updatedNode = PrismaClient.nodes.update({
-        where: {
-          nodeID: requestForm.location, // Assuming NodeID is provided in the request body
-        },
-        data: {
-          // name: requestForm.name,
-          // severity: requestForm.severity,
-          // location: requestForm.location,
-          // typeOfIssue: requestForm.typeOfIssue,
-          // status: requestForm.status,
-          // description: requestForm.description,
-          // dateSubmitted: requestForm.dateSubmitted,
-          obstacle: true,
-        },
-      });
-      if (!updatedNode) {
-        // If the node was not found or not updated, throw an error
-        console.log("Node not found or could not be updated");
-      }
-      console.log(updatedNode);
-    }
+    // let update = false;
+    //
+    // if (requestForm.status != "Closed") {
+    //   if (requestForm.typeOfIssue === "PlumbingIssue") {
+    //     update = true;
+    //   }
+    //
+    //   if (requestForm.typeOfIssue === "ElevatorIssue") {
+    //     update = true;
+    //     if (requestForm.severity === "Low") {
+    //       update = false;
+    //     }
+    //   }
+    // }
+    //
+    // if (update) {
+    //   const updatedNode = PrismaClient.nodes.update({
+    //     where: {
+    //       nodeID: requestForm.location, // Assuming NodeID is provided in the request body
+    //     },
+    //     data: {
+    //       // name: requestForm.name,
+    //       // severity: requestForm.severity,
+    //       // location: requestForm.location,
+    //       // typeOfIssue: requestForm.typeOfIssue,
+    //       // status: requestForm.status,
+    //       // description: requestForm.description,
+    //       // dateSubmitted: requestForm.dateSubmitted,
+    //       obstacle: true,
+    //     },
+    //   });
+    //   if (!updatedNode) {
+    //     // If the node was not found or not updated, throw an error
+    //     console.log("Node not found or could not be updated");
+    //   }
+    //   console.log(updatedNode);
+    // }
 
     console.info("Successfully requested maintenance services");
     res
