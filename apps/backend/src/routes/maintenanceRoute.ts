@@ -1,6 +1,7 @@
 import express, { Router, Request, Response } from "express";
 
 import PrismaClient from "../bin/database-connection.ts";
+import { MaintenanceForm } from "../../../frontend/src/interfaces/maintenanceReq.ts";
 
 const router: Router = express.Router();
 
@@ -25,26 +26,41 @@ const router: Router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestForm = req.body;
-    // console.log(requestBody);
-    // const jsonString = JSON.stringify(requestBody);
-    // console.log("JSON String:", jsonString);
-    //
-    // Parse the JSON string back into an object
-    // const requestForms: RequestForm = JSON.parse(jsonString);
-    // console.log(requestForm);
+    const requestForms = req.body;
+    console.log(requestForms);
+    const jsonString = JSON.stringify(requestForms);
+    console.log("JSON String:", jsonString);
 
-    // for (const requestForm of requestForms) {
-    await PrismaClient.maintenanceRequest.create({
-      data: {
-        name: requestForm.name,
-        severity: requestForm.severity,
-        location: requestForm.location,
-        typeOfIssue: requestForm.typeOfIssue,
-        status: requestForm.status,
-        description: requestForm.description,
-      },
-    });
+    //Parse the JSON string back into an object
+    const requestForm: MaintenanceForm = JSON.parse(jsonString);
+    console.log(requestForm);
+
+    if (Array.isArray(requestForms)) {
+      for (const requestForm of requestForms) {
+        await PrismaClient.maintenanceRequest.create({
+          data: {
+            name: requestForm.name,
+            severity: requestForm.severity,
+            location: requestForm.location,
+            typeOfIssue: requestForm.typeOfIssue,
+            status: requestForm.status,
+            description: requestForm.description,
+          },
+        });
+      }
+    } else {
+      await PrismaClient.maintenanceRequest.create({
+        data: {
+          name: requestForm.name,
+          severity: requestForm.severity,
+          location: requestForm.location,
+          typeOfIssue: requestForm.typeOfIssue,
+          status: requestForm.status,
+          description: requestForm.description,
+        },
+      });
+    }
+
     // }
     // elevator anything but low
     // plumbing all
@@ -69,13 +85,14 @@ router.post("/", async (req: Request, res: Response) => {
           nodeID: requestForm.location, // Assuming NodeID is provided in the request body
         },
         data: {
-          name: requestForm.name,
-          severity: requestForm.severity,
-          location: requestForm.location,
-          typeOfIssue: requestForm.typeOfIssue,
-          status: requestForm.status,
-          description: requestForm.description,
-          dateSubmitted: requestForm.dateSubmitted,
+          // name: requestForm.name,
+          // severity: requestForm.severity,
+          // location: requestForm.location,
+          // typeOfIssue: requestForm.typeOfIssue,
+          // status: requestForm.status,
+          // description: requestForm.description,
+          // dateSubmitted: requestForm.dateSubmitted,
+          obstacle: true,
         },
       });
       if (!updatedNode) {
