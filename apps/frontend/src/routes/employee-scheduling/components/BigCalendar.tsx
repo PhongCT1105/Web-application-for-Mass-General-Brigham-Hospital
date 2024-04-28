@@ -20,7 +20,7 @@ import { addHours } from "date-fns/addHours";
 import { DraggableCard } from "@/routes/employee-scheduling/components/draggableCard.tsx";
 import { EventPopover } from "@/routes/employee-scheduling/components/eventPopover.tsx";
 import { Button } from "@/components/ui/button.tsx";
-import { getHours } from "date-fns";
+// import { getHours } from "date-fns";
 
 // import { startOfHour } from "date-fns";
 
@@ -62,18 +62,25 @@ export const BigCalendar = ({
   const filterEventsByShift = () => {
     setEvents((prevEvents) =>
       prevEvents.map((event) => {
-        if (event.start && event.end) {
-          const startHour = getHours(event.start);
-          const endHour = getHours(event.end);
-          if (startHour >= 0 && endHour <= 6) return { ...event, shift: 1 };
-          else if (startHour >= 6 && endHour <= 12)
-            return { ...event, shift: 2 };
-          else if (startHour >= 12 && endHour <= 18)
-            return { ...event, shift: 3 };
-          else if (startHour >= 18 && endHour <= 24)
-            return { ...event, shift: 4 };
+        const { start } = event;
+        if (!start) return event; // If start time is not available, return the event unchanged
+
+        const startHour = start.getHours();
+
+        // Determine the shift block based on the start hour
+        let shift: number;
+        if (startHour >= 0 && startHour < 6) {
+          shift = 1;
+        } else if (startHour >= 6 && startHour < 12) {
+          shift = 2;
+        } else if (startHour >= 12 && startHour < 18) {
+          shift = 3;
+        } else {
+          shift = 4;
         }
-        return event;
+
+        // Return the event object with the shift attribute set
+        return { ...event, shift };
       }),
     );
   };
@@ -176,7 +183,7 @@ export const BigCalendar = ({
     }) => {
       const start =
         typeof event.start === "string" ? new Date(event.start) : event.start;
-      const end = addHours(start, 8);
+      const end = addHours(start, 6);
 
       setEvents((prev) => {
         return [...prev, { ...event, start, end, color: dragEvent?.color }];
@@ -268,13 +275,21 @@ export const BigCalendar = ({
         }}
       />
       <Button
+        variant={"destructive"}
         onClick={() => {
-          filterEventsByShift();
+          setEvents([]);
+        }}
+      >
+        Clear
+      </Button>
+      <Button
+        onClick={() => {
           filterEventsByWeekday();
+          filterEventsByShift();
           console.log(events);
         }}
       >
-        click
+        Submit
       </Button>
     </div>
   );
