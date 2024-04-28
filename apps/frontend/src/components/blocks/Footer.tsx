@@ -2,6 +2,7 @@ import "../../styles/globals.css";
 import Logo from "@/assets/brighamJlogo.png";
 import { ChevronRight } from "lucide-react";
 import { useAuth0 } from "@auth0/auth0-react";
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 export function Footer() {
   const {
     // loginWithRedirect,
@@ -25,6 +26,7 @@ export function Footer() {
           {/*  © 2024 Company Name. All rights reserved.*/}
           {/*</p>*/}
         </div>
+        <InstructionsLink location={"search"}></InstructionsLink>
         <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">
           {/*className="hidden flex-col gap-4 text-base font-medium md:flex md:flex-row md:items-center md:gap- md:text-md lg:gap-6 text-nowrap">*/}
           <div
