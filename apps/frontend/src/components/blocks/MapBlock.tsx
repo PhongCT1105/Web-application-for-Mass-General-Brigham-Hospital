@@ -127,6 +127,11 @@ export const MapBlock: React.FC = () => {
     setAccessMode(!accessMode);
   };
 
+  const handleObstacle = () => {
+    setObstacles(!obstacles);
+    console.log("Changes obstacles handling to " + obstacles);
+  };
+
   const mapRef = useRef<Map | null>(null);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<string>("AStar");
@@ -144,6 +149,7 @@ export const MapBlock: React.FC = () => {
   const [arrivalTime, setArrivalTime] = useState(new Date());
   const [havePath, setHavePath] = useState(false);
   const [accessMode, setAccessMode] = useState(false);
+  const [obstacles, setObstacles] = useState(false);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -905,6 +911,7 @@ export const MapBlock: React.FC = () => {
       Paths[key].clearLayers();
       PathMarkers[key].clearLayers();
       Markers[key].addTo(Layers[key]);
+      ObstacleMarkers[key].addTo(Layers[key]);
     });
     setTextDirections([]);
   }
@@ -915,7 +922,7 @@ export const MapBlock: React.FC = () => {
       start: start,
       end: end,
       accessibility: accessMode,
-      obstacles: false,
+      obstacles: obstacles,
     };
     console.log(test);
     const nodeArray: Node[] = [];
@@ -999,11 +1006,8 @@ export const MapBlock: React.FC = () => {
           zIndex: 1,
           overflow: "hidden",
         }}
-        // className={"flex h-[80vh] z-1"}
       >
-        <div
-        // style={{ flex: 1, padding: "10px" }}
-        >
+        <div>
           <SearchBar
             locations={hospitalData
               .filter((hospital) => !hospital.name.includes("Hall"))
@@ -1019,6 +1023,7 @@ export const MapBlock: React.FC = () => {
             //currentFloor={currentFloor}
             textDirections={textDirections}
             changeAccessibility={changeAccessibilty}
+            handleObstacle={handleObstacle}
           />
         </div>
         <div

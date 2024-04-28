@@ -19,6 +19,7 @@ import {
   Clover,
   EllipsisVertical,
   Accessibility,
+  TriangleAlert,
 } from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 
@@ -33,6 +34,7 @@ interface SearchBarProps {
   //currentFloor: string;
   textDirections: direction[];
   changeAccessibility: () => void;
+  handleObstacle: () => void;
   children?: React.ReactNode; // Add this line
 }
 
@@ -43,6 +45,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   changePathfindingStrategy,
   textDirections, // New prop
   changeAccessibility,
+  handleObstacle,
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -140,6 +143,15 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             >
               <div className="flex items-center w-auto group-hover:text-yellow-500 ">
                 <Accessibility />
+              </div>
+            </Button>
+            <Button
+              variant="invisible"
+              title="Accessibility"
+              onClick={handleObstacle}
+            >
+              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
+                <TriangleAlert color={"#ffc800"} />
               </div>
             </Button>
           </CardTitle>

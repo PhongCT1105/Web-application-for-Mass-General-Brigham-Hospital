@@ -66,6 +66,7 @@ router.post("/", async (req, res) => {
     const edges = await PrismaClient.edges.findMany();
     const nodes = await PrismaClient.nodes.findMany();
     const stairs: string[] = [];
+    const blocked: string[] = [];
 
     const graph: Graph = new Graph();
     for (let i = 0; i < nodes.length; i++) {
@@ -80,16 +81,37 @@ router.post("/", async (req, res) => {
         nodes[i].shortName,
         new Set<Node>(),
       );
+
       graph.addNode(node);
 
+      if (nodes[i].obstacle) {
+        blocked.push(node.nodeID);
+        console.log(nodes[i].obstacle);
+      }
       if (node.nodeType == "STAI") stairs.push(node.nodeID);
     }
 
     for (let i = 0; i < edges.length; i++) {
-      if (data.accessibility) {
+      if (data.accessibility && data.obstacles) {
+        if (
+          !stairs.includes(edges[i].startNode) ||
+          !stairs.includes(edges[i].endNode) ||
+          !blocked.includes(edges[i].startNode) ||
+          !blocked.includes(edges[i].endNode)
+        ) {
+          graph.addEdge(edges[i].startNode, edges[i].endNode);
+        }
+      } else if (data.accessibility) {
         if (
           !stairs.includes(edges[i].startNode) ||
           !stairs.includes(edges[i].endNode)
+        ) {
+          graph.addEdge(edges[i].startNode, edges[i].endNode);
+        }
+      } else if (data.obstacles) {
+        if (
+          !blocked.includes(edges[i].startNode) ||
+          !blocked.includes(edges[i].endNode)
         ) {
           graph.addEdge(edges[i].startNode, edges[i].endNode);
         }
@@ -98,7 +120,8 @@ router.post("/", async (req, res) => {
         graph.addEdge(edges[i].startNode, edges[i].endNode);
       }
     }
-    console.log(graph);
+
+    console.log(blocked);
 
     // Run the selected search algorithm
     const nodeArray: Node[] = searchStrategy.findPath(
