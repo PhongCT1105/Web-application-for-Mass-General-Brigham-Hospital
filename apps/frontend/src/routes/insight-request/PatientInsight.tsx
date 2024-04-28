@@ -73,7 +73,7 @@ function convertTimestampToMonth(timestamp: string): string {
 function convertTimeToMonth(arr: ScheduleForm[]): ScheduleForm[] {
   return arr.map((obj) => ({
     ...obj,
-    timestamp: convertTimestampToMonth(obj.dateSubmitted),
+    timestamp: convertTimestampToMonth(obj.time),
   }));
 }
 
@@ -96,7 +96,7 @@ function countMonth(arr: ScheduleForm[]): lineRequestData[] {
   const countDictionary: Record<string, number> = {};
 
   arr.forEach((obj) => {
-    const month = convertTimestampToMonth(obj.dateSubmitted);
+    const month = convertTimestampToMonth(obj.time);
     countDictionary[month] = (countDictionary[month] || 0) + 1;
   });
 
