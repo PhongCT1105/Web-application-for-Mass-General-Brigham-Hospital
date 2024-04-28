@@ -1061,7 +1061,7 @@ export const MapBlock: React.FC = () => {
                   </Label>
                 </div>
                 <Label className={"text-2xl text-gray-800"}>
-                  Arr: {arrivalTime.getHours()}:
+                  ETA • {arrivalTime.getHours()}:
                   {arrivalTime.getMinutes() + time < 10 ? "0" : ""}
                   {(arrivalTime.getMinutes() + time).toFixed(0)}{" "}
                 </Label>
