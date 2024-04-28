@@ -125,7 +125,7 @@ export const MapBlock: React.FC = () => {
   };
 
   const handleObstacle = (obstacles: boolean) => {
-    setObstacles(!obstacles);
+    setObstacles(obstacles);
     console.log("Changes obstacles handling to " + obstacles);
   };
 
