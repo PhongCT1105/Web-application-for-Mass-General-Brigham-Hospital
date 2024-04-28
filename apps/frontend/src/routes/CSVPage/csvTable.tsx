@@ -25,7 +25,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
-
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 interface CSVData {
   [key: string]: string; // Assuming all values in CSV are strings, adjust as needed
 }
@@ -422,6 +422,7 @@ const CSVTable: React.FC = () => {
                     </div>
                     <div className="flex space-x-4">
                       {/*<Button onClick={exportCSV()}>Export CSV</Button>*/}
+                      <InstructionsLink location={"csv"}></InstructionsLink>
                       <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                           <Button>Export CSV</Button>
