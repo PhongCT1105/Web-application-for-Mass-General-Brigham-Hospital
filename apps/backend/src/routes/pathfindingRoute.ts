@@ -64,7 +64,11 @@ router.post("/", async (req, res) => {
     const endNodeID = endNode!.nodeID;
 
     const edges = await PrismaClient.edges.findMany();
-    const nodes = await PrismaClient.nodes.findMany();
+    const nodes = await PrismaClient.nodes.findMany({
+      where: {
+        obstacle: false,
+      },
+    });
     const stairs: string[] = [];
     const blocked: string[] = [];
 

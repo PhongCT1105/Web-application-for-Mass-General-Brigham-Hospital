@@ -34,7 +34,6 @@ type rStatus = "unassigned" | "assigned" | "inprogress" | "closed";
 type rPriority = "low" | "medium" | "high" | "emergency" | "";
 
 interface securityRequest {
-  ename: string;
   location: string;
   employee: string;
   situation: string;
@@ -48,7 +47,6 @@ export const SecurityForm = () => {
 
   const { toast } = useToast();
   const [securityRequest, setSecurityRequest] = useState<securityRequest>({
-    ename: "",
     location: "",
     situation: "",
     employee: "",
@@ -70,7 +68,6 @@ export const SecurityForm = () => {
    */
   const clearReq = () => {
     setSecurityRequest({
-      ename: "",
       location: "",
       employee: "",
       situation: "",
@@ -147,7 +144,6 @@ export const SecurityForm = () => {
 
   const checkEmpty = () => {
     return (
-      securityRequest.ename === "" ||
       securityRequest.location === "" ||
       securityRequest.situation === "" ||
       securityRequest.employee === ""
@@ -232,7 +228,6 @@ export const SecurityForm = () => {
   async function submit() {
     console.log(securityRequest);
     if (
-      securityRequest.ename === "" ||
       securityRequest.location === "" ||
       securityRequest.situation === "" ||
       securityRequest.employee === ""

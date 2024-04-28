@@ -238,7 +238,7 @@ export const RequestLogPage = () => {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then();
+    fetchData().then(() => console.log("tranportLog"));
   }, []);
 
   useEffect(() => {

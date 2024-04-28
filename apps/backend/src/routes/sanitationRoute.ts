@@ -27,49 +27,58 @@ const router: Router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestForm = req.body;
-    // console.log(requestBody);
-    // const jsonString = JSON.stringify(requestBody);
-    // console.log("JSON String:", jsonString);
-    //
-    // Parse the JSON string back into an object
-    // const requestForm: RequestForm = requestBody;
-    // console.log(requestForm);
-    // for (const requestForm of requestData) {
-    await PrismaClient.sanitationRequest.create({
-      data: {
-        name: requestForm.name,
-        severity: requestForm.severity,
-        location: requestForm.location,
-        typeOfIssue: requestForm.typeOfIssue,
-        time: requestForm.time,
-        status: requestForm.status,
-        description: requestForm.description,
-        comments: requestForm.comments,
-      },
-    });
+    const requestForms = req.body;
 
-    // Update the state of the Node if severity is high or emergency
-    if (
-      requestForm.severity === "High" ||
-      requestForm.severity === "Emergency"
-    ) {
-      const updatedNode = await PrismaClient.nodes.update({
-        where: {
-          nodeID: requestForm.location, // Assuming NodeID is provided in the request body
-        },
+    if (Array.isArray(requestForms)) {
+      for (const requestForm of requestForms)
+        await PrismaClient.sanitationRequest.create({
+          data: {
+            name: requestForm.name,
+            severity: requestForm.severity,
+            location: requestForm.location,
+            typeOfIssue: requestForm.typeOfIssue,
+            time: requestForm.time,
+            status: requestForm.status,
+            description: requestForm.description,
+            comments: requestForm.comments,
+          },
+        });
+    } else {
+      await PrismaClient.sanitationRequest.create({
         data: {
-          obstacle: true,
+          name: requestForms.name,
+          severity: requestForms.severity,
+          location: requestForms.location,
+          typeOfIssue: requestForms.typeOfIssue,
+          time: requestForms.time,
+          status: requestForms.status,
+          description: requestForms.description,
+          comments: requestForms.comments,
         },
       });
-      console.log("Updated Node:", updatedNode);
-      if (!updatedNode) {
-        // If the node was not found or not updated, throw an error
-        console.log("Node not found or could not be updated");
-      }
+
+      // Update the state of the Node if severity is high or emergency
+
+      // if (
+      //   requestForms.severity === "High" ||
+      //   requestForms.severity === "Emergency"
+      // ) {
+      //   const updatedNode = PrismaClient.nodes.update({
+      //     where: {
+      //       nodeID: requestForms.location, // Assuming NodeID is provided in the request body
+      //     },
+      //     data: {
+      //       obstacle: true,
+      //     },
+      //   });
+      //   if (!updatedNode) {
+      //     // If the node was not found or not updated, throw an error
+      //     console.log("Node not found or could not be updated");
+      //   }
+      //   console.log(updatedNode);
+      // }
     }
 
-    // }
     console.info("Successfully requested sanitation services and updated node");
     res
       .status(200)

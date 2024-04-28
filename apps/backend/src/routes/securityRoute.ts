@@ -1,5 +1,6 @@
 import express, { Router, Request, Response } from "express";
 import PrismaClient from "../bin/database-connection.ts";
+import { SecurityForm } from "../../../frontend/src/interfaces/securityReq.ts";
 
 const router: Router = express.Router();
 
@@ -19,18 +20,37 @@ const router: Router = express.Router();
 router.post("/", async (req: Request, res: Response) => {
   try {
     const requestForms = req.body;
-    // console.log(requestForm);
+    console.log(requestForms);
+    const jsonString = JSON.stringify(requestForms);
+    console.log("JSON String:", jsonString);
 
-    for (const requestForm of requestForms) {
+    //Parse the JSON string back into an object
+    const requestForm: SecurityForm = JSON.parse(jsonString);
+
+    if (Array.isArray(requestForms)) {
+      for (const requestForm of requestForms) {
+        await PrismaClient.securityRequest.create({
+          data: {
+            location: requestForm.location,
+            employee: requestForm.employee,
+            situation: requestForm.situation,
+            call: requestForm.call,
+            status: requestForm.status,
+            priority: requestForm.priority,
+            dateSubmitted: requestForm.dateSubmitted,
+          },
+        });
+      }
+    } else {
       await PrismaClient.securityRequest.create({
         data: {
-          ename: requestForm.ename,
           location: requestForm.location,
           employee: requestForm.employee,
           situation: requestForm.situation,
           call: requestForm.call,
           status: requestForm.status,
           priority: requestForm.priority,
+          dateSubmitted: requestForm.dateSubmitted,
         },
       });
     }

@@ -16,7 +16,7 @@ const maintenanceData: MaintenanceForm[] = Array.from({ length: 10 }, () => ({
   severity: faker.helpers.arrayElement(priorities).value,
   status: faker.helpers.arrayElement(statuses).value,
   description: faker.lorem.sentence(),
-  dateSubmitted: faker.date.weekday(),
+  dateSubmitted: faker.date.anytime().getTime().toString(),
 }));
 
 submitDataOnce("maintenanceSubmitted", maintenanceData, "/api/maintenanceReq");

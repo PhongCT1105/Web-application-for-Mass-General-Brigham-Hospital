@@ -1,28 +1,44 @@
 import express, { Router, Request, Response } from "express";
 // import { Flower, flowerRequest } from "database";
 import PrismaClient from "../bin/database-connection.ts";
-import { ScheduleForm } from "../../../frontend/src/interfaces/roomScheduleReq.ts";
+// import { ScheduleForm } from "../../../frontend/src/interfaces/roomScheduleReq.ts";
 
 const router: Router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
-  const requestForms: ScheduleForm[] = req.body;
-  // console.log(requestForm);
-
+  const requestForms = req.body;
   try {
-    for (const requestForm of requestForms) {
-      const dateConvert = new Date(requestForm.date);
+    if (Array.isArray(requestForms)) {
+      for (const requestForm of requestForms) {
+        const dateConvert = new Date(requestForm.date);
+        await PrismaClient.internalTransportRequest.create({
+          data: {
+            employeeName: requestForm.employeeName,
+            patientName: requestForm.patientName,
+            locationFrom: requestForm.locationFrom,
+            locationTo: requestForm.locationTo,
+            reason: requestForm.reason,
+            time: requestForm.time,
+            priority: requestForm.priority,
+            status: requestForm.status,
+            note: requestForm.note,
+            date: dateConvert,
+          },
+        });
+      }
+    } else {
+      const dateConvert = new Date(requestForms.date);
       await PrismaClient.internalTransportRequest.create({
         data: {
-          employeeName: requestForm.employeeName,
-          patientName: requestForm.patientName,
-          locationFrom: requestForm.locationFrom,
-          locationTo: requestForm.locationTo,
-          reason: requestForm.reason,
-          time: requestForm.time,
-          priority: requestForm.priority,
-          status: requestForm.status,
-          note: requestForm.note,
+          employeeName: requestForms.employeeName,
+          patientName: requestForms.patientName,
+          locationFrom: requestForms.locationFrom,
+          locationTo: requestForms.locationTo,
+          reason: requestForms.reason,
+          time: requestForms.time,
+          priority: requestForms.priority,
+          status: requestForms.status,
+          note: requestForms.note,
           date: dateConvert,
         },
       });
