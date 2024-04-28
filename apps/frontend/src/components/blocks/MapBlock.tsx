@@ -146,6 +146,7 @@ export const MapBlock: React.FC = () => {
   const [distance, setDistance] = useState(0);
   const [arrivalTime, setArrivalTime] = useState(new Date());
   const [havePath, setHavePath] = useState(false);
+
   const [accessMode, setAccessMode] = useState(false);
   const [securityMode, setSecurityMode] = useState(false);
 
@@ -252,6 +253,17 @@ export const MapBlock: React.FC = () => {
       }) as const,
     [],
   );
+  const securityPaths: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
 
   const PathMarkers: { [key: string]: L.LayerGroup } = useMemo(
     () =>
@@ -323,8 +335,11 @@ export const MapBlock: React.FC = () => {
         })
         .addTo(map);
       map.setMaxBounds(bounds);
-      Paths[floor].snakeIn();
-
+      if (securityMode) {
+        securityPaths[floor].snakeIn;
+      } else {
+        Paths[floor].snakeIn();
+      }
       mapRef.current = map;
 
       // leaving the below code incase we want it for iteration 5
@@ -384,7 +399,7 @@ export const MapBlock: React.FC = () => {
       //   map.setView([0, 0], -3);
       // }
     },
-    [Layers, Paths, baseLayers],
+    [Layers, securityPaths, securityMode, Paths, baseLayers],
   );
 
   const addMarker = useCallback(
@@ -586,14 +601,23 @@ export const MapBlock: React.FC = () => {
       3400 - endHospital.yCoord,
       endHospital.xCoord,
     ];
-
-    return L.polyline([startCoords, endCoords], {
-      color: "blue",
-      weight: 5,
-      // dashArray: "3, 10",
-      snakingSpeed: 200,
-      snakeRepeat: true,
-    });
+    if (securityMode) {
+      return L.polyline([startCoords, endCoords], {
+        color: "gold",
+        weight: 5,
+        dashArray: "3, 10",
+        snakingSpeed: 200,
+        snakeRepeat: true,
+      });
+    } else {
+      return L.polyline([startCoords, endCoords], {
+        color: "blue",
+        weight: 5,
+        // dashArray: "3, 10",
+        snakingSpeed: 200,
+        snakeRepeat: true,
+      });
+    }
   }
 
   function placeStartEndMarkers(searchPath: Node[]) {
@@ -829,19 +853,26 @@ export const MapBlock: React.FC = () => {
           searchPath[i + 1].nodeID,
         );
         if (newPath) {
-          newPath.addTo(Paths[floor]);
+          if (securityMode) newPath.addTo(securityPaths[floor]);
+          else newPath.addTo(Paths[floor]);
         }
       }
     }
-    Object.keys(Layers).forEach((key) => {
-      Paths[key].addTo(Layers[key]);
-      StartMarker[key].clearLayers();
-      EndMarker[key].clearLayers();
-    });
-    placeStartEndMarkers(searchPath);
-    placeFloorMarkers(searchPath);
+    if (securityMode) {
+      Object.keys(Layers).forEach((key) => {
+        securityPaths[key].addTo(Layers[key]);
+      });
+    } else {
+      Object.keys(Layers).forEach((key) => {
+        Paths[key].addTo(Layers[key]);
+        StartMarker[key].clearLayers();
+        EndMarker[key].clearLayers();
+      });
+      placeStartEndMarkers(searchPath);
+      placeFloorMarkers(searchPath);
 
-    console.log("done :D");
+      console.log("done :D");
+    }
   }
 
   function checkNodeTypes(source: Node, target: Node): boolean {
@@ -861,20 +892,31 @@ export const MapBlock: React.FC = () => {
   }
 
   function handleClear() {
-    setHavePath(false);
-    const map = mapRef.current;
-    if (!map) return;
-    console.log("Clear lines:");
+    if (securityMode) {
+      const map = mapRef.current;
+      if (!map) return;
+      console.log("Clear lines:");
 
-    Object.keys(SpecialMarkers).forEach((key) => {
-      SpecialMarkers[key].clearLayers();
-      StartMarker[key].clearLayers();
-      EndMarker[key].clearLayers();
-      Paths[key].clearLayers();
-      PathMarkers[key].clearLayers();
-      Markers[key].addTo(Layers[key]);
-    });
-    setTextDirections([]);
+      Object.keys(SpecialMarkers).forEach((key) => {
+        securityPaths[key].clearLayers();
+        Markers[key].addTo(Layers[key]);
+      });
+    } else {
+      setHavePath(false);
+      const map = mapRef.current;
+      if (!map) return;
+      console.log("Clear lines:");
+
+      Object.keys(SpecialMarkers).forEach((key) => {
+        SpecialMarkers[key].clearLayers();
+        StartMarker[key].clearLayers();
+        EndMarker[key].clearLayers();
+        Paths[key].clearLayers();
+        PathMarkers[key].clearLayers();
+        Markers[key].addTo(Layers[key]);
+      });
+      setTextDirections([]);
+    }
   }
 
   function handleSearch(start: string, end: string) {
@@ -912,8 +954,8 @@ export const MapBlock: React.FC = () => {
 
     if (securityMode) {
       path().then(() => {
+        handleClear();
         addPathPolylines(nodeArray);
-        addMarkersOnPath(nodeArray);
       });
     } else {
       path().then(() => {
