@@ -14,7 +14,13 @@ const router: Router = express.Router();
 
 router.post("/", async (req, res) => {
   //const { strategy, start, end } = req.body;
-  const data: { strategy: string; start: string; end: string } = req.body;
+  const data: {
+    strategy: string;
+    start: string;
+    end: string;
+    accessibility: boolean;
+    obstacles: boolean;
+  } = req.body;
   let searchStrategy;
   const pathFindingContext: PathingContext = new PathingContext(new aStar());
   console.log(data);
@@ -59,28 +65,40 @@ router.post("/", async (req, res) => {
 
     const edges = await PrismaClient.edges.findMany();
     const nodes = await PrismaClient.nodes.findMany();
+    const stairs: string[] = [];
 
     const graph: Graph = new Graph();
     for (let i = 0; i < nodes.length; i++) {
-      graph.addNode(
-        new Node(
-          nodes[i].nodeID,
-          nodes[i].xcoord,
-          nodes[i].ycoord,
-          nodes[i].floor,
-          nodes[i].building,
-          nodes[i].nodeType,
-          nodes[i].longName,
-          nodes[i].shortName,
-          new Set<Node>(),
-        ),
+      const node = new Node(
+        nodes[i].nodeID,
+        nodes[i].xcoord,
+        nodes[i].ycoord,
+        nodes[i].floor,
+        nodes[i].building,
+        nodes[i].nodeType,
+        nodes[i].longName,
+        nodes[i].shortName,
+        new Set<Node>(),
       );
+      graph.addNode(node);
+
+      if (node.nodeType == "STAI") stairs.push(node.nodeID);
     }
 
     for (let i = 0; i < edges.length; i++) {
-      //newGraph.addNeighbors(edgeData[i].startNode, edgeData[i].endNode);
-      graph.addEdge(edges[i].startNode, edges[i].endNode);
+      if (data.accessibility) {
+        if (
+          !stairs.includes(edges[i].startNode) ||
+          !stairs.includes(edges[i].endNode)
+        ) {
+          graph.addEdge(edges[i].startNode, edges[i].endNode);
+        }
+      } else {
+        //newGraph.addNeighbors(edgeData[i].startNode, edgeData[i].endNode);
+        graph.addEdge(edges[i].startNode, edges[i].endNode);
+      }
     }
+    console.log(graph);
 
     // Run the selected search algorithm
     const nodeArray: Node[] = searchStrategy.findPath(
@@ -89,7 +107,7 @@ router.post("/", async (req, res) => {
       endNodeID,
     );
 
-    console.log("Backend response:" + nodeArray);
+    //console.log("Backend response:" + nodeArray);
     res.status(200).json(nodeArray);
   } catch (error) {
     console.error("Error:", error);

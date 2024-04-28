@@ -30,6 +30,7 @@ model Nodes {
   shortName  String
   startEdges Edges[] @relation("StartNode")
   endEdges   Edges[] @relation("EndNode")
+  obstacle   Boolean @default(false)
 
   @@unique([xcoord, ycoord, floor])
 }

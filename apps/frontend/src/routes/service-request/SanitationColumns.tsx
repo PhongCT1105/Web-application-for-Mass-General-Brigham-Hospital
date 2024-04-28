@@ -22,7 +22,7 @@ export const columnsSanitationFormLog: ColumnDef<SanitationForm>[] = [
     ),
     cell: ({ row }) => (
       <div className="w-[80px] font-normal">
-        {"SA" + (row.getValue("reqId") as string).toString()}
+        #{"SA" + row.getValue("reqId")}
       </div>
     ),
   },
