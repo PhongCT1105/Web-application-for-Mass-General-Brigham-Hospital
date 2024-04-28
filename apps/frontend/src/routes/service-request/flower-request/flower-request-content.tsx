@@ -76,6 +76,7 @@ export interface requestForm {
 
 export const FlowerContent = () => {
   const now = new Date();
+
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
   const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
   const [locations, setLocations] = useState<string[]>([]);
@@ -147,8 +148,8 @@ export const FlowerContent = () => {
       total: totalCost, // Assuming total is unchanged
       priority: prev.priority,
       status: prev.status,
-      dateSubmitted: now.toDateString(),
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
   };
 

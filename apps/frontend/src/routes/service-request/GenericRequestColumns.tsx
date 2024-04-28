@@ -1,18 +1,16 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { DataTableColumnHeader } from "@/components/table/data-table-column-header.tsx";
-import { MaintenanceForm } from "@/interfaces/maintenanceReq.ts";
+import { GenericForm } from "@/interfaces/genericReq.ts";
 import { DataTableColumnHeaderEmployee } from "@/components/table/data-table-employee-header.tsx";
-export const columnsMaintenanceLog: ColumnDef<MaintenanceForm>[] = [
+export const columnsGenericLog: ColumnDef<GenericForm>[] = [
   {
     accessorKey: "reqId",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="ID" />
     ),
     cell: ({ row }) => (
-      <div className="w-[80px] font-normal">
-        #{"MA" + row.getValue("reqId")}
-      </div>
+      <div className="w-[80px] font-normal">#{row.getValue("reqId")}</div>
     ),
   },
   {
@@ -25,22 +23,6 @@ export const columnsMaintenanceLog: ColumnDef<MaintenanceForm>[] = [
         <div className="flex space-x-2">
           <span className="max-w-[300px] truncate font-medium">
             {row.getValue("name")}
-          </span>
-        </div>
-      );
-    },
-    enableHiding: false,
-  },
-  {
-    accessorKey: "typeOfIssue",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Type Of Issue" />
-    ),
-    cell: ({ row }) => {
-      return (
-        <div className="flex space-x-2">
-          <span className="max-w-[300px] truncate font-medium">
-            {row.getValue("typeOfIssue")}
           </span>
         </div>
       );
@@ -93,4 +75,19 @@ export const columnsMaintenanceLog: ColumnDef<MaintenanceForm>[] = [
       );
     },
   },
+  // {
+  //     accessorKey: "dateSubmitted",
+  //     header: ({ column }) => (
+  //         <DataTableColumnHeader column={column} title="Date Submitted" />
+  //     ),
+  //     cell: ({ row }) => {
+  //         return (
+  //             <div className="flex space-x-2">
+  //       <span className="max-w-[200px] truncate font-medium">
+  //         {row.getValue("dateSubmitted")}
+  //       </span>
+  //             </div>
+  //         );
+  //     },
+  // },
 ];
