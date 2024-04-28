@@ -7,13 +7,14 @@ import React, {
   useRef,
   useState,
 } from "react";
-import L, {
-  CRS,
-  Icon,
-  LatLngBoundsExpression,
-  LatLngExpression,
-  Map,
-} from "leaflet";
+// import L, {
+//   CRS,
+//   Icon,
+//   LatLngBoundsExpression,
+//   LatLngExpression,
+//   Map,
+// } from "leaflet";
+import * as L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
 import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
@@ -34,7 +35,8 @@ import UpArrow from "@/assets/arrow-up-solid.svg";
 import LeftArrow from "@/assets/arrow-left-solid.svg";
 import RightArrow from "@/assets/arrow-right-solid.svg";
 import Hospital from "@/assets/hospital-solid.svg";
-import Circle from "@/assets/circle-regular.svg";
+import Empty from "@/assets/empty.svg";
+import Stairs from "@/assets/stairs-solid.svg";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
@@ -57,6 +59,14 @@ declare module "leaflet" {
     snakeRepeatDelay?: number;
   }
 }
+
+import { data } from "./heatmap/testData.ts";
+//import "leaflet.heat";
+// import { useMap } from "react-leaflet";
+// interface TestData {
+//   //max: number;
+//   data: number[][];
+// }
 
 export interface HospitalData {
   nodeID: string;
@@ -120,7 +130,7 @@ export const MapBlock: React.FC = () => {
     setPathfindingStrategy(strat);
   };
 
-  const mapRef = useRef<Map | null>(null);
+  const mapRef = useRef<L.Map | null>(null);
   const [pathfindingStrategy, setPathfindingStrategy] =
     useState<string>("AStar");
   //const [currentFloor, setCurrentFloor] = useState("theFirstFloor");
@@ -273,19 +283,19 @@ export const MapBlock: React.FC = () => {
     (floor: string) => {
       // what if we reinitalized the map and popped that up instead?
 
-      let map: Map | null = mapRef.current;
+      let map: L.Map | null = mapRef.current;
       if (map) {
         map.off();
         map.remove();
       }
 
-      const bounds: LatLngBoundsExpression = [
+      const bounds: L.LatLngBoundsExpression = [
         [0, 0],
         [3400, 5000],
       ];
 
       map = L.map("map-container", {
-        crs: CRS.Simple,
+        crs: L.CRS.Simple,
         minZoom: -2,
         maxZoom: 3,
         zoomControl: true,
@@ -365,7 +375,7 @@ export const MapBlock: React.FC = () => {
 
   const addMarker = useCallback(
     (
-      location: LatLngExpression,
+      location: L.LatLngExpression,
       iconPath: string,
       floorLayer: L.LayerGroup,
       floorMarker: boolean,
@@ -376,7 +386,7 @@ export const MapBlock: React.FC = () => {
 
       // floor markers have a different anchor point
       if (floorMarker) {
-        const customIcon = new Icon({
+        const customIcon = new L.Icon({
           iconUrl: iconPath,
           iconSize: [25, 30],
           iconAnchor: [13, 30],
@@ -388,7 +398,7 @@ export const MapBlock: React.FC = () => {
           changeFloor(floor);
         });
       } else {
-        const customIcon = new Icon({
+        const customIcon = new L.Icon({
           iconUrl: iconPath,
           iconSize: [25, 25],
           iconAnchor: [12.5, 12.5],
@@ -406,15 +416,15 @@ export const MapBlock: React.FC = () => {
         setIsDataLoaded(true);
       });
     } else {
-      let map: Map | null = mapRef.current;
-      const bounds: LatLngBoundsExpression = [
+      let map: L.Map | null = mapRef.current;
+      const bounds: L.LatLngBoundsExpression = [
         [0, 0],
         [3400, 5000],
       ];
 
       if (!map) {
         map = L.map("map-container", {
-          crs: CRS.Simple,
+          crs: L.CRS.Simple,
           minZoom: -2,
           maxZoom: 3,
           zoomControl: true,
@@ -429,6 +439,15 @@ export const MapBlock: React.FC = () => {
           })
           .addTo(map);
         map.setMaxBounds(bounds);
+
+        const testData = data.map(([lng, lat, intensity]) =>
+          L.latLng(lat, lng, intensity),
+        );
+
+        L.heatLayer(testData, {
+          radius: 1,
+          blur: 2,
+        }).addTo(map);
       }
 
       const setStartEndLocation = (
@@ -571,7 +590,7 @@ export const MapBlock: React.FC = () => {
   }
 
   function placeStartEndMarkers(searchPath: Node[]) {
-    const startCoord: LatLngExpression = [
+    const startCoord: L.LatLngExpression = [
       3400 - searchPath[0].ycoord,
       searchPath[0].xcoord,
     ];
@@ -582,7 +601,7 @@ export const MapBlock: React.FC = () => {
       false,
       searchPath[0].floor,
     );
-    const endCoord: LatLngExpression = [
+    const endCoord: L.LatLngExpression = [
       3400 - searchPath[searchPath.length - 1].ycoord,
       searchPath[searchPath.length - 1].xcoord,
     ];
@@ -636,12 +655,12 @@ export const MapBlock: React.FC = () => {
     console.log("changeFloor here:" + searchPath[0].floor);
     for (let i = 0; i < searchPath.length - 1; i++) {
       const current = searchPath[i];
-      const currentCoord: LatLngExpression = [
+      const currentCoord: L.LatLngExpression = [
         3400 - current.ycoord,
         current.xcoord,
       ];
       const next = searchPath[i + 1];
-      const nextCoord: LatLngExpression = [3400 - next.ycoord, next.xcoord];
+      const nextCoord: L.LatLngExpression = [3400 - next.ycoord, next.xcoord];
       if (current.floor != next.floor) {
         addMarker(
           currentCoord,
@@ -716,7 +735,7 @@ export const MapBlock: React.FC = () => {
           icon: Hospital,
         };
         directionsArray.push(directionObject);
-        directionsArray.push({ text: "\n\n", icon: Circle });
+        directionsArray.push({ text: "\n\n", icon: Empty });
 
         for (let j = 0; j < paths[i].length - 1; j++) {
           if (
@@ -726,7 +745,7 @@ export const MapBlock: React.FC = () => {
           ) {
             directionsArray.push({
               text: "\n",
-              icon: Circle,
+              icon: Stairs,
             });
           } else if (
             j != 0 &&
@@ -745,7 +764,7 @@ export const MapBlock: React.FC = () => {
             directionsArray.push(directionObject);
           }
         }
-        directionsArray.push({ text: "\n", icon: Circle });
+        directionsArray.push({ text: "\n", icon: Empty });
       }
     }
     setTextDirections(directionsArray);
@@ -899,6 +918,43 @@ export const MapBlock: React.FC = () => {
       Layers[key].removeLayer(Markers[key]);
     });
   }
+
+  //********* HEAT MAP **********//
+
+  //function heatmap() {
+  // useEffect(() => {
+  //   // Create map instance
+  //   const map = L.map("map-container").setView([1750, 2700], -2);
+  //   console.log("this use Effect is running");
+  //
+  //   // Add OpenStreetMap tile layer
+  //   // L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  //   //   attribution:
+  //   //     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  //   // }).addTo(map);
+  //
+  //   // Prepare heatmap data
+  //   // const testData = {
+  //   //   // max: 50, // Maximum value for the heatmap
+  //   //   data, // Your heatmap data
+  //   // };
+  //
+  //   // const testData = data.map(
+  //   //   ([lat, lng, intensity]) => [lat, lng, intensity] as L.HeatLatLngTuple,
+  //   // );
+  //   const testData = data.map(([lng, lat, intensity]) =>
+  //     L.latLng(lat, lng, intensity),
+  //   );
+  //
+  //   // Create heatmap layer and add it to the map
+  //   L.heatLayer(testData, {
+  //     radius: 1,
+  //     blur: 2,
+  //   }).addTo(map);
+  // }, []); // Empty dependency array ensures this effect runs only once after initial render
+  // //
+
+  //*********ENDHEATMAP********//
 
   return (
     <SearchContext.Provider

@@ -80,6 +80,7 @@ const RAW_RUNTIME_STATE =
           ["@types/csv-parse", "npm:1.2.2"],\
           ["@types/kill-port", "npm:2.0.3"],\
           ["@types/leaflet", "npm:1.9.8"],\
+          ["@types/leaflet.heat", "npm:0.2.4"],\
           ["@types/leaflet.markercluster", "npm:1.5.4"],\
           ["@types/node", "npm:20.12.2"],\
           ["@types/pathfinding", "npm:0.0.9"],\
@@ -110,6 +111,7 @@ const RAW_RUNTIME_STATE =
           ["leaflet-ant-path", "npm:1.3.0"],\
           ["leaflet-moving-marker", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.3.0"],\
           ["leaflet.animatedmarker", "npm:1.0.0"],\
+          ["leaflet.heat", "npm:0.2.0"],\
           ["leaflet.markercluster", "virtual:a657ee487c4210b95204859cdabe06f03ec08433ab706cfa484088bf818c3d5b7eba1df2444afeb50a660321f8c236d084c716c2b23544e39eaee66887ee25fa#npm:1.5.3"],\
           ["npm", "npm:10.5.0"],\
           ["pathfinding", "npm:0.4.18"],\
@@ -6367,6 +6369,16 @@ const RAW_RUNTIME_STATE =
         "linkType": "HARD"\
       }]\
     ]],\
+    ["@types/leaflet.heat", [\
+      ["npm:0.2.4", {\
+        "packageLocation": "./.yarn/cache/@types-leaflet.heat-npm-0.2.4-4286953340-9bee546a03.zip/node_modules/@types/leaflet.heat/",\
+        "packageDependencies": [\
+          ["@types/leaflet.heat", "npm:0.2.4"],\
+          ["@types/leaflet", "npm:1.9.8"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
     ["@types/leaflet.markercluster", [\
       ["npm:1.5.4", {\
         "packageLocation": "./.yarn/cache/@types-leaflet.markercluster-npm-1.5.4-f45d9cd073-ecc9f1bff9.zip/node_modules/@types/leaflet.markercluster/",\
@@ -10809,6 +10821,7 @@ const RAW_RUNTIME_STATE =
           ["@types/csv-parse", "npm:1.2.2"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/leaflet", "npm:1.9.8"],\
+          ["@types/leaflet.heat", "npm:0.2.4"],\
           ["@types/multer", "npm:1.4.11"],\
           ["@types/node", "npm:20.12.2"],\
           ["@types/papaparse", "npm:5.3.14"],\
@@ -12176,6 +12189,15 @@ const RAW_RUNTIME_STATE =
         "packageLocation": "./.yarn/cache/leaflet.animatedmarker-npm-1.0.0-3089e5cb4f-67557377aa.zip/node_modules/leaflet.animatedmarker/",\
         "packageDependencies": [\
           ["leaflet.animatedmarker", "npm:1.0.0"]\
+        ],\
+        "linkType": "HARD"\
+      }]\
+    ]],\
+    ["leaflet.heat", [\
+      ["npm:0.2.0", {\
+        "packageLocation": "./.yarn/cache/leaflet.heat-npm-0.2.0-6648e822c9-bd796566f4.zip/node_modules/leaflet.heat/",\
+        "packageDependencies": [\
+          ["leaflet.heat", "npm:0.2.0"]\
         ],\
         "linkType": "HARD"\
       }]\
@@ -16631,6 +16653,7 @@ const RAW_RUNTIME_STATE =
           ["@types/csv-parse", "npm:1.2.2"],\
           ["@types/kill-port", "npm:2.0.3"],\
           ["@types/leaflet", "npm:1.9.8"],\
+          ["@types/leaflet.heat", "npm:0.2.4"],\
           ["@types/leaflet.markercluster", "npm:1.5.4"],\
           ["@types/node", "npm:20.12.2"],\
           ["@types/pathfinding", "npm:0.0.9"],\
@@ -16661,6 +16684,7 @@ const RAW_RUNTIME_STATE =
           ["leaflet-ant-path", "npm:1.3.0"],\
           ["leaflet-moving-marker", "virtual:f7b030241781449f9f163484f540f772ec3707fc5214186cd12bce9e472ad0dbf6db26b799fb1d7d9f7a9e4faeedac41da01e533ee775acb5c8a31c546a0661d#npm:0.3.0"],\
           ["leaflet.animatedmarker", "npm:1.0.0"],\
+          ["leaflet.heat", "npm:0.2.0"],\
           ["leaflet.markercluster", "virtual:a657ee487c4210b95204859cdabe06f03ec08433ab706cfa484088bf818c3d5b7eba1df2444afeb50a660321f8c236d084c716c2b23544e39eaee66887ee25fa#npm:1.5.3"],\
           ["npm", "npm:10.5.0"],\
           ["pathfinding", "npm:0.4.18"],\
