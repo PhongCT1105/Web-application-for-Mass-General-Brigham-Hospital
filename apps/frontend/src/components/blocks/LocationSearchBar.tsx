@@ -25,6 +25,7 @@ import {
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 // import {Label} from "@/components/ui/label.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
 // interface changeMarker {
 //   start: string;
@@ -74,6 +75,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [accessMode, setAccessMode] = useState(false);
   const [obstacles, setObstacles] = useState(false);
 
+  const { triggerAchievement } = useAchievements();
+
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
     .filter((location) => {
@@ -114,8 +117,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setEndPointID(locations[randEnd].nodeID);
     changePathfindingStrategy(pathAlgo);
     setTabValue(pathAlgo.toLowerCase());
-    // handleSearch();
     onSearch(locations[randStart].nodeID, locations[randEnd].nodeID);
+    triggerAchievement("Chance Trailblazer");
   };
 
   useEffect(() => {

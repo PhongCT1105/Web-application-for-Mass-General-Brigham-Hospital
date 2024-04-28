@@ -1,7 +1,6 @@
 import React from "react";
 import "leaflet/dist/leaflet.css";
 import { MapBlock } from "@/components/blocks/MapBlock.tsx";
-import { AchievementProvider } from "@/context/achievementContext.tsx";
 
 // Define the map component
 const HomePage: React.FC = () => {
@@ -10,9 +9,7 @@ const HomePage: React.FC = () => {
       className={"flex flex-col h-[89vh]"}
       // style={{ display: "flex", flexDirection: "column",  }}
     >
-      <AchievementProvider>
-        <MapBlock />
-      </AchievementProvider>
+      <MapBlock />
     </div>
   );
 };

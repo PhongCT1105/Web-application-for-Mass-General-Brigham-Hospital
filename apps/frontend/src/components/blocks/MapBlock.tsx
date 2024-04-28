@@ -43,7 +43,6 @@ import { ToastProvider } from "@/components/ui/toast.tsx"; // Importing the Toas
 import "@/components/blocks/SnakeAnim";
 import { Label } from "@/components/ui/label.tsx";
 import Caution from "@/assets/caution.png";
-import { useToast } from "@/components/ui/use-toast.ts";
 
 declare module "leaflet" {
   interface Polyline {
@@ -120,8 +119,7 @@ const SearchContext = createContext<changeMarker>({
 // eslint-disable-next-line
 // @ts-ignore
 export const MapBlock: React.FC = () => {
-  const { achievements, triggerAchievement } = useAchievements();
-  const { toast } = useToast(); // Use the useToast hook
+  const { triggerAchievement } = useAchievements();
   const changePathfindingStrategy = (strat: string) => {
     setPathfindingStrategy(strat);
   };
@@ -961,16 +959,7 @@ export const MapBlock: React.FC = () => {
     }
 
     path().then(() => {
-      // Check if the "First Path Found" achievement has already been triggered
-      if (!achievements.includes("First Path Found")) {
-        // Trigger the achievement
-        triggerAchievement("First Path Found");
-        // Display a toast notification
-        toast({
-          title: "Path Found!",
-          description: "You found the first path.",
-        });
-      }
+      triggerAchievement("Pathfinding Pioneer");
       handleClear();
       clearMarkers();
       addPathPolylines(nodeArray);
