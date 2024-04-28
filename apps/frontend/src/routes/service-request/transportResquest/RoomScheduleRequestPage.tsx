@@ -1,4 +1,11 @@
-import { Card, CardContent, CardFooter } from "@/components/ui/card.tsx";
+import {
+  Card,
+  CardContent,
+  // CardDescription,
+  CardFooter,
+  // CardHeader,
+  // CardTitle,
+} from "@/components/ui/card.tsx";
 import React, { useEffect, useState } from "react";
 import { Input } from "@/components/ui/input.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
@@ -8,7 +15,6 @@ import { Textarea } from "@/components/ui/textarea.tsx";
 import { toast } from "@/components/ui/use-toast.ts";
 import { Calendar } from "@/components/ui/calendar.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
-import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,12 +30,37 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip.tsx";
 
+export interface scheduleForm {
+  employeeName: string;
+  patientName: string;
+  priority: string;
+  locationFrom: string;
+  locationTo: string;
+  date: Date;
+  reason: string;
+  time: string;
+  note: string;
+  status: string;
+}
+
 export const ScheduleContent = () => {
   const now = new Date();
-  const [form, setForm] = React.useState<ScheduleForm>({} as ScheduleForm);
+
+  const [form, setForm] = useState<scheduleForm>({
+    employeeName: "",
+    patientName: "",
+    priority: "",
+    locationFrom: "",
+    locationTo: "",
+    date: new Date(),
+    reason: "",
+    time: "",
+    note: "",
+    status: "",
+  });
 
   const [selectedPriority, setSelectedPriority] = useState("");
-  const [submittedForms, setSubmittedForms] = useState<ScheduleForm[]>([]);
+  const [submittedForms, setSubmittedForms] = useState<scheduleForm[]>([]);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [locationsFrom, setLocationsFrom] = useState<string[]>([]);
   const [locationsTo, setLocationsTo] = useState<string[]>([]);

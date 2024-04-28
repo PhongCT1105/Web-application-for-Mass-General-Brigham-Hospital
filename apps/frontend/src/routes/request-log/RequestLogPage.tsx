@@ -16,10 +16,12 @@ import {
   FlowerIcon,
   PillIcon,
   Hammer,
+  BookOpen,
 } from "lucide-react";
 import { MedicationForm } from "@/interfaces/medicationReq.ts";
 import { MedicineFormLogTable } from "@/routes/request-log/medicineLogPage.tsx";
 import { SecurityFormLogTable } from "@/routes/request-log/securityLogPage.tsx";
+import { GenericForm } from "@/interfaces/genericReq.ts";
 import { MaintenanceForm } from "@/interfaces/maintenanceReq.ts";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
 import { columnsSecurityFormLog } from "@/routes/service-request/securityColumns.tsx";
@@ -38,6 +40,7 @@ import bannerTransportationImage from "@/assets/transportation-banner.png";
 import bannerMedicationImage from "@/assets/medication-banner.png";
 import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
 import bannerFlowerImage from "@/assets/flower-banner.png";
+import { columnsGenericLog } from "@/routes/service-request/GenericRequestColumns.tsx";
 
 export const RequestLogPage = () => {
   const [flowerLog, setFlowerLog] = useState<FlowerForm[]>([]);
@@ -46,6 +49,9 @@ export const RequestLogPage = () => {
   const [tranportLog, setTransportLog] = useState<ScheduleForm[]>([]);
   const [sanitationLog, setSanitationLog] = useState<SanitationForm[]>([]);
   const [maintenanceLog, setMaintenanceLog] = useState<MaintenanceForm[]>([]);
+  const [genericLog, setGenericLog] = useState<GenericForm[]>(
+    [] as GenericForm[],
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -62,6 +68,17 @@ export const RequestLogPage = () => {
             dateSubmitted: item.dateSubmitted,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "ME" + item.id.toString(),
+          name: item.employee,
+          location: item.location,
+          severity: item.medication[0].priority,
+          status: item.medication[0].status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         setMedicineLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -89,13 +106,24 @@ export const RequestLogPage = () => {
           priority: item.priority,
           status: item.status,
         }));
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "F" + item.reqID.toString(),
+          name: item.sender,
+          location: item.location,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         setFlowerLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log("flowerLog"));
+    fetchData().then();
   }, []);
 
   useEffect(() => {
@@ -117,13 +145,23 @@ export const RequestLogPage = () => {
           }),
         );
 
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "SE" + item.reqID.toString(),
+          name: item.employee,
+          location: item.location,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         setSecurityLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log("securityLog"));
+    fetchData().then();
   }, []);
 
   useEffect(() => {
@@ -144,13 +182,24 @@ export const RequestLogPage = () => {
             comments: item.comments,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "SA" + item.reqId.toString(),
+          name: item.name,
+          location: item.location,
+          severity: item.severity,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+        console.log(genericData);
         setSanitationLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log("sanitationLog"));
+    fetchData().then();
   }, []);
 
   useEffect(() => {
@@ -173,13 +222,23 @@ export const RequestLogPage = () => {
             date: item.date,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "T" + item.reqID.toString(),
+          name: item.employeeName,
+          location: item.locationFrom,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
         setTransportLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log("tranportLog"));
+    fetchData().then();
   }, []);
 
   useEffect(() => {
@@ -198,14 +257,30 @@ export const RequestLogPage = () => {
             description: item.description,
           }),
         );
+
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "MA" + item.reqId.toString(),
+          name: item.name,
+          location: item.location,
+          severity: item.severity,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         setMaintenanceLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     }
-    fetchData().then(() => console.log("maintenanceLog"));
+    fetchData().then();
   }, []);
+
+  function genericTableData(genericData: GenericForm[]) {
+    // setGenericLog((prevState) => [...prevState, ...genericData.slice(0, genericData.length / 2)]);
+    return genericData.slice(0, genericData.length / 2);
+  }
 
   return (
     <div className={"scrollbar-hide"}>
@@ -213,12 +288,11 @@ export const RequestLogPage = () => {
         <div className="border-t">
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
-              {/*<Sidebar className="hidden lg:block"/>*/}
               <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs
-                      defaultValue="Flower Request"
+                      defaultValue="All Requests"
                       className="h-full space-y-6"
                     >
                       <div
@@ -228,6 +302,10 @@ export const RequestLogPage = () => {
                         }}
                       >
                         <TabsList>
+                          <TabsTrigger value="All Requests">
+                            <BookOpen className="mr-2 h-4 w-4" />
+                            All Requests
+                          </TabsTrigger>
                           <TabsTrigger value="Flower Request">
                             <FlowerIcon className="mr-2 h-4 w-4" />
                             Flower Request
@@ -255,8 +333,45 @@ export const RequestLogPage = () => {
                         </TabsList>
                       </div>
                       <TabsContent
+                        value="All Requests"
+                        className="border-none p-0 flex-col data-[state=active]:flex "
+                        // h-full  ^^^^^
+                      >
+                        <div
+                          className="flex items-center justify-between"
+                          style={{
+                            backgroundImage: `url(${bannerFlowerImage})`,
+                            backgroundSize: "cover",
+                            backgroundPosition: "center",
+                            height: "100px",
+                            borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
+                          }}
+                        >
+                          <div className="space-y-1">
+                            <h2
+                              className="text-2xl font-semibold tracking-tight"
+                              style={{
+                                color: "white",
+                                marginLeft: "20px",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
+                            >
+                              All Requests
+                            </h2>
+                          </div>
+                        </div>
+                        <Separator className="my-4 w-5/6 mx-auto" />
+                        <DataTable
+                          data={genericTableData(genericLog)}
+                          columns={columnsGenericLog}
+                        />
+                      </TabsContent>
+                      <TabsContent
                         value="Flower Request"
                         className="border-none p-0 flex-col data-[state=active]:flex "
+                        // h-full  ^^^^^
                       >
                         <div
                           className="flex items-center justify-between"

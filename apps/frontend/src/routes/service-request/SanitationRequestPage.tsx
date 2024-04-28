@@ -50,6 +50,7 @@ interface LocationWID {
 
 export function Sanitation() {
   const now = new Date();
+
   const { toast } = useToast();
 
   async function submit() {
