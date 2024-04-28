@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button.tsx";
 import { CircleHelp } from "lucide-react";
 import { useSearchParams } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
 
 const InstructionsPage = () => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
