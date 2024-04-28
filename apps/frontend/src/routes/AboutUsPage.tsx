@@ -115,7 +115,7 @@ const AboutMePage = () => {
               Github={"https://github.com/tdyang"}
               Linkdin={"https://www.linkedin.com/in/tracy-yang-b61b72211/"}
               Imagepath={Tracy}
-              quote={""}
+              quote={'"ware are yew" -blink-182'}
             />
             <AboutBlock
               Name={"Alexsandra Antoski"}
