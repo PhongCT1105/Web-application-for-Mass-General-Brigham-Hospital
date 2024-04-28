@@ -25,8 +25,8 @@ import {
   TableRow,
 } from "@/components/ui/table.tsx";
 import { Input } from "@/components/ui/input.tsx";
-//import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
-//import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
+import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
+import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 interface DataTableProps<TCols, TData> {
   columns: ColumnDef<TData, TCols>[];
   data: TData[];
@@ -66,7 +66,7 @@ export function SecurityFormLogTable<TCols, TData>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-5/6 mx-auto">
       <Input
         placeholder={`Search items by employee name...`}
         value={(table.getColumn("ename")?.getFilterValue() as string) ?? ""}
@@ -75,7 +75,7 @@ export function SecurityFormLogTable<TCols, TData>({
         }
         className="h-8 w-[150px] w-[250px]"
       />
-      {/*<DataTableToolbar table={table} />*/}
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
@@ -126,7 +126,7 @@ export function SecurityFormLogTable<TCols, TData>({
           </TableBody>
         </Table>
       </div>
-      {/*<DataTablePagination table={table} />*/}
+      <DataTablePagination table={table} />
     </div>
   );
 }

@@ -43,18 +43,9 @@ export interface scheduleForm {
   status: string;
 }
 
-// interface nodeTable {
-//   nodeID: string;
-//   xcoord: number;
-//   ycoord: number;
-//   floor: string;
-//   building: string;
-//   nodeType: string;
-//   longName: string;
-//   shortName: string;
-// }
+export const ScheduleContent = () => {
+  const now = new Date();
 
-export const SheduleContent = () => {
   const [form, setForm] = useState<scheduleForm>({
     employeeName: "",
     patientName: "",
@@ -182,6 +173,7 @@ export const SheduleContent = () => {
     setForm((prevState) => ({
       ...prevState,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
 
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
