@@ -25,7 +25,7 @@ const router: Router = express.Router();
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestForms = req.body;
+    const requestForm = req.body;
     // console.log(requestBody);
     // const jsonString = JSON.stringify(requestBody);
     // console.log("JSON String:", jsonString);
@@ -34,18 +34,51 @@ router.post("/", async (req: Request, res: Response) => {
     // const requestForms: RequestForm = JSON.parse(jsonString);
     // console.log(requestForm);
 
-    for (const requestForm of requestForms) {
-      await PrismaClient.maintenanceRequest.create({
+    // for (const requestForm of requestForms) {
+    await PrismaClient.maintenanceRequest.create({
+      data: {
+        name: requestForm.name,
+        severity: requestForm.severity,
+        location: requestForm.location,
+        typeOfIssue: requestForm.typeOfIssue,
+        status: requestForm.status,
+        description: requestForm.description,
+      },
+    });
+    // }
+    // elevator anything but low
+    // plumbing all
+    let update = false;
+
+    if (requestForm.status != "Closed") {
+      if (requestForm.typeOfIssue === "PlumbingIssue") {
+        update = true;
+      }
+
+      if (requestForm.typeOfIssue === "ElevatorIssue") {
+        update = true;
+        if (requestForm.severity === "Low") {
+          update = false;
+        }
+      }
+    }
+
+    if (update) {
+      const updatedNode = PrismaClient.nodes.update({
+        where: {
+          nodeID: requestForm.location, // Assuming NodeID is provided in the request body
+        },
         data: {
-          name: requestForm.name,
-          severity: requestForm.severity,
-          location: requestForm.location,
-          typeOfIssue: requestForm.typeOfIssue,
-          status: requestForm.status,
-          description: requestForm.description,
+          obstacle: true,
         },
       });
+      if (!updatedNode) {
+        // If the node was not found or not updated, throw an error
+        console.log("Node not found or could not be updated");
+      }
+      console.log(updatedNode);
     }
+
     console.info("Successfully requested maintenance services");
     res
       .status(200)
