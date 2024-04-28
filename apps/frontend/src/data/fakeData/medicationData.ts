@@ -21,7 +21,7 @@ const medicationData: MedicationForm[] = Array.from({ length: 40 }, () => ({
   employee: faker.helpers.arrayElement(EmployeeNames).value,
   location: faker.location.city(),
   patient: faker.person.firstName(),
-  dateSubmitted: faker.date.weekday(),
+  dateSubmitted: faker.date.anytime().getTime().toString(),
 }));
 
 submitDataOnce("medicationSubmitted", medicationData, "/api/medicationReq");

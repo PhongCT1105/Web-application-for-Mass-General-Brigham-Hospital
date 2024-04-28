@@ -31,6 +31,7 @@ router.post("/", async (req: Request, res: Response) => {
           call: requestForm.call,
           status: requestForm.status,
           priority: requestForm.priority,
+          dateSubmitted: requestForm.dateSubmitted,
         },
       });
     }

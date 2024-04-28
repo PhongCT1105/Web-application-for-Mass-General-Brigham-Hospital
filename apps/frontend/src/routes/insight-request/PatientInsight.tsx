@@ -1,14 +1,16 @@
 import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 // import "../styles/example.route.css";
 // import "../styles/globals.css";
-import LineGraph from "@/components/Graph/LineGraph.tsx";
+// import LineGraph from "@/components/Graph/LineGraph.tsx";
 import BarGraph from "@/components/Graph/BarGraph.tsx";
 import PieGraph from "@/components/Graph/PieGraph.tsx";
-import { patientLineData } from "@/data/patientData/lineChartData";
+// import { patientLineData } from "@/data/patientData/lineChartData";
 import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 import { pieRequestData } from "@/components/Graph/GraphInterface/pieRequestData";
 import PolarAreaChart from "@/components/Graph/PolarAreaGraphPriority.tsx";
 import { polarRequestDataPriority } from "@/components/Graph/GraphInterface/polarRequestDataPriority.tsx";
+import { lineRequestData } from "@/components/Graph/GraphInterface/lineRequestData.tsx";
+import LineGraph from "@/components/Graph/LineGraph";
 
 function countEmployee(arr: ScheduleForm[]): barRequestData[] {
   const countDictionary: Record<string, number> = {};
@@ -30,8 +32,11 @@ function countStatus(arr: ScheduleForm[]): pieRequestData[] {
   arr.forEach((obj) => {
     let { status } = obj;
     if (status === "") status = "None";
-    else if (status === "done") status = "Dont";
+    else if (status === "done") status = "Done";
     else if (status === "backlog") status = "Backlog";
+    else if (status === "InProgress") status = "In progress";
+    else if (status === "canceled") status = "Canceled";
+    else if (status === "todo") status = "To do";
     countDictionary[status] = (countDictionary[status] || 0) + 1;
   });
 
@@ -59,12 +64,62 @@ function countPriority(arr: ScheduleForm[]): polarRequestDataPriority[] {
   return chartdata;
 }
 
+function convertTimestampToMonth(timestamp: string): string {
+  const date = new Date(parseInt(timestamp));
+  const month = date.toLocaleString("default", { month: "long" });
+  return month;
+}
+
+function convertTimeToMonth(arr: ScheduleForm[]): ScheduleForm[] {
+  return arr.map((obj) => ({
+    ...obj,
+    timestamp: convertTimestampToMonth(obj.dateSubmitted),
+  }));
+}
+
+function countMonth(arr: ScheduleForm[]): lineRequestData[] {
+  const monthOrder = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const countDictionary: Record<string, number> = {};
+
+  arr.forEach((obj) => {
+    const month = convertTimestampToMonth(obj.dateSubmitted);
+    countDictionary[month] = (countDictionary[month] || 0) + 1;
+  });
+
+  // Sort the months based on the defined order
+  const sortedMonths = monthOrder.filter(
+    (month) => countDictionary[month] !== undefined,
+  );
+
+  // Create line data in the sorted order
+  const linedata: lineRequestData[] = sortedMonths.map((month) => ({
+    month,
+    request: countDictionary[month] || 0,
+  }));
+
+  return linedata;
+}
 function PatientInsight({ props }: { props: ScheduleForm[] }) {
-  console.log(props);
-  const patientChartData = countEmployee(props);
-  const patientPieData = countStatus(props);
-  const patientPolarData = countPriority(props);
-  console.log(patientChartData);
+  const data = convertTimeToMonth(props);
+  console.log(data);
+  const patientChartData = countEmployee(data);
+  const patientPieData = countStatus(data);
+  const patientPolarData = countPriority(data);
+  const patientLineData = countMonth(data);
 
   return (
     <>

@@ -12,7 +12,7 @@ const sanitationData: SanitationForm[] = Array.from({ length: 20 }, () => ({
   reqId: faker.number.int(),
   name: faker.helpers.arrayElement(EmployeeNames).value,
   location: faker.location.city(),
-  time: faker.date.month(),
+  time: faker.date.anytime().getTime().toString(),
   severity: faker.helpers.arrayElement(priorities).value,
   status: faker.helpers.arrayElement(statuses).value,
   typeOfIssue: faker.word.adjective(),

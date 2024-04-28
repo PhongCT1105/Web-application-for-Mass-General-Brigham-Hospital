@@ -69,7 +69,13 @@ router.post("/", async (req: Request, res: Response) => {
           nodeID: requestForm.location, // Assuming NodeID is provided in the request body
         },
         data: {
-          obstacle: true,
+          name: requestForm.name,
+          severity: requestForm.severity,
+          location: requestForm.location,
+          typeOfIssue: requestForm.typeOfIssue,
+          status: requestForm.status,
+          description: requestForm.description,
+          dateSubmitted: requestForm.dateSubmitted,
         },
       });
       if (!updatedNode) {
