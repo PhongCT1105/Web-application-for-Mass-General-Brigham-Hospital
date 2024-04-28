@@ -277,6 +277,11 @@ export const RequestLogPage = () => {
     fetchData().then();
   }, []);
 
+  function genericTableData(genericData: GenericForm[]) {
+    // setGenericLog((prevState) => [...prevState, ...genericData.slice(0, genericData.length / 2)]);
+    return genericData.slice(0, genericData.length / 2);
+  }
+
   return (
     <div className={"scrollbar-hide"}>
       <div className="hidden md:block">
@@ -359,7 +364,7 @@ export const RequestLogPage = () => {
                         </div>
                         <Separator className="my-4 w-5/6 mx-auto" />
                         <DataTable
-                          data={genericLog}
+                          data={genericTableData(genericLog)}
                           columns={columnsGenericLog}
                         />
                       </TabsContent>
