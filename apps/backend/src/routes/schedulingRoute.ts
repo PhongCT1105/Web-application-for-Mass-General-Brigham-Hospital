@@ -18,7 +18,6 @@ router.post("/", async (req, res) => {
     for (const event of events) {
       event.employee = "Mina";
     }
-
     console.log("Backend response: " + events);
     res.status(200).json(events);
   } catch (error) {

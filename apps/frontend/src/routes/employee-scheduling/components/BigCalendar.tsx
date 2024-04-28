@@ -1,19 +1,10 @@
 import React, { useCallback, useState } from "react";
-import {
-  Calendar,
-  dateFnsLocalizer,
-  Event,
-  stringOrDate,
-} from "react-big-calendar";
+import { Calendar, Event, stringOrDate } from "react-big-calendar";
 import withDragAndDrop, {
   DragFromOutsideItemArgs,
   withDragAndDropProps,
 } from "react-big-calendar/lib/addons/dragAndDrop";
-import { format } from "date-fns/format";
-import { parse } from "date-fns/parse";
-import startOfWeek from "date-fns/startOfWeek";
-import getDay from "date-fns/getDay";
-import { enUS } from "date-fns/locale/en-US";
+
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { addHours } from "date-fns/addHours";
@@ -24,9 +15,9 @@ import {
   filterEventsByShift,
   filterEventsByWeekday,
 } from "../utils/eventFiltering.ts";
-import axios from "axios";
-// import { getHours } from "date-fns";
-// import { startOfHour } from "date-fns";
+import { fetchEmployeeData } from "@/routes/employee-scheduling/utils/api.ts";
+import { eventStyleGetter } from "@/routes/employee-scheduling/utils/eventStyling.ts";
+import { localizer } from "../utils/localizer.ts";
 
 export interface CustomCalendarEvent extends Event {
   color?: string;
@@ -50,33 +41,20 @@ export const BigCalendar = ({
     null,
   );
 
-  const getEmployees = () => {
-    const filteredByWeekday = filterEventsByWeekday(events);
-    const filteredByShift = filterEventsByShift(filteredByWeekday);
-    let newEvents: CustomCalendarEvent[] = [];
-    const calculate = async () => {
-      // const filteredEvents = handleFilterSubmit();
-      const { data: response } = await axios.post(
-        "api/scheduling",
-        filteredByShift,
-        {
-          headers: {
-            "content-type": "Application/json",
-          },
-        },
-      );
-      newEvents = response;
-    };
-    calculate().then(() => {
+  const getEmployees = async () => {
+    try {
+      const filteredByWeekday = filterEventsByWeekday(events);
+      const filteredByShift = filterEventsByShift(filteredByWeekday);
+      const newEvents = await fetchEmployeeData(filteredByShift);
       setEvents((prevState) =>
-        prevState.map((event, index) => {
-          return {
-            ...event,
-            employee: newEvents[index].employee,
-          };
-        }),
+        prevState.map((event, index) => ({
+          ...event,
+          employee: newEvents[index].employee,
+        })),
       );
-    });
+    } catch (error) {
+      console.error("Error: " + error);
+    }
   };
 
   const handleEventUpdate = (updatedEvent: CustomCalendarEvent) => {
@@ -96,20 +74,6 @@ export const BigCalendar = ({
     (event: CustomCalendarEvent) => setDraggedEvent(event),
     [],
   );
-  // const dragFromOutsideItem = useCallback(() => draggedEvent, [draggedEvent]);
-  const eventStyleGetter = (event: CustomCalendarEvent) => {
-    const color = event.color || "#000678"; // Default color or use event color if provided
-    const style = {
-      font: "Ariel",
-      backgroundColor: color,
-      borderRadius: "5px",
-      color: "white",
-      border: "none",
-      display: "block",
-    };
-
-    return { style: style };
-  };
 
   const onEventResize: withDragAndDropProps["onEventResize"] = (data) => {
     const { event, start, end } = data;
@@ -251,22 +215,5 @@ export const BigCalendar = ({
     </div>
   );
 };
-
-const locales = {
-  "en-US": enUS,
-};
-
-// const endOfHour = (date: Date): Date => addHours(startOfHour(date), 1);
-// const now = new Date();
-// const start = endOfHour(now);
-// const end = addHours(start, 8);
-// The types here are `object`. Strongly consider making them better as removing `locales` caused a fatal error
-const localizer = dateFnsLocalizer({
-  format,
-  parse,
-  startOfWeek,
-  getDay,
-  locales,
-});
 
 const DnDCalendar = withDragAndDrop(Calendar);
