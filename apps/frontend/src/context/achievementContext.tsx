@@ -26,6 +26,10 @@ const achievementsWithMessages: Record<string, string> = {
   "Pathfinding Pioneer": "You have discovered your first path!",
   "Chance Trailblazer":
     "By clicking 'Feeling Lucky,' you've stumbled upon new paths and adventures. Keep clicking and exploring!",
+  "Big Spender":
+    "Your flower requests have blossomed into something truly special. Your generosity knows no bounds – keep blooming brightly!",
+  "Wong Achievement":
+    "No nothing is Wong, you've just stumbled upon an achievement for getting to know professor Wong!",
   // Add more achievements here
 };
 

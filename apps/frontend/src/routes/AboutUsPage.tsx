@@ -17,11 +17,18 @@ import Owen from "@/assets/headshots/Owen.jpg";
 import WPI_Logo from "@/assets/WPI_Logo.png";
 import Wong from "@/assets/headshots/Wong.png";
 import { Card } from "@/components/ui/card.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
 // import wongAsters from "@/assets/wongSunFlower.png";
 // import wongSunflower from "@/assets/wongAsters.png";
 
 const AboutMePage = () => {
+  const { triggerAchievement } = useAchievements();
+
+  function handleWongAchievement() {
+    triggerAchievement("Wong Achievement");
+  }
+
   return (
     <div>
       <div className="about-the-team w-5/6 pt-2 pb-5 gap-5 m-auto">
@@ -196,6 +203,7 @@ const AboutMePage = () => {
               quote={
                 '"No matter how bad a situation may be, with careful thought it can be turned into an advantage."'
               }
+              onClick={handleWongAchievement} // Add onClick event handler
             />
             <AboutBlock
               Name={"Ari Schechter"}
