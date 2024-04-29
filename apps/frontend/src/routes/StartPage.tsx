@@ -12,6 +12,7 @@ import "react-bootstrap";
 import { useState } from "react";
 import { Footer } from "@/components/blocks/Footer.tsx";
 import sidePic from "@/assets/BWH-HaleBuilding-770x950-Copyright_AntonGrassl-Esto_1-1.jpg";
+// import {Button} from "@/components/ui/button.tsx";
 
 export default function StartPage() {
   const [showPopup, setShowPopup] = useState(true);
@@ -29,23 +30,21 @@ export default function StartPage() {
                             mb-0 p-0 text-s h-full
                             text-center
                             alert-dismissible
-                            fade show pb-2"
+                            fade show pb-2 pr-2"
               role="alert"
             >
               <strong>Notice! </strong>
               This website is a term project exercise for WPI CS 3733 Software
               Engineering (Prof. Wong) and is not to be confused with the actual
               Brigham & Women’s Hospital website.
-              <CircleX
-                type="button"
-                className="rounded-circle"
-                data-dismiss="alert"
-                aria-label="Close"
-                style={{ float: "right" }}
+              <button
+                // variant={"invisible"}
+                // className={"mt-5"}
                 onClick={toggleShowInfoPopup}
+                data-dismiss="alert"
               >
-                <span aria-hidden="true">&times;</span>
-              </CircleX>
+                <CircleX className={"ml-1 pt-2  h-6 w-6"} />
+              </button>
             </div>
           );
         }

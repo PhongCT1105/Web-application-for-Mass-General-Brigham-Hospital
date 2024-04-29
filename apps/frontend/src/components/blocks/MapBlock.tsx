@@ -14,18 +14,15 @@ import React, {
 //   LatLngExpression,
 //   Map,
 // } from "leaflet";
-import * as L from "leaflet";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import lowerLevelMap1 from "@/assets/00_thelowerlevel1.png";
 import lowerLevelMap2 from "@/assets/00_thelowerlevel2.png";
 import theFirstFloor from "@/assets/01_thefirstfloor.png";
 import theSecondFloor from "@/assets/02_thesecondfloor.png";
 import theThirdFloor from "@/assets/03_thethirdfloor.png";
-//import GrayDot from "@/assets/gray-dot.png";
 import GreenStar from "@/assets/start-marker.png";
-//import GreenStar2 from "@/assets/start-marker2.png";
 import RedStar from "@/assets/end-marker.png";
-//import RedStar2 from "@/assets/end-marker2.png";
 import L2 from "@/assets/FloorL2.png";
 import L1 from "@/assets/FloorL1.png";
 import F1 from "@/assets/Floor1.png";
@@ -43,6 +40,9 @@ import axios from "axios";
 // import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
 import { Label } from "@/components/ui/label.tsx";
+import Caution from "@/assets/caution.png";
+
+import { data } from "./heatmap/testData.ts";
 
 declare module "leaflet" {
   interface Polyline {
@@ -58,15 +58,6 @@ declare module "leaflet" {
     snakeRepeat?: boolean;
     snakeRepeatDelay?: number;
   }
-}
-
-import { data } from "./heatmap/testData.ts";
-//import "leaflet.heat";
-// import { useMap } from "react-leaflet";
-// interface TestData {
-//   //max: number;
-//   data: number[][];
-// }
 
 export interface HospitalData {
   nodeID: string;
@@ -74,6 +65,7 @@ export interface HospitalData {
   xCoord: number;
   yCoord: number;
   floor: string;
+  obstacle: boolean;
 }
 
 export interface Node {
@@ -92,6 +84,16 @@ export interface direction {
   icon: string;
 }
 
+interface EdgesData {
+    edgeId: string;
+    count: number;
+}
+
+interface ParsedEdge {
+    start: string;
+    end: string;
+    count: number;
+}
 interface changeMarker {
   startNodeName: string;
   endNodeName: string;
@@ -118,7 +120,7 @@ const SearchContext = createContext<changeMarker>({
   // eslint-disable-next-line no-empty-function
   setEndNodeName: () => {},
   // eslint-disable-next-line no-empty-function
-  setStartNodeID: () => {},
+    setStartNodeID: () => {},
   // eslint-disable-next-line no-empty-function
   setEndNodeID: () => {},
 });
@@ -128,6 +130,15 @@ const SearchContext = createContext<changeMarker>({
 export const MapBlock: React.FC = () => {
   const changePathfindingStrategy = (strat: string) => {
     setPathfindingStrategy(strat);
+  };
+
+  const changeAccessibilty = (accessMode: boolean) => {
+    setAccessMode(accessMode);
+  };
+
+  const handleObstacle = (obstacles: boolean) => {
+    setObstacles(obstacles);
+    console.log("Changes obstacles handling to " + obstacles);
   };
 
   const mapRef = useRef<L.Map | null>(null);
@@ -146,6 +157,8 @@ export const MapBlock: React.FC = () => {
   const [distance, setDistance] = useState(0);
   const [arrivalTime, setArrivalTime] = useState(new Date());
   const [havePath, setHavePath] = useState(false);
+  const [accessMode, setAccessMode] = useState(false);
+  const [obstacles, setObstacles] = useState(false);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -202,8 +215,19 @@ export const MapBlock: React.FC = () => {
     [LayerF1, LayerF2, LayerF3, LayerL1, LayerL2],
   );
 
-  // special markers (floor icons, start, and end)
   const SpecialMarkers: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
+  const ObstacleMarkers: { [key: string]: L.LayerGroup } = useMemo(
     () =>
       ({
         L1: new L.LayerGroup(),
@@ -251,6 +275,18 @@ export const MapBlock: React.FC = () => {
     [],
   );
 
+  const PathMarkers: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
   const loadData = async () => {
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes`);
 
@@ -263,6 +299,7 @@ export const MapBlock: React.FC = () => {
         xCoord: nodeData[i].xcoord,
         yCoord: nodeData[i].ycoord,
         floor: nodeData[i].floor,
+        obstacle: nodeData[i].obstacle,
       });
     }
     setHospitalData(newHospitalData);
@@ -308,6 +345,9 @@ export const MapBlock: React.FC = () => {
           position: "bottomright",
         })
         .addTo(map);
+      map.on("baselayerchange", function () {
+        map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
+      });
       map.setMaxBounds(bounds);
       Paths[floor].snakeIn();
 
@@ -430,24 +470,20 @@ export const MapBlock: React.FC = () => {
           zoomControl: true,
           preferCanvas: true,
           layers: [LayerF1],
-        }).setView([1750, 2700], -2);
+        });
         mapRef.current = map;
+        map.setView([1750, 2700], -2);
         L.control
           .layers(baseLayers, undefined, {
             collapsed: false,
             position: "bottomright",
           })
           .addTo(map);
+        map.on("baselayerchange", function () {
+          map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
+        });
         map.setMaxBounds(bounds);
 
-        const testData = data.map(([lng, lat, intensity]) =>
-          L.latLng(lat, lng, intensity),
-        );
-
-        L.heatLayer(testData, {
-          radius: 1,
-          blur: 2,
-        }).addTo(map);
       }
 
       const setStartEndLocation = (
@@ -512,24 +548,48 @@ export const MapBlock: React.FC = () => {
       const addMarkersToLayerGroups = (hospitalData: HospitalData[]) => {
         hospitalData.forEach((node) => {
           const coords: [number, number] = [3400 - node.yCoord, node.xCoord];
-          const marker = L.circleMarker(coords, {
-            radius: 4,
-            color: "#3B3B3B",
-            fillColor: "#3B3B3B",
-            fillOpacity: 0.8,
-          }).bindPopup(node.name);
-          marker.addTo(Markers[node.floor]);
-          //marker.options.attribution = node.nodeID;
-          // Event listener for clicking on markers
-          marker.on("click", function () {
-            setStartEndLocation(
-              node.nodeID,
+          if (node.obstacle) {
+            console.log("This node is an obstacle: " + node);
+            const customIcon = new L.Icon({
+              iconUrl: Caution,
+              iconSize: [25, 30],
+              iconAnchor: [13, 30],
+            });
+            const marker = L.marker(coords, { icon: customIcon }).bindPopup(
               node.name,
-              node.xCoord,
-              node.yCoord,
-              node.floor,
             );
-          });
+            // Event listener for clicking on markers
+            marker.on("click", function () {
+              setStartEndLocation(
+                node.nodeID,
+                node.name,
+                node.xCoord,
+                node.yCoord,
+                node.floor,
+              );
+            });
+            marker.addTo(ObstacleMarkers[node.floor]);
+          } else {
+            const marker = L.circleMarker(coords, {
+              radius: 4,
+              color: "#3B3B3B",
+              fillColor: "#3B3B3B",
+              fillOpacity: 0.8,
+            }).bindPopup(node.name);
+            // Event listener for clicking on markers
+            marker.on("click", function () {
+              setStartEndLocation(
+                node.nodeID,
+                node.name,
+                node.xCoord,
+                node.yCoord,
+                node.floor,
+              );
+            });
+            marker.addTo(Markers[node.floor]);
+          }
+
+          //marker.options.attribution = node.nodeID;
         });
       };
 
@@ -541,6 +601,8 @@ export const MapBlock: React.FC = () => {
         SpecialMarkers[key].addTo(Layers[key]);
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
+        PathMarkers[key].addTo(Layers[key]);
+        ObstacleMarkers[key].addTo(Layers[key]);
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -559,6 +621,8 @@ export const MapBlock: React.FC = () => {
     StartMarker,
     EndMarker,
     addMarker,
+    PathMarkers,
+    ObstacleMarkers,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -583,7 +647,7 @@ export const MapBlock: React.FC = () => {
     return L.polyline([startCoords, endCoords], {
       color: "blue",
       weight: 5,
-      dashArray: "3, 10",
+      // dashArray: "3, 10",
       snakingSpeed: 200,
       snakeRepeat: true,
     });
@@ -715,6 +779,19 @@ export const MapBlock: React.FC = () => {
 
     const paths: Node[][] = parsePath(nodeArray);
     const directionsArray: direction[] = [];
+    let floorPath: string = "Floor Path: " + nodeArray[0].floor;
+
+    for (let i = 0; i < nodeArray.length - 1; i++) {
+      if (nodeArray[i].floor != nodeArray[i + 1].floor) {
+        floorPath += " -> " + nodeArray[i + 1].floor;
+      }
+    }
+
+    directionsArray.push({ text: floorPath, icon: Stairs });
+    directionsArray.push({
+      text: "\n",
+      icon: Empty,
+    });
 
     for (let i = 0; i < paths.length; i++) {
       if (paths[i].length > 1) {
@@ -817,7 +894,6 @@ export const MapBlock: React.FC = () => {
       StartMarker[key].clearLayers();
       EndMarker[key].clearLayers();
     });
-
     placeStartEndMarkers(searchPath);
     placeFloorMarkers(searchPath);
 
@@ -851,7 +927,9 @@ export const MapBlock: React.FC = () => {
       StartMarker[key].clearLayers();
       EndMarker[key].clearLayers();
       Paths[key].clearLayers();
+      PathMarkers[key].clearLayers();
       Markers[key].addTo(Layers[key]);
+      ObstacleMarkers[key].addTo(Layers[key]);
     });
     setTextDirections([]);
   }
@@ -861,6 +939,8 @@ export const MapBlock: React.FC = () => {
       strategy: pathfindingStrategy,
       start: start,
       end: end,
+      accessibility: accessMode,
+      obstacles: obstacles,
     };
     console.log(test);
     const nodeArray: Node[] = [];
@@ -890,8 +970,8 @@ export const MapBlock: React.FC = () => {
     path().then(() => {
       handleClear();
       clearMarkers();
-      addMarkersOnPath(nodeArray);
       addPathPolylines(nodeArray);
+      addMarkersOnPath(nodeArray);
       createTextDirections(nodeArray); //nodeArray[0].floor);
       findTotalPathDistance(nodeArray);
       if (nodeArray) {
@@ -901,58 +981,43 @@ export const MapBlock: React.FC = () => {
   }
 
   function addMarkersOnPath(searchPath: Node[]) {
+    let index = 0;
     searchPath.forEach((node) => {
-      const coords: [number, number] = [3400 - node.ycoord, node.xcoord];
-      const marker = L.circleMarker(coords, {
-        radius: 5,
-        color: "#ebd234",
-        fillColor: "#ebd234",
-        fillOpacity: 1,
-      }).bindPopup(node.longName);
-      marker.addTo(Paths[node.floor]);
+      if (index != 0 || index != searchPath.length - 1) {
+        const coords: [number, number] = [3400 - node.ycoord, node.xcoord];
+        const marker = L.circleMarker(coords, {
+          radius: 8,
+          color: "#ebd234",
+          fillColor: "blue",
+          fillOpacity: 1,
+        }).bindPopup(node.longName);
+        marker.addTo(PathMarkers[node.floor]);
+        index++;
+      }
     });
   }
 
   function clearMarkers() {
     Object.keys(Layers).forEach((key) => {
       Layers[key].removeLayer(Markers[key]);
+      // Layers[key].removeLayer(ObstacleMarkers[key]);
     });
   }
 
-  //********* HEAT MAP **********//
+  //********* HEATMAP **********//
 
-  //function heatmap() {
-  // useEffect(() => {
-  //   // Create map instance
-  //   const map = L.map("map-container").setView([1750, 2700], -2);
-  //   console.log("this use Effect is running");
-  //
-  //   // Add OpenStreetMap tile layer
-  //   // L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-  //   //   attribution:
-  //   //     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  //   // }).addTo(map);
-  //
-  //   // Prepare heatmap data
-  //   // const testData = {
-  //   //   // max: 50, // Maximum value for the heatmap
-  //   //   data, // Your heatmap data
-  //   // };
-  //
-  //   // const testData = data.map(
-  //   //   ([lat, lng, intensity]) => [lat, lng, intensity] as L.HeatLatLngTuple,
-  //   // );
-  //   const testData = data.map(([lng, lat, intensity]) =>
-  //     L.latLng(lat, lng, intensity),
-  //   );
-  //
-  //   // Create heatmap layer and add it to the map
-  //   L.heatLayer(testData, {
-  //     radius: 1,
-  //     blur: 2,
-  //   }).addTo(map);
-  // }, []); // Empty dependency array ensures this effect runs only once after initial render
-  // //
+    function parseEdges(edgesData: EdgesData[]) {
+        const edges = edgesData;
+        const parsedEdges: ParsedEdge[] = [];
+
+        edges.forEach((edge) => {
+        const [startNode, endNode] = edge.edgeId.split('_');
+            const count = edge.count;
+            parsedEdges.push({ start: startNode, end: endNode, count: count });
+        });
+
+        return parsedEdges;
+    }
 
   //*********ENDHEATMAP********//
 
@@ -965,7 +1030,7 @@ export const MapBlock: React.FC = () => {
         endNodeID,
         setStartNodeName,
         setEndNodeName,
-        setStartNodeID,
+          setStartNodeID,
         setEndNodeID,
       }}
     >
@@ -976,11 +1041,8 @@ export const MapBlock: React.FC = () => {
           zIndex: 1,
           overflow: "hidden",
         }}
-        // className={"flex h-[80vh] z-1"}
       >
-        <div
-        // style={{ flex: 1, padding: "10px" }}
-        >
+        <div>
           <SearchBar
             locations={hospitalData
               .filter((hospital) => !hospital.name.includes("Hall"))
@@ -995,6 +1057,8 @@ export const MapBlock: React.FC = () => {
             changePathfindingStrategy={changePathfindingStrategy}
             //currentFloor={currentFloor}
             textDirections={textDirections}
+            changeAccessibility={changeAccessibilty}
+            handleObstacle={handleObstacle}
           />
         </div>
         <div
@@ -1027,7 +1091,7 @@ export const MapBlock: React.FC = () => {
                   </Label>
                 </div>
                 <Label className={"text-2xl text-gray-800"}>
-                  Arr: {arrivalTime.getHours()}:
+                  ETA • {arrivalTime.getHours()}:
                   {arrivalTime.getMinutes() + time < 10 ? "0" : ""}
                   {(arrivalTime.getMinutes() + time).toFixed(0)}{" "}
                 </Label>

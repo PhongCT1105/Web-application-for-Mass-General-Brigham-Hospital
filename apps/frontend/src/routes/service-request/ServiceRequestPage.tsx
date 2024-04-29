@@ -32,6 +32,7 @@ import bannerTransportImage from "@/assets/transportation-banner.png";
 import bannerSanitationImage from "@/assets/sanitation-banner.png";
 import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
 import bannerSecurityImage from "@/assets/security-banner.png";
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -74,9 +75,10 @@ export default function ServiceRequestPage() {
                       className="h-full space-y-6"
                     >
                       <div
-                        className="space-between flex items-center"
+                        className="justify-between flex flex-row"
                         style={{
                           marginLeft: "7.8%",
+                          width: "83.5%",
                         }}
                       >
                         <TabsList>
@@ -105,6 +107,9 @@ export default function ServiceRequestPage() {
                             Maintenance Request
                           </TabsTrigger>
                         </TabsList>
+                        <InstructionsLink
+                          location={"service"}
+                        ></InstructionsLink>
                       </div>
                       <TabsContent
                         value="Flower Request"

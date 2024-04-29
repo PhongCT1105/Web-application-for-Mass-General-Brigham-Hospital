@@ -8,7 +8,7 @@ import { EdgeDataTable } from "@/routes/map-editor/edges/edge-table.tsx";
 import { Separator } from "@/components/ui/separator.tsx";
 import { Button } from "@/components/ui/button.tsx";
 import { MapIcon } from "lucide-react";
-
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 export interface Node {
   nodeID: string;
   xcoord: number;
@@ -37,6 +37,10 @@ export const MapEditorTablePage = () => {
             <p className="text-sm text-muted-foreground">Table View</p>
           </div>
           <div className={"flex items-center"}>
+            <InstructionsLink
+              className={"mr-2"}
+              location={"editor"}
+            ></InstructionsLink>
             <Button
               variant={"outline"}
               className={"mr-3"}

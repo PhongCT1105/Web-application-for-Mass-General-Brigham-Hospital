@@ -10,11 +10,33 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
 import {
   Card,
   CardContent,
+  // CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import { CircleDot, CirclePlay, Clover, EllipsisVertical } from "lucide-react";
+import {
+  CircleDot,
+  CirclePlay,
+  Clover,
+  EllipsisVertical,
+  Accessibility,
+  TriangleAlert,
+} from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
+// import {Label} from "@/components/ui/label.tsx";
+
+// interface changeMarker {
+//   start: string;
+//   end: string;
+//   setStart: React.Dispatch<React.SetStateAction<string>>;
+//   setEnd: React.Dispatch<React.SetStateAction<string>>;
+// }
+//
+// interface locationData {
+//   nodeID: string;
+//   longName: string;
+// }
 
 interface SearchBarProps {
   locations: {
@@ -26,6 +48,8 @@ interface SearchBarProps {
   changePathfindingStrategy: (strat: string) => void;
   //currentFloor: string;
   textDirections: direction[];
+  changeAccessibility: (accessMode: boolean) => void;
+  handleObstacle: (obstacles: boolean) => void;
   children?: React.ReactNode; // Add this line
 }
 
@@ -35,6 +59,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onClear,
   changePathfindingStrategy,
   textDirections, // New prop
+  changeAccessibility,
+  handleObstacle,
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -45,6 +71,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const { startNodeName, endNodeName, startNodeID, endNodeID } =
     useSearchContext();
   const [tabVal, setTabValue] = useState<string>("astar");
+  const [accessMode, setAccessMode] = useState(false);
+  const [obstacles, setObstacles] = useState(false);
 
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
@@ -108,23 +136,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div
-      className="flex flex-col items-center bg-transparent p-4 w-[350px]
-"
-    >
+    <div className="flex flex-col items-center bg-transparent p-4 w-[350px]">
       <Card className={"w-full shadow"}>
         <CardHeader>
-          <CardTitle className="flex justify-between items-center">
+          <CardTitle className={"flex justify-between items-center"}>
             <div>Directions</div>
-            <Button
-              variant="invisible"
-              title="Feeling Lucky?"
-              onClick={feelingLucky}
-            >
-              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
-                <Clover color={"green"} />
-              </div>
-            </Button>
+            <InstructionsLink location={"nav"}></InstructionsLink>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -213,7 +230,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             {/*</Label>*/}
           </div>
 
-          <div className="flex mb-4 flex-col items-center align-content-center">
+          <div className="flex mb-3 flex-col items-center align-content-center">
             <Tabs value={tabVal}>
               <TabsList>
                 <TabsTrigger
@@ -257,8 +274,80 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               {/*<TabsContent value="password">Change your password here.</TabsContent>*/}
             </Tabs>
           </div>
+          <CardTitle className={"flex mb-3 justify-between items-center gap-6"}>
+            <Button
+              variant="invisible"
+              title="Feeling Lucky?"
+              onClick={feelingLucky}
+            >
+              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
+                <Clover color={"green"} />
+              </div>
+            </Button>
+            <div
+              className="flex items-center w-auto group-hover:text-yellow-500 -ml-4"
+              title="Accessibility Toggle"
+            >
+              <div
+                onClick={() => {
+                  changeAccessibility(!accessMode);
+                  setAccessMode(!accessMode);
+                }}
+                className={
+                  !accessMode
+                    ? "relative h-[30px] w-[60px] cursor-pointer pr-2 rounded-full bg-slate-400 duration-150"
+                    : "relative h-[30px] w-[60px] cursor-pointer pr-2  rounded-full bg-[#003a96] duration-150"
+                }
+              >
+                <div
+                  className={
+                    !accessMode
+                      ? "absolute inset-0 flex translate-x-[0] p-[3px] duration-150"
+                      : "absolute inset-0 flex translate-x-[50%] p-[3px] duration-150"
+                  }
+                >
+                  <div className="aspect-square h-full rounded-full bg-slate-50 p-1">
+                    <div className="relative h-full w-full">
+                      <Accessibility size={15} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div className="flex items-center gap-4">
+            <div
+              className="flex items-center w-auto group-hover:text-yellow-500 -ml-4"
+              title="Obstacles Toggle"
+            >
+              <div
+                onClick={() => {
+                  handleObstacle(!obstacles);
+                  setObstacles(!obstacles);
+                }}
+                className={
+                  !obstacles
+                    ? "relative h-[30px] w-[60px] cursor-pointer pr-2 rounded-full bg-slate-400 duration-150"
+                    : "relative h-[30px] w-[60px] cursor-pointer pr-2  rounded-full bg-[#f6bd38] duration-150"
+                }
+              >
+                <div
+                  className={
+                    !obstacles
+                      ? "absolute inset-0 flex translate-x-[0] p-[3px] duration-150"
+                      : "absolute inset-0 flex translate-x-[50%] p-[3px] duration-150"
+                  }
+                >
+                  <div className="aspect-square h-full rounded-full bg-slate-50 p-1">
+                    <div className="relative h-full w-full">
+                      <TriangleAlert size={15} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardTitle>
+
+          <div className="flex items-center gap-10">
             <Button
               variant={"default"}
               onClick={handleSearch}

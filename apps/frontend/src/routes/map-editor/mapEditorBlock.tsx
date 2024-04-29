@@ -33,7 +33,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 export interface Edge {
   edgeID: string;
   start: string;
@@ -462,7 +462,10 @@ export const MapEditor: React.FC = () => {
       <div className="flex flex-col items-center bg-transparent p-4 w-[400px] space-y-4 overflow-y-scroll">
         <Card className={"w-full shadow"}>
           <CardHeader>
-            <CardTitle>Map Editor</CardTitle>
+            <CardTitle className={"flex justify-between items-center"}>
+              Map Editor
+              <InstructionsLink location={"editor"}></InstructionsLink>
+            </CardTitle>
             <CardDescription>
               Move and drag nodes to change their position. Click on a node to
               edit. Click "Submit Changes" to override all node data. You may

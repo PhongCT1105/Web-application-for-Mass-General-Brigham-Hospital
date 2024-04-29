@@ -1,6 +1,6 @@
 import { z } from "zod";
 export const ScheduleRoomForm = z.object({
-  reqID: z.string(),
+  reqID: z.number(),
   employeeName: z.string(),
   patientName: z.string(),
   locationFrom: z.string(),
@@ -11,6 +11,7 @@ export const ScheduleRoomForm = z.object({
   status: z.string(),
   note: z.string(),
   date: z.date(),
+  dateSubmitted: z.string(),
 });
 
 export type ScheduleForm = z.infer<typeof ScheduleRoomForm>;

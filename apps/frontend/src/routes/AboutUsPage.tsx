@@ -51,7 +51,7 @@ const AboutMePage = () => {
               Github={"https://github.com/alexanderjlap"}
               Linkdin={"https://www.linkedin.com/in/alexanderlap/"}
               Imagepath={Lap}
-              quote={""}
+              quote={'"Stay strapped or get clapped" - Sun Tzu'}
             />
             <AboutBlock
               Name={"Trang Tran"}
@@ -77,7 +77,7 @@ const AboutMePage = () => {
               Github={"https://github.com/minaboktor2628"}
               Linkdin={"https://www.linkedin.com/in/mina-boktor-108126211/"}
               Imagepath={Mina}
-              quote={""}
+              quote={'"It\'s just math" - Phong'}
             />
             <AboutBlock
               Name={"Henry Solomon"}
@@ -89,7 +89,7 @@ const AboutMePage = () => {
               Github={"https://github.com/hjsolomon"}
               Linkdin={"https://www.linkedin.com/in/hjsolomon/"}
               Imagepath={Henry}
-              quote={""}
+              quote={'"Real G\'s move in silence like lasagna" - Lil Wayne'}
             />
             <AboutBlock
               Name={"June Whittall"}
@@ -115,7 +115,7 @@ const AboutMePage = () => {
               Github={"https://github.com/tdyang"}
               Linkdin={"https://www.linkedin.com/in/tracy-yang-b61b72211/"}
               Imagepath={Tracy}
-              quote={""}
+              quote={'"ware are yew" -blink-182'}
             />
             <AboutBlock
               Name={"Alexsandra Antoski"}
@@ -129,7 +129,10 @@ const AboutMePage = () => {
                 "https://www.linkedin.com/in/alexsandra-antoski-9b7a242a4/"
               }
               Imagepath={Sandi}
-              quote={""}
+              quote={
+                "\"We don't have to do everything in order to be everything, " +
+                'because we are already infinite. While we are alive we always contain a future of multifarious possibility." - Matt Haig'
+              }
             />
             <AboutBlock
               Name={"Alexander Kraemling"}
@@ -143,7 +146,7 @@ const AboutMePage = () => {
                 "https://www.linkedin.com/in/alexander-kraemling-aa9b42214/"
               }
               Imagepath={Kraemling}
-              quote={""}
+              quote={'"I don\'t think I can take any more" - Jon Arbuckle'}
             />
           </div>
           <div className={"mx-auto w-3/5"}>

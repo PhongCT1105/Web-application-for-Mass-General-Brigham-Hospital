@@ -22,36 +22,65 @@ interface RequestForm {
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestBody = req.body;
-    //console.log(requestBody);
-    const jsonString = JSON.stringify(requestBody);
-    console.log("JSON String:", jsonString);
+    const requestForms = req.body;
+    if (Array.isArray(requestForms)) {
+      for (const requestForm of requestForms) {
+        const flowers: cartItem[] = requestForm.cartItems;
+        const cartItemCreateData = flowers.map((flower) => ({
+          name: flower.name,
+          cost: flower.cost,
+        }));
 
-    // Parse the JSON string back into an object
-    const requestForm: RequestForm = JSON.parse(jsonString);
-    const flowers: cartItem[] = requestForm.cartItems;
-    const cartItemCreateData = flowers.map((flower) => ({
-      name: flower.name,
-      cost: flower.cost,
-    }));
-
-    await PrismaClient.flowerRequest.create({
-      data: {
-        cartItems: {
-          createMany: {
-            data: cartItemCreateData,
+        const dateConvert = new Date(requestForm.dateSubmitted);
+        await PrismaClient.flowerRequest.create({
+          data: {
+            cartItems: {
+              createMany: {
+                data: cartItemCreateData,
+              },
+            },
+            location: requestForm.location,
+            message: requestForm.message,
+            recipient: requestForm.recipient,
+            sender: requestForm.sender,
+            total: requestForm.total,
+            priority: requestForm.priority,
+            status: requestForm.status,
+            dateSubmitted: dateConvert,
           },
+        });
+      }
+    } else {
+      const jsonString = JSON.stringify(requestForms);
+      console.log("JSON String:", jsonString);
+
+      //Parse the JSON string back into an object
+      const requestForm: RequestForm = JSON.parse(jsonString);
+      const flowers: cartItem[] = requestForms.cartItems;
+      const cartItemCreateData = flowers.map((flower) => ({
+        name: flower.name,
+        cost: flower.cost,
+      }));
+      const dateConvert = new Date(requestForm.dateSubmitted);
+      await PrismaClient.flowerRequest.create({
+        data: {
+          cartItems: {
+            createMany: {
+              data: cartItemCreateData,
+            },
+          },
+          location: requestForm.location,
+          message: requestForm.message,
+          recipient: requestForm.recipient,
+          sender: requestForm.sender,
+          total: requestForm.total,
+          priority: requestForm.priority,
+          status: requestForm.status,
+          dateSubmitted: dateConvert,
         },
-        location: requestForm.location,
-        message: requestForm.message,
-        recipient: requestForm.recipient,
-        sender: requestForm.sender,
-        total: requestForm.total,
-        priority: requestForm.priority,
-        status: requestForm.status,
-        dateSubmitted: requestForm.dateSubmitted,
-      },
-    });
+      });
+    }
+
     console.info("Successfully requested flowers");
     res.status(200).json({ message: "Flower requests created successfully" });
   } catch (error) {

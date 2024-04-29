@@ -1,0 +1,12 @@
+input to model:
+
+task required;
+weekday;
+shift period; (1, 2 , 3, 4)
+priority;
+status;
+
+
+
+output:
+employee name

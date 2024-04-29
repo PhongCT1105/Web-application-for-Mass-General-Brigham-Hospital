@@ -11,7 +11,7 @@ export const columnsMaintenanceLog: ColumnDef<MaintenanceForm>[] = [
     ),
     cell: ({ row }) => (
       <div className="w-[80px] font-normal">
-        {"MA" + (row.getValue("reqID") as string).toString()}
+        #{"MA" + row.getValue("reqId")}
       </div>
     ),
   },

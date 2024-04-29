@@ -1,9 +1,9 @@
 import React, { ReactNode, useState } from "react";
 import Draggable from "react-draggable";
-import PieGraph from "@/components/Graph/PieGraph";
-import LineGraph from "@/components/Graph/LineGraph.tsx";
-import { overallLineData } from "@/data/overallData/lineChartData";
-import { overallPieData } from "@/data/overallData/pieChartData";
+// import PieGraph from "@/components/Graph/PieGraph.tsx";
+// import LineGraph from "@/components/Graph/LineGraph.tsx";
+// import { overallLineData } from "@/data/overallData/lineChartData.ts";
+// import { overallPieData } from "@/data/overallData/pieChartData.ts";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
@@ -138,7 +138,7 @@ const Dashboard = () => {
                       <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">
                         Money tracking
                       </h2>
-                      <LineGraph props={overallLineData} />
+                      {/*<LineGraph props={overallLineData} />*/}
                     </div>,
                   )
                 }
@@ -147,35 +147,35 @@ const Dashboard = () => {
                   <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">
                     Money tracking
                   </h2>
-                  <LineGraph props={overallLineData} />
+                  {/*<LineGraph props={overallLineData} />*/}
                 </div>
               </div>
             </Draggable>
 
-            <Draggable>
-              {/* Pie Graph */}
-              <div
-                className="w-full md:w-1/2 bg-white rounded-lg shadow-lg overflow-hidden"
-                onDoubleClick={() =>
-                  handleDoubleClick(
-                    <div>
-                      <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">
-                        Proportion of service requests
-                      </h2>
-                      <PieGraph props={overallPieData} />
-                    </div>,
-                  )
-                }
-              >
-                <div>
-                  <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">
-                    Proportion of service requests
-                  </h2>
-                  <PieGraph props={overallPieData} />
-                </div>
-                ,
-              </div>
-            </Draggable>
+            {/*<Draggable>*/}
+            {/*  /!* Pie Graph *!/*/}
+            {/*  <div*/}
+            {/*    className="w-full md:w-1/2 bg-white rounded-lg shadow-lg overflow-hidden"*/}
+            {/*    onDoubleClick={() =>*/}
+            {/*      handleDoubleClick(*/}
+            {/*        <div>*/}
+            {/*          <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">*/}
+            {/*            Proportion of service requests*/}
+            {/*          </h2>*/}
+            {/*          <PieGraph props={overallPieData} />*/}
+            {/*        </div>,*/}
+            {/*      )*/}
+            {/*    }*/}
+            {/*  >*/}
+            {/*    <div>*/}
+            {/*      <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">*/}
+            {/*        Proportion of service requests*/}
+            {/*      </h2>*/}
+            {/*      <PieGraph props={overallPieData} />*/}
+            {/*    </div>*/}
+            {/*    ,*/}
+            {/*  </div>*/}
+            {/*</Draggable>*/}
           </div>
         </div>
         <button
