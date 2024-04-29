@@ -22,6 +22,7 @@ import InsightRoute from "@/routes/InsightRoute.tsx";
 import { InstructionsPage } from "./routes/InstructionsPage.tsx";
 import DashBoard from "./routes/DashBoard.tsx";
 import "./fakeDataLoader.ts";
+import { SchedulingPage } from "@/routes/employee-scheduling/SchedulingPage.tsx";
 // import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 
 function App() {
@@ -92,6 +93,11 @@ function App() {
           path: "/instructions",
           errorElement: <h1>ERROR</h1>,
           element: <InstructionsPage />,
+        },
+        {
+          path: "/scheduling",
+          errorElement: <h1>ERROR</h1>,
+          element: <SchedulingPage />,
         },
       ],
     },
