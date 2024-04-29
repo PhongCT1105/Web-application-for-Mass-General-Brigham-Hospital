@@ -30,6 +30,8 @@ const achievementsWithMessages: Record<string, string> = {
     "Your flower requests have blossomed into something truly special. Your generosity knows no bounds – keep blooming brightly!",
   "Wong Achievement":
     "No nothing is Wong, you've just stumbled upon an achievement for getting to know professor Wong!",
+  "All Achievements Discovered":
+    "You have discovered every achievement! Thank you so much for exploring our application, we hope you enjoyed the journey!",
   // Add more achievements here
 };
 
@@ -46,6 +48,7 @@ export const AchievementProvider: React.FC<AchievementProviderProps> = ({
   children,
 }) => {
   const { toast } = useToast();
+  const totalAchievements = 4; // total # of achievements - 1!
   // State to manage achievements
   const [achievements, setAchievements] = useState<string[]>([]);
 
@@ -83,6 +86,13 @@ export const AchievementProvider: React.FC<AchievementProviderProps> = ({
   useEffect(() => {
     localStorage.setItem("achievements", JSON.stringify(achievements));
   }, [achievements]);
+
+  useEffect(() => {
+    if (achievements.length === totalAchievements) {
+      // Trigger the "all achievements discovered" achievement
+      triggerAchievement("All Achievements Discovered");
+    }
+  }, [achievements, totalAchievements, triggerAchievement]);
 
   // Memoized context value
   const contextValue = React.useMemo(
