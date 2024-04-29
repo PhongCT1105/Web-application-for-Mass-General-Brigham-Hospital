@@ -101,7 +101,9 @@ const AboutMePage = () => {
               Github={"https://github.com/jwwhittall"}
               Linkdin={""}
               Imagepath={June}
-              quote={""}
+              quote={
+                '"Do you remember that old lake? The one by Santa Fe?" -Dean Summerwind'
+              }
             />
           </div>
           <div className={"flex flex-row pt-10 pb-5 justify-between"}>
