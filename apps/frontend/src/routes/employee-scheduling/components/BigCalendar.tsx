@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Calendar, Event, stringOrDate } from "react-big-calendar";
 import withDragAndDrop, {
   DragFromOutsideItemArgs,
@@ -15,7 +15,10 @@ import {
   filterEventsByShift,
   filterEventsByWeekday,
 } from "../utils/eventFiltering.ts";
-import { fetchEmployeeData } from "@/routes/employee-scheduling/utils/api.ts";
+import {
+  fetchEmployeeData,
+  postSchedule,
+} from "@/routes/employee-scheduling/utils/api.ts";
 import { eventStyleGetter } from "@/routes/employee-scheduling/utils/eventStyling.ts";
 import { localizer } from "../utils/localizer.ts";
 import { toast } from "@/components/ui/use-toast.ts";
@@ -45,6 +48,9 @@ export const BigCalendar = ({
     null,
   );
 
+  useEffect(() => {
+    console.log(events);
+  }, [events]);
   const [lastId, setLastId] = useState(0);
   const getEmployees = async () => {
     try {
@@ -215,7 +221,18 @@ export const BigCalendar = ({
               <DraggableCard info={request} key={index} />
             </div>
           ))}
-          <div className={"space-x-1 pt-2"}>
+          <Button
+            className={"w-full"}
+            variant={
+              JSON.stringify(events) != JSON.stringify(employeeSchedule)
+                ? "default"
+                : "outline"
+            }
+            onClick={() => postSchedule(events)}
+          >
+            Save Schedule
+          </Button>
+          <div className={"space-x-1"}>
             <Button
               className={"p-5"}
               variant={"destructive"}
