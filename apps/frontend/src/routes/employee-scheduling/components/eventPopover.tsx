@@ -33,24 +33,34 @@ export function EventPopover({ event, onUpdateEvent }: EventPopoverProps) {
     event.priority,
   );
 
+  const [thisEvent, setThisEvent] = useState(event);
+
   const handleStatusChange = (value: string) => {
+    setThisEvent((prevState) => ({
+      ...prevState,
+      status: value,
+    }));
     setSelectedStatus(value);
   };
 
   const handlePriorityChange = (value: string) => {
+    setThisEvent((prevState) => ({
+      ...prevState,
+      priority: value,
+    }));
     setSelectedPriority(value);
   };
 
   const handleSaveChanges = () => {
-    // Update the event with the selected status and priority
     const updatedEvent = {
       ...event,
       status: selectedStatus,
       priority: selectedPriority,
     };
+    onUpdateEvent(updatedEvent);
     event.priority = selectedPriority;
     event.status = selectedStatus;
-    onUpdateEvent(updatedEvent);
+    return thisEvent;
   };
 
   return (
