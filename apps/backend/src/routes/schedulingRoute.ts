@@ -1,5 +1,7 @@
 import PrismaClient from "../bin/database-connection.ts";
 import express, { Router } from "express";
+import * as tf from "@tensorflow/tfjs";
+import { loadLayersModel } from "@tensorflow/tfjs-node";
 
 interface scheduling {
   task: number;
@@ -8,6 +10,10 @@ interface scheduling {
   priority: number;
   status: number;
   employee?: number;
+  title: string;
+  color: string;
+  start: string;
+  end: string;
 }
 // interface Event {
 //   id: number;
@@ -23,6 +29,33 @@ interface scheduling {
 // }
 
 const router: Router = express.Router();
+
+let model: tf.LayersModel | undefined;
+async function loadModel() {
+  model = await loadLayersModel("file://model.json");
+}
+loadModel();
+
+router.post("/predict", async (req, res) => {
+  try {
+    const inputData = req.body; // This should be preprocessed in the same way as your training data
+    const tensor = tf.tensor2d(inputData, [1, 5]); // Replace 5 with the number of features in your input data
+    if (!model) {
+      return res.status(500).json({ error: "Model not loaded" });
+    }
+    const prediction = model.predict(tensor);
+    let predictionData;
+    if (Array.isArray(prediction)) {
+      predictionData = prediction.map((p) => p.dataSync());
+    } else {
+      predictionData = prediction.dataSync();
+    }
+    res.status(200).json({ prediction: predictionData });
+  } catch (error) {
+    console.error("Error", error);
+    res.status(400);
+  }
+});
 router.post("/", async (req, res) => {
   const events: scheduling[] = req.body;
 
