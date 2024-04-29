@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 
 export const SchedulingPage = () => {
   const [savedData, setSavedData] = useState<CustomCalendarEvent[]>([]);
+  const [dataFetched, setDataFetched] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -25,7 +26,7 @@ export const SchedulingPage = () => {
         console.error("Error fetching saved schedule:", error);
       }
     };
-    fetchData().then(() => console.log("useEffect just ran"));
+    fetchData().then(() => setDataFetched(true));
   }, []);
 
   return (
@@ -41,7 +42,7 @@ export const SchedulingPage = () => {
         </div>
       </div>
       <Separator className="my-4" />
-      {savedData.length > 0 && (
+      {dataFetched && (
         <BigCalendar
           employeeSchedule={savedData}
           draggableCardData={requests}

@@ -41,10 +41,10 @@ router.post("/", async (req, res) => {
 router.post("/save", async (req, res) => {
   try {
     const schedule = req.body;
+    await PrismaClient.scheduleEvent.deleteMany();
     for (const event of schedule) {
-      await PrismaClient.schedule.create({
+      await PrismaClient.scheduleEvent.create({
         data: {
-          // id: event.id,
           end: event.end,
           start: event.start,
           color: event.color,
@@ -52,7 +52,7 @@ router.post("/save", async (req, res) => {
           status: event.status,
           shift: event.shift,
           weekday: event.weekday,
-          employeeName: event.employee,
+          employee: event.employee,
           title: event.title,
         },
       });
@@ -65,7 +65,7 @@ router.post("/save", async (req, res) => {
   }
 });
 router.get("/savedSchedule", async (req, res) => {
-  const savedSchedule = await PrismaClient.schedule.findMany();
+  const savedSchedule = await PrismaClient.scheduleEvent.findMany();
 
   // Convert ISO strings to Date objects
   // const scheduleWithDates = savedSchedule.map((item) => ({
