@@ -127,7 +127,7 @@ const Dashboard = () => {
 
           {/* Graphs */}
 
-          <div className="mt-3 flex flex-col md:flex-row gap-6">
+          <div className="mt-3 flex flex-col md:flex-row gap-6 ">
             <Draggable>
               {/* Line Graph */}
               <div
@@ -179,7 +179,7 @@ const Dashboard = () => {
           </div>
         </div>
         <button
-          className="px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
+          className="mt-2 px-4 py-2 bg-gray-800 text-white rounded-lg shadow hover:bg-gray-700 focus:outline-none focus:bg-gray-700"
           onClick={downloadAsPDF}
         >
           Download report
