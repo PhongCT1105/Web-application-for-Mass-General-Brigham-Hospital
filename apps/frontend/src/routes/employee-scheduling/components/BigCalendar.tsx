@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Calendar, Event, stringOrDate } from "react-big-calendar";
+import { Calendar, Event, EventProps, stringOrDate } from "react-big-calendar";
 import withDragAndDrop, {
   DragFromOutsideItemArgs,
   withDragAndDropProps,
@@ -47,6 +47,12 @@ export const BigCalendar = ({
   const [dragEvent, setDraggedEvent] = useState<CustomCalendarEvent | null>(
     null,
   );
+
+  const [isEventPopoverOpen, setEventPopoverOpen] = useState(false);
+  const handleEventPopoverToggle = (isOpen: boolean) => {
+    setEventPopoverOpen(isOpen);
+  };
+
   const [lastId, setLastId] = useState(0);
 
   const getEmployees = async () => {
@@ -202,6 +208,10 @@ export const BigCalendar = ({
     [dragEvent, newEvent],
   );
 
+  const handleSelected = (isOpen: boolean) => {
+    setEventPopoverOpen(isOpen);
+  };
+
   return (
     <div className={"grid grid-cols-7 grid-rows-5 gap-4"}>
       <div className={"row-span-5 mt-8 "}>
@@ -273,8 +283,8 @@ export const BigCalendar = ({
           <DnDCalendar
             popup
             resizable
-            // toolbar={false}
             events={events}
+            onSelectEvent={() => handleSelected(true)}
             defaultView="week"
             localizer={localizer}
             onEventDrop={onEventDrop}
@@ -283,9 +293,11 @@ export const BigCalendar = ({
             eventPropGetter={eventStyleGetter}
             onDropFromOutside={onDropFromOutside}
             components={{
-              event: (props) => (
+              event: (props: EventProps) => (
                 <EventPopover
                   event={props.event}
+                  setTrigger={handleEventPopoverToggle}
+                  trigger={isEventPopoverOpen}
                   onUpdateEvent={handleEventUpdate}
                 />
               ),

@@ -16,7 +16,7 @@ import {
   DialogFooter,
   DialogTrigger,
 } from "@/components/ui/dialog.tsx";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { statuses } from "@/routes/employee-scheduling/data/status.ts";
 import { priorities } from "@/routes/employee-scheduling/data/priority.ts";
@@ -24,15 +24,21 @@ import { priorities } from "@/routes/employee-scheduling/data/priority.ts";
 interface EventPopoverProps {
   onUpdateEvent: (updatedEvent: CustomCalendarEvent) => void;
   event: CustomCalendarEvent;
+  trigger: boolean;
+  setTrigger: (isOpen: boolean) => void;
 }
-export function EventPopover({ event, onUpdateEvent }: EventPopoverProps) {
+export function EventPopover({
+  trigger,
+  setTrigger,
+  event,
+  onUpdateEvent,
+}: EventPopoverProps) {
   const [selectedStatus, setSelectedStatus] = useState<string | undefined>(
     event.status,
   );
   const [selectedPriority, setSelectedPriority] = useState<string | undefined>(
     event.priority,
   );
-
   const [thisEvent, setThisEvent] = useState(event);
 
   const handleStatusChange = (value: string) => {
@@ -64,7 +70,7 @@ export function EventPopover({ event, onUpdateEvent }: EventPopoverProps) {
   };
 
   return (
-    <Dialog>
+    <Dialog open={trigger} onOpenChange={setTrigger}>
       <DialogTrigger className={"items-start"}>
         <CustomEventComponent event={event} />
       </DialogTrigger>
@@ -115,7 +121,14 @@ export function EventPopover({ event, onUpdateEvent }: EventPopoverProps) {
         </div>
         <DialogFooter className={"mr-4"}>
           <DialogClose>
-            <Button onClick={handleSaveChanges}>Save</Button>
+            <Button
+              onClick={() => {
+                setTrigger(false);
+                handleSaveChanges();
+              }}
+            >
+              Save
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>
