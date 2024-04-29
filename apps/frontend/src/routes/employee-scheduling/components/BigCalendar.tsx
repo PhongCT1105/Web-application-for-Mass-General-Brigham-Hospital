@@ -20,19 +20,21 @@ import { eventStyleGetter } from "@/routes/employee-scheduling/utils/eventStylin
 import { localizer } from "../utils/localizer.ts";
 import { toast } from "@/components/ui/use-toast.ts";
 import { CalendarToastDescription } from "@/routes/employee-scheduling/components/toastDescription.tsx";
+import { EventRequests } from "@/routes/employee-scheduling/data/requests.ts";
 
 export interface CustomCalendarEvent extends Event {
+  id?: number;
   color?: string;
   employee?: string;
   status?: string;
   priority?: string;
   shift?: number;
-  weekday?: string;
+  weekday?: number;
 }
 
 interface CalendarProps {
   employeeSchedule: CustomCalendarEvent[];
-  draggableCardData: CustomCalendarEvent[];
+  draggableCardData: EventRequests[];
 }
 export const BigCalendar = ({
   employeeSchedule,
@@ -43,27 +45,43 @@ export const BigCalendar = ({
     null,
   );
 
+  const [lastId, setLastId] = useState(0);
   const getEmployees = async () => {
     try {
+      // get the shift and weekday
       const filteredByWeekday = filterEventsByWeekday(events);
       const filteredByShift = filterEventsByShift(filteredByWeekday);
-      const newEvents = await fetchEmployeeData(filteredByShift);
+      const prevEvents = [...events];
+      const newEvents: CustomCalendarEvent[] =
+        await fetchEmployeeData(filteredByShift);
       setEvents((prevState) =>
         prevState.map((event, index) => ({
           ...event,
           employee: newEvents[index].employee,
         })),
       );
-      toast({
-        title: "Algorithm picked the following employees:",
-        description: (
-          <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
-            <div className="text-white pb-1">
-              {events.map((event) => CalendarToastDescription(event))}
-            </div>
-          </pre>
-        ),
+
+      const changedEvents = newEvents.filter((newEvent) => {
+        const prevEvent = prevEvents.find(
+          (prevEvent) => prevEvent.id === newEvent.id,
+        );
+        return !prevEvent || newEvent.employee !== prevEvent.employee;
       });
+
+      if (changedEvents.length > 0) {
+        toast({
+          title: "Algorithm picked the following employees:",
+          description: (
+            <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+              <div className="text-white pb-1">
+                {changedEvents.map((event, index) => (
+                  <div key={index}>{CalendarToastDescription(event)}</div>
+                ))}
+              </div>
+            </pre>
+          ),
+        });
+      }
     } catch (error) {
       console.error("Error: " + error);
     }
@@ -124,12 +142,17 @@ export const BigCalendar = ({
       const start =
         typeof event.start === "string" ? new Date(event.start) : event.start;
       const end = addHours(start, 6);
+      const newId = lastId + 1;
+      setLastId(newId);
 
       setEvents((prev) => {
-        return [...prev, { ...event, start, end, color: dragEvent?.color }];
+        return [
+          ...prev,
+          { ...event, id: newId, start, end, color: dragEvent?.color },
+        ];
       });
     },
-    [dragEvent?.color],
+    [dragEvent?.color, lastId],
   );
 
   const onEventDrop: withDragAndDropProps["onEventDrop"] = ({
@@ -176,8 +199,8 @@ export const BigCalendar = ({
   );
 
   return (
-    <div className={"grid grid-cols-6 grid-rows-5 gap-4"}>
-      <div className={"row-span-5 mt-24"}>
+    <div className={"grid grid-cols-7 grid-rows-5 gap-4"}>
+      <div className={"row-span-5 mt-8 "}>
         <div className={"flex flex-col items-center space-y-4 mt-3"}>
           {draggableCardData.map((request, index) => (
             <div
@@ -192,7 +215,7 @@ export const BigCalendar = ({
               <DraggableCard info={request} key={index} />
             </div>
           ))}
-          <div className={"space-x-3 pt-2"}>
+          <div className={"space-x-1 pt-2"}>
             <Button
               className={"p-5"}
               variant={"destructive"}
@@ -203,7 +226,9 @@ export const BigCalendar = ({
               Clear
             </Button>
             <Button
-              variant={events.length != 0 ? "default" : "outline"}
+              variant={
+                events.some((event) => !event.employee) ? "default" : "outline"
+              }
               onClick={getEmployees}
               className={"p-5"}
             >
@@ -212,7 +237,7 @@ export const BigCalendar = ({
           </div>
         </div>
       </div>
-      <div className={"col-span-5 row-span-5"}>
+      <div className={"col-span-6 row-span-5 mr-1"}>
         <div>
           <DnDCalendar
             popup

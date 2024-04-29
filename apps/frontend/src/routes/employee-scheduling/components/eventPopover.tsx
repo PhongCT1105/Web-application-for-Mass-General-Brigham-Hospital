@@ -8,7 +8,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
-import { priorities, statuses } from "@/interfaces/dataTypes/labels.ts";
 import { CustomEventComponent } from "@/routes/employee-scheduling/components/CustomEventComponent.tsx";
 import {
   Dialog,
@@ -19,6 +18,8 @@ import {
 } from "@/components/ui/dialog.tsx";
 import { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
+import { statuses } from "@/routes/employee-scheduling/data/status.ts";
+import { priorities } from "@/routes/employee-scheduling/data/priority.ts";
 
 interface EventPopoverProps {
   onUpdateEvent: (updatedEvent: CustomCalendarEvent) => void;
@@ -48,7 +49,7 @@ export function EventPopover({ event, onUpdateEvent }: EventPopoverProps) {
       priority: selectedPriority,
     };
     event.priority = selectedPriority;
-    event.status = selectedPriority;
+    event.status = selectedStatus;
     onUpdateEvent(updatedEvent);
   };
 
@@ -102,7 +103,7 @@ export function EventPopover({ event, onUpdateEvent }: EventPopoverProps) {
             </div>
           </div>
         </div>
-        <DialogFooter className={" mr-4"}>
+        <DialogFooter className={"mr-4"}>
           <DialogClose>
             <Button onClick={handleSaveChanges}>Save</Button>
           </DialogClose>

@@ -5,10 +5,14 @@ export const CustomEventComponent = ({
   event: CustomCalendarEvent;
 }) => {
   return (
-    <div className={"pt-1 h-full text-left"}>
+    <div className={"py-1 h-full text-left"}>
       <strong className={"text-left"}>{event.title}</strong>
       <div className={"pt-1 space-y-1"}>
-        <p className={"text-left"}>{event.employee && event.employee}</p>
+        {event.employee && (
+          <p className={"text-left"}>
+            <span className={"font-semibold"}>Employee:</span> {event.employee}
+          </p>
+        )}
         {event.status && (
           <p className={"text-left"}>
             <span className={"font-semibold"}>Status:</span> {event.status}

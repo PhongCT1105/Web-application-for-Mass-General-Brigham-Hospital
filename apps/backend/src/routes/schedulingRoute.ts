@@ -2,12 +2,12 @@
 import express, { Router } from "express";
 
 interface scheduling {
-  task: string;
-  weekday: string;
-  shift: 1 | 2 | 3 | 4;
-  priority: string;
-  status: string;
-  employee?: string;
+  task: number;
+  weekday: number;
+  shift: number;
+  priority: number;
+  status: number;
+  employee?: number;
 }
 
 const router: Router = express.Router();
@@ -16,7 +16,7 @@ router.post("/", async (req, res) => {
 
   try {
     for (const event of events) {
-      event.employee = "Mina";
+      event.employee = 6;
     }
     console.log("Backend response: " + events);
     res.status(200).json(events);

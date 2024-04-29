@@ -10,7 +10,7 @@ export const DraggableCard = ({ info }: props) => {
       <Card style={{ background: info.color }} className={"shadow w-[175px]"}>
         <CardHeader>
           <CardTitle>
-            <span>{info.title}</span>
+            <span className={"text-white"}>{info.title}</span>
           </CardTitle>
         </CardHeader>
       </Card>

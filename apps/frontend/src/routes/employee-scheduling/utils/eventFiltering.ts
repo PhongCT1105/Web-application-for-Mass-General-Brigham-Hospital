@@ -33,36 +33,10 @@ export const filterEventsByWeekday = (events: CustomCalendarEvent[]) => {
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       const startDayOfWeek = getDay(event.start);
-      let weekday: string;
-
-      switch (startDayOfWeek) {
-        case 0:
-          weekday = "sunday";
-          break;
-        case 1:
-          weekday = "monday";
-          break;
-        case 2:
-          weekday = "tuesday";
-          break;
-        case 3:
-          weekday = "wednesday";
-          break;
-        case 4:
-          weekday = "thursday";
-          break;
-        case 5:
-          weekday = "friday";
-          break;
-        case 6:
-          weekday = "saturday";
-          break;
-        default:
-          weekday = "unknown";
-      }
 
       // Update the event with the weekday
-      return { ...event, weekday };
+      // sunday is 0, sat is 6
+      return { ...event, weekday: startDayOfWeek };
     }
     return event;
   });

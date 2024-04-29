@@ -4,6 +4,7 @@ export const CalendarToastDescription = (event: CustomCalendarEvent) => {
   return (
     <>
       <strong className={"text-left"}>{event.title}</strong>
+      {/*<p>{" "} on {new Date(event.start!).toLocaleDateString('en-US', { month: '2-digit', day: '2-digit' })} </p>*/}
       <span>
         {" "}
         from{" "}
