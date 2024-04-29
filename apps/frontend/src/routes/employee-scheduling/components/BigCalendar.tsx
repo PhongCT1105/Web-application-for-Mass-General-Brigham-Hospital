@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Calendar, Event, stringOrDate } from "react-big-calendar";
 import withDragAndDrop, {
   DragFromOutsideItemArgs,
   withDragAndDropProps,
 } from "react-big-calendar/lib/addons/dragAndDrop";
-
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { addHours } from "date-fns/addHours";
@@ -48,10 +47,14 @@ export const BigCalendar = ({
     null,
   );
 
-  useEffect(() => {
-    console.log(events);
-  }, [events]);
+  const [canSave, setCanSave] = useState(false);
+  const [, setCanSubmit] = useState(false);
   const [lastId, setLastId] = useState(0);
+
+  const isReadyForSubmit = (events: CustomCalendarEvent[]) => {
+    return events.every((event) => event.priority && event.status);
+  };
+
   const getEmployees = async () => {
     try {
       // get the shift and weekday
@@ -60,9 +63,12 @@ export const BigCalendar = ({
       const prevEvents = [...events];
       const newEvents: CustomCalendarEvent[] =
         await fetchEmployeeData(filteredByShift);
+
       setEvents((prevState) =>
         prevState.map((event, index) => ({
           ...event,
+          weekday: filteredByWeekday[index].weekday,
+          shift: filteredByShift[index].shift,
           employee: newEvents[index].employee,
         })),
       );
@@ -88,11 +94,13 @@ export const BigCalendar = ({
           ),
         });
       }
+      setCanSubmit(isReadyForSubmit(newEvents));
     } catch (error) {
       console.error("Error: " + error);
     }
   };
 
+  ///
   const handleEventUpdate = (updatedEvent: CustomCalendarEvent) => {
     // Find the index of the event being updated
     const index = events.findIndex((e) => e === updatedEvent);
@@ -222,31 +230,38 @@ export const BigCalendar = ({
             </div>
           ))}
           <Button
-            className={"w-full"}
-            variant={
-              JSON.stringify(events) != JSON.stringify(employeeSchedule)
-                ? "default"
-                : "outline"
-            }
-            onClick={() => postSchedule(events)}
+            className={"w-[175px]"}
+            disabled={!canSave}
+            onClick={() => {
+              postSchedule(events).then(() => {
+                setCanSave(false);
+                setCanSubmit(false);
+              });
+            }}
           >
             Save Schedule
           </Button>
-          <div className={"space-x-1"}>
+          <div className={"space-x-2 flex flex row items-center"}>
             <Button
               className={"p-5"}
               variant={"destructive"}
               onClick={() => {
                 setEvents([]);
+                setCanSave(true);
               }}
             >
               Clear
             </Button>
             <Button
-              variant={
-                events.some((event) => !event.employee) ? "default" : "outline"
+              disabled={
+                isReadyForSubmit(events) ||
+                (events.every((event) => event.employee) &&
+                  !isReadyForSubmit(events))
               }
-              onClick={getEmployees}
+              onClick={() => {
+                getEmployees();
+                setCanSave(true);
+              }}
               className={"p-5"}
             >
               Submit
@@ -259,6 +274,7 @@ export const BigCalendar = ({
           <DnDCalendar
             popup
             resizable
+            toolbar={false}
             events={events}
             defaultView="week"
             localizer={localizer}

@@ -149,15 +149,15 @@ model maintenanceRequest {
   dateSubmitted String?
 }
 
-model schedule {
-  id           Int      @id @default(autoincrement())
-  color        String
-  start        DateTime
-  end          DateTime
-  employeeName String
-  title        String // this is the task/request
-  status       String
-  priority     String
-  shift        Int
-  weekday      Int
+model scheduleEvent {
+  id       Int      @id @default(autoincrement())
+  color    String
+  start    DateTime
+  end      DateTime
+  employee String
+  title    String // this is the task/request
+  status   String
+  priority String
+  shift    Int
+  weekday  Int
 }
