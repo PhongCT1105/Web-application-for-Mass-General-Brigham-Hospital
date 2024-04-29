@@ -1,49 +1,94 @@
 import express, { Router, Request, Response } from "express";
 
 import PrismaClient from "../bin/database-connection.ts";
+import { MaintenanceForm } from "../../../frontend/src/interfaces/maintenanceReq.ts";
 
 const router: Router = express.Router();
 
-type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
-type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
-type rTypeOfIssue =
-  | "BrokenEquipment"
-  | "PowerIssue"
-  | "PlumbingIssue"
-  | "ElevatorIssue"
-  | "Other"
-  | "";
+// type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
+// type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
+// type rTypeOfIssue =
+//   | "BrokenEquipment"
+//   | "PowerIssue"
+//   | "PlumbingIssue"
+//   | "ElevatorIssue"
+//   | "Other"
+//   | "";
 
-interface RequestForm {
-  name: string;
-  severity: rSeverity;
-  location: string;
-  typeOfIssue: rTypeOfIssue;
-  status: rStatus;
-  description: string;
-}
+// interface RequestForm {
+//   name: string;
+//   severity: string;
+//   location: string;
+//   typeOfIssue: string;
+//   status: string;
+//   description: string;
+// }
 
 router.post("/", async (req: Request, res: Response) => {
   try {
-    const requestBody = req.body;
-    console.log(requestBody);
-    const jsonString = JSON.stringify(requestBody);
-    console.log("JSON String:", jsonString);
+    const requestForms = req.body;
+    const jsonString = JSON.stringify(requestForms);
 
-    // Parse the JSON string back into an object
-    const requestForm: RequestForm = JSON.parse(jsonString);
+    //Parse the JSON string back into an object
+    const requestForm: MaintenanceForm = JSON.parse(jsonString);
     console.log(requestForm);
 
-    await PrismaClient.maintenanceRequest.create({
-      data: {
-        name: requestForm.name,
-        severity: requestForm.severity,
-        location: requestForm.location,
-        typeOfIssue: requestForm.typeOfIssue,
-        status: requestForm.status,
-        description: requestForm.description,
-      },
-    });
+    if (Array.isArray(requestForms)) {
+      for (const requestForm of requestForms) {
+        await PrismaClient.maintenanceRequest.create({
+          data: {
+            name: requestForm.name,
+            severity: requestForm.severity,
+            location: requestForm.location,
+            typeOfIssue: requestForm.typeOfIssue,
+            status: requestForm.status,
+            description: requestForm.description,
+          },
+        });
+      }
+    } else {
+      await PrismaClient.maintenanceRequest.create({
+        data: {
+          name: requestForm.name,
+          severity: requestForm.severity,
+          location: requestForm.location,
+          typeOfIssue: requestForm.typeOfIssue,
+          status: requestForm.status,
+          description: requestForm.description,
+        },
+      });
+      let update = false;
+
+      if (requestForm.status != "Closed") {
+        if (requestForm.typeOfIssue === "PlumbingIssue") {
+          update = true;
+        }
+
+        if (requestForm.typeOfIssue === "ElevatorIssue") {
+          update = true;
+          if (requestForm.severity === "Low") {
+            update = false;
+          }
+        }
+      }
+
+      if (update) {
+        const updatedNode = await PrismaClient.nodes.update({
+          where: {
+            nodeID: requestForm.location, // Assuming NodeID is provided in the request body
+          },
+          data: {
+            obstacle: true,
+          },
+        });
+        if (!updatedNode) {
+          // If the node was not found or not updated, throw an error
+          console.log("Node not found or could not be updated");
+        }
+        console.log(updatedNode);
+      }
+    }
+
     console.info("Successfully requested maintenance services");
     res
       .status(200)

@@ -8,6 +8,7 @@ export const _SecurityForm = z.object({
   priority: z.string(),
   status: z.string(),
   situation: z.string(),
+  dateSubmitted: z.string(),
 });
 
 export type SecurityForm = z.infer<typeof _SecurityForm>;
