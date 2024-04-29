@@ -36,10 +36,17 @@ import Stairs from "@/assets/stairs-solid.svg";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
-// import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
 import { Label } from "@/components/ui/label.tsx";
 import Caution from "@/assets/caution.png";
+import CONF from "@/assets/nodetype-icons/icons8-analytics-48.png";
+import DEPT from "@/assets/nodetype-icons/icons8-hierarchy-32.png";
+import EXIT from "@/assets/nodetype-icons/icons8-exit-48.png";
+import INFO from "@/assets/nodetype-icons/icons8-info-48.png";
+import LABS from "@/assets/nodetype-icons/icons8-flask-48.png";
+import TOILET from "@/assets/nodetype-icons/icons8-toilet-48.png";
+import RETL from "@/assets/nodetype-icons/icons8-shopping-basket-48.png";
+import SERV from "@/assets/nodetype-icons/icons8-palm-up-hand-48.png";
 
 declare module "leaflet" {
   interface Polyline {
@@ -64,6 +71,7 @@ export interface HospitalData {
   yCoord: number;
   floor: string;
   obstacle: boolean;
+  nodeType: string;
 }
 
 export interface Node {
@@ -162,6 +170,38 @@ export const MapBlock: React.FC = () => {
         1: F1,
         2: F2,
         3: F3,
+      }) as const,
+    [],
+  );
+
+  const NodeMarkers: { [key: string]: string } = useMemo(
+    () =>
+      ({
+        BATH: TOILET,
+        CONF: CONF,
+        DEPT: DEPT,
+        EXIT: EXIT,
+        INFO: INFO,
+        LABS: LABS,
+        REST: TOILET,
+        RETL: RETL,
+        SERV: SERV,
+      }) as const,
+    [],
+  );
+
+  const NodeColors: { [key: string]: string } = useMemo(
+    () =>
+      ({
+        BATH: "#59aafd", //b
+        CONF: "#0680fc", //b
+        DEPT: "#fdf2d7", //y
+        EXIT: "#ef4444", //r
+        INFO: "#0056de", //b
+        LABS: "#acd5fe", //b
+        REST: "#59aafd", //b
+        RETL: "#e7a50a", //y
+        SERV: "#fad788", //y
       }) as const,
     [],
   );
@@ -288,6 +328,7 @@ export const MapBlock: React.FC = () => {
         yCoord: nodeData[i].ycoord,
         floor: nodeData[i].floor,
         obstacle: nodeData[i].obstacle,
+        nodeType: nodeData[i].nodeType,
       });
     }
     setHospitalData(newHospitalData);
@@ -557,26 +598,65 @@ export const MapBlock: React.FC = () => {
             });
             marker.addTo(ObstacleMarkers[node.floor]);
           } else {
-            const marker = L.circleMarker(coords, {
-              radius: 4,
-              color: "#3B3B3B",
-              fillColor: "#3B3B3B",
-              fillOpacity: 0.8,
-            }).bindPopup(node.name);
-            // Event listener for clicking on markers
-            marker.on("click", function () {
-              setStartEndLocation(
-                node.nodeID,
-                node.name,
-                node.xCoord,
-                node.yCoord,
-                node.floor,
-              );
-            });
-            marker.addTo(Markers[node.floor]);
-          }
+            let marker;
+            console.log("This node is of type: " + node.nodeType);
+            const url = NodeMarkers[node.nodeType];
+            const color = NodeColors[node.nodeType];
+            console.log("Here is the url:" + url);
+            console.log(NodeMarkers);
 
-          //marker.options.attribution = node.nodeID;
+            if (node.nodeType != ("STAI" || "ELEV" || "HALL") && url) {
+              const size = 7;
+              const customIcon = new Icon({
+                iconUrl: url,
+                iconSize: [size * 2, size * 2],
+                iconAnchor: [size, size],
+              });
+
+              marker = L.marker(coords, { icon: customIcon }).bindPopup(
+                node.name,
+              );
+
+              const circleMarker = L.circleMarker(coords, {
+                radius: size,
+                color: color,
+                fillColor: color,
+                fillOpacity: 1,
+              });
+
+              // Event listener for clicking on markers
+              marker.on("click", function () {
+                setStartEndLocation(
+                  node.nodeID,
+                  node.name,
+                  node.xCoord,
+                  node.yCoord,
+                  node.floor,
+                );
+              });
+              circleMarker.addTo(Markers[node.floor]);
+              marker.addTo(Markers[node.floor]);
+            } else {
+              marker = L.circleMarker(coords, {
+                radius: 3,
+                color: "#6d6d6d",
+                fillColor: "#6d6d6d",
+                fillOpacity: 0.8,
+              }).bindPopup(node.name);
+
+              // Event listener for clicking on markers
+              marker.on("click", function () {
+                setStartEndLocation(
+                  node.nodeID,
+                  node.name,
+                  node.xCoord,
+                  node.yCoord,
+                  node.floor,
+                );
+              });
+              marker.addTo(Markers[node.floor]);
+            }
+          }
         });
       };
 
@@ -610,6 +690,8 @@ export const MapBlock: React.FC = () => {
     addMarker,
     PathMarkers,
     ObstacleMarkers,
+    NodeMarkers,
+    NodeColors,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
