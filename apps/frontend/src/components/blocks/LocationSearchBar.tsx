@@ -21,6 +21,7 @@ import {
   EllipsisVertical,
   Accessibility,
   TriangleAlert,
+  Flame,
 } from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
@@ -51,6 +52,7 @@ interface SearchBarProps {
   changeAccessibility: (accessMode: boolean) => void;
   handleObstacle: (obstacles: boolean) => void;
   children?: React.ReactNode; // Add this line
+  handleHeatmap: (heatmap: boolean) => void;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -61,6 +63,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   textDirections, // New prop
   changeAccessibility,
   handleObstacle,
+  handleHeatmap,
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -73,6 +76,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [tabVal, setTabValue] = useState<string>("astar");
   const [accessMode, setAccessMode] = useState(false);
   const [obstacles, setObstacles] = useState(false);
+  const [heatmap, setHeatmap] = useState(false);
 
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
@@ -341,6 +345,32 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                     <div className="relative h-full w-full">
                       <TriangleAlert size={15} />
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div
+              onClick={() => {
+                handleHeatmap(!heatmap);
+                setHeatmap(!heatmap);
+              }}
+              className={
+                !heatmap
+                  ? "relative h-[30px] w-[60px] cursor-pointer pr-2 rounded-full bg-slate-400 duration-150"
+                  : "relative h-[30px] w-[60px] cursor-pointer pr-2  rounded-full bg-[#003a96] duration-150"
+              }
+            >
+              <div
+                className={
+                  !heatmap
+                    ? "absolute inset-0 flex translate-x-[0] p-[3px] duration-150"
+                    : "absolute inset-0 flex translate-x-[50%] p-[3px] duration-150"
+                }
+              >
+                <div className="aspect-square h-full rounded-full bg-slate-50 p-1">
+                  <div className="relative h-full w-full">
+                    <Flame size={15} />
                   </div>
                 </div>
               </div>

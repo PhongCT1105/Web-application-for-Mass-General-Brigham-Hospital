@@ -98,6 +98,18 @@ export interface directionObject {
   icon: Element;
 }
 
+import { data } from "./heatmap/testData.ts";
+interface EdgesData {
+  edgeId: string;
+  count: number;
+}
+
+interface ParsedEdge {
+  start: string;
+  end: string;
+  count: number;
+}
+
 const SearchContext = createContext<changeMarker>({
   startNodeName: "",
   endNodeName: "",
@@ -147,6 +159,7 @@ export const MapBlock: React.FC = () => {
   const [havePath, setHavePath] = useState(false);
   const [accessMode, setAccessMode] = useState(false);
   const [obstacles, setObstacles] = useState(false);
+  //const [heatmap, setHeatmap] = useState(false);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -264,6 +277,18 @@ export const MapBlock: React.FC = () => {
   );
 
   const PathMarkers: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
+  const Heatmap: { [key: string]: L.LayerGroup } = useMemo(
     () =>
       ({
         L1: new L.LayerGroup(),
@@ -590,6 +615,8 @@ export const MapBlock: React.FC = () => {
         EndMarker[key].addTo(Layers[key]);
         PathMarkers[key].addTo(Layers[key]);
         ObstacleMarkers[key].addTo(Layers[key]);
+        Heatmap[key].addTo(Layers[key]);
+
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -610,6 +637,7 @@ export const MapBlock: React.FC = () => {
     addMarker,
     PathMarkers,
     ObstacleMarkers,
+    Heatmap,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -915,6 +943,7 @@ export const MapBlock: React.FC = () => {
       EndMarker[key].clearLayers();
       Paths[key].clearLayers();
       PathMarkers[key].clearLayers();
+      Heatmap[key].clearLayers();
       Markers[key].addTo(Layers[key]);
       ObstacleMarkers[key].addTo(Layers[key]);
     });
@@ -991,6 +1020,94 @@ export const MapBlock: React.FC = () => {
     });
   }
 
+  //********* HEATMAP **********//
+
+  function parseEdges(edgesData: EdgesData[]) {
+    const edges = edgesData;
+    const parsedEdges: ParsedEdge[] = [];
+
+    edges.forEach((edge) => {
+      const [startNode, endNode] = edge.edgeId.split("_");
+      const count = edge.count;
+      parsedEdges.push({ start: startNode, end: endNode, count: count });
+    });
+
+    return parsedEdges;
+  }
+
+  function drawHeatPath(start: string, end: string, count: number) {
+    const startHospital = hospitalData.find((h) => h.nodeID === start);
+    const endHospital = hospitalData.find((h) => h.nodeID === end);
+
+    if (!startHospital || !endHospital) {
+      console.error("Start or end location not found in hospital data.");
+      return;
+    }
+
+    const floor = startHospital.floor;
+
+    const startCoords: [number, number] = [
+      3400 - startHospital.yCoord,
+      startHospital.xCoord,
+    ];
+    const endCoords: [number, number] = [
+      3400 - endHospital.yCoord,
+      endHospital.xCoord,
+    ];
+
+    let color: string;
+    if (count > 15) {
+      color = "red";
+    } else if (count > 10) {
+      color = "orange";
+    } else if (count > 5) {
+      color = "yellow";
+    } else {
+      color = "green";
+    }
+
+    const draw = L.polyline([startCoords, endCoords], {
+      color: color,
+      weight: 5,
+      // dashArray: "3, 10",
+      // snakingSpeed: 200,
+      // snakeRepeat: true,
+    });
+
+    draw.addTo(Heatmap[floor]);
+  }
+
+  // function drawHeatMapPath(edgesData: EdgesData[]) {
+  //     const parsedEdges: ParsedEdge[] =  parseEdges(edgesData);
+  //
+  //     parsedEdges.forEach((edge) => {
+  //         drawHeatPath(edge.start, edge.end, edge.count);
+  //     });
+  // }
+
+  const handleHeatmap = (heatmap: boolean) => {
+    ///setHeatmap(heatmap);
+    console.log(heatmap);
+    if (heatmap) {
+      const parsedEdges: ParsedEdge[] = parseEdges(data);
+
+      parsedEdges.forEach((edge) => {
+        drawHeatPath(edge.start, edge.end, edge.count);
+      });
+
+      Object.keys(Layers).forEach((key) => {
+        Heatmap[key].addTo(Layers[key]);
+      });
+    } else {
+      Object.keys(SpecialMarkers).forEach((key) => {
+        Heatmap[key].clearLayers();
+      });
+    }
+    //console.log("Changes obstacles handling to " + obstacles);
+  };
+
+  //*********ENDHEATMAP********//
+
   return (
     <SearchContext.Provider
       value={{
@@ -1029,6 +1146,7 @@ export const MapBlock: React.FC = () => {
             textDirections={textDirections}
             changeAccessibility={changeAccessibilty}
             handleObstacle={handleObstacle}
+            handleHeatmap={handleHeatmap}
           />
         </div>
         <div
