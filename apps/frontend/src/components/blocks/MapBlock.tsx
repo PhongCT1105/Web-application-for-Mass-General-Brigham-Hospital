@@ -125,7 +125,7 @@ export const MapBlock: React.FC = () => {
   };
 
   const handleObstacle = (obstacles: boolean) => {
-    setObstacles(!obstacles);
+    setObstacles(obstacles);
     console.log("Changes obstacles handling to " + obstacles);
   };
 
@@ -333,6 +333,9 @@ export const MapBlock: React.FC = () => {
           position: "bottomright",
         })
         .addTo(map);
+      map.on("baselayerchange", function () {
+        map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
+      });
       map.setMaxBounds(bounds);
       Paths[floor].snakeIn();
 
@@ -464,6 +467,9 @@ export const MapBlock: React.FC = () => {
             position: "bottomright",
           })
           .addTo(map);
+        map.on("baselayerchange", function () {
+          map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
+        });
         map.setMaxBounds(bounds);
       }
 
@@ -1055,7 +1061,7 @@ export const MapBlock: React.FC = () => {
                   </Label>
                 </div>
                 <Label className={"text-2xl text-gray-800"}>
-                  Arr: {arrivalTime.getHours()}:
+                  ETA • {arrivalTime.getHours()}:
                   {arrivalTime.getMinutes() + time < 10 ? "0" : ""}
                   {(arrivalTime.getMinutes() + time).toFixed(0)}{" "}
                 </Label>

@@ -83,7 +83,10 @@ router.post("/", async (req: Request, res: Response) => {
 
       graph.addNode(node);
 
-      if (node.obstacle) blocked.push(node.nodeID);
+      if (node.obstacle) {
+        blocked.push(node.nodeID.toString());
+        console.log(node);
+      }
       if (node.nodeType == "STAI") stairs.push(node.nodeID);
     }
 
@@ -92,10 +95,10 @@ router.post("/", async (req: Request, res: Response) => {
     for (let i = 0; i < edges.length; i++) {
       if (data.accessibility && data.obstacles) {
         if (
-          !stairs.includes(edges[i].startNode) ||
-          !stairs.includes(edges[i].endNode) ||
-          !blocked.includes(edges[i].startNode) ||
-          !blocked.includes(edges[i].endNode)
+          !stairs.includes(edges[i].startNode.toString()) ||
+          !stairs.includes(edges[i].endNode.toString()) ||
+          !blocked.includes(edges[i].startNode.toString()) ||
+          !blocked.includes(edges[i].endNode.toString())
         ) {
           graph.addEdge(edges[i].startNode, edges[i].endNode);
         }
@@ -108,10 +111,11 @@ router.post("/", async (req: Request, res: Response) => {
         }
       } else if (data.obstacles) {
         if (
-          !blocked.includes(edges[i].startNode) ||
-          !blocked.includes(edges[i].endNode)
+          blocked.includes(edges[i].startNode.toString()) ||
+          blocked.includes(edges[i].endNode.toString())
         ) {
           console.log(edges[i].edgeID);
+        } else {
           graph.addEdge(edges[i].startNode, edges[i].endNode);
         }
       } else {
