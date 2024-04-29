@@ -1,5 +1,4 @@
 import { Label } from "@/components/ui/label";
-
 import { CustomCalendarEvent } from "@/routes/employee-scheduling/components/BigCalendar.tsx";
 import {
   Select,
@@ -8,13 +7,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
-import { CustomEventComponent } from "@/routes/employee-scheduling/components/CustomEventComponent.tsx";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
-  DialogTrigger,
+  // DialogTrigger,
 } from "@/components/ui/dialog.tsx";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
@@ -71,9 +69,6 @@ export function EventPopover({
 
   return (
     <Dialog open={trigger} onOpenChange={setTrigger}>
-      <DialogTrigger className={"items-start"}>
-        <CustomEventComponent event={event} />
-      </DialogTrigger>
       <DialogContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-2">

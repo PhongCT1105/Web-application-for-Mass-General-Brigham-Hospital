@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { Calendar, Event, EventProps, stringOrDate } from "react-big-calendar";
+import { Calendar, Event, stringOrDate } from "react-big-calendar";
 import withDragAndDrop, {
   DragFromOutsideItemArgs,
   withDragAndDropProps,
@@ -23,6 +23,7 @@ import { localizer } from "../utils/localizer.ts";
 import { toast } from "@/components/ui/use-toast.ts";
 import { CalendarToastDescription } from "@/routes/employee-scheduling/components/toastDescription.tsx";
 import { EventRequests } from "@/routes/employee-scheduling/data/requests.ts";
+import { CustomEventComponent } from "@/routes/employee-scheduling/components/CustomEventComponent.tsx";
 
 export interface CustomCalendarEvent extends Event {
   id?: number;
@@ -43,18 +44,19 @@ export const BigCalendar = ({
   draggableCardData,
 }: CalendarProps) => {
   const [events, setEvents] = useState<CustomCalendarEvent[]>(employeeSchedule);
+  const [eventSelected, setEventSelected] = useState<CustomCalendarEvent>(
+    {} as CustomCalendarEvent,
+  );
   const [prevEvents, setPrevEvents] = useState<CustomCalendarEvent[]>(events);
   const [dragEvent, setDraggedEvent] = useState<CustomCalendarEvent | null>(
     null,
   );
 
+  const [lastId, setLastId] = useState(0);
   const [isEventPopoverOpen, setEventPopoverOpen] = useState(false);
   const handleEventPopoverToggle = (isOpen: boolean) => {
     setEventPopoverOpen(isOpen);
   };
-
-  const [lastId, setLastId] = useState(0);
-
   const getEmployees = async () => {
     try {
       // get the shift and weekday
@@ -208,8 +210,9 @@ export const BigCalendar = ({
     [dragEvent, newEvent],
   );
 
-  const handleSelected = (isOpen: boolean) => {
+  const handleSelected = (isOpen: boolean, event: CustomCalendarEvent) => {
     setEventPopoverOpen(isOpen);
+    setEventSelected(event);
   };
 
   return (
@@ -268,9 +271,7 @@ export const BigCalendar = ({
                 JSON.stringify(prevEvents) == JSON.stringify(events) ||
                 events.every((event) => event.employee)
               }
-              onClick={() => {
-                getEmployees();
-              }}
+              onClick={() => getEmployees()}
               className={"p-2"}
             >
               Submit
@@ -284,7 +285,7 @@ export const BigCalendar = ({
             popup
             resizable
             events={events}
-            onSelectEvent={() => handleSelected(true)}
+            onSelectEvent={(event) => handleSelected(true, event)}
             defaultView="week"
             localizer={localizer}
             onEventDrop={onEventDrop}
@@ -292,17 +293,16 @@ export const BigCalendar = ({
             onEventResize={onEventResize}
             eventPropGetter={eventStyleGetter}
             onDropFromOutside={onDropFromOutside}
-            components={{
-              event: (props: EventProps) => (
-                <EventPopover
-                  event={props.event}
-                  setTrigger={handleEventPopoverToggle}
-                  trigger={isEventPopoverOpen}
-                  onUpdateEvent={handleEventUpdate}
-                />
-              ),
-            }}
+            components={{ event: CustomEventComponent }}
           />
+          {isEventPopoverOpen && (
+            <EventPopover
+              event={eventSelected}
+              trigger={isEventPopoverOpen}
+              setTrigger={handleEventPopoverToggle}
+              onUpdateEvent={handleEventUpdate}
+            />
+          )}
         </div>
       </div>
     </div>
