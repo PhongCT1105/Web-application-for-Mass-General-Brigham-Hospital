@@ -3892,6 +3892,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-icons/all-files@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@react-icons/all-files@npm:4.1.0"
+  peerDependencies:
+    react: "*"
+  checksum: 56252b205bd5960e605e9de9a9eacd4b2a5cf9f2e6156f4a1803eee502a7d1749e479a56d68dfc5514decc06cf4ffdf11e36c71359a984892c54cfc4a4604bc8
+  languageName: node
+  linkType: hard
+
 "@react-leaflet/core@npm:^1.0.2, @react-leaflet/core@npm:^1.1.1":
   version: 1.1.1
   resolution: "@react-leaflet/core@npm:1.1.1"
@@ -13033,6 +13042,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-icons@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "react-icons@npm:5.1.0"
+  peerDependencies:
+    react: "*"
+  checksum: 00f75809b1846a6cfb48e3d64ddc5e931a1fa74aa429cd594dc4a70223a5702deff62638b02c727c0aeb83120a8875d8034b380601c61a4d803a9227387bac22
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.10.2, react-is@npm:^16.13.1, react-is@npm:^16.3.2, react-is@npm:^16.6.0, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -14175,6 +14193,7 @@ __metadata:
     "@mui/material": "npm:^5.15.15"
     "@prisma/client": "npm:4.15.0"
     "@radix-ui/react-slot": "npm:^1.0.2"
+    "@react-icons/all-files": "npm:^4.1.0"
     "@react-leaflet/core": "npm:^2.1.0"
     "@types/csv-parse": "npm:^1.2.2"
     "@types/kill-port": "npm:^2"
@@ -14224,7 +14243,7 @@ __metadata:
     react-chartjs-2: "npm:^4.0.0"
     react-dom: "npm:^18.2.0"
     react-draggable: "npm:^4.4.6"
-    react-icons: "npm:^5.0.1"
+    react-icons: "npm:^5.1.0"
     react-lazyload: "npm:^3.2.1"
     react-leaflet: "npm:^4.2.1"
     react-leaflet-ant-path: "npm:^1.1.0"
