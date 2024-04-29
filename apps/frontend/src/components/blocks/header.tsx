@@ -285,7 +285,7 @@ export function Header() {
                     : "text-gray-300"
                 }`}
               >
-                DashBoard
+                Dashboard
               </a>
               <a
                 href="/about-us"

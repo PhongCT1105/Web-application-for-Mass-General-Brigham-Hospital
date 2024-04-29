@@ -125,14 +125,18 @@ type Props = {
 const InstructionsLink: React.FC<Props> = (props) => {
   return (
     <Button
-      variant={"outline"}
+      variant={"invisible"}
       className={props.className}
+      title={"Need Help?"}
       onClick={() =>
         (window.location.href = "/instructions?location=" + props.location)
       }
     >
-      <CircleHelp className={"mr-2"}></CircleHelp>
-      Need Help?
+      <CircleHelp color={"gray"} className={"hover:opacity-0"} />
+      <CircleHelp
+        color={"black"}
+        className={"absolute hover:opacity-100 opacity-0"}
+      />
     </Button>
   );
 };
