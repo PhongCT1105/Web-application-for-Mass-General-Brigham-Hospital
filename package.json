@@ -41,6 +41,7 @@
     "@types/react-dom": "^18.2.23",
     "@types/react-lazyload": "^3",
     "@types/react-leaflet-markercluster": "^3",
+    "@types/spotify-web-api-node": "^5.0.11",
     "@types/three": "^0",
     "@vitest/ui": "^0.33.0",
     "eslint": "^8.57.0",
@@ -110,6 +111,8 @@
     "react-leaflet-cluster": "^2.1.0",
     "react-leaflet-markercluster": "^3.0.0-rc1",
     "react-router-dom": "5",
+    "spotify-finder": "^2.1.1",
+    "spotify-web-api-node": "^5.0.2",
     "three": "^0.163.0",
     "workspace": "^0.0.1-preview.1",
     "zod": "^3.22.4"

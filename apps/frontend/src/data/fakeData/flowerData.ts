@@ -2,16 +2,15 @@ import { faker } from "@faker-js/faker";
 // import axios from "axios";
 import { FlowerForm } from "@/interfaces/flowerReq.ts";
 import { submitDataOnce } from "@/data/fakeData/submissionUtils.ts";
+import {
+  priorities,
+  statuses,
+} from "@/interfaces/dataTypes/maintenanceData/labels.ts";
 
 const flowerData: FlowerForm[] = Array.from({ length: 100 }, () => ({
   reqID: faker.number.int(),
-  priority: faker.helpers.arrayElement(["low", "medium", "high", "emergency"]),
-  status: faker.helpers.arrayElement([
-    "unassigned",
-    "assigned",
-    "inprogress",
-    "closed",
-  ]),
+  priority: faker.helpers.arrayElement(priorities).value,
+  status: faker.helpers.arrayElement(statuses).value,
   cartItems: Array.from({ length: 5 }, () => ({
     fID: faker.number.int(),
     name: faker.commerce.productName(),
