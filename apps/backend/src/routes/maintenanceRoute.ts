@@ -59,17 +59,11 @@ router.post("/", async (req: Request, res: Response) => {
       });
       let update = false;
 
-      if (requestForm.status != "Closed") {
-        if (requestForm.typeOfIssue === "PlumbingIssue") {
-          update = true;
-        }
-
-        if (requestForm.typeOfIssue === "ElevatorIssue") {
-          update = true;
-          if (requestForm.severity === "Low") {
-            update = false;
-          }
-        }
+      if (
+        requestForm.typeOfIssue === "PlumbingIssue" &&
+        requestForm.status != "Closed"
+      ) {
+        update = true;
       }
 
       if (update) {
