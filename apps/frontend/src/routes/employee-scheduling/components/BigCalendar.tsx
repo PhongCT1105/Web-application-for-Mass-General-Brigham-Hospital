@@ -43,17 +43,11 @@ export const BigCalendar = ({
   draggableCardData,
 }: CalendarProps) => {
   const [events, setEvents] = useState<CustomCalendarEvent[]>(employeeSchedule);
+  const [prevEvents, setPrevEvents] = useState<CustomCalendarEvent[]>(events);
   const [dragEvent, setDraggedEvent] = useState<CustomCalendarEvent | null>(
     null,
   );
-
-  const [canSave, setCanSave] = useState(false);
-  const [, setCanSubmit] = useState(false);
   const [lastId, setLastId] = useState(0);
-
-  const isReadyForSubmit = (events: CustomCalendarEvent[]) => {
-    return events.every((event) => event.priority && event.status);
-  };
 
   const getEmployees = async () => {
     try {
@@ -94,21 +88,17 @@ export const BigCalendar = ({
           ),
         });
       }
-      setCanSubmit(isReadyForSubmit(newEvents));
     } catch (error) {
       console.error("Error: " + error);
     }
   };
 
-  ///
   const handleEventUpdate = (updatedEvent: CustomCalendarEvent) => {
     // Find the index of the event being updated
-    const index = events.findIndex((e) => e === updatedEvent);
+    const index = events.findIndex((e) => e.id === updatedEvent.id);
 
     if (index !== -1) {
-      // Create a copy of the events array
       const updatedEvents = [...events];
-      // Replace the event at the found index with the updated event
       updatedEvents[index] = updatedEvent;
       setEvents(updatedEvents);
     }
@@ -231,38 +221,47 @@ export const BigCalendar = ({
           ))}
           <Button
             className={"w-[175px]"}
-            disabled={!canSave}
+            disabled={
+              !events.every((event) => event.employee) ||
+              JSON.stringify(prevEvents) == JSON.stringify(events)
+            }
             onClick={() => {
-              postSchedule(events).then(() => {
-                setCanSave(false);
-                setCanSubmit(false);
-              });
+              setPrevEvents(events);
+              toast({ title: "Successfully saved schedule!" });
+              postSchedule(events).then(() =>
+                console.log("submitted schedule."),
+              );
             }}
           >
             Save Schedule
           </Button>
-          <div className={"space-x-2 flex flex row items-center"}>
+          <div className={"space-x-1 flex flex row items-center"}>
             <Button
-              className={"p-5"}
+              className={"p-2"}
+              disabled={JSON.stringify(prevEvents) == JSON.stringify(events)}
+              variant={"outline"}
+              onClick={() => setEvents(prevEvents)}
+            >
+              Revert
+            </Button>
+            <Button
+              className={"p-2"}
               variant={"destructive"}
-              onClick={() => {
-                setEvents([]);
-                setCanSave(true);
-              }}
+              disabled={!events.length}
+              onClick={() => setEvents([])}
             >
               Clear
             </Button>
             <Button
               disabled={
-                isReadyForSubmit(events) ||
-                (events.every((event) => event.employee) &&
-                  !isReadyForSubmit(events))
+                !events.every((event) => event.status && event.priority) ||
+                JSON.stringify(prevEvents) == JSON.stringify(events) ||
+                events.every((event) => event.employee)
               }
               onClick={() => {
                 getEmployees();
-                setCanSave(true);
               }}
-              className={"p-5"}
+              className={"p-2"}
             >
               Submit
             </Button>
@@ -274,7 +273,7 @@ export const BigCalendar = ({
           <DnDCalendar
             popup
             resizable
-            toolbar={false}
+            // toolbar={false}
             events={events}
             defaultView="week"
             localizer={localizer}
