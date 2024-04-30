@@ -1176,7 +1176,7 @@ export const MapBlock: React.FC = () => {
 
     const draw = L.polyline([startCoords, endCoords], {
       color: color,
-      weight: 5,
+      weight: 7,
       opacity: 0.7,
     });
 
@@ -1200,7 +1200,9 @@ export const MapBlock: React.FC = () => {
           });
 
           Object.keys(Layers).forEach((key) => {
+            Layers[key].removeLayer(Markers[key]);
             Heatmap[key].addTo(Layers[key]);
+            Markers[key].addTo(Layers[key]);
           });
         } else {
           Object.keys(SpecialMarkers).forEach((key) => {
