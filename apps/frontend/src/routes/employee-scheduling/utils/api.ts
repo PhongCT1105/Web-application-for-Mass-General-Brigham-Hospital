@@ -42,6 +42,7 @@ export const fetchEmployeeData = async (events: CustomCalendarEvent[]) => {
       },
     });
 
+    console.log(data);
     // Update employees in the original events array
     data.forEach((schedulingEvent: scheduling, index: number) => {
       events[index].employee = schedulingEvent.employee
