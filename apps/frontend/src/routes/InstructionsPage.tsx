@@ -44,9 +44,9 @@ const InstructionsPage = () => {
             </p>
 
             <p>
-              Click once on a node to set it as your start node, click twice on
-              a node to set it as your end node. Please click twice on "Find
-              Path" to get directions.{" "}
+              Click once on a node to set it as your start node, click on
+              another node to set it as your end node. Click on "Find Path" to
+              get directions.{" "}
             </p>
           </AccordionContent>
         </AccordionItem>
