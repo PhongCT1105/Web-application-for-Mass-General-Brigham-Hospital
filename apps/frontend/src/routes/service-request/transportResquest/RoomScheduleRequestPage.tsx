@@ -302,7 +302,7 @@ export const ScheduleContent = () => {
                     <Input
                       type="text"
                       id="patientName"
-                      placeholder="Enter The Patient's Name Here"
+                      placeholder="Enter the Patient's Name Here"
                       onChange={handleFormChange}
                       value={form.patientName}
                     />
@@ -352,7 +352,7 @@ export const ScheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="py-2 w-1/4 px-2">
+                  <div className="py-2 w-1/4 px-3">
                     <h1 className="text-2xl font-bold py-2">Location</h1>
                     <h2 className={"text-sm"}>From: </h2>
                     <DropdownMenu>
@@ -482,7 +482,7 @@ export const ScheduleContent = () => {
                   </div>
                 </div>
 
-                <div>
+                <div className="space-y-1">
                   <h1 className="text-2xl font-bold">Reason</h1>
                   <Input
                     type="text"
@@ -547,9 +547,9 @@ export const ScheduleContent = () => {
           </Card>
         </div>
 
-        <div className="w-1/3 rounded-md items-center justify-center bg-secondary overflow-hidden">
+        <div className="w-1/3 items-center justify-center rounded-md bg-secondary overflow-hidden">
           <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
-          <div className="flex items-center justify-center">
+          <div className="w-1/3 flex items-center justify-center">
             <Calendar
               className={
                 "w-full transform scale-150 md:ml-40 my-6 md:my-20 p-4"
@@ -569,7 +569,6 @@ export const ScheduleContent = () => {
           </h2>
         </div>
       </div>
-      <div></div>
     </>
   );
 };

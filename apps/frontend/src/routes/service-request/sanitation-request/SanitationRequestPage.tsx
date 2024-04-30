@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button.tsx";
+import { Input } from "@/components/ui/input.tsx";
+import { Label } from "@/components/ui/label.tsx";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card.tsx";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +20,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip.tsx";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -291,10 +291,8 @@ export function Sanitation() {
           <Card className="border-none p-4">
             <CardContent>
               <div className="flex justify-center">
-                <div className="w-1/5">
-                  <h1 className="text-2xl font-bold my-2 pb-2">
-                    Employee Name
-                  </h1>
+                <div className="w-2/3">
+                  <h1 className="text-2xl font-bold my-2">Employee Name</h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="">
@@ -314,13 +312,11 @@ export function Sanitation() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                <div className="w-1/5">
-                  <h1 className="text-2xl font-bold my-2 pb-2 ml-4">
-                    Location
-                  </h1>
+                <div className="justify-center items-center w-2/3">
+                  <h1 className="text-2xl font-bold my-2 pb-2">Location</h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button variant="outline" className="ml-4">
+                      <Button variant="outline">
                         {locationLong ? locationLong : "Select Location"}
                       </Button>
                     </DropdownMenuTrigger>
@@ -361,13 +357,13 @@ export function Sanitation() {
                 </div>
               </div>
 
-              <div className="flex w-full overflow-x-auto py-2 justify-center">
-                <h1 className="text-2xl font-bold my-2 mr-6 flex justify-center">
+              <div className="w-full overflow-x-auto py-2 justify-center">
+                <h1 className="text-2xl font-bold my-2 mr-6 justify-center">
                   Type of Issue
                 </h1>
                 <RadioGroup
                   defaultValue="comfortable"
-                  className="flex flex-wrap"
+                  className="flex flex-col"
                 >
                   <div className="flex items-center space-x-2">
                     <RadioGroupItem

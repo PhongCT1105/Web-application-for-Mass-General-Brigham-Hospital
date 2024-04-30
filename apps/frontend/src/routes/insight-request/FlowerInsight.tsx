@@ -107,7 +107,7 @@ function FlowerInsight({ props }: { props: FlowerForm[] }) {
   const flowerPolarData = countPriority(props);
   return (
     <>
-      <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
+      <div className="m-3 griFkd gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
         <div className="rounded-lg bg-gray-200 scale-0.25">
           <PieGraph props={flowerPieData} />
         </div>
