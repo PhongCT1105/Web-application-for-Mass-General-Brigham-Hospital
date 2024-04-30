@@ -47,6 +47,7 @@ import LABS from "@/assets/nodetype-icons/icons8-flask-48.png";
 import TOILET from "@/assets/nodetype-icons/icons8-toilet-48.png";
 import RETL from "@/assets/nodetype-icons/icons8-shopping-basket-48.png";
 import SERV from "@/assets/nodetype-icons/icons8-palm-up-hand-48.png";
+import { Accessibility, Footprints } from "lucide-react";
 
 declare module "leaflet" {
   interface Polyline {
@@ -155,6 +156,8 @@ export const MapBlock: React.FC = () => {
   const [havePath, setHavePath] = useState(false);
   const [accessMode, setAccessMode] = useState(false);
   const [obstacles, setObstacles] = useState(false);
+
+  const [displayETAIcon, setETAIcon] = useState(false);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -821,16 +824,21 @@ export const MapBlock: React.FC = () => {
     nodeArray.forEach((node) => {
       const xDiff = Math.abs(prevNode.xcoord - node.xcoord);
       const yDiff = Math.abs(prevNode.ycoord - node.ycoord);
-      dist = Math.sqrt(xDiff * xDiff + yDiff + yDiff);
+      dist += Math.sqrt(xDiff * xDiff + yDiff * yDiff);
       prevNode = node;
       if (node.longName.includes("ELEV")) {
         elevatorCount++;
       }
     });
 
-    const distanceInFeet = dist * 20; // turning coords roughly into feet
-    const timeInMinutes = distanceInFeet / 265; // 282 ft per minute as average walking speed
+    const distanceInFeet = dist; // turning coords roughly into feet
+    let divisor = 265;
 
+    if (accessMode) divisor = 240; // 282 ft per minute as average walking speed
+
+    const timeInMinutes = distanceInFeet / divisor; // 282 ft per minute as average walking speed
+
+    setETAIcon(accessMode);
     setDistance(distanceInFeet); // assuming coords are in feet
     setTime(timeInMinutes + elevatorCount); // 282 ft per minute, assuming 1 extra min for each elevator
     setArrivalTime(new Date());
@@ -1134,6 +1142,15 @@ export const MapBlock: React.FC = () => {
                   "absolute bottom-3 rounded-full bg-white py-3 w-auto px-8 shadow-sm shadow-black flex flex-row gap-4 justify-center items-center"
                 }
               >
+                {displayETAIcon ? (
+                  <>
+                    <Accessibility />
+                  </>
+                ) : (
+                  <>
+                    <Footprints />
+                  </>
+                )}
                 <div className={"flex flex-col"}>
                   <Label className={"text-xl text-gray-800"}>
                     <b>{time < 1 ? "<1" : time.toFixed(0)}</b> min
