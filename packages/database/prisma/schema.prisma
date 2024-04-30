@@ -153,3 +153,16 @@ model heatMap {
   id     Int    @id @default(autoincrement())
   edgeID String
 }
+
+model scheduleEvent {
+  id       Int      @id @default(autoincrement())
+  color    String
+  start    DateTime
+  end      DateTime
+  employee String
+  title    String // this is the task/request
+  status   String
+  priority String
+  shift    Int
+  weekday  Int
+}
