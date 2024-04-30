@@ -15,7 +15,7 @@ export const requests: EventRequests[] = [
     value: 1,
   },
   {
-    title: "Scheduling",
+    title: "Transport",
     color: "#96c3ce",
     value: 2,
   },
