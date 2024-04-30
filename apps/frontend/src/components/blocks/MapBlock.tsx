@@ -1138,8 +1138,8 @@ export const MapBlock: React.FC = () => {
   function getCountColor(count: number): string {
     // Interpolate between colors based on the count
 
-    const red = Math.max(0, Math.min(255, Math.round(255 - count * 20)));
-    const green = Math.max(0, Math.min(255, Math.round(count * 20)));
+    const red = Math.max(0, Math.min(255, Math.round(255 - count * 50)));
+    const green = Math.max(0, Math.min(255, Math.round(count * 50)));
     const blue = 0; // You can adjust this if needed
 
     // Construct the RGB color string
