@@ -12,7 +12,7 @@ const securityData: SecurityForm[] = Array.from({ length: 10 }, () => ({
   reqID: faker.number.int(),
   ename: faker.helpers.arrayElement(EmployeeNames).value,
   location: faker.location.city(),
-  employee: faker.person.firstName(),
+  employee: faker.helpers.arrayElement(EmployeeNames).value,
   call: faker.datatype.boolean(),
   priority: faker.helpers.arrayElement(priorities).value,
   status: faker.helpers.arrayElement(statuses).value,

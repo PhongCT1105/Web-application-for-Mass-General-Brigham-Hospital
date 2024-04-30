@@ -43,6 +43,7 @@ router.post("/", async (req: Request, res: Response) => {
             typeOfIssue: requestForm.typeOfIssue,
             status: requestForm.status,
             description: requestForm.description,
+            dateSubmitted: requestForm.dateSubmitted,
           },
         });
       }
@@ -55,6 +56,7 @@ router.post("/", async (req: Request, res: Response) => {
           typeOfIssue: requestForm.typeOfIssue,
           status: requestForm.status,
           description: requestForm.description,
+          dateSubmitted: requestForm.dateSubmitted,
         },
       });
       let update = false;
