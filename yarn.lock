@@ -7666,6 +7666,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"deepmerge@npm:^4.0.0":
+  version: 4.3.1
+  resolution: "deepmerge@npm:4.3.1"
+  checksum: 058d9e1b0ff1a154468bf3837aea436abcfea1ba1d165ddaaf48ca93765fdd01a30d33c36173da8fbbed951dd0a267602bc782fe288b0fc4b7e1e7091afc4529
+  languageName: node
+  linkType: hard
+
 "defaults@npm:^1.0.3":
   version: 1.0.4
   resolution: "defaults@npm:1.0.4"
@@ -9193,6 +9200,7 @@ __metadata:
     react-lazyload: "npm:^3.2.1"
     react-leaflet: "npm:^4.2.1"
     react-leaflet-cluster: "npm:^2.1.0"
+    react-player: "npm:^2.16.0"
     react-resizable-panels: "npm:^2.0.16"
     react-router-bootstrap: "npm:^0.26.2"
     react-router-dom: "npm:^6.11.2"
@@ -10848,6 +10856,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"load-script@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "load-script@npm:1.0.0"
+  checksum: 8458e3f07b4a86f8d9d66e47a987811491a5d013af23ba7b371c6d3c9dc899885b072ccf65abf7874c10cb197d4975eacd8a7a125bfb38dbbcb267539f5dc1e9
+  languageName: node
+  linkType: hard
+
 "local-pkg@npm:^0.4.3":
   version: 0.4.3
   resolution: "local-pkg@npm:0.4.3"
@@ -11041,6 +11056,13 @@ __metadata:
   version: 0.3.0
   resolution: "media-typer@npm:0.3.0"
   checksum: 38e0984db39139604756903a01397e29e17dcb04207bb3e081412ce725ab17338ecc47220c1b186b6bbe79a658aad1b0d41142884f5a481f36290cdefbe6aa46
+  languageName: node
+  linkType: hard
+
+"memoize-one@npm:^5.1.1":
+  version: 5.2.1
+  resolution: "memoize-one@npm:5.2.1"
+  checksum: b7141dc148b5c6fdd51e77ecf0421fd2581681eb8756e0b3dfbd4fe765b5e2b5a6bc90214bb6f19a96b6aed44de17eda3407142a7be9e24ccd0774bbd9874d1b
   languageName: node
   linkType: hard
 
@@ -13269,6 +13291,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-fast-compare@npm:^3.0.1":
+  version: 3.2.2
+  resolution: "react-fast-compare@npm:3.2.2"
+  checksum: a6826180ba75cefba1c8d3ac539735f9b627ca05d3d307fe155487f5d0228d376dac6c9708d04a283a7b9f9aee599b637446635b79c8c8753d0b4eece56c125c
+  languageName: node
+  linkType: hard
+
 "react-hook-form@npm:^7.51.2":
   version: 7.51.2
   resolution: "react-hook-form@npm:7.51.2"
@@ -13408,6 +13437,21 @@ __metadata:
     react: ">=16.3.0"
     react-dom: ">=16.3.0"
   checksum: 89aebeef9917f8a9edd25f3dab18bd82cf67872a8648246c9e62fb6e4ea5af8ac22d93b63df81253f3d2c3bbac3eeb74c830cb7519f746447cdfccf9a4f370c3
+  languageName: node
+  linkType: hard
+
+"react-player@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "react-player@npm:2.16.0"
+  dependencies:
+    deepmerge: "npm:^4.0.0"
+    load-script: "npm:^1.0.0"
+    memoize-one: "npm:^5.1.1"
+    prop-types: "npm:^15.7.2"
+    react-fast-compare: "npm:^3.0.1"
+  peerDependencies:
+    react: ">=16.6.0"
+  checksum: d7e2824f9cb52afc71e5661e341360153087fc4fe231ee4b6c0b968fcae1efecc208416cd69bfa24a024265fdca65aee3f74a290a86ccf1e5c0452102b82cb0d
   languageName: node
   linkType: hard
 
