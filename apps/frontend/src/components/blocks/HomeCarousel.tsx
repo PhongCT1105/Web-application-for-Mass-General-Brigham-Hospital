@@ -33,7 +33,7 @@ export const HomeCarousel: React.FC<HomeCarouselProps> = ({ data }) => {
   }, [data.length, nextSlide]);
 
   return (
-    <div className="relative flex justify-center align-content-center h-[400px] self-stretch m-0 p-0">
+    <div className="relative flex justify-center align-content-center h-[89vh] self-stretch m-0 p-0">
       <BsArrowLeftCircleFill
         onClick={prevSlide}
         className="z-50 absolute left-0 top-1/2 transform -translate-y-1/2 w-[2rem] h-[2rem] text-white ml-3"

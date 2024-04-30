@@ -36,10 +36,18 @@ import Stairs from "@/assets/stairs-solid.svg";
 import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
-// import {Button} from "@/components/ui/button";
 import "@/components/blocks/SnakeAnim";
 import { Label } from "@/components/ui/label.tsx";
 import Caution from "@/assets/caution.png";
+import CONF from "@/assets/nodetype-icons/icons8-analytics-48.png";
+import DEPT from "@/assets/nodetype-icons/icons8-hierarchy-32.png";
+import EXIT from "@/assets/nodetype-icons/icons8-exit-48.png";
+import INFO from "@/assets/nodetype-icons/icons8-info-48.png";
+import LABS from "@/assets/nodetype-icons/icons8-flask-48.png";
+import TOILET from "@/assets/nodetype-icons/icons8-toilet-48.png";
+import RETL from "@/assets/nodetype-icons/icons8-shopping-basket-48.png";
+import SERV from "@/assets/nodetype-icons/icons8-palm-up-hand-48.png";
+import { Accessibility, Footprints } from "lucide-react";
 
 declare module "leaflet" {
   interface Polyline {
@@ -64,6 +72,7 @@ export interface HospitalData {
   yCoord: number;
   floor: string;
   obstacle: boolean;
+  nodeType: string;
 }
 
 export interface Node {
@@ -96,6 +105,18 @@ interface changeMarker {
 export interface directionObject {
   text: string;
   icon: Element;
+}
+
+// import { data } from "./heatmap/testData.ts";
+interface EdgesData {
+  edgeID: string;
+  count: number;
+}
+
+interface ParsedEdge {
+  start: string;
+  end: string;
+  count: number;
 }
 
 const SearchContext = createContext<changeMarker>({
@@ -148,6 +169,8 @@ export const MapBlock: React.FC = () => {
   const [accessMode, setAccessMode] = useState(false);
   const [obstacles, setObstacles] = useState(false);
 
+  const [displayETAIcon, setETAIcon] = useState(false);
+
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF1] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -162,6 +185,38 @@ export const MapBlock: React.FC = () => {
         1: F1,
         2: F2,
         3: F3,
+      }) as const,
+    [],
+  );
+
+  const NodeMarkers: { [key: string]: string } = useMemo(
+    () =>
+      ({
+        BATH: TOILET,
+        CONF: CONF,
+        DEPT: DEPT,
+        EXIT: EXIT,
+        INFO: INFO,
+        LABS: LABS,
+        REST: TOILET,
+        RETL: RETL,
+        SERV: SERV,
+      }) as const,
+    [],
+  );
+
+  const NodeColors: { [key: string]: string } = useMemo(
+    () =>
+      ({
+        BATH: "#59aafd", //b
+        CONF: "#0680fc", //b
+        DEPT: "#fdf2d7", //y
+        EXIT: "#ef4444", //r
+        INFO: "#0056de", //b
+        LABS: "#acd5fe", //b
+        REST: "#59aafd", //b
+        RETL: "#e7a50a", //y
+        SERV: "#fad788", //y
       }) as const,
     [],
   );
@@ -275,6 +330,18 @@ export const MapBlock: React.FC = () => {
     [],
   );
 
+  const Heatmap: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
   const loadData = async () => {
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes`);
 
@@ -288,6 +355,7 @@ export const MapBlock: React.FC = () => {
         yCoord: nodeData[i].ycoord,
         floor: nodeData[i].floor,
         obstacle: nodeData[i].obstacle,
+        nodeType: nodeData[i].nodeType,
       });
     }
     setHospitalData(newHospitalData);
@@ -439,6 +507,7 @@ export const MapBlock: React.FC = () => {
 
   useEffect(() => {
     console.log("useEffect is running");
+
     if (!isDataLoaded) {
       loadData().then(() => {
         setIsDataLoaded(true);
@@ -557,26 +626,65 @@ export const MapBlock: React.FC = () => {
             });
             marker.addTo(ObstacleMarkers[node.floor]);
           } else {
-            const marker = L.circleMarker(coords, {
-              radius: 4,
-              color: "#3B3B3B",
-              fillColor: "#3B3B3B",
-              fillOpacity: 0.8,
-            }).bindPopup(node.name);
-            // Event listener for clicking on markers
-            marker.on("click", function () {
-              setStartEndLocation(
-                node.nodeID,
-                node.name,
-                node.xCoord,
-                node.yCoord,
-                node.floor,
-              );
-            });
-            marker.addTo(Markers[node.floor]);
-          }
+            let marker;
+            console.log("This node is of type: " + node.nodeType);
+            const url = NodeMarkers[node.nodeType];
+            const color = NodeColors[node.nodeType];
+            console.log("Here is the url:" + url);
+            console.log(NodeMarkers);
 
-          //marker.options.attribution = node.nodeID;
+            if (node.nodeType != ("STAI" || "ELEV" || "HALL") && url) {
+              const size = 7;
+              const customIcon = new Icon({
+                iconUrl: url,
+                iconSize: [size * 2, size * 2],
+                iconAnchor: [size, size],
+              });
+
+              marker = L.marker(coords, { icon: customIcon }).bindPopup(
+                node.name,
+              );
+
+              const circleMarker = L.circleMarker(coords, {
+                radius: size,
+                color: color,
+                fillColor: color,
+                fillOpacity: 1,
+              });
+
+              // Event listener for clicking on markers
+              marker.on("click", function () {
+                setStartEndLocation(
+                  node.nodeID,
+                  node.name,
+                  node.xCoord,
+                  node.yCoord,
+                  node.floor,
+                );
+              });
+              circleMarker.addTo(Markers[node.floor]);
+              marker.addTo(Markers[node.floor]);
+            } else {
+              marker = L.circleMarker(coords, {
+                radius: 3,
+                color: "#6d6d6d",
+                fillColor: "#6d6d6d",
+                fillOpacity: 0.8,
+              }).bindPopup(node.name);
+
+              // Event listener for clicking on markers
+              marker.on("click", function () {
+                setStartEndLocation(
+                  node.nodeID,
+                  node.name,
+                  node.xCoord,
+                  node.yCoord,
+                  node.floor,
+                );
+              });
+              marker.addTo(Markers[node.floor]);
+            }
+          }
         });
       };
 
@@ -584,12 +692,15 @@ export const MapBlock: React.FC = () => {
 
       Object.keys(Layers).forEach((key) => {
         Paths[key].addTo(Layers[key]);
-        Markers[key].addTo(Layers[key]);
+
         SpecialMarkers[key].addTo(Layers[key]);
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
         PathMarkers[key].addTo(Layers[key]);
         ObstacleMarkers[key].addTo(Layers[key]);
+        Heatmap[key].addTo(Layers[key]);
+        Markers[key].addTo(Layers[key]);
+
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -610,6 +721,9 @@ export const MapBlock: React.FC = () => {
     addMarker,
     PathMarkers,
     ObstacleMarkers,
+    NodeMarkers,
+    NodeColors,
+    Heatmap,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -739,16 +853,21 @@ export const MapBlock: React.FC = () => {
     nodeArray.forEach((node) => {
       const xDiff = Math.abs(prevNode.xcoord - node.xcoord);
       const yDiff = Math.abs(prevNode.ycoord - node.ycoord);
-      dist = Math.sqrt(xDiff * xDiff + yDiff + yDiff);
+      dist += Math.sqrt(xDiff * xDiff + yDiff * yDiff);
       prevNode = node;
       if (node.longName.includes("ELEV")) {
         elevatorCount++;
       }
     });
 
-    const distanceInFeet = dist * 20; // turning coords roughly into feet
-    const timeInMinutes = distanceInFeet / 265; // 282 ft per minute as average walking speed
+    const distanceInFeet = dist; // turning coords roughly into feet
+    let divisor = 265;
 
+    if (accessMode) divisor = 240; // 282 ft per minute as average walking speed
+
+    const timeInMinutes = distanceInFeet / divisor; // 282 ft per minute as average walking speed
+
+    setETAIcon(accessMode);
     setDistance(distanceInFeet); // assuming coords are in feet
     setTime(timeInMinutes + elevatorCount); // 282 ft per minute, assuming 1 extra min for each elevator
     setArrivalTime(new Date());
@@ -991,6 +1110,108 @@ export const MapBlock: React.FC = () => {
     });
   }
 
+  //********* HEATMAP **********//
+
+  function parseEdges(edgesData: EdgesData[]) {
+    //const edges = edgesData;
+    const parsedEdges: ParsedEdge[] = [];
+    console.log(edgesData);
+
+    edgesData.forEach((edge) => {
+      if (edge.edgeID) {
+        const splitEdgeId = edge.edgeID.split("_");
+        if (splitEdgeId.length === 2) {
+          const [startNode, endNode] = splitEdgeId;
+          const count = edge.count;
+          parsedEdges.push({ start: startNode, end: endNode, count: count });
+        } else {
+          console.error(`Invalid edgeId format: ${edge.edgeID}`);
+        }
+      } else {
+        console.error("Invalid or missing edgeId:", edge);
+      }
+    });
+
+    return parsedEdges;
+  }
+
+  function getCountColor(count: number): string {
+    // Interpolate between colors based on the count
+
+    const red = Math.max(0, Math.min(255, Math.round(255 - count * 20)));
+    const green = Math.max(0, Math.min(255, Math.round(count * 20)));
+    const blue = 0; // You can adjust this if needed
+
+    // Construct the RGB color string
+    return `rgb(${red}, ${green}, ${blue})`;
+  }
+
+  function drawHeatPath(start: string, end: string, count: number) {
+    const startHospital = hospitalData.find((h) => h.nodeID === start);
+    const endHospital = hospitalData.find((h) => h.nodeID === end);
+
+    if (!startHospital || !endHospital) {
+      console.error("Start or end location not found in hospital data.");
+      return;
+    }
+
+    const floor = startHospital.floor;
+
+    const startCoords: [number, number] = [
+      3400 - startHospital.yCoord,
+      startHospital.xCoord,
+    ];
+    const endCoords: [number, number] = [
+      3400 - endHospital.yCoord,
+      endHospital.xCoord,
+    ];
+
+    const color: string = getCountColor(count);
+
+    const draw = L.polyline([startCoords, endCoords], {
+      color: color,
+      weight: 5,
+      opacity: 0.7,
+    });
+
+    draw.addTo(Heatmap[floor]);
+  }
+
+  const handleHeatmap = (heatmap: boolean) => {
+    ///setHeatmap(heatmap);
+    console.log(heatmap);
+    async function fetchData() {
+      try {
+        const { data: EdgesData } = await axios.get(`/api/search/heatmap`);
+        console.log(EdgesData);
+        //setHeatmapEdges(EdgesData);
+
+        if (heatmap) {
+          const parsedEdges: ParsedEdge[] = parseEdges(EdgesData);
+
+          parsedEdges.forEach((edge) => {
+            drawHeatPath(edge.start, edge.end, edge.count);
+          });
+
+          Object.keys(Layers).forEach((key) => {
+            Heatmap[key].addTo(Layers[key]);
+          });
+        } else {
+          Object.keys(SpecialMarkers).forEach((key) => {
+            Heatmap[key].clearLayers();
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+    fetchData().then();
+
+    //console.log("Changes obstacles handling to " + obstacles);
+  };
+
+  //*********ENDHEATMAP********//
+
   return (
     <SearchContext.Provider
       value={{
@@ -1029,6 +1250,7 @@ export const MapBlock: React.FC = () => {
             textDirections={textDirections}
             changeAccessibility={changeAccessibilty}
             handleObstacle={handleObstacle}
+            handleHeatmap={handleHeatmap}
           />
         </div>
         <div
@@ -1052,6 +1274,15 @@ export const MapBlock: React.FC = () => {
                   "absolute bottom-3 rounded-full bg-white py-3 w-auto px-8 shadow-sm shadow-black flex flex-row gap-4 justify-center items-center"
                 }
               >
+                {displayETAIcon ? (
+                  <>
+                    <Accessibility />
+                  </>
+                ) : (
+                  <>
+                    <Footprints />
+                  </>
+                )}
                 <div className={"flex flex-col"}>
                   <Label className={"text-xl text-gray-800"}>
                     <b>{time < 1 ? "<1" : time.toFixed(0)}</b> min

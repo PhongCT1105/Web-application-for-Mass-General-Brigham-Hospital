@@ -149,6 +149,11 @@ model maintenanceRequest {
   dateSubmitted String?
 }
 
+model heatMap {
+  id     Int    @id @default(autoincrement())
+  edgeID String
+}
+
 model scheduleEvent {
   id       Int      @id @default(autoincrement())
   color    String

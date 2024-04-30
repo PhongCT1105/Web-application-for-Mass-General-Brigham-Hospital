@@ -40,6 +40,7 @@ import bannerTransportationImage from "@/assets/transportation-banner.png";
 import bannerMedicationImage from "@/assets/medication-banner.png";
 import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
 import bannerFlowerImage from "@/assets/flower-banner.png";
+import bannerRequestImage from "@/assets/request-banner.png";
 import { columnsGenericLog } from "@/routes/service-request/GenericRequestColumns.tsx";
 
 export const RequestLogPage = () => {
@@ -338,9 +339,9 @@ export const RequestLogPage = () => {
                         // h-full  ^^^^^
                       >
                         <div
-                          className="flex items-center justify-between"
+                          className="flex items-center jutify-between"
                           style={{
-                            backgroundImage: `url(${bannerFlowerImage})`,
+                            backgroundImage: `url(${bannerRequestImage})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                             height: "100px",
