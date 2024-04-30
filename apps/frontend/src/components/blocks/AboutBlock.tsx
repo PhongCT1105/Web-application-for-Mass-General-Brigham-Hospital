@@ -20,6 +20,7 @@ interface AboutInfo {
   Linkdin?: string;
   Imagepath: string;
   quote?: string;
+  onClick?: () => void; // Add onClick prop
 }
 
 const AboutBlock = ({
@@ -33,12 +34,14 @@ const AboutBlock = ({
   Linkdin,
   Imagepath,
   quote,
+  onClick, // Add onClick prop
 }: AboutInfo) => {
   return (
     <Card
       className={
         "flex flex-col justify-space-between mw-700 p-5 bg-secondary shadow-lg"
       }
+      onClick={onClick}
     >
       <Popover>
         <PopoverTrigger>

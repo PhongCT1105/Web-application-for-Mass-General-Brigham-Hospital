@@ -6,6 +6,8 @@ import Draggable from "react-draggable";
 // import { overallPieData } from "@/data/overallData/pieChartData.ts";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
+import BarGraph from "./BarGraph";
+import RadarChart from "./RadarChart";
 
 const downloadAsPDF = () => {
   const input = document.getElementById("pdf-content"); // Replace 'pdf-content' with the ID of the container element
@@ -21,8 +23,6 @@ const downloadAsPDF = () => {
     pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
     pdf.save("Report.pdf");
   });
-
-  // triggerAchievement("")
 };
 
 interface PopupContentProps {
@@ -87,7 +87,7 @@ const Dashboard = () => {
               <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="p-6">
                   <h2 className="text-lg font-semibold mb-2">Days</h2>
-                  <p className="text-3xl font-bold">255</p>
+                  <p className="text-3xl font-bold">3</p>
                 </div>
               </div>
             </Draggable>
@@ -97,7 +97,7 @@ const Dashboard = () => {
               <div className="bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="p-6">
                   <h2 className="text-lg font-semibold mb-2">Total amount</h2>
-                  <p className="text-3xl font-bold">$10,000</p>
+                  <p className="text-3xl font-bold">$590</p>
                 </div>
               </div>
             </Draggable>
@@ -140,7 +140,7 @@ const Dashboard = () => {
                       <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">
                         Money tracking
                       </h2>
-                      {/*<LineGraph props={overallLineData} />*/}
+                      <BarGraph />
                     </div>,
                   )
                 }
@@ -149,35 +149,35 @@ const Dashboard = () => {
                   <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">
                     Money tracking
                   </h2>
-                  {/*<LineGraph props={overallLineData} />*/}
+                  <BarGraph />
                 </div>
               </div>
             </Draggable>
 
-            {/*<Draggable>*/}
-            {/*  /!* Pie Graph *!/*/}
-            {/*  <div*/}
-            {/*    className="w-full md:w-1/2 bg-white rounded-lg shadow-lg overflow-hidden"*/}
-            {/*    onDoubleClick={() =>*/}
-            {/*      handleDoubleClick(*/}
-            {/*        <div>*/}
-            {/*          <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">*/}
-            {/*            Proportion of service requests*/}
-            {/*          </h2>*/}
-            {/*          <PieGraph props={overallPieData} />*/}
-            {/*        </div>,*/}
-            {/*      )*/}
-            {/*    }*/}
-            {/*  >*/}
-            {/*    <div>*/}
-            {/*      <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">*/}
-            {/*        Proportion of service requests*/}
-            {/*      </h2>*/}
-            {/*      <PieGraph props={overallPieData} />*/}
-            {/*    </div>*/}
-            {/*    ,*/}
-            {/*  </div>*/}
-            {/*</Draggable>*/}
+            <Draggable>
+              {/* Pie Graph */}
+              <div
+                className="w-full md:w-1/2 bg-white rounded-lg shadow-lg overflow-hidden"
+                onDoubleClick={() =>
+                  handleDoubleClick(
+                    <div>
+                      <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">
+                        Proportion of service requests
+                      </h2>
+                      <RadarChart />
+                    </div>,
+                  )
+                }
+              >
+                <div>
+                  <h2 className="text-lg font-semibold mb-4 py-4 bg-gradient-to-r from-blue-400 to-purple-600 text-white text-center">
+                    Proportion of service requests
+                  </h2>
+                  <RadarChart />
+                </div>
+                ,
+              </div>
+            </Draggable>
           </div>
         </div>
         <button
