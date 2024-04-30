@@ -136,9 +136,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setTabValue(tabVal);
   }, [tabVal]);
 
-  const handleClear = () => {
+  const handleReset = () => {
     setStartPoint("");
     setEndPoint("");
+    setAccessMode(false); // Reset accessMode state to false
+    setObstacles(false);
+    setHeatmap(false);
     onClear(); // Clear the line on the map
   };
 
@@ -396,7 +399,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             </Button>
             <Button
               variant={"destructive"}
-              onClick={handleClear}
+              onClick={handleReset}
               className="w-full"
             >
               Reset
