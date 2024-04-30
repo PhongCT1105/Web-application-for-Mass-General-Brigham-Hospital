@@ -8290,6 +8290,8 @@ const RAW_RUNTIME_STATE =
           ["@swc/core", "virtual:9a28949798a912c67218bf8cea1001b3cae21be82aaad0589210650a91ed87ad2b921ce3379d36f5723672b5e5a668da59a3e262568425b08570aa654e7b0112#npm:1.3.104"],\
           ["@swc/helpers", "npm:0.5.3"],\
           ["@tensorflow/tfjs", "npm:4.18.0"],\
+          ["@tensorflow/tfjs-converter", "virtual:f68366440ccc02ae1b71f0a3c5efc179a643a41de24c5701d94b63d0887fb3273baee9f78eaa3e5327b931de2053ed1463d1f4338ff1e3c7d5d488e1aa3b9bbc#npm:4.18.0"],\
+          ["@tensorflow/tfjs-core", "npm:4.18.0"],\
           ["@types/cookie-parser", "npm:1.4.6"],\
           ["@types/express", "npm:4.17.21"],\
           ["@types/http-errors", "npm:2.0.4"],\
