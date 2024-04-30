@@ -692,13 +692,14 @@ export const MapBlock: React.FC = () => {
 
       Object.keys(Layers).forEach((key) => {
         Paths[key].addTo(Layers[key]);
-        Markers[key].addTo(Layers[key]);
+
         SpecialMarkers[key].addTo(Layers[key]);
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
         PathMarkers[key].addTo(Layers[key]);
         ObstacleMarkers[key].addTo(Layers[key]);
         Heatmap[key].addTo(Layers[key]);
+        Markers[key].addTo(Layers[key]);
 
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
@@ -1170,9 +1171,7 @@ export const MapBlock: React.FC = () => {
     const draw = L.polyline([startCoords, endCoords], {
       color: color,
       weight: 5,
-      // dashArray: "3, 10",
-      // snakingSpeed: 200,
-      // snakeRepeat: true,
+      opacity: 0.7,
     });
 
     draw.addTo(Heatmap[floor]);
