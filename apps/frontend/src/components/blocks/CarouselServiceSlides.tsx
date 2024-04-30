@@ -8,9 +8,9 @@ import { Button } from "@/components/ui/button.tsx";
 
 export const SecuritySlide = () => {
   return (
-    <div className="SecurityRequest w-full h-[400px] absolute overflow-hidden">
+    <div className="SecurityRequest w-full h-[89vh] absolute overflow-hidden">
       <img
-        className="BirthdayFlowersColors1 absolute inset-0 w-full h-[400px] object-cover object-top"
+        className="BirthdayFlowersColors1 absolute inset-0 w-full h-[89vh] object-cover object-top"
         src={securityGuard}
         alt="Security Guard"
       />
@@ -36,9 +36,9 @@ export const SecuritySlide = () => {
 
 export const FlowerSlide = () => {
   return (
-    <div className="w-full h-[400px] absolute overflow-hidden ">
+    <div className="w-full h-[89vh] absolute overflow-hidden ">
       <img
-        className="absolute inset-0 w-full brightness-75 h-[400px] object-cover object-top"
+        className="absolute inset-0 w-full brightness-75 h-[89vh] object-cover object-top"
         src={flowerPic}
         alt="Flower Picture"
       />
@@ -59,9 +59,9 @@ export const FlowerSlide = () => {
 
 export const SanitationSlide = () => {
   return (
-    <div className="w-full h-[400px] absolute overflow-hidden">
+    <div className="w-full h-[89vh] absolute overflow-hidden">
       <img
-        className="absolute inset-0 brightness-90 w-full h-[400px] object-cover object-bottom"
+        className="absolute inset-0 brightness-90 w-full h-[89vh] object-cover object-bottom"
         src={sanitation}
         alt="Sanitation Picture"
       />
@@ -86,9 +86,9 @@ export const SanitationSlide = () => {
 
 export const MedicationSlide = () => {
   return (
-    <div className="w-full h-[400px] absolute overflow-hidden ">
+    <div className="w-full h-[89vh] absolute overflow-hidden ">
       <img
-        className="absolute inset-0 w-full brightness-90 h-[400px] object-cover object-top"
+        className="absolute inset-0 w-full brightness-90 h-[89vh] object-cover object-top"
         src={medicationPic}
         alt="Flower Picture"
       />
@@ -155,9 +155,9 @@ export const MedicationSlide = () => {
 
 export const HeroSlide = () => {
   return (
-    <div className="w-full h-[400px] absolute overflow-hidden ">
+    <div className="w-full h-[89vh] absolute overflow-hidden ">
       <img
-        className="absolute inset-0 w-full brightness-75 h-[400px] object-cover"
+        className="absolute inset-0 w-full brightness-75 h-[89vh] object-cover"
         // style={{ objectPosition: 'center top', top: '50%'}}
         src={heroPic}
         alt="Map Picture"

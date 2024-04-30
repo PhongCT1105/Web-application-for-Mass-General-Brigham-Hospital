@@ -242,6 +242,16 @@ export function Header() {
                   >
                     CSV Table
                   </a>
+                  <a
+                    href="/scheduling"
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                      location.pathname === "/scheduling"
+                        ? "text-yellow-500"
+                        : "text-gray-300"
+                    }`}
+                  >
+                    Scheduling
+                  </a>
                 </>
               ) : (
                 <>
@@ -275,7 +285,7 @@ export function Header() {
                     : "text-gray-300"
                 }`}
               >
-                DashBoard
+                Dashboard
               </a>
               <a
                 href="/about-us"

@@ -15,6 +15,7 @@ import pathfindingRoute from "./routes/pathfindingRoute.ts";
 import employeeRoute from "./routes/employeeRoute.ts";
 import maintenanceRoute from "./routes/maintenanceRoute.ts";
 import insightRoute from "./routes/insightRoute.ts";
+import schedulingRoute from "./routes/schedulingRoute.ts";
 
 const app: Express = express(); // Setup the backend
 
@@ -45,6 +46,7 @@ app.use("/api/search", pathfindingRoute);
 app.use("/api/insight", insightRoute);
 app.use("/api/employeeData", employeeRoute);
 app.use("/api/maintenanceReq", maintenanceRoute);
+app.use("/api/scheduling", schedulingRoute);
 app.use("/healthcheck", function (req: Request, res: Response): void {
   if (!process.env["VITETEST"]) {
     app.use(
