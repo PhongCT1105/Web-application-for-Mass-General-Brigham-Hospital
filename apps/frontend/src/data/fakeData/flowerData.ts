@@ -22,7 +22,7 @@ const flowerData: FlowerForm[] = Array.from({ length: 100 }, () => ({
   location: faker.location.city(),
   recipient: faker.person.firstName(),
   message: faker.lorem.sentence(),
-  dateSubmitted: faker.date.recent(),
+  dateSubmitted: faker.date.anytime(),
 }));
 
 submitDataOnce("flowerSubmmited", flowerData, "/api/flowerReq");

@@ -1,6 +1,5 @@
 import { Bar } from "react-chartjs-2";
 import ChartJS, { AnimationSpec } from "chart.js/auto";
-import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 import {
   ChartType,
   CategoryScale,
@@ -10,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { IntervalData } from "./IntervalData";
 
 ChartJS.register(
   CategoryScale,
@@ -20,39 +20,12 @@ ChartJS.register(
   Legend,
 );
 
-// Define the custom order for employee names
-const customEmployeeNameOrder = [
-  "Phong",
-  "Mina",
-  "Trang",
-  "Tracy",
-  "Lap",
-  "Sandi",
-  "Owen",
-  "Alexander",
-  "Alex",
-  "Henry",
-  "June",
-];
-
-function BarGraph({ props }: { props: barRequestData[] }) {
-  // Custom sorting function to sort employee names based on the defined order
-  const sortByCustomOrder = (a: string, b: string) => {
-    return (
-      customEmployeeNameOrder.indexOf(a) - customEmployeeNameOrder.indexOf(b)
-    );
-  };
-
-  // Sort the employee names based on the custom order
-  const sortedEmployeeNames = props
-    .map((data) => data.employeeName)
-    .sort(sortByCustomOrder);
-
+function BarGraph({ props }: { props: IntervalData[] }) {
   const barChartData = {
-    labels: sortedEmployeeNames,
+    labels: props.map((map) => map.interval),
     datasets: [
       {
-        label: "Employee",
+        label: "Interval",
         data: props.map((map) => map.request),
         backgroundColor: [
           "rgba(255, 99, 13, 0.2)",
@@ -98,7 +71,7 @@ function BarGraph({ props }: { props: barRequestData[] }) {
     plugins: {
       title: {
         display: true,
-        text: "Total Request by Employee",
+        text: "The intervals of the money for each flower request",
       },
     },
   };

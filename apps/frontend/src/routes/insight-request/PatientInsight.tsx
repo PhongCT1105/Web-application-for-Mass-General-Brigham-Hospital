@@ -55,6 +55,7 @@ function countPriority(arr: ScheduleForm[]): polarRequestDataPriority[] {
     else if (priority === "low") priority = "Low";
     else if (priority === "medium") priority = "Medium";
     else if (priority === "high") priority = "High";
+    else if (priority === "urgent") priority = "Urgent";
     countDictionary[priority] = (countDictionary[priority] || 0) + 1;
   });
 
