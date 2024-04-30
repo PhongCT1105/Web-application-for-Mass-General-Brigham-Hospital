@@ -12,6 +12,13 @@ import { PathingContext } from "../util/PathfindingTemplate.ts";
 
 const router: Router = express.Router();
 
+interface edgeCount {
+  edgeID: string;
+  count: number;
+}
+
+// let nodeArray : Node[] = [];
+
 router.post("/", async (req: Request, res: Response) => {
   try {
     const data: {
@@ -124,14 +131,103 @@ router.post("/", async (req: Request, res: Response) => {
     }
 
     // Run the selected search algorithm
-    const nodeArray: Node[] = searchStrategy.findPath(
-      graph,
-      startNodeID,
-      endNodeID,
-    );
+    const nodeArray = searchStrategy.findPath(graph, startNodeID, endNodeID);
+    // console.log(nodeArray);
+
+    //for heatmap
+    for (let i = 0; i < nodeArray.length - 1; i++) {
+      if (
+        (nodeArray[i].nodeType == "ELEV" &&
+          nodeArray[i + 1].nodeType == "ELEV") ||
+        (nodeArray[i].nodeType == "STAI" && nodeArray[i + 1].nodeType == "STAI")
+      ) {
+        console.log("hehe");
+      } else {
+        const startNode = nodeArray[i].nodeID;
+        const endNode = nodeArray[i + 1].nodeID;
+
+        // Find the edgeID matching the start node
+        let edgeID = await PrismaClient.edges.findFirst({
+          where: {
+            startNode: startNode,
+            endNode: endNode,
+          },
+          select: {
+            edgeID: true,
+          },
+        });
+
+        if (!edgeID) {
+          edgeID = await PrismaClient.edges.findFirst({
+            where: {
+              startNode: endNode,
+              endNode: startNode,
+            },
+            select: {
+              edgeID: true,
+            },
+          });
+        }
+
+        // console.log("edgeId: " + edgeID);
+
+        if (edgeID) {
+          const count = await PrismaClient.heatMap.count();
+          if (count == 400) {
+            const firstEntry = await PrismaClient.heatMap.findFirst();
+
+            if (!firstEntry) {
+              console.log("No entries found in EdgeListMap");
+              return;
+            }
+
+            // Delete the first entry
+            await PrismaClient.heatMap.delete({
+              where: {
+                id: firstEntry.id,
+              },
+            });
+
+            await PrismaClient.heatMap.create({
+              data: edgeID,
+            });
+          } else {
+            await PrismaClient.heatMap.create({
+              data: edgeID,
+            });
+          }
+        }
+      }
+    }
 
     //console.log("Backend response:" + nodeArray);
     res.status(200).json(nodeArray);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(400).json({ error: "Pathfinding Error" });
+  }
+});
+
+router.get("/heatmap", async (req: Request, res: Response) => {
+  try {
+    const EdgeListMap: edgeCount[] = []; // Initialize EdgeListMap
+    const edgelist = await PrismaClient.heatMap.findMany();
+
+    edgelist.forEach((edgeIDObj: { id: number; edgeID: string }) => {
+      const index = EdgeListMap.findIndex(
+        (item) => item.edgeID === edgeIDObj.edgeID,
+      );
+
+      if (index === -1) {
+        // If the edgeID is not found in edgeCount, add it with count 1
+        EdgeListMap.push({ edgeID: edgeIDObj.edgeID, count: 1 });
+      } else {
+        // If the edgeID is already in edgeCount, increase its count by 1
+        EdgeListMap[index].count++;
+      }
+    });
+
+    res.status(200).json(EdgeListMap);
   } catch (error) {
     console.error("Error:", error);
     res.status(400).json({ error: "Pathfinding Error" });

@@ -148,3 +148,8 @@ model maintenanceRequest {
   description   String
   dateSubmitted String?
 }
+
+model heatMap {
+  id     Int    @id @default(autoincrement())
+  edgeID String
+}
