@@ -8,6 +8,19 @@ async function readCsvFile() {
   // CLear table
   await prisma.edges.deleteMany();
   await prisma.nodes.deleteMany();
+  //
+  // await prisma.employee.deleteMany();
+  //
+  // await prisma.flower.deleteMany();
+  // await prisma.flowerRequest.deleteMany();
+  //
+  // await prisma.medicationRequest.deleteMany();
+  // await prisma.medicationInfo.deleteMany();
+  //
+  // await prisma.securityRequest.deleteMany();
+  // await prisma.sanitationRequest.deleteMany();
+  // await prisma.maintenanceRequest.deleteMany();
+  // await prisma.internalTransportRequest.deleteMany();
 
   //---------------NODE---------------
   const nodesCSV = fs.readFileSync("./resources/allNodes.csv", "utf8");
