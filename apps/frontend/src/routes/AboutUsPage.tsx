@@ -17,11 +17,26 @@ import Owen from "@/assets/headshots/Owen.jpg";
 import WPI_Logo from "@/assets/WPI_Logo.png";
 import Wong from "@/assets/headshots/Wong.png";
 import { Card } from "@/components/ui/card.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
 // import wongAsters from "@/assets/wongSunFlower.png";
 // import wongSunflower from "@/assets/wongAsters.png";
 
 const AboutMePage = () => {
+  const { triggerAchievement } = useAchievements();
+
+  function handleWongAchievement() {
+    triggerAchievement("Wong Achievement");
+  }
+
+  function handleMinaAchievement() {
+    triggerAchievement("Mina Achievement");
+  }
+
+  function handleHenryAchievement() {
+    triggerAchievement("Henry Achievement");
+  }
+
   return (
     <div>
       <div className="about-the-team w-5/6 pt-2 pb-5 gap-5 m-auto">
@@ -78,6 +93,7 @@ const AboutMePage = () => {
               Linkdin={"https://www.linkedin.com/in/mina-boktor-108126211/"}
               Imagepath={Mina}
               quote={'"It\'s just math" - Phong'}
+              onClick={handleMinaAchievement} // Add onClick event handler
             />
             <AboutBlock
               Name={"Henry Solomon"}
@@ -90,6 +106,7 @@ const AboutMePage = () => {
               Linkdin={"https://www.linkedin.com/in/hjsolomon/"}
               Imagepath={Henry}
               quote={'"Real G\'s move in silence like lasagna" - Lil Wayne'}
+              onClick={handleHenryAchievement}
             />
             <AboutBlock
               Name={"June Whittall"}
@@ -198,6 +215,7 @@ const AboutMePage = () => {
               quote={
                 '"No matter how bad a situation may be, with careful thought it can be turned into an advantage."'
               }
+              onClick={handleWongAchievement}
             />
             <AboutBlock
               Name={"Ari Schechter"}

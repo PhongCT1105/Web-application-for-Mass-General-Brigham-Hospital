@@ -26,6 +26,7 @@ import {
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 // import {Label} from "@/components/ui/label.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
 // interface changeMarker {
 //   start: string;
@@ -78,6 +79,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [obstacles, setObstacles] = useState(false);
   const [heatmap, setHeatmap] = useState(false);
 
+  const { triggerAchievement } = useAchievements();
+
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
     .filter((location) => {
@@ -118,8 +121,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setEndPointID(locations[randEnd].nodeID);
     changePathfindingStrategy(pathAlgo);
     setTabValue(pathAlgo.toLowerCase());
-    // handleSearch();
     onSearch(locations[randStart].nodeID, locations[randEnd].nodeID);
+    triggerAchievement("Chance Trailblazer");
   };
 
   useEffect(() => {
@@ -133,9 +136,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setTabValue(tabVal);
   }, [tabVal]);
 
-  const handleClear = () => {
+  const handleReset = () => {
     setStartPoint("");
     setEndPoint("");
+    setAccessMode(false); // Reset accessMode state to false
+    setObstacles(false);
+    setHeatmap(false);
     onClear(); // Clear the line on the map
   };
 
@@ -393,7 +399,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             </Button>
             <Button
               variant={"destructive"}
-              onClick={handleClear}
+              onClick={handleReset}
               className="w-full"
             >
               Reset
