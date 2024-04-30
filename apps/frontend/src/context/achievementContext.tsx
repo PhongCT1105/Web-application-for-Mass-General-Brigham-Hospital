@@ -45,6 +45,8 @@ const achievementsWithMessages: Record<string, string> = {
     "Your professional touch has turned bathrooms into sparkling retreats. Clients will revel in the freshness you bring – keep shining brightly!",
   "Medication Maverick":
     "You're not just prescribing, you're orchestrating a symphony of pharmaceutical solutions! Keep rocking those Rx pads!",
+  "Inaugural Explorer":
+    "By testing the very first path ever given to our application, you've embarked on a journey of discovery.",
   // Add more achievements here
 };
 
@@ -61,7 +63,7 @@ export const AchievementProvider: React.FC<AchievementProviderProps> = ({
   children,
 }) => {
   const { toast } = useToast();
-  const totalAchievements = 4; // total # of achievements - 1!
+  const totalAchievements = 12; // total # of achievements - 1!
   // State to manage achievements
   const [achievements, setAchievements] = useState<string[]>([]);
 

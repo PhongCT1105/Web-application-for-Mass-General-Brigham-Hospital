@@ -1080,6 +1080,13 @@ export const MapBlock: React.FC = () => {
 
     path().then(() => {
       triggerAchievement("Pathfinding Pioneer");
+      if (test.strategy === "BFS" && !test.accessibility && !test.obstacles) {
+        if (test.start === "CCONF001L1" || test.end === "CCONF001L1") {
+          if (test.start === "CLABS005L1" || test.end === "CLABS005L1") {
+            triggerAchievement("Inaugural Explorer");
+          }
+        }
+      }
       handleClear();
       clearMarkers();
       addPathPolylines(nodeArray);
