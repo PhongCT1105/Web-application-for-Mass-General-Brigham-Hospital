@@ -7,6 +7,19 @@ import React, {
   useCallback,
 } from "react";
 import { useToast } from "@/components/ui/use-toast.ts";
+import Wong from "@/assets/profwonglasereyes.png";
+import All from "@/assets/All_achievements.png";
+import BigSpender from "@/assets/Big_Spender.png";
+import Bathroom from "@/assets/Cleaned_the_bathroom.png";
+import Lucky from "@/assets/Feeling_Lucky.png";
+import FirstPath from "@/assets/Found_First_Path.png";
+import Mina from "@/assets/WAH.png";
+import Map from "@/assets/map.png";
+import File from "@/assets/file.png";
+import Dismiss from "@/assets/dismiss.png";
+import Pill from "@/assets/pills.png";
+import Beginning from "@/assets/beginning.png";
+import Henry from "@/assets/nervouscat.png";
 
 // Define the shape of the context value
 interface AchievementContextType {
@@ -21,33 +34,21 @@ const defaultValue: AchievementContextType = {
   triggerAchievement: () => {},
 };
 
-// Object containing achievements with their corresponding messages
-const achievementsWithMessages: Record<string, string> = {
-  "Pathfinding Pioneer":
-    "You've taken your first step in navigation, charting a course into the unknown. Embrace the thrill of discovery as you blaze trails to new destinations!",
-  "Chance Trailblazer":
-    "By clicking 'Feeling Lucky,' you've stumbled upon new paths and adventures. Keep clicking and exploring!",
-  "Big Spender":
-    "Your flower requests have blossomed into something truly special. Your generosity knows no bounds – keep blooming brightly!",
-  "Wong Achievement":
-    "No nothing is Wong, you've just stumbled upon an achievement for getting to know professor Wong!",
-  "All Achievements Discovered":
-    "You have discovered every achievement! Thank you so much for exploring our application, we hope you enjoyed the journey!",
-  "Cartographer Apprentice":
-    "Your first map edit signifies the beginning of a new journey. Your contributions shape our understanding of the world – keep exploring and editing!",
-  "File Pioneer":
-    "Your first upload marks the beginning of a new chapter. Your contributions are the building blocks of our shared knowledge – keep uploading and inspiring!",
-  "Selective Visionary":
-    "Your first dismissal shows that you're not afraid to filter out what doesn't resonate. Keep honing your focus and embracing what truly matters to you!",
-  "Mina Achievement": "WAH WAH WAH!",
-  "Henry Achievement": "gulp",
-  "Bathroom Whisperer":
-    "Your professional touch has turned bathrooms into sparkling retreats. Clients will revel in the freshness you bring – keep shining brightly!",
-  "Medication Maverick":
-    "You're not just prescribing, you're orchestrating a symphony of pharmaceutical solutions! Keep rocking those Rx pads!",
-  "Inaugural Explorer":
-    "By testing the very first path ever given to our application, you've embarked on a journey of discovery.",
-  // Add more achievements here
+// Object containing achievements with their corresponding images
+const achievementsWithImages: Record<string, string> = {
+  "Pathfinding Pioneer": FirstPath,
+  "Chance Trailblazer": Lucky,
+  "Big Spender": BigSpender,
+  "Wong Achievement": Wong,
+  "All Achievements Discovered": All,
+  "Cartographer Apprentice": Map,
+  "File Pioneer": File,
+  "Selective Visionary": Dismiss,
+  "Mina Achievement": Mina,
+  "Henry Achievement": Henry,
+  "Bathroom Whisperer": Bathroom,
+  "Medication Maverick": Pill,
+  "Inaugural Explorer": Beginning,
 };
 
 // Create the context with explicit typing
@@ -75,19 +76,30 @@ export const AchievementProvider: React.FC<AchievementProviderProps> = ({
           ...prevAchievements,
           achievement,
         ]);
-        // Get the message for the achievement
-        const message = achievementsWithMessages[achievement];
-        if (message) {
-          // Trigger the toast notification with the message
+        // Get the image for the achievement
+        const image = achievementsWithImages[achievement];
+        if (image) {
+          // Trigger the toast notification with the image
           toast({
-            title: "Achievement Unlocked",
-            description: message,
+            description: (
+              <div className="flex items-center justify-center">
+                <div className="pr-5">
+                  <img src={image} alt="Achievement" className="w-16 h-16" />
+                </div>
+                <div>
+                  <h1 className="text-base font-bold mb-1">
+                    Achievement Unlocked
+                  </h1>
+                  <p className="text-sm">{achievement}</p>
+                </div>
+              </div>
+            ),
           });
         }
       }
     },
     [achievements, toast],
-  ); // Include dependencies in useCallback's dependency array
+  );
 
   // Effect to load achievements from browser storage on component mount
   useEffect(() => {
@@ -104,9 +116,7 @@ export const AchievementProvider: React.FC<AchievementProviderProps> = ({
 
   useEffect(() => {
     if (achievements.length === totalAchievements) {
-      setTimeout(() => {
-        triggerAchievement("All Achievements Discovered");
-      }, 6000);
+      triggerAchievement("All Achievements Discovered");
       // Trigger the "all achievements discovered" achievement
     }
   }, [achievements, totalAchievements, triggerAchievement]);

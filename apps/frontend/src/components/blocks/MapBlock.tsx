@@ -1039,6 +1039,7 @@ export const MapBlock: React.FC = () => {
       EndMarker[key].clearLayers();
       Paths[key].clearLayers();
       PathMarkers[key].clearLayers();
+      Heatmap[key].clearLayers();
       Markers[key].addTo(Layers[key]);
       ObstacleMarkers[key].addTo(Layers[key]);
     });
