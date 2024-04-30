@@ -149,13 +149,7 @@ model maintenanceRequest {
   dateSubmitted String?
 }
 
-model edgeListMap {
+model heatMap {
   id     Int    @id @default(autoincrement())
   edgeID String
-}
-
-model HeatMap {
-  id     Int    @id @default(autoincrement())
-  edgeID String
-  count  Int    @default(0)
 }

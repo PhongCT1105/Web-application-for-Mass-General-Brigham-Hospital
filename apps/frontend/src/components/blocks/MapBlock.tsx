@@ -98,9 +98,9 @@ export interface directionObject {
   icon: Element;
 }
 
-import { data } from "./heatmap/testData.ts";
+// import { data } from "./heatmap/testData.ts";
 interface EdgesData {
-  edgeId: string;
+  edgeID: string;
   count: number;
 }
 
@@ -159,7 +159,7 @@ export const MapBlock: React.FC = () => {
   const [havePath, setHavePath] = useState(false);
   const [accessMode, setAccessMode] = useState(false);
   const [obstacles, setObstacles] = useState(false);
-  //const [heatmap, setHeatmap] = useState(false);
+  //const [heatmapEdges, setHeatmapEdges] = useState<EdgesData[]>([]);
 
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
@@ -464,6 +464,7 @@ export const MapBlock: React.FC = () => {
 
   useEffect(() => {
     console.log("useEffect is running");
+
     if (!isDataLoaded) {
       loadData().then(() => {
         setIsDataLoaded(true);
@@ -943,7 +944,6 @@ export const MapBlock: React.FC = () => {
       EndMarker[key].clearLayers();
       Paths[key].clearLayers();
       PathMarkers[key].clearLayers();
-      Heatmap[key].clearLayers();
       Markers[key].addTo(Layers[key]);
       ObstacleMarkers[key].addTo(Layers[key]);
     });
@@ -1023,13 +1023,23 @@ export const MapBlock: React.FC = () => {
   //********* HEATMAP **********//
 
   function parseEdges(edgesData: EdgesData[]) {
-    const edges = edgesData;
+    //const edges = edgesData;
     const parsedEdges: ParsedEdge[] = [];
+    console.log(edgesData);
 
-    edges.forEach((edge) => {
-      const [startNode, endNode] = edge.edgeId.split("_");
-      const count = edge.count;
-      parsedEdges.push({ start: startNode, end: endNode, count: count });
+    edgesData.forEach((edge) => {
+      if (edge.edgeID) {
+        const splitEdgeId = edge.edgeID.split("_");
+        if (splitEdgeId.length === 2) {
+          const [startNode, endNode] = splitEdgeId;
+          const count = edge.count;
+          parsedEdges.push({ start: startNode, end: endNode, count: count });
+        } else {
+          console.error(`Invalid edgeId format: ${edge.edgeID}`);
+        }
+      } else {
+        console.error("Invalid or missing edgeId:", edge);
+      }
     });
 
     return parsedEdges;
@@ -1077,32 +1087,36 @@ export const MapBlock: React.FC = () => {
     draw.addTo(Heatmap[floor]);
   }
 
-  // function drawHeatMapPath(edgesData: EdgesData[]) {
-  //     const parsedEdges: ParsedEdge[] =  parseEdges(edgesData);
-  //
-  //     parsedEdges.forEach((edge) => {
-  //         drawHeatPath(edge.start, edge.end, edge.count);
-  //     });
-  // }
-
   const handleHeatmap = (heatmap: boolean) => {
     ///setHeatmap(heatmap);
     console.log(heatmap);
-    if (heatmap) {
-      const parsedEdges: ParsedEdge[] = parseEdges(data);
+    async function fetchData() {
+      try {
+        const { data: EdgesData } = await axios.get(`/api/search/heatmap`);
+        console.log(EdgesData);
+        //setHeatmapEdges(EdgesData);
 
-      parsedEdges.forEach((edge) => {
-        drawHeatPath(edge.start, edge.end, edge.count);
-      });
+        if (heatmap) {
+          const parsedEdges: ParsedEdge[] = parseEdges(EdgesData);
 
-      Object.keys(Layers).forEach((key) => {
-        Heatmap[key].addTo(Layers[key]);
-      });
-    } else {
-      Object.keys(SpecialMarkers).forEach((key) => {
-        Heatmap[key].clearLayers();
-      });
+          parsedEdges.forEach((edge) => {
+            drawHeatPath(edge.start, edge.end, edge.count);
+          });
+
+          Object.keys(Layers).forEach((key) => {
+            Heatmap[key].addTo(Layers[key]);
+          });
+        } else {
+          Object.keys(SpecialMarkers).forEach((key) => {
+            Heatmap[key].clearLayers();
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
     }
+    fetchData().then();
+
     //console.log("Changes obstacles handling to " + obstacles);
   };
 

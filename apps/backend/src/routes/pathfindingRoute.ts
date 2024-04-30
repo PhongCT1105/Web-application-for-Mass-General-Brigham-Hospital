@@ -132,62 +132,70 @@ router.post("/", async (req: Request, res: Response) => {
 
     // Run the selected search algorithm
     const nodeArray = searchStrategy.findPath(graph, startNodeID, endNodeID);
-    console.log(nodeArray);
+    // console.log(nodeArray);
 
     //for heatmap
     for (let i = 0; i < nodeArray.length - 1; i++) {
-      const startNode = nodeArray[i].nodeID;
-      const endNode = nodeArray[i + 1].nodeID;
+      if (
+        (nodeArray[i].nodeType == "ELEV" &&
+          nodeArray[i + 1].nodeType == "ELEV") ||
+        (nodeArray[i].nodeType == "STAI" && nodeArray[i + 1].nodeType == "STAI")
+      ) {
+        console.log("hehe");
+      } else {
+        const startNode = nodeArray[i].nodeID;
+        const endNode = nodeArray[i + 1].nodeID;
 
-      // Find the edgeID matching the start node
-      let edgeID = await PrismaClient.edges.findFirst({
-        where: {
-          startNode: startNode,
-          endNode: endNode,
-        },
-        select: {
-          edgeID: true,
-        },
-      });
-
-      if (!edgeID) {
-        edgeID = await PrismaClient.edges.findFirst({
+        // Find the edgeID matching the start node
+        let edgeID = await PrismaClient.edges.findFirst({
           where: {
-            startNode: endNode,
-            endNode: startNode,
+            startNode: startNode,
+            endNode: endNode,
           },
           select: {
             edgeID: true,
           },
         });
-      }
 
-      console.log("edgeId ne: " + edgeID);
-
-      if (edgeID) {
-        const count = await PrismaClient.edgeListMap.count();
-        if (count == 400) {
-          const firstEntry = await PrismaClient.edgeListMap.findFirst();
-
-          if (!firstEntry) {
-            console.log("No entries found in EdgeListMap");
-            return;
-          }
-
-          // Delete the first entry
-          await PrismaClient.edgeListMap.delete({
+        if (!edgeID) {
+          edgeID = await PrismaClient.edges.findFirst({
             where: {
-              id: firstEntry.id,
+              startNode: endNode,
+              endNode: startNode,
+            },
+            select: {
+              edgeID: true,
             },
           });
+        }
 
-          await PrismaClient.edgeListMap.create({
-            data: edgeID,
-          });
-        } else {
-          await PrismaClient.edgeListMap.create({
-            data: edgeID,
-          });
+        // console.log("edgeId: " + edgeID);
+
+        if (edgeID) {
+          const count = await PrismaClient.heatMap.count();
+          if (count == 400) {
+            const firstEntry = await PrismaClient.heatMap.findFirst();
+
+            if (!firstEntry) {
+              console.log("No entries found in EdgeListMap");
+              return;
+            }
+
+            // Delete the first entry
+            await PrismaClient.heatMap.delete({
+              where: {
+                id: firstEntry.id,
+              },
+            });
+
+            await PrismaClient.heatMap.create({
+              data: edgeID,
+            });
+          } else {
+            await PrismaClient.heatMap.create({
+              data: edgeID,
+            });
+          }
         }
       }
     }
@@ -203,10 +211,9 @@ router.post("/", async (req: Request, res: Response) => {
 router.get("/heatmap", async (req: Request, res: Response) => {
   try {
     const EdgeListMap: edgeCount[] = []; // Initialize EdgeListMap
-    const edgelist = await PrismaClient.edgeListMap.findMany();
-    console.log(edgelist);
+    const edgelist = await PrismaClient.heatMap.findMany();
 
-    edgelist.forEach((edgeIDObj) => {
+    edgelist.forEach((edgeIDObj: { id: number; edgeID: string }) => {
       const index = EdgeListMap.findIndex(
         (item) => item.edgeID === edgeIDObj.edgeID,
       );
