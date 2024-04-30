@@ -1045,6 +1045,17 @@ export const MapBlock: React.FC = () => {
     return parsedEdges;
   }
 
+  function getCountColor(count: number): string {
+    // Interpolate between colors based on the count
+
+    const red = Math.max(0, Math.min(255, Math.round(255 - count * 20)));
+    const green = Math.max(0, Math.min(255, Math.round(count * 20)));
+    const blue = 0; // You can adjust this if needed
+
+    // Construct the RGB color string
+    return `rgb(${red}, ${green}, ${blue})`;
+  }
+
   function drawHeatPath(start: string, end: string, count: number) {
     const startHospital = hospitalData.find((h) => h.nodeID === start);
     const endHospital = hospitalData.find((h) => h.nodeID === end);
@@ -1065,16 +1076,7 @@ export const MapBlock: React.FC = () => {
       endHospital.xCoord,
     ];
 
-    let color: string;
-    if (count > 15) {
-      color = "red";
-    } else if (count > 10) {
-      color = "orange";
-    } else if (count > 5) {
-      color = "yellow";
-    } else {
-      color = "green";
-    }
+    const color: string = getCountColor(count);
 
     const draw = L.polyline([startCoords, endCoords], {
       color: color,
