@@ -26,6 +26,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
 import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 interface CSVData {
   [key: string]: string; // Assuming all values in CSV are strings, adjust as needed
 }
@@ -55,6 +56,7 @@ interface Node {
 }
 
 const CSVTable: React.FC = () => {
+  const { triggerAchievement } = useAchievements();
   const [selectedFile, setSelectedFile] = useState<File | undefined>();
   const [jsonData, setJsonData] = useState<CSVData[]>([]);
   const [uploading, setUploading] = useState<boolean>(false);
@@ -82,6 +84,7 @@ const CSVTable: React.FC = () => {
           console.error("Error importing file:", error);
           setUploadStatus("Error importing file. Please try again.");
         });
+      triggerAchievement("File Pioneer");
     }
   };
 

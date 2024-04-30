@@ -23,7 +23,8 @@ const defaultValue: AchievementContextType = {
 
 // Object containing achievements with their corresponding messages
 const achievementsWithMessages: Record<string, string> = {
-  "Pathfinding Pioneer": "You have discovered your first path!",
+  "Pathfinding Pioneer":
+    "You've taken your first step in navigation, charting a course into the unknown. Embrace the thrill of discovery as you blaze trails to new destinations!",
   "Chance Trailblazer":
     "By clicking 'Feeling Lucky,' you've stumbled upon new paths and adventures. Keep clicking and exploring!",
   "Big Spender":
@@ -32,6 +33,18 @@ const achievementsWithMessages: Record<string, string> = {
     "No nothing is Wong, you've just stumbled upon an achievement for getting to know professor Wong!",
   "All Achievements Discovered":
     "You have discovered every achievement! Thank you so much for exploring our application, we hope you enjoyed the journey!",
+  "Cartographer Apprentice":
+    "Your first map edit signifies the beginning of a new journey. Your contributions shape our understanding of the world – keep exploring and editing!",
+  "File Pioneer":
+    "Your first upload marks the beginning of a new chapter. Your contributions are the building blocks of our shared knowledge – keep uploading and inspiring!",
+  "Selective Visionary":
+    "Your first dismissal shows that you're not afraid to filter out what doesn't resonate. Keep honing your focus and embracing what truly matters to you!",
+  "Mina Achievement": "WAH WAH WAH!",
+  "Henry Achievement": "gulp",
+  "Bathroom Whisperer":
+    "Your professional touch has turned bathrooms into sparkling retreats. Clients will revel in the freshness you bring – keep shining brightly!",
+  "Medication Maverick":
+    "You're not just prescribing, you're orchestrating a symphony of pharmaceutical solutions! Keep rocking those Rx pads!",
   // Add more achievements here
 };
 
@@ -89,8 +102,10 @@ export const AchievementProvider: React.FC<AchievementProviderProps> = ({
 
   useEffect(() => {
     if (achievements.length === totalAchievements) {
+      setTimeout(() => {
+        triggerAchievement("All Achievements Discovered");
+      }, 6000);
       // Trigger the "all achievements discovered" achievement
-      triggerAchievement("All Achievements Discovered");
     }
   }, [achievements, totalAchievements, triggerAchievement]);
 

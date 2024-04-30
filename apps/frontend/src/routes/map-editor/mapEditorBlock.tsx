@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 export interface Edge {
   edgeID: string;
   start: string;
@@ -53,6 +54,7 @@ interface HospitalData {
 
 // Define the map component
 export const MapEditor: React.FC = () => {
+  const { triggerAchievement } = useAchievements();
   const mapRef = useRef<Map | null>(null);
   const [hospitalData, setHospitalData] = useState<HospitalData[]>([]);
   const [originalHospitalData, setOriginalHospitalData] = useState<
@@ -146,6 +148,7 @@ export const MapEditor: React.FC = () => {
         console.log("Selected node not found in the node array.");
       }
       setSelectedNode(null); // Clear the selected node after finalizing
+      triggerAchievement("Cartographer Apprentice");
     } else {
       console.log("No node selected.");
     }
