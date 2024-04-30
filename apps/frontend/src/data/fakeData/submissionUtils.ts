@@ -12,7 +12,7 @@ export async function submitDataOnce(
   endpoint: string,
 ) {
   if (isDataSubmitted(key)) {
-    console.log("Data has already been submitted. Skipping...");
+    // console.log("Data has already been submitted. Skipping...");
     return;
   }
 
@@ -31,15 +31,15 @@ export async function submitDataOnce(
     console.error("Error:", error);
   }
 }
-
-// // Version 2: Push data
-// import axios from "axios";
 //
-// // Function to check if data has been submitted
-// export function isDataSubmitted(key: string): boolean {
-//     return localStorage.getItem(key) === "true";
-// }
-
+// // // Version 2: Push data
+// // import axios from "axios";
+// //
+// // // Function to check if data has been submitted
+// // export function isDataSubmitted(key: string): boolean {
+// //     return localStorage.getItem(key) === "true";
+// // }
+//
 // // Submit
 // // Function to submit data only once
 // import axios from "axios";

@@ -25,7 +25,7 @@ const flowerData: FlowerForm[] = Array.from({ length: 100 }, () => ({
   dateSubmitted: faker.date.recent(),
 }));
 
-submitDataOnce("flowerSubmmited", flowerData, "/api/flowerReq");
+submitDataOnce("flowerSubmitted", flowerData, "/api/flowerReq");
 
 // async function submitFlowerData() {
 //     try {
