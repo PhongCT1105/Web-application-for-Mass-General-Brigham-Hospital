@@ -8,13 +8,17 @@
 // import PolarAreaChart from "@/components/Graph/PolorAreaGraph.tsx";
 // import { overallPolarData } from "@/data/overallData/polarAreaChartData.ts";
 // import { overallPieData } from "@/data/overallData/pieChartData.ts";
-function OverallInsight() {
+import RadarChart from "@/components/Graph/RadarChart";
+import { GenericForm } from "@/interfaces/genericReq";
+
+function OverallInsight({ props }: { props: GenericForm[] }) {
+  console.log(props);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
-        {/*<div className="rounded-lg bg-gray-200">*/}
-        {/*  <LineGraph props={overallLineData} />*/}
-        {/*</div>*/}
+        <div className="rounded-lg bg-gray-200">
+          <RadarChart />
+        </div>
         {/*<div className="rounded-lg bg-gray-200">*/}
         {/*  <BarGraph props={overallChartData} />*/}
         {/*</div>*/}
