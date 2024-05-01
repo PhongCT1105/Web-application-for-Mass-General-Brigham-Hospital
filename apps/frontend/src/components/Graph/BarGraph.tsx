@@ -20,33 +20,11 @@ ChartJS.register(
   Legend,
 );
 
-// Define the custom order for employee names
-const customEmployeeNameOrder = [
-  "Phong",
-  "Mina",
-  "Trang",
-  "Tracy",
-  "Lap",
-  "Sandi",
-  "Owen",
-  "Alexander",
-  "Alex",
-  "Henry",
-  "June",
-];
-
 function BarGraph({ props }: { props: barRequestData[] }) {
-  // Custom sorting function to sort employee names based on the defined order
-  const sortByCustomOrder = (a: string, b: string) => {
-    return (
-      customEmployeeNameOrder.indexOf(a) - customEmployeeNameOrder.indexOf(b)
-    );
-  };
-
-  // Sort the employee names based on the custom order
+  // Sort the employee names alphabetically
   const sortedEmployeeNames = props
     .map((data) => data.employeeName)
-    .sort(sortByCustomOrder);
+    .sort((a, b) => a.localeCompare(b)); // Sort alphabetically
 
   const barChartData = {
     labels: sortedEmployeeNames,

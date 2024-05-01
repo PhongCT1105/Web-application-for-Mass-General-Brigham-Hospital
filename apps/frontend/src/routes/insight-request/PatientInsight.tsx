@@ -34,9 +34,9 @@ function countStatus(arr: ScheduleForm[]): pieRequestData[] {
     if (status === "") status = "None";
     else if (status === "done") status = "Done";
     else if (status === "backlog") status = "Backlog";
-    else if (status === "InProgress") status = "In progress";
+    else if (status === "in progress") status = "In progress";
     else if (status === "canceled") status = "Canceled";
-    else if (status === "todo") status = "To do";
+    else if (status === "todo") status = "Todo";
     countDictionary[status] = (countDictionary[status] || 0) + 1;
   });
 

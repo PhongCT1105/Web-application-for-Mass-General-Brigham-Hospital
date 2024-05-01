@@ -59,7 +59,7 @@ function headerChange(arr: SanitationForm[]): SanitationForm[] {
         : obj.status === "backlog"
           ? "Backlog"
           : obj.status === "todo"
-            ? "To do"
+            ? "Todo"
             : obj.status === "in progress"
               ? "In progress"
               : obj.status === "canceled"
