@@ -182,7 +182,7 @@ export const MapBlock: React.FC = () => {
   const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
 
-  const [currentFloor, setCurrentFloor] = useState(""); // Initialize state for current floor
+  const [currentFloor, setCurrentFloor] = useState("1"); // Initialize state for current floor
 
   // Function to handle floor change
 
@@ -404,7 +404,7 @@ export const MapBlock: React.FC = () => {
         zoomControl: true,
         preferCanvas: true,
         layers: [Layers[floor]],
-      }).setView([1750, 2700], -2);
+      }).setView([1700, 2500], -2);
       // L.control
       //   .layers(baseLayers, undefined, {
       //     collapsed: false,
@@ -539,7 +539,7 @@ export const MapBlock: React.FC = () => {
           layers: [LayerF1],
         });
         mapRef.current = map;
-        map.setView([1750, 2700], -2);
+        map.setView([1700, 2500], -2);
         // L.control
         //   .layers(baseLayers, undefined, {
         //     collapsed: false,
