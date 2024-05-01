@@ -14,10 +14,16 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card.tsx";
-import { CircleDot, CirclePlay, EllipsisVertical } from "lucide-react";
-// import { Node } from "@/context/nodeContext.tsx";
+import {
+  CircleDot,
+  CirclePlay,
+  Clover,
+  EllipsisVertical,
+  Accessibility,
+  TriangleAlert,
+} from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
-
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 // import {Label} from "@/components/ui/label.tsx";
 
 // interface changeMarker {
@@ -42,6 +48,8 @@ interface SearchBarProps {
   changePathfindingStrategy: (strat: string) => void;
   //currentFloor: string;
   textDirections: direction[];
+  changeAccessibility: (accessMode: boolean) => void;
+  handleObstacle: (obstacles: boolean) => void;
   children?: React.ReactNode; // Add this line
 }
 
@@ -51,6 +59,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   onClear,
   changePathfindingStrategy,
   textDirections, // New prop
+  changeAccessibility,
+  handleObstacle,
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -60,6 +70,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [endPointID, setEndPointID] = useState<string>("");
   const { startNodeName, endNodeName, startNodeID, endNodeID } =
     useSearchContext();
+  const [tabVal, setTabValue] = useState<string>("astar");
+  const [accessMode, setAccessMode] = useState(false);
+  const [obstacles, setObstacles] = useState(false);
+
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
     .filter((location) => {
@@ -73,9 +87,35 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   const handleSearch = () => {
     onClear();
-    console.log("startSearch === " + startPoint);
-    console.log("endSearch === " + endPoint);
+    // console.log("startSearch === " + startPoint);
+    // console.log("endSearch === " + endPoint);
     onSearch(startPointID, endPointID);
+  };
+
+  const feelingLucky = () => {
+    const randStart = Math.floor(Math.random() * locations.length);
+    let randEnd = Math.floor(Math.random() * locations.length);
+    while (randStart === randEnd) {
+      // If they are the same, get new randEnd value until no longer true
+      randEnd = Math.floor(Math.random() * locations.length);
+    }
+    const nZTT = Math.floor(Math.random() * 4);
+    const pathAlgo =
+      nZTT === 0
+        ? "AStar"
+        : nZTT === 1
+          ? "Dijkstra"
+          : nZTT === 2
+            ? "BFS"
+            : "DFS";
+    setStartPoint(locations[randStart].longName);
+    setStartPointID(locations[randStart].nodeID);
+    setEndPoint(locations[randEnd].longName);
+    setEndPointID(locations[randEnd].nodeID);
+    changePathfindingStrategy(pathAlgo);
+    setTabValue(pathAlgo.toLowerCase());
+    // handleSearch();
+    onSearch(locations[randStart].nodeID, locations[randEnd].nodeID);
   };
 
   useEffect(() => {
@@ -85,6 +125,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setEndPointID(endNodeID);
   }, [startNodeName, endNodeName, startNodeID, endNodeID]);
 
+  useEffect(() => {
+    setTabValue(tabVal);
+  }, [tabVal]);
+
   const handleClear = () => {
     setStartPoint("");
     setEndPoint("");
@@ -92,16 +136,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div
-      className="flex flex-col items-center bg-transparent p-4 w-[350px]
-"
-    >
+    <div className="flex flex-col items-center bg-transparent p-4 w-[350px]">
       <Card className={"w-full shadow"}>
         <CardHeader>
-          <CardTitle
-          // className={"text-4xl font-semibold"}
-          >
-            Directions
+          <CardTitle className={"flex justify-between items-center"}>
+            <div>Directions</div>
+            <InstructionsLink location={"nav"}></InstructionsLink>
           </CardTitle>
         </CardHeader>
         <CardContent>
@@ -190,30 +230,42 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             {/*</Label>*/}
           </div>
 
-          <div className="flex mb-4 flex-col items-center align-content-center">
-            <Tabs defaultValue="astar" className=" ">
+          <div className="flex mb-3 flex-col items-center align-content-center">
+            <Tabs value={tabVal}>
               <TabsList>
                 <TabsTrigger
                   value="bfs"
-                  onClick={() => changePathfindingStrategy("BFS")}
+                  onClick={() => {
+                    changePathfindingStrategy("BFS");
+                    setTabValue("bfs");
+                  }}
                 >
                   BFS
                 </TabsTrigger>
                 <TabsTrigger
                   value="astar"
-                  onClick={() => changePathfindingStrategy("AStar")}
+                  onClick={() => {
+                    changePathfindingStrategy("AStar");
+                    setTabValue("astar");
+                  }}
                 >
                   A*
                 </TabsTrigger>
                 <TabsTrigger
                   value="dfs"
-                  onClick={() => changePathfindingStrategy("DFS")}
+                  onClick={() => {
+                    changePathfindingStrategy("DFS");
+                    setTabValue("dfs");
+                  }}
                 >
                   DFS
                 </TabsTrigger>
                 <TabsTrigger
                   value="dijkstra"
-                  onClick={() => changePathfindingStrategy("Dijkstra")}
+                  onClick={() => {
+                    changePathfindingStrategy("Dijkstra");
+                    setTabValue("dijkstra");
+                  }}
                 >
                   Dijkstra
                 </TabsTrigger>
@@ -222,8 +274,80 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               {/*<TabsContent value="password">Change your password here.</TabsContent>*/}
             </Tabs>
           </div>
+          <CardTitle className={"flex mb-3 justify-between items-center gap-6"}>
+            <Button
+              variant="invisible"
+              title="Feeling Lucky?"
+              onClick={feelingLucky}
+            >
+              <div className="flex items-center w-auto group-hover:text-yellow-500 ">
+                <Clover color={"green"} />
+              </div>
+            </Button>
+            <div
+              className="flex items-center w-auto group-hover:text-yellow-500 -ml-4"
+              title="Accessibility Toggle"
+            >
+              <div
+                onClick={() => {
+                  changeAccessibility(!accessMode);
+                  setAccessMode(!accessMode);
+                }}
+                className={
+                  !accessMode
+                    ? "relative h-[30px] w-[60px] cursor-pointer pr-2 rounded-full bg-slate-400 duration-150"
+                    : "relative h-[30px] w-[60px] cursor-pointer pr-2  rounded-full bg-[#003a96] duration-150"
+                }
+              >
+                <div
+                  className={
+                    !accessMode
+                      ? "absolute inset-0 flex translate-x-[0] p-[3px] duration-150"
+                      : "absolute inset-0 flex translate-x-[50%] p-[3px] duration-150"
+                  }
+                >
+                  <div className="aspect-square h-full rounded-full bg-slate-50 p-1">
+                    <div className="relative h-full w-full">
+                      <Accessibility size={15} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-          <div className="flex items-center gap-4">
+            <div
+              className="flex items-center w-auto group-hover:text-yellow-500 -ml-4"
+              title="Obstacles Toggle"
+            >
+              <div
+                onClick={() => {
+                  handleObstacle(!obstacles);
+                  setObstacles(!obstacles);
+                }}
+                className={
+                  !obstacles
+                    ? "relative h-[30px] w-[60px] cursor-pointer pr-2 rounded-full bg-slate-400 duration-150"
+                    : "relative h-[30px] w-[60px] cursor-pointer pr-2  rounded-full bg-[#f6bd38] duration-150"
+                }
+              >
+                <div
+                  className={
+                    !obstacles
+                      ? "absolute inset-0 flex translate-x-[0] p-[3px] duration-150"
+                      : "absolute inset-0 flex translate-x-[50%] p-[3px] duration-150"
+                  }
+                >
+                  <div className="aspect-square h-full rounded-full bg-slate-50 p-1">
+                    <div className="relative h-full w-full">
+                      <TriangleAlert size={15} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </CardTitle>
+
+          <div className="flex items-center gap-10">
             <Button
               variant={"default"}
               onClick={handleSearch}
@@ -236,7 +360,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               onClick={handleClear}
               className="w-full"
             >
-              Clear
+              Reset
             </Button>
           </div>
         </CardContent>

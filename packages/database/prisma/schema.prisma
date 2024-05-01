@@ -30,6 +30,7 @@ model Nodes {
   shortName  String
   startEdges Edges[] @relation("StartNode")
   endEdges   Edges[] @relation("EndNode")
+  obstacle   Boolean @default(false)
 
   @@unique([xcoord, ycoord, floor])
 }
@@ -85,28 +86,29 @@ model sanitationRequest {
 }
 
 model securityRequest {
-  reqID     Int     @id @default(autoincrement())
-  ename     String
-  location  String
-  employee  String
-  situation String
-  call      Boolean
-  status    String
-  priority  String
+  reqID         Int     @id @default(autoincrement())
+  location      String
+  employee      String
+  situation     String
+  call          Boolean
+  status        String
+  priority      String
+  dateSubmitted String?
 }
 
 model internalTransportRequest {
-  reqID        Int      @id @default(autoincrement())
-  employeeName String
-  patientName  String
-  priority     String
-  locationFrom String
-  locationTo   String
-  date         DateTime
-  reason       String
-  time         String
-  note         String
-  status       String
+  reqID         Int      @id @default(autoincrement())
+  employeeName  String
+  patientName   String
+  priority      String
+  locationFrom  String
+  locationTo    String
+  date          DateTime
+  reason        String
+  time          String
+  note          String
+  status        String
+  dateSubmitted String?
 }
 
 model medicationInfo {
@@ -137,11 +139,12 @@ model employee {
 }
 
 model maintenanceRequest {
-  reqId       Int    @id @default(autoincrement())
-  name        String
-  severity    String
-  location    String
-  typeOfIssue String
-  status      String
-  description String
+  reqId         Int     @id @default(autoincrement())
+  name          String
+  severity      String
+  location      String
+  typeOfIssue   String
+  status        String
+  description   String
+  dateSubmitted String?
 }

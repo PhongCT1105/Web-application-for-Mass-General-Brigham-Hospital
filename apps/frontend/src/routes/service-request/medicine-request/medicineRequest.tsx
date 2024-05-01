@@ -1,5 +1,4 @@
 "use client";
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -15,7 +14,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -179,7 +177,13 @@ export function MedicineRequest({ columns }: DataTableProps) {
   });
 
   return (
-    <div className="space-y-4">
+    <div
+      className="space-y-4"
+      style={{
+        paddingLeft: "8%",
+        paddingRight: "8%",
+      }}
+    >
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>

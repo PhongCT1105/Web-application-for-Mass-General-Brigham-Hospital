@@ -38,7 +38,7 @@ const AboutMePage = () => {
               Github={"https://github.com/PhongCT1105"}
               Linkdin={"https://www.linkedin.com/in/phong-cao/"}
               Imagepath={Phong}
-              FunFact={""}
+              quote={""}
             />
 
             <AboutBlock
@@ -51,7 +51,7 @@ const AboutMePage = () => {
               Github={"https://github.com/alexanderjlap"}
               Linkdin={"https://www.linkedin.com/in/alexanderlap/"}
               Imagepath={Lap}
-              FunFact={""}
+              quote={'"Stay strapped or get clapped" - Sun Tzu'}
             />
             <AboutBlock
               Name={"Trang Tran"}
@@ -63,7 +63,7 @@ const AboutMePage = () => {
               Github={"https://github.com/tsnhim"}
               Linkdin={"https://www.linkedin.com/in/tntran03/"}
               Imagepath={Trang}
-              FunFact={""}
+              quote={""}
             />
           </div>
           <div className={"flex flex-row pt-10 pb-5 justify-between"}>
@@ -77,7 +77,7 @@ const AboutMePage = () => {
               Github={"https://github.com/minaboktor2628"}
               Linkdin={"https://www.linkedin.com/in/mina-boktor-108126211/"}
               Imagepath={Mina}
-              FunFact={""}
+              quote={'"It\'s just math" - Phong'}
             />
             <AboutBlock
               Name={"Henry Solomon"}
@@ -89,7 +89,7 @@ const AboutMePage = () => {
               Github={"https://github.com/hjsolomon"}
               Linkdin={"https://www.linkedin.com/in/hjsolomon/"}
               Imagepath={Henry}
-              FunFact={""}
+              quote={'"Real G\'s move in silence like lasagna" - Lil Wayne'}
             />
             <AboutBlock
               Name={"June Whittall"}
@@ -101,7 +101,7 @@ const AboutMePage = () => {
               Github={"https://github.com/jwwhittall"}
               Linkdin={""}
               Imagepath={June}
-              FunFact={""}
+              quote={""}
             />
           </div>
           <div className={"flex flex-row pt-10 pb-5 justify-between"}>
@@ -115,7 +115,7 @@ const AboutMePage = () => {
               Github={"https://github.com/tdyang"}
               Linkdin={"https://www.linkedin.com/in/tracy-yang-b61b72211/"}
               Imagepath={Tracy}
-              FunFact={""}
+              quote={'"ware are yew" -blink-182'}
             />
             <AboutBlock
               Name={"Alexsandra Antoski"}
@@ -129,7 +129,10 @@ const AboutMePage = () => {
                 "https://www.linkedin.com/in/alexsandra-antoski-9b7a242a4/"
               }
               Imagepath={Sandi}
-              FunFact={""}
+              quote={
+                "\"We don't have to do everything in order to be everything, " +
+                'because we are already infinite. While we are alive we always contain a future of multifarious possibility." - Matt Haig'
+              }
             />
             <AboutBlock
               Name={"Alexander Kraemling"}
@@ -143,7 +146,7 @@ const AboutMePage = () => {
                 "https://www.linkedin.com/in/alexander-kraemling-aa9b42214/"
               }
               Imagepath={Kraemling}
-              FunFact={""}
+              quote={'"I don\'t think I can take any more" - Jon Arbuckle'}
             />
           </div>
           <div className={"mx-auto w-3/5"}>
@@ -158,35 +161,31 @@ const AboutMePage = () => {
                 Github={"https://github.com/alexshettler"}
                 Linkdin={""}
                 Imagepath={Shettler}
-                FunFact={""}
+                quote={
+                  '"You have never been given sufficient evidence that worms can\'t fly" - Sun Tzu'
+                }
               />
               <AboutBlock
                 Name={"Owen Lacey"}
                 role={"Documentation Analyst"}
                 devrole={"Full-Stack Engineer"}
-                ClassYear={"2026"}
-                major={"IMGD"}
+                ClassYear={"2025"}
+                major={"IMGD Tech"}
                 Email={"oelacey@wpi.edu"}
                 Github={"https://github.com/echoct21"}
                 Linkdin={"https://www.linkedin.com/in/owen-lacey-721205250/"}
                 Imagepath={Owen}
-                FunFact={""}
+                quote={
+                  "\"Belief, truth, honor: the moment these exist only to get you something is the moment you've " +
+                  'missed the point." - Brandon Sanderson'
+                }
               />
             </div>
           </div>
         </Card>
         <h1 className="text-2xl font-bold my-2 mt-6 text-center">Faculty</h1>
         <Card className="faculty-flex p-5">
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "row",
-              paddingTop: "20px",
-              justifyContent: "space-evenly",
-              alignItems: "center",
-              margin: "auto",
-            }}
-          >
+          <div className={"flex flex-row pt-10 pb-5 justify-between"}>
             <AboutBlock
               Name={"Wilson Wong"}
               role={"Professor"}
@@ -194,6 +193,9 @@ const AboutMePage = () => {
               Github={"https://github.com/wwong2"}
               Linkdin={"https://www.linkedin.com/in/wilson-wong-wpi/"}
               Imagepath={Wong}
+              quote={
+                '"No matter how bad a situation may be, with careful thought it can be turned into an advantage."'
+              }
             />
             <AboutBlock
               Name={"Ari Schechter"}
@@ -225,7 +227,7 @@ const AboutMePage = () => {
         </h4>
         <h4 className={"text-center text-md text-muted-foreground pt-5"}>
           Thank you to Brigham and Women's Hospital and representative Andrew
-          Shin.
+          Shinn - Senior Planner.
         </h4>
         <h6 style={{ textAlign: "center", marginTop: "75px" }}>
           WPI Computer Science Department, CS3733-D24 Software Engineering
@@ -236,7 +238,7 @@ const AboutMePage = () => {
           educational purposes.
         </h6>
         <div className={"logo-container"}>
-          <img src={WPI_Logo} alt="WPI Logo" style={{ maxWidth: "150px" }} />
+          <img src={WPI_Logo} alt="WPI Logo" style={{ maxWidth: "125px" }} />
         </div>
       </div>
     </div>

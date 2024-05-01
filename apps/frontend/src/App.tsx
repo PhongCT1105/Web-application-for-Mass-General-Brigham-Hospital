@@ -19,7 +19,10 @@ import ProtectedPage from "@/routes/ProtectedPage.tsx";
 import { Header } from "@/components/blocks/header.tsx";
 import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
 import InsightRoute from "@/routes/InsightRoute.tsx";
-import InstructionsPage from "./routes/InstructionsPage.tsx";
+import { InstructionsPage } from "./routes/InstructionsPage.tsx";
+import DashBoard from "./routes/DashBoard.tsx";
+import "./fakeDataLoader.ts";
+import { SchedulingPage } from "@/routes/employee-scheduling/SchedulingPage.tsx";
 // import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 
 function App() {
@@ -54,6 +57,11 @@ function App() {
           element: <AboutCreditsPages />,
         },
         {
+          path: "/dashboard",
+          errorElement: <h1>ERROR</h1>,
+          element: <DashBoard />,
+        },
+        {
           path: "/insight",
           errorElement: <h1>ERROR</h1>,
           element: <ProtectedPage Page={InsightRoute} />,
@@ -85,6 +93,11 @@ function App() {
           path: "/instructions",
           errorElement: <h1>ERROR</h1>,
           element: <InstructionsPage />,
+        },
+        {
+          path: "/scheduling",
+          errorElement: <h1>ERROR</h1>,
+          element: <SchedulingPage />,
         },
       ],
     },

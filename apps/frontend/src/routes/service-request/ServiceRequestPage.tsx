@@ -26,12 +26,13 @@ import { columns } from "@/routes/service-request/medicine-request/columns.tsx";
 import { Medication } from "@/interfaces/medicationReq.ts";
 import { pillData } from "@/interfaces/dataTypes/testData.ts";
 import React, { createContext, useContext, useState } from "react";
-import { SheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
-import bannerMedicationImage from "@/assets/medication-banner.jpg";
-import bannerTransportImage from "@/assets/transportation-banner.webp";
+import { ScheduleContent } from "@/routes/service-request/transportResquest/RoomScheduleRequestPage.tsx";
+import bannerMedicationImage from "@/assets/medication-banner.png";
+import bannerTransportImage from "@/assets/transportation-banner.png";
 import bannerSanitationImage from "@/assets/sanitation-banner.png";
-import bannerMaintenanceImage from "@/assets/maintenance-banner.jpg";
-import bannerSecurityImage from "@/assets/security-banner.jpg";
+import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
+import bannerSecurityImage from "@/assets/security-banner.png";
+import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
 
 // const items = [15, 15, 15, 15, 20, 20, 20, 25, 50, 75];
 // const randomItem = items[Math.floor(Math.random() * items.length)];
@@ -60,25 +61,26 @@ export default function ServiceRequestPage() {
   const [data, setData] = useState<Medication[]>(pillData);
 
   return (
-    <div className={" scrollbar-hide"}>
+    <div className={"scrollbar-hide"}>
       <div className="hidden md:block">
         <div className="border-t">
           <div className="bg-background">
             <div className="grid lg:grid-cols-5">
               {/*<Sidebar className="hidden lg:block"/>*/}
-              <div
-                className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto"
-                style={{
-                  backgroundColor: "#F1F1F1",
-                }}
-              >
-                <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
+              <div className="col-span-4 lg:col-span-5 lg:border-l overflow-x-auto">
+                <div className="col-span-5 lg:col-span-5 lg:border-l mt-2">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs
                       defaultValue="Flower Request"
                       className="h-full space-y-6"
                     >
-                      <div className="space-between flex items-center">
+                      <div
+                        className="justify-between flex flex-row"
+                        style={{
+                          marginLeft: "7.8%",
+                          width: "83.5%",
+                        }}
+                      >
                         <TabsList>
                           <TabsTrigger value="Flower Request">
                             <FlowerIcon className="mr-2 h-4 w-4" />
@@ -105,6 +107,9 @@ export default function ServiceRequestPage() {
                             Maintenance Request
                           </TabsTrigger>
                         </TabsList>
+                        <InstructionsLink
+                          location={"service"}
+                        ></InstructionsLink>
                       </div>
                       <TabsContent
                         value="Flower Request"
@@ -125,6 +130,8 @@ export default function ServiceRequestPage() {
                             backgroundPosition: "center 80%",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div className="space-y-1">
@@ -133,8 +140,7 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               Medication Request
@@ -144,8 +150,8 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               By Mina Boktor & Alexander Kraemling
@@ -155,8 +161,8 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               Order and deliver a patient's medication from the
@@ -164,7 +170,7 @@ export default function ServiceRequestPage() {
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <div className={"p-3"}>
                           <MedicineContext.Provider value={{ data, setData }}>
                             <div className={"space-y-4"}>
@@ -178,13 +184,15 @@ export default function ServiceRequestPage() {
                         className="w-full flex-col border-none p-0 data-[state=active]:flex"
                       >
                         <div
-                          className="flex items-center justify-between"
+                          className=" flex items-center justify-between"
                           style={{
                             backgroundImage: `url(${bannerTransportImage})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center 37%",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div className="space-y-1">
@@ -193,8 +201,7 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               Internal Patient Transport
@@ -204,8 +211,8 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               By Trang Tran & Phong Cao
@@ -215,15 +222,17 @@ export default function ServiceRequestPage() {
                               style={{
                                 color: "white",
                                 marginLeft: "20px",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
                               Move patients to a different room
                             </p>
                           </div>
                         </div>
-                        <SheduleContent />
+                        <div className=" justify-center items-center">
+                          <ScheduleContent />
+                        </div>
                       </TabsContent>
                       <TabsContent
                         value={"Sanitation Request"}
@@ -239,6 +248,8 @@ export default function ServiceRequestPage() {
                             backgroundPosition: "center 65%",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div
@@ -246,8 +257,7 @@ export default function ServiceRequestPage() {
                             style={{
                               color: "white",
                               marginLeft: "20px",
-                              textShadow:
-                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                             }}
                           >
                             <h2 className="text-2xl font-semibold tracking-tight">
@@ -255,19 +265,27 @@ export default function ServiceRequestPage() {
                             </h2>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white" }}
+                              style={{
+                                color: "white",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
                             >
                               By Alex Shettler & Tracy Yang
                             </p>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white" }}
+                              style={{
+                                color: "white",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
                             >
                               Get sanitation services for an issue.
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <Sanitation />
                       </TabsContent>
                       <TabsContent
@@ -284,6 +302,8 @@ export default function ServiceRequestPage() {
                             backgroundPosition: "center",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div
@@ -291,8 +311,7 @@ export default function ServiceRequestPage() {
                             style={{
                               color: "white",
                               marginLeft: "20px",
-                              textShadow:
-                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                             }}
                           >
                             <h2 className="text-2xl font-semibold tracking-tight">
@@ -302,21 +321,25 @@ export default function ServiceRequestPage() {
                               className="text-sm text-muted-foreground"
                               style={{
                                 color: "white",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
-                              By Owen Lacey & Tracy Yang
+                              By Owen Lacey & June Whittall
                             </p>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white" }}
+                              style={{
+                                color: "white",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
                             >
                               Request Security services and optionally call 911.
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <SecurityForm />
                       </TabsContent>
                       <TabsContent
@@ -333,6 +356,8 @@ export default function ServiceRequestPage() {
                             backgroundPosition: "center 35%",
                             height: "100px",
                             borderRadius: "10px",
+                            width: "83.5%",
+                            marginLeft: "8%",
                           }}
                         >
                           <div
@@ -340,8 +365,7 @@ export default function ServiceRequestPage() {
                             style={{
                               color: "white",
                               marginLeft: "20px",
-                              textShadow:
-                                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                              textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                             }}
                           >
                             <h2 className="text-2xl font-semibold tracking-tight">
@@ -351,21 +375,25 @@ export default function ServiceRequestPage() {
                               className="text-sm text-muted-foreground"
                               style={{
                                 color: "white",
-                                textShadow:
-                                  "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
                               }}
                             >
-                              June Whittall & Alex Shettler
+                              By June Whittall & Alex Shettler
                             </p>
                             <p
                               className="text-sm text-muted-foreground"
-                              style={{ color: "white" }}
+                              style={{
+                                color: "white",
+                                fontWeight: "bold",
+                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
+                              }}
                             >
                               Report a maintenance issue
                             </p>
                           </div>
                         </div>
-                        <Separator className="my-4" />
+                        <Separator className="my-4 w-5/6 mx-auto" />
                         <Maintenance />
                       </TabsContent>
                     </Tabs>
