@@ -8,7 +8,7 @@ import {
   statuses,
 } from "@/interfaces/dataTypes/maintenanceData/labels.ts";
 
-const maintenanceData: MaintenanceForm[] = Array.from({ length: 10 }, () => ({
+const maintenanceData: MaintenanceForm[] = Array.from({ length: 20 }, () => ({
   reqId: faker.number.int(),
   name: faker.helpers.arrayElement(EmployeeNames).value,
   location: faker.location.city(),
