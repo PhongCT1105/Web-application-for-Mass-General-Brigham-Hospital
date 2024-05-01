@@ -21,22 +21,20 @@ import {
   EllipsisVertical,
   Accessibility,
   TriangleAlert,
+  Flame,
 } from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
-// import {Label} from "@/components/ui/label.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
-// interface changeMarker {
-//   start: string;
-//   end: string;
-//   setStart: React.Dispatch<React.SetStateAction<string>>;
-//   setEnd: React.Dispatch<React.SetStateAction<string>>;
-// }
-//
-// interface locationData {
-//   nodeID: string;
-//   longName: string;
-// }
+import CONF from "@/assets/nodetype-icons/icons8-analytics-48.png";
+import DEPT from "@/assets/nodetype-icons/icons8-hierarchy-32.png";
+import EXIT from "@/assets/nodetype-icons/icons8-exit-48.png";
+import INFO from "@/assets/nodetype-icons/icons8-info-48.png";
+import LABS from "@/assets/nodetype-icons/icons8-flask-48.png";
+import TOILET from "@/assets/nodetype-icons/icons8-toilet-48.png";
+import RETL from "@/assets/nodetype-icons/icons8-shopping-basket-48.png";
+import SERV from "@/assets/nodetype-icons/icons8-palm-up-hand-48.png";
 
 interface SearchBarProps {
   locations: {
@@ -51,6 +49,7 @@ interface SearchBarProps {
   changeAccessibility: (accessMode: boolean) => void;
   handleObstacle: (obstacles: boolean) => void;
   children?: React.ReactNode; // Add this line
+  handleHeatmap: (heatmap: boolean) => void;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
@@ -61,6 +60,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   textDirections, // New prop
   changeAccessibility,
   handleObstacle,
+  handleHeatmap,
   //nodesOnFloor,
   //onChange,
 }) => {
@@ -73,6 +73,9 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [tabVal, setTabValue] = useState<string>("astar");
   const [accessMode, setAccessMode] = useState(false);
   const [obstacles, setObstacles] = useState(false);
+  const [heatmap, setHeatmap] = useState(false);
+
+  const { triggerAchievement } = useAchievements();
 
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
@@ -116,6 +119,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setTabValue(pathAlgo.toLowerCase());
     // handleSearch();
     onSearch(locations[randStart].nodeID, locations[randEnd].nodeID);
+    triggerAchievement("Chance Trailblazer");
   };
 
   useEffect(() => {
@@ -129,17 +133,20 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setTabValue(tabVal);
   }, [tabVal]);
 
-  const handleClear = () => {
+  const handleReset = () => {
     setStartPoint("");
     setEndPoint("");
+    setAccessMode(false); // Reset accessMode state to false
+    setObstacles(false);
+    setHeatmap(false);
     onClear(); // Clear the line on the map
   };
 
   return (
-    <div className="flex flex-col items-center bg-transparent p-4 w-[350px]">
+    <div className="flex flex-col items-center bg-transparent p-2 w-[350px] h-[89vh]">
       <Card className={"w-full shadow"}>
         <CardHeader>
-          <CardTitle className={"flex justify-between items-center"}>
+          <CardTitle className={"flex justify-between items-center py-0 gap-0"}>
             <div>Directions</div>
             <InstructionsLink location={"nav"}></InstructionsLink>
           </CardTitle>
@@ -274,6 +281,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               {/*<TabsContent value="password">Change your password here.</TabsContent>*/}
             </Tabs>
           </div>
+
           <CardTitle className={"flex mb-3 justify-between items-center gap-6"}>
             <Button
               variant="invisible"
@@ -345,6 +353,37 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 </div>
               </div>
             </div>
+
+            <div
+              className="flex items-center w-auto group-hover:text-yellow-500 -ml-4"
+              title="Heatmap Toggle"
+            >
+              <div
+                onClick={() => {
+                  handleHeatmap(!heatmap);
+                  setHeatmap(!heatmap);
+                }}
+                className={
+                  !heatmap
+                    ? "relative h-[30px] w-[60px] cursor-pointer pr-2 rounded-full bg-slate-400 duration-150"
+                    : "relative h-[30px] w-[60px] cursor-pointer pr-2  rounded-full bg-[#db0f0f] duration-150"
+                }
+              >
+                <div
+                  className={
+                    !heatmap
+                      ? "absolute inset-0 flex translate-x-[0] p-[3px] duration-150"
+                      : "absolute inset-0 flex translate-x-[50%] p-[3px] duration-150"
+                  }
+                >
+                  <div className="aspect-square h-full rounded-full bg-slate-50 p-1">
+                    <div className="relative h-full w-full">
+                      <Flame size={15} />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </CardTitle>
 
           <div className="flex items-center gap-10">
@@ -357,7 +396,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             </Button>
             <Button
               variant={"destructive"}
-              onClick={handleClear}
+              onClick={handleReset}
               className="w-full"
             >
               Reset
@@ -365,277 +404,132 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           </div>
         </CardContent>
       </Card>
-
-      <Card
-        className={"m-4 w-full h-full  border-none bg-transparent shadow-none"}
-      >
-        {/*<CardHeader>*/}
-        {/*  <div >Text Directions:</div>*/}
-        {/*</CardHeader>*/}
-        <CardContent
-          // style={{ maxHeight: "40vh", overflowY: "auto" }}
-          className={"overflow-y-auto max-h-[40vh]"}
+      {textDirections.length === 0 ? (
+        <div
+          className={
+            " my-2 w-full h-full border-none bg-transparent shadow-none"
+          }
         >
-          {textDirections.map((direction, index) => (
-            <div
-              key={index}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                // backgroundColor: index % 2 === 0 ? "#ADD8E6" : "#f3f4f6"
-              }}
-            >
-              <img
-                src={direction.icon}
-                alt="arrow-icon"
-                style={{ width: "24px", height: "24px", marginRight: "8px" }}
-              />
-              <span>{direction.text}</span>
+          {/*<CardHeader>*/}
+          {/*  <div >Text Directions:</div>*/}
+          {/*</CardHeader>*/}
+          <div
+            // style={{ maxHeight: "40vh", overflowY: "auto" }}
+            className={" h-full "}
+          >
+            <div className={"flex-row flex justify-between m-2"}>
+              <div className={"flex flex-col gap-4"}>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={EXIT}
+                    alt={"Exit"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#ef4444" }}
+                  />
+                  <p>Exit</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={CONF}
+                    alt={"Conference"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#0680fc" }}
+                  />
+                  <p>Conference Room</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={DEPT}
+                    alt={"Department"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#fdf2d7" }}
+                  />
+                  <p>Department Room</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={INFO}
+                    alt={"Information"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#0056de" }}
+                  />
+                  <p>Information Stall</p>
+                </div>
+              </div>
+              <div className={"flex flex-col gap-4 "}>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={LABS}
+                    alt={"Laboratory"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#acd5fe" }}
+                  />
+                  <p>Laboratory</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={TOILET}
+                    alt={"Bathroom"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#59aafd" }}
+                  />
+                  <p>Bathroom</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={RETL}
+                    alt={"Retail"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#e7a50a" }}
+                  />
+                  <p>Retail Location</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={SERV}
+                    alt={"Service"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#fad788" }}
+                  />
+                  <p>Service Station</p>
+                </div>
+              </div>
             </div>
-          ))}
-        </CardContent>
-      </Card>
-      {/*  <h3 className="mb-3 mt-0 text-center text-2xl">Directions</h3>*/}
-      {/*  <div className="flex mb-4">*/}
-      {/*      <DropdownMenu>*/}
-      {/*          <DropdownMenuTrigger asChild>*/}
-      {/*              <Button variant="outline">*/}
-      {/*                  {startPoint ? startPoint : "Select start location"}*/}
-      {/*              </Button>*/}
-      {/*          </DropdownMenuTrigger>*/}
-      {/*          <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">*/}
-      {/*              {filteredLocations.map((location, index) => (*/}
-      {/*                  <DropdownMenuRadioItem*/}
-      {/*                      key={index}*/}
-      {/*                      value={location}*/}
-      {/*                      onClick={() => setStartPoint(location)}*/}
-      {/*                  >*/}
-      {/*                      {location}*/}
-      {/*                  </DropdownMenuRadioItem>*/}
-      {/*              ))}*/}
-      {/*          </DropdownMenuContent>*/}
-      {/*      </DropdownMenu>*/}
-      {/*      <DropdownMenu>*/}
-      {/*          <DropdownMenuTrigger asChild>*/}
-      {/*              <Button variant="outline">*/}
-      {/*                  {endPoint ? endPoint : "Select end location"}*/}
-      {/*              </Button>*/}
-      {/*          </DropdownMenuTrigger>*/}
-      {/*          <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">*/}
-      {/*              {filteredLocations.map((location, index) => (*/}
-      {/*                  <DropdownMenuRadioItem*/}
-      {/*                      key={index}*/}
-      {/*                      value={location}*/}
-      {/*                      onClick={() => setEndPoint(location)}*/}
-      {/*                  >*/}
-      {/*                      {location}*/}
-      {/*                  </DropdownMenuRadioItem>*/}
-      {/*              ))}*/}
-      {/*          </DropdownMenuContent>*/}
-      {/*      </DropdownMenu>*/}
-      {/*  </div>*/}
-
-      {/*  <div className="flex mb-4 flex-col items-center align-content-center">*/}
-      {/*      <Tabs defaultValue="astar" className=" ">*/}
-      {/*          <TabsList>*/}
-      {/*              <TabsTrigger*/}
-      {/*                  value="bfs"*/}
-      {/*                  onClick={() => changePathfindingStrategy("BFS")}*/}
-      {/*              >*/}
-      {/*                  BFS*/}
-      {/*              </TabsTrigger>*/}
-      {/*              <TabsTrigger*/}
-      {/*                  value="astar"*/}
-      {/*                  onClick={() => changePathfindingStrategy("AStar")}*/}
-      {/*              >*/}
-      {/*                  A**/}
-      {/*              </TabsTrigger>*/}
-      {/*              <TabsTrigger*/}
-      {/*                  value="dfs"*/}
-      {/*                  onClick={() => changePathfindingStrategy("DFS")}*/}
-      {/*              >*/}
-      {/*                  DFS*/}
-      {/*              </TabsTrigger>*/}
-      {/*          </TabsList>*/}
-      {/*          /!*<TabsContent value="account">Make changes to your account here.</TabsContent>*!/*/}
-      {/*          /!*<TabsContent value="password">Change your password here.</TabsContent>*!/*/}
-      {/*      </Tabs>*/}
-      {/*  </div>*/}
-
-      {/*  <div className="flex mb-4">*/}
-      {/*      <Button*/}
-      {/*          onClick={handleSearch}*/}
-      {/*          className="px-8 py-2 bg-blue-500 text-white rounded cursor-pointer mr-2"*/}
-      {/*      >*/}
-      {/*          Find Path*/}
-      {/*      </Button>*/}
-      {/*      <Button*/}
-      {/*          onClick={handleClear}*/}
-      {/*          className="px-8 py-2 bg-red-500 text-white rounded cursor-pointer"*/}
-      {/*  >*/}
-      {/*    Clear*/}
-      {/*  </Button>*/}
-      {/*</div>*/}
+          </div>
+        </div>
+      ) : (
+        <Card
+          className={
+            "m-2 w-full h-full  border-none bg-transparent shadow-none"
+          }
+        >
+          {/*<CardHeader>*/}
+          {/*  <div >Text Directions:</div>*/}
+          {/*</CardHeader>*/}
+          <CardContent
+            // style={{ maxHeight: "40vh", overflowY: "auto" }}
+            className={"overflow-y-auto max-h-[34vh]"}
+          >
+            {textDirections.map((direction, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  // backgroundColor: index % 2 === 0 ? "#ADD8E6" : "#f3f4f6"
+                }}
+              >
+                <img
+                  src={direction.icon}
+                  alt="arrow-icon"
+                  style={{ width: "24px", height: "24px", marginRight: "8px" }}
+                />
+                <span>{direction.text}</span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };
-
-// import React, { useState } from "react";
-// import { Button } from "@/components/ui/button";
-// import {
-//   DropdownMenu,
-//   DropdownMenuContent,
-//   DropdownMenuRadioItem,
-//   DropdownMenuTrigger,
-// } from "@/components/ui/dropdown-menu";
-// import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs.tsx";
-// //import { HospitalData } from "@/components/blocks/mapBlock.tsx";
-//
-// interface SearchBarProps {
-//   locations: string[];
-//   onSearch: (start: string, end: string) => void;
-//   onClear: () => void;
-//   currentFloor: string;
-//   changePathfindingStrategy: (strategy: string) => void;
-//   //nodesOnFloor: HospitalData[];
-// }
-//
-// export const SearchBar: React.FC<SearchBarProps> = ({
-//   locations,
-//   onSearch,
-//   onClear,
-//   changePathfindingStrategy, // New prop
-//   //nodesOnFloor,
-// }) => {
-//   const [startPoint, setStartPoint] = useState<string>("");
-//   const [endPoint, setEndPoint] = useState<string>("");
-//   // Filter locations based on the current floor
-//   const filteredLocations = locations.filter((location) => {
-//     // Check if the location is not a hallway and does not start with "Hall"
-//     return !location.includes("Hallway") && !location.startsWith("Hall");
-//   });
-//
-//   const handleSearch = () => {
-//     onClear();
-//     onSearch(startPoint, endPoint);
-//   };
-//
-//   const handleClear = () => {
-//     setStartPoint("");
-//     setEndPoint("");
-//     onClear(); // Clear the line on the map
-//   };
-//
-//   return (
-//     <div className="flex flex-col items-center">
-//       <h3 className="mb-3 mt-0 text-center text-2xl">Directions</h3>
-//       <div className="flex mb-4">
-//         <DropdownMenu>
-//           <DropdownMenuTrigger asChild>
-//             <Button variant="outline">
-//               {startPoint ? startPoint : "Select start location"}
-//             </Button>
-//           </DropdownMenuTrigger>
-//           <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
-//             {filteredLocations.map((location, index) => (
-//               <DropdownMenuRadioItem
-//                 key={index}
-//                 value={location}
-//                 onClick={() => setStartPoint(location)}
-//               >
-//                 {location}
-//               </DropdownMenuRadioItem>
-//             ))}
-//           </DropdownMenuContent>
-//         </DropdownMenu>
-//         <DropdownMenu>
-//           <DropdownMenuTrigger asChild>
-//             <Button variant="outline">
-//               {endPoint ? endPoint : "Select end location"}
-//             </Button>
-//           </DropdownMenuTrigger>
-//           <DropdownMenuContent className="w-56 max-h-dropdownheight overflow-y-auto">
-//             {filteredLocations.map((location, index) => (
-//               <DropdownMenuRadioItem
-//                 key={index}
-//                 value={location}
-//                 onClick={() => setEndPoint(location)}
-//               >
-//                 {location}
-//               </DropdownMenuRadioItem>
-//             ))}
-//           </DropdownMenuContent>
-//         </DropdownMenu>
-//       </div>
-//
-//       <div className="flex mb-4 flex-col items-center align-content-center">
-//         <Tabs defaultValue="bfs" className=" ">
-//           <TabsList>
-//             <TabsTrigger
-//               value="bfs"
-//               onClick={() => changePathfindingStrategy("BFS")}
-//             >
-//               BFS
-//             </TabsTrigger>
-//             <TabsTrigger
-//               value="dfs"
-//               onClick={() => changePathfindingStrategy("DFS")}
-//             >
-//               DFS
-//             </TabsTrigger>
-//             <TabsTrigger
-//               value="astar"
-//               onClick={() => changePathfindingStrategy("AStar")}
-//             >
-//               A*
-//             </TabsTrigger>
-//             <TabsTrigger
-//               value="dijkstra"
-//               onClick={() => changePathfindingStrategy("Dijkstra")}
-//             >
-//               Dijkstra
-//             </TabsTrigger>
-//           </TabsList>
-//           {/*<TabsContent value="account">Make changes to your account here.</TabsContent>*/}
-//           {/*<TabsContent value="password">Change your password here.</TabsContent>*/}
-//         </Tabs>
-//       </div>
-//
-//       {/*<div className="flex mb-4">*/}
-//       {/*  /!* Button to switch to BFS strategy *!/*/}
-//       {/*  <button*/}
-//       {/*    onClick={() =>*/}
-//       {/*      changePathfindingStrategy(new BFSPathfindingStrategy())*/}
-//       {/*    }*/}
-//       {/*    className="px-8 py-2 bg-green-500 text-white rounded cursor-pointer mr-2"*/}
-//       {/*  >*/}
-//       {/*    BFS*/}
-//       {/*  </button>*/}
-//       {/*  /!* Button to switch to A* strategy *!/*/}
-//       {/*  <button*/}
-//       {/*    onClick={() =>*/}
-//       {/*      changePathfindingStrategy(new AStarPathfindingStrategy())*/}
-//       {/*    }*/}
-//       {/*    className="px-8 py-2 bg-green-500 text-white rounded cursor-pointer"*/}
-//       {/*  >*/}
-//       {/*    A**/}
-//       {/*  </button>*/}
-//       {/*</div>*/}
-//
-//       <div className="flex mb-4">
-//         <button
-//           onClick={handleSearch}
-//           className="px-8 py-2 bg-blue-500 text-white rounded cursor-pointer mr-2"
-//         >
-//           Find Path
-//         </button>
-//         <button
-//           onClick={handleClear}
-//           className="px-8 py-2 bg-red-500 text-white rounded cursor-pointer"
-//         >
-//           Clear
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };

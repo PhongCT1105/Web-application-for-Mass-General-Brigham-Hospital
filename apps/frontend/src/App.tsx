@@ -9,7 +9,7 @@ import AboutCreditsPages from "./routes/AboutCreditsPages.tsx"; // Correct impor
 import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"; // Correct import path
 import CSVTable from "./routes/CSVPage/csvTable.tsx";
 import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
-import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
+import { Sanitation } from "@/routes/service-request/sanitation-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
 import StartPage from "@/routes/StartPage.tsx";
 import { GraphStateProvider } from "@/context/nodeContext.tsx";
@@ -20,16 +20,18 @@ import { Header } from "@/components/blocks/header.tsx";
 import { MapEditorTablePage } from "@/routes/map-editor/mapEditorTablePage.tsx";
 import InsightRoute from "@/routes/InsightRoute.tsx";
 import { InstructionsPage } from "./routes/InstructionsPage.tsx";
-import DashBoard from "./routes/DashBoard.tsx";
 import "./fakeDataLoader.ts";
 import { SchedulingPage } from "@/routes/employee-scheduling/SchedulingPage.tsx";
+import ScreenSaver from "@/components/blocks/ScreenSaver.tsx";
+import DashBoard from "./routes/Dashboard/DashBoard.tsx";
+import ErrorPage from "./routes/ErrorPage.tsx";
 // import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      errorElement: <h1>ERROR</h1>,
+      errorElement: <ErrorPage />,
       element: <Root />,
       children: [
         {
@@ -38,37 +40,37 @@ function App() {
         },
         {
           path: "/home",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <HomePage />,
         },
         {
           path: "/login",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <LoginPage />,
         },
         {
           path: "/request-log-Page",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <RequestLogPage />,
         },
         {
           path: "/about-us",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <AboutCreditsPages />,
         },
         {
           path: "/dashboard",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <DashBoard />,
         },
         {
           path: "/insight",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <ProtectedPage Page={InsightRoute} />,
         },
         {
           path: "/service-requests",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <ProtectedPage Page={ServiceRequestPage} />,
         },
         {
@@ -81,22 +83,22 @@ function App() {
         },
         {
           path: "/map-editor/map",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <MapEditingPage />,
         },
         {
           path: "/map-editor/table",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <MapEditorTablePage />,
         },
         {
           path: "/instructions",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <InstructionsPage />,
         },
         {
           path: "/scheduling",
-          errorElement: <h1>ERROR</h1>,
+          errorElement: <ErrorPage />,
           element: <SchedulingPage />,
         },
       ],
@@ -129,6 +131,7 @@ function App() {
         }}
       >
         {showHeader && <Header />}
+        <ScreenSaver />
         {/*{showHeader && <HeaderHome/>}*/}
         <div className="w-full flex flex-col">
           <Outlet />

@@ -4,7 +4,6 @@ import withDragAndDrop, {
   DragFromOutsideItemArgs,
   withDragAndDropProps,
 } from "react-big-calendar/lib/addons/dragAndDrop";
-
 import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import "react-big-calendar/lib/css/react-big-calendar.css";
 import { addHours } from "date-fns/addHours";
@@ -15,12 +14,18 @@ import {
   filterEventsByShift,
   filterEventsByWeekday,
 } from "../utils/eventFiltering.ts";
-import { fetchEmployeeData } from "@/routes/employee-scheduling/utils/api.ts";
+import {
+  fetchEmployeeData,
+  postSchedule,
+} from "@/routes/employee-scheduling/utils/api.ts";
 import { eventStyleGetter } from "@/routes/employee-scheduling/utils/eventStyling.ts";
 import { localizer } from "../utils/localizer.ts";
 import { toast } from "@/components/ui/use-toast.ts";
 import { CalendarToastDescription } from "@/routes/employee-scheduling/components/toastDescription.tsx";
 import { EventRequests } from "@/routes/employee-scheduling/data/requests.ts";
+import { CustomEventComponent } from "@/routes/employee-scheduling/components/CustomEventComponent.tsx";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export interface CustomCalendarEvent extends Event {
   id?: number;
@@ -36,16 +41,41 @@ interface CalendarProps {
   employeeSchedule: CustomCalendarEvent[];
   draggableCardData: EventRequests[];
 }
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const downloadAsPDF = () => {
+  const input = document.getElementById("scheduling"); // Replace 'pdf-content' with the ID of the container element
+  if (!input) return;
+  const padding = 10;
+
+  html2canvas(input).then((canvas) => {
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF();
+    const imgWidth = 210 - padding * 2; // A4 width in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    pdf.addImage(imgData, "PNG", padding, padding, imgWidth, imgHeight);
+    pdf.save("Schedule.pdf");
+  });
+};
+
 export const BigCalendar = ({
   employeeSchedule,
   draggableCardData,
 }: CalendarProps) => {
   const [events, setEvents] = useState<CustomCalendarEvent[]>(employeeSchedule);
+  const [eventSelected, setEventSelected] = useState<CustomCalendarEvent>(
+    {} as CustomCalendarEvent,
+  );
+  const [prevEvents, setPrevEvents] = useState<CustomCalendarEvent[]>(events);
   const [dragEvent, setDraggedEvent] = useState<CustomCalendarEvent | null>(
     null,
   );
 
   const [lastId, setLastId] = useState(0);
+  const [isEventPopoverOpen, setEventPopoverOpen] = useState(false);
+  const handleEventPopoverToggle = (isOpen: boolean) => {
+    setEventPopoverOpen(isOpen);
+  };
   const getEmployees = async () => {
     try {
       // get the shift and weekday
@@ -54,9 +84,12 @@ export const BigCalendar = ({
       const prevEvents = [...events];
       const newEvents: CustomCalendarEvent[] =
         await fetchEmployeeData(filteredByShift);
+
       setEvents((prevState) =>
         prevState.map((event, index) => ({
           ...event,
+          weekday: filteredByWeekday[index].weekday,
+          shift: filteredByShift[index].shift,
           employee: newEvents[index].employee,
         })),
       );
@@ -89,12 +122,10 @@ export const BigCalendar = ({
 
   const handleEventUpdate = (updatedEvent: CustomCalendarEvent) => {
     // Find the index of the event being updated
-    const index = events.findIndex((e) => e === updatedEvent);
+    const index = events.findIndex((e) => e.id === updatedEvent.id);
 
     if (index !== -1) {
-      // Create a copy of the events array
       const updatedEvents = [...events];
-      // Replace the event at the found index with the updated event
       updatedEvents[index] = updatedEvent;
       setEvents(updatedEvents);
     }
@@ -198,6 +229,11 @@ export const BigCalendar = ({
     [dragEvent, newEvent],
   );
 
+  const handleSelected = (isOpen: boolean, event: CustomCalendarEvent) => {
+    setEventPopoverOpen(isOpen);
+    setEventSelected(event);
+  };
+
   return (
     <div className={"grid grid-cols-7 grid-rows-5 gap-4"}>
       <div className={"row-span-5 mt-8 "}>
@@ -215,22 +251,47 @@ export const BigCalendar = ({
               <DraggableCard info={request} key={index} />
             </div>
           ))}
-          <div className={"space-x-1 pt-2"}>
+          <Button
+            className={"w-[175px]"}
+            disabled={
+              !events.every((event) => event.employee) ||
+              JSON.stringify(prevEvents) == JSON.stringify(events)
+            }
+            onClick={() => {
+              setPrevEvents(events);
+              toast({ title: "Successfully saved schedule!" });
+              postSchedule(events).then(() =>
+                console.log("submitted schedule."),
+              );
+            }}
+          >
+            Save Schedule
+          </Button>
+          <div className={"space-x-1 flex flex row items-center"}>
             <Button
-              className={"p-5"}
+              className={"p-2"}
+              disabled={JSON.stringify(prevEvents) == JSON.stringify(events)}
+              variant={"outline"}
+              onClick={() => setEvents(prevEvents)}
+            >
+              Revert
+            </Button>
+            <Button
+              className={"p-2"}
               variant={"destructive"}
-              onClick={() => {
-                setEvents([]);
-              }}
+              disabled={!events.length}
+              onClick={() => setEvents([])}
             >
               Clear
             </Button>
             <Button
-              variant={
-                events.some((event) => !event.employee) ? "default" : "outline"
+              disabled={
+                !events.every((event) => event.status && event.priority) ||
+                JSON.stringify(prevEvents) == JSON.stringify(events) ||
+                events.every((event) => event.employee)
               }
-              onClick={getEmployees}
-              className={"p-5"}
+              onClick={() => getEmployees()}
+              className={"p-2"}
             >
               Submit
             </Button>
@@ -238,11 +299,12 @@ export const BigCalendar = ({
         </div>
       </div>
       <div className={"col-span-6 row-span-5 mr-1"}>
-        <div>
+        <div id={"scheduling"}>
           <DnDCalendar
             popup
             resizable
             events={events}
+            onSelectEvent={(event) => handleSelected(true, event)}
             defaultView="week"
             localizer={localizer}
             onEventDrop={onEventDrop}
@@ -250,15 +312,16 @@ export const BigCalendar = ({
             onEventResize={onEventResize}
             eventPropGetter={eventStyleGetter}
             onDropFromOutside={onDropFromOutside}
-            components={{
-              event: (props) => (
-                <EventPopover
-                  event={props.event}
-                  onUpdateEvent={handleEventUpdate}
-                />
-              ),
-            }}
+            components={{ event: CustomEventComponent }}
           />
+          {isEventPopoverOpen && (
+            <EventPopover
+              event={eventSelected}
+              trigger={isEventPopoverOpen}
+              setTrigger={handleEventPopoverToggle}
+              onUpdateEvent={handleEventUpdate}
+            />
+          )}
         </div>
       </div>
     </div>

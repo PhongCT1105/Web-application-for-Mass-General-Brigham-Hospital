@@ -3892,6 +3892,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-icons/all-files@npm:^4.1.0":
+  version: 4.1.0
+  resolution: "@react-icons/all-files@npm:4.1.0"
+  peerDependencies:
+    react: "*"
+  checksum: 56252b205bd5960e605e9de9a9eacd4b2a5cf9f2e6156f4a1803eee502a7d1749e479a56d68dfc5514decc06cf4ffdf11e36c71359a984892c54cfc4a4604bc8
+  languageName: node
+  linkType: hard
+
 "@react-leaflet/core@npm:^1.0.2, @react-leaflet/core@npm:^1.1.1":
   version: 1.1.1
   resolution: "@react-leaflet/core@npm:1.1.1"
@@ -4457,7 +4466,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tensorflow/tfjs-converter@npm:4.18.0":
+"@tensorflow/tfjs-converter@npm:4.18.0, @tensorflow/tfjs-converter@npm:^4.18.0":
   version: 4.18.0
   resolution: "@tensorflow/tfjs-converter@npm:4.18.0"
   peerDependencies:
@@ -4466,7 +4475,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@tensorflow/tfjs-core@npm:4.18.0":
+"@tensorflow/tfjs-core@npm:4.18.0, @tensorflow/tfjs-core@npm:^4.18.0":
   version: 4.18.0
   resolution: "@tensorflow/tfjs-core@npm:4.18.0"
   dependencies:
@@ -6192,6 +6201,9 @@ __metadata:
     "@faker-js/faker": "npm:^8.4.1"
     "@swc/core": "npm:^1.3.60"
     "@swc/helpers": "npm:^0.5.1"
+    "@tensorflow/tfjs": "npm:^4.18.0"
+    "@tensorflow/tfjs-converter": "npm:^4.18.0"
+    "@tensorflow/tfjs-core": "npm:^4.18.0"
     "@types/cookie-parser": "npm:^1.4.3"
     "@types/express": "npm:^4.17.17"
     "@types/http-errors": "npm:^2.0.1"
@@ -6214,6 +6226,7 @@ __metadata:
     http-errors: "npm:~1.6.3"
     http-terminator: "npm:^3.2.0"
     jose: "npm:^4.14.4"
+    long: "npm:^5.2.3"
     morgan: "npm:~1.9.1"
     multer: "npm:^1.4.5-lts.1"
     nodemon: "npm:latest"
@@ -7563,6 +7576,13 @@ __metadata:
   version: 0.1.4
   resolution: "deep-is@npm:0.1.4"
   checksum: ec12d074aef5ae5e81fa470b9317c313142c9e8e2afe3f8efa124db309720db96d1d222b82b84c834e5f87e7a614b44a4684b6683583118b87c833b3be40d4d8
+  languageName: node
+  linkType: hard
+
+"deepmerge@npm:^4.0.0":
+  version: 4.3.1
+  resolution: "deepmerge@npm:4.3.1"
+  checksum: 058d9e1b0ff1a154468bf3837aea436abcfea1ba1d165ddaaf48ca93765fdd01a30d33c36173da8fbbed951dd0a267602bc782fe288b0fc4b7e1e7091afc4529
   languageName: node
   linkType: hard
 
@@ -8995,7 +9015,6 @@ __metadata:
     "@radix-ui/react-toggle-group": "npm:^1.0.4"
     "@radix-ui/react-tooltip": "npm:^1.0.7"
     "@tanstack/react-table": "npm:^8.15.3"
-    "@tensorflow/tfjs": "npm:^4.18.0"
     "@types/bootstrap": "npm:^5.2.6"
     "@types/csv-parse": "npm:^1.2.2"
     "@types/date-arithmetic": "npm:^4"
@@ -9047,6 +9066,7 @@ __metadata:
     localforage: "npm:^1.10.0"
     lucide-react: "npm:^0.366.0"
     match-sorter: "npm:^6.3.1"
+    moment: "npm:^2.30.1"
     multer: "npm:^1.4.5-lts.1"
     next-themes: "npm:^0.3.0"
     papaparse: "npm:^5.4.1"
@@ -9071,6 +9091,7 @@ __metadata:
     react-lazyload: "npm:^3.2.1"
     react-leaflet: "npm:^4.2.1"
     react-leaflet-cluster: "npm:^2.1.0"
+    react-player: "npm:^2.16.0"
     react-resizable-panels: "npm:^2.0.16"
     react-router-bootstrap: "npm:^0.26.2"
     react-router-dom: "npm:^6.11.2"
@@ -10673,6 +10694,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"load-script@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "load-script@npm:1.0.0"
+  checksum: 8458e3f07b4a86f8d9d66e47a987811491a5d013af23ba7b371c6d3c9dc899885b072ccf65abf7874c10cb197d4975eacd8a7a125bfb38dbbcb267539f5dc1e9
+  languageName: node
+  linkType: hard
+
 "local-pkg@npm:^0.4.3":
   version: 0.4.3
   resolution: "local-pkg@npm:0.4.3"
@@ -10723,6 +10751,13 @@ __metadata:
   version: 4.0.0
   resolution: "long@npm:4.0.0"
   checksum: 8296e2ba7bab30f9cfabb81ebccff89c819af6a7a78b4bb5a70ea411aa764ee0532f7441381549dfa6a1a98d72abe9138bfcf99f4fa41238629849bc035b845b
+  languageName: node
+  linkType: hard
+
+"long@npm:^5.2.3":
+  version: 5.2.3
+  resolution: "long@npm:5.2.3"
+  checksum: 9167ec6947a825b827c30da169a7384eec6c0c9ec2f0b9c74da2e93d81159bbe39fb09c3f13dae9721d4b807ccfa09797a7dd1012f5d478e3e33ca3c78b608e6
   languageName: node
   linkType: hard
 
@@ -10850,6 +10885,13 @@ __metadata:
   version: 0.3.0
   resolution: "media-typer@npm:0.3.0"
   checksum: 38e0984db39139604756903a01397e29e17dcb04207bb3e081412ce725ab17338ecc47220c1b186b6bbe79a658aad1b0d41142884f5a481f36290cdefbe6aa46
+  languageName: node
+  linkType: hard
+
+"memoize-one@npm:^5.1.1":
+  version: 5.2.1
+  resolution: "memoize-one@npm:5.2.1"
+  checksum: b7141dc148b5c6fdd51e77ecf0421fd2581681eb8756e0b3dfbd4fe765b5e2b5a6bc90214bb6f19a96b6aed44de17eda3407142a7be9e24ccd0774bbd9874d1b
   languageName: node
   linkType: hard
 
@@ -11145,7 +11187,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"moment@npm:^2.29.4":
+"moment@npm:^2.29.4, moment@npm:^2.30.1":
   version: 2.30.1
   resolution: "moment@npm:2.30.1"
   checksum: ae42d876d4ec831ef66110bdc302c0657c664991e45cf2afffc4b0f6cd6d251dde11375c982a5c0564ccc0fa593fc564576ddceb8c8845e87c15f58aa6baca69
@@ -13015,6 +13057,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-fast-compare@npm:^3.0.1":
+  version: 3.2.2
+  resolution: "react-fast-compare@npm:3.2.2"
+  checksum: a6826180ba75cefba1c8d3ac539735f9b627ca05d3d307fe155487f5d0228d376dac6c9708d04a283a7b9f9aee599b637446635b79c8c8753d0b4eece56c125c
+  languageName: node
+  linkType: hard
+
 "react-hook-form@npm:^7.51.2":
   version: 7.51.2
   resolution: "react-hook-form@npm:7.51.2"
@@ -13030,6 +13079,15 @@ __metadata:
   peerDependencies:
     react: "*"
   checksum: c4458c643ae32a793ddebc5fa1235c7ec051be1b131205510e8199d15a4c89221a501f95a71fa21c2da93e8dd225290e2e24bb80abd3fb85801e43009e692098
+  languageName: node
+  linkType: hard
+
+"react-icons@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "react-icons@npm:5.1.0"
+  peerDependencies:
+    react: "*"
+  checksum: 00f75809b1846a6cfb48e3d64ddc5e931a1fa74aa429cd594dc4a70223a5702deff62638b02c727c0aeb83120a8875d8034b380601c61a4d803a9227387bac22
   languageName: node
   linkType: hard
 
@@ -13145,6 +13203,21 @@ __metadata:
     react: ">=16.3.0"
     react-dom: ">=16.3.0"
   checksum: 89aebeef9917f8a9edd25f3dab18bd82cf67872a8648246c9e62fb6e4ea5af8ac22d93b63df81253f3d2c3bbac3eeb74c830cb7519f746447cdfccf9a4f370c3
+  languageName: node
+  linkType: hard
+
+"react-player@npm:^2.16.0":
+  version: 2.16.0
+  resolution: "react-player@npm:2.16.0"
+  dependencies:
+    deepmerge: "npm:^4.0.0"
+    load-script: "npm:^1.0.0"
+    memoize-one: "npm:^5.1.1"
+    prop-types: "npm:^15.7.2"
+    react-fast-compare: "npm:^3.0.1"
+  peerDependencies:
+    react: ">=16.6.0"
+  checksum: d7e2824f9cb52afc71e5661e341360153087fc4fe231ee4b6c0b968fcae1efecc208416cd69bfa24a024265fdca65aee3f74a290a86ccf1e5c0452102b82cb0d
   languageName: node
   linkType: hard
 
@@ -14175,6 +14248,7 @@ __metadata:
     "@mui/material": "npm:^5.15.15"
     "@prisma/client": "npm:4.15.0"
     "@radix-ui/react-slot": "npm:^1.0.2"
+    "@react-icons/all-files": "npm:^4.1.0"
     "@react-leaflet/core": "npm:^2.1.0"
     "@types/csv-parse": "npm:^1.2.2"
     "@types/kill-port": "npm:^2"
@@ -14211,6 +14285,7 @@ __metadata:
     leaflet-moving-marker: "npm:^0.3.0"
     leaflet.animatedmarker: "npm:^1.0.0"
     leaflet.markercluster: "npm:^1.5.3"
+    long: "npm:^5.2.3"
     npm: "npm:^10.5.0"
     pathfinding: "npm:^0.4.18"
     prettier: "npm:2.8.8"
@@ -14224,7 +14299,7 @@ __metadata:
     react-chartjs-2: "npm:^4.0.0"
     react-dom: "npm:^18.2.0"
     react-draggable: "npm:^4.4.6"
-    react-icons: "npm:^5.0.1"
+    react-icons: "npm:^5.1.0"
     react-lazyload: "npm:^3.2.1"
     react-leaflet: "npm:^4.2.1"
     react-leaflet-ant-path: "npm:^1.1.0"

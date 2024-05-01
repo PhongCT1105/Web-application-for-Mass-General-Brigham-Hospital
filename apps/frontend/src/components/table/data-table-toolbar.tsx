@@ -9,10 +9,13 @@ import { DataTableFacetedFilter } from "./data-table-faceted-filter.tsx";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
+  columnID?: string;
+  // searchTitle?: string;
 }
 
 export function DataTableToolbar<TData>({
   table,
+  columnID, //searchTitle
 }: DataTableToolbarProps<TData>) {
   const isFiltered = table.getState().columnFilters.length > 0;
 
@@ -22,10 +25,14 @@ export function DataTableToolbar<TData>({
         <Input
           placeholder="Filter Items..."
           value={
-            (table.getColumn("longName")?.getFilterValue() as string) ?? ""
+            (table
+              .getColumn(!columnID ? "longName" : columnID)
+              ?.getFilterValue() as string) ?? ""
           }
           onChange={(event) =>
-            table.getColumn("longName")?.setFilterValue(event.target.value)
+            table
+              .getColumn(!columnID ? "longName" : columnID)
+              ?.setFilterValue(event.target.value)
           }
           className="h-8 w-[150px] lg:w-[250px]"
         />

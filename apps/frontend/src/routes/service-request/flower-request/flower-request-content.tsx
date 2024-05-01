@@ -57,6 +57,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
 export interface cartItem {
   cost: number;
@@ -76,6 +77,7 @@ export interface requestForm {
 
 export const FlowerContent = () => {
   const now = new Date();
+  const { triggerAchievement } = useAchievements();
 
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
   const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
@@ -163,6 +165,9 @@ export const FlowerContent = () => {
     });
     if (res.status == 200) {
       console.log("success");
+      if (form.total > 500) {
+        triggerAchievement("Big Spender");
+      }
     }
   }
 

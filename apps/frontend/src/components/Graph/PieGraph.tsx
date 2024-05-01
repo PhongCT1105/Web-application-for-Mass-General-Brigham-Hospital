@@ -5,9 +5,31 @@ import { pieRequestData } from "./GraphInterface/pieRequestData";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
+// Define the custom order for status labels
+const customStatusLabelOrder = [
+  "None",
+  "Canceled",
+  "Backlog",
+  "Todo",
+  "In progress",
+  "Done",
+];
+
 function PieGraph({ props }: { props: pieRequestData[] }) {
+  // Custom sorting function to sort status labels based on the defined order
+  const sortByCustomOrder = (a: string, b: string) => {
+    return (
+      customStatusLabelOrder.indexOf(a) - customStatusLabelOrder.indexOf(b)
+    );
+  };
+
+  // Sort the status labels based on the custom order
+  const sortedStatusLabels = props
+    .map((data) => data.status)
+    .sort(sortByCustomOrder);
+
   const pieChartData = {
-    labels: props.map((map) => map.status),
+    labels: sortedStatusLabels,
     datasets: [
       {
         label: "Total Used",

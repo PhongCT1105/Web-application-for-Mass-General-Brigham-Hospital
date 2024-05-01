@@ -3,6 +3,8 @@ import {
   // CircleUser,
   // CreditCard,
   EditIcon,
+  // LogIn,
+  LogOut,
   // LogOut,
   // FolderArchive,
   // Key,
@@ -41,6 +43,12 @@ import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { searchList } from "@/components/blocks/searchList.ts";
 import AutoLogout from "./AutoLogout";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 
 export function Header() {
   const location = useLocation();
@@ -278,14 +286,14 @@ export function Header() {
                 </>
               )}
               <a
-                href="/dashboard"
+                href="/Dashboard"
                 className={`transition-colors hover:text-yellow-500 text-gray-300 ${
                   location.pathname === "/dashboard"
                     ? "text-yellow-500"
                     : "text-gray-300"
                 }`}
               >
-                DashBoard
+                Dashboard
               </a>
               <a
                 href="/about-us"
@@ -489,23 +497,41 @@ export function Header() {
             </form>
 
             <ModeToggle />
+
             {!isLoading && isAuthenticated ? (
-              <Button
-                className={" w-20"}
-                variant="default"
-                onClick={handleLogout}
-              >
-                Log Out
-                {/*<LogOut className="mr-2 h-4 w-4 ml-2" />*/}
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className={"p-2"}
+                      variant="outline"
+                      onClick={handleLogout}
+                    >
+                      <LogOut />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Logout</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             ) : (
-              <Button
-                className={" w-20"}
-                variant="default"
-                onClick={handleLogin}
-              >
-                Log In
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className={"p-2 text-l text-gray-200 bg-blue-900"}
+                      variant="outline"
+                      onClick={handleLogin}
+                    >
+                      Login
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Login</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
 
             {/*<DropdownMenu>*/}

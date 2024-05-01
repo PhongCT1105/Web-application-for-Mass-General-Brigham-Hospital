@@ -21,11 +21,16 @@ ChartJS.register(
 );
 
 function BarGraph({ props }: { props: barRequestData[] }) {
+  // Sort the employee names alphabetically
+  const sortedEmployeeNames = props
+    .map((data) => data.employeeName)
+    .sort((a, b) => a.localeCompare(b)); // Sort alphabetically
+
   const barChartData = {
-    labels: props.map((map) => map.employeeName),
+    labels: sortedEmployeeNames,
     datasets: [
       {
-        label: "Total Used",
+        label: "Employee",
         data: props.map((map) => map.request),
         backgroundColor: [
           "rgba(255, 99, 13, 0.2)",
@@ -71,7 +76,7 @@ function BarGraph({ props }: { props: barRequestData[] }) {
     plugins: {
       title: {
         display: true,
-        text: "Bar Chart of total service request used",
+        text: "Total Request by Employee",
       },
     },
   };

@@ -1,5 +1,4 @@
 import { Label } from "@/components/ui/label";
-
 import { CustomCalendarEvent } from "@/routes/employee-scheduling/components/BigCalendar.tsx";
 import {
   Select,
@@ -8,15 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select.tsx";
-import { CustomEventComponent } from "@/routes/employee-scheduling/components/CustomEventComponent.tsx";
 import {
   Dialog,
   DialogClose,
   DialogContent,
   DialogFooter,
-  DialogTrigger,
+  // DialogTrigger,
 } from "@/components/ui/dialog.tsx";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button.tsx";
 import { statuses } from "@/routes/employee-scheduling/data/status.ts";
 import { priorities } from "@/routes/employee-scheduling/data/priority.ts";
@@ -24,40 +22,53 @@ import { priorities } from "@/routes/employee-scheduling/data/priority.ts";
 interface EventPopoverProps {
   onUpdateEvent: (updatedEvent: CustomCalendarEvent) => void;
   event: CustomCalendarEvent;
+  trigger: boolean;
+  setTrigger: (isOpen: boolean) => void;
 }
-export function EventPopover({ event, onUpdateEvent }: EventPopoverProps) {
+export function EventPopover({
+  trigger,
+  setTrigger,
+  event,
+  onUpdateEvent,
+}: EventPopoverProps) {
   const [selectedStatus, setSelectedStatus] = useState<string | undefined>(
     event.status,
   );
   const [selectedPriority, setSelectedPriority] = useState<string | undefined>(
     event.priority,
   );
+  const [thisEvent, setThisEvent] = useState(event);
 
   const handleStatusChange = (value: string) => {
+    setThisEvent((prevState) => ({
+      ...prevState,
+      status: value,
+    }));
     setSelectedStatus(value);
   };
 
   const handlePriorityChange = (value: string) => {
+    setThisEvent((prevState) => ({
+      ...prevState,
+      priority: value,
+    }));
     setSelectedPriority(value);
   };
 
   const handleSaveChanges = () => {
-    // Update the event with the selected status and priority
     const updatedEvent = {
       ...event,
       status: selectedStatus,
       priority: selectedPriority,
     };
+    onUpdateEvent(updatedEvent);
     event.priority = selectedPriority;
     event.status = selectedStatus;
-    onUpdateEvent(updatedEvent);
+    return thisEvent;
   };
 
   return (
-    <Dialog>
-      <DialogTrigger className={"items-start"}>
-        <CustomEventComponent event={event} />
-      </DialogTrigger>
+    <Dialog open={trigger} onOpenChange={setTrigger}>
       <DialogContent className="w-80">
         <div className="grid gap-4">
           <div className="space-y-2">
@@ -105,7 +116,14 @@ export function EventPopover({ event, onUpdateEvent }: EventPopoverProps) {
         </div>
         <DialogFooter className={"mr-4"}>
           <DialogClose>
-            <Button onClick={handleSaveChanges}>Save</Button>
+            <Button
+              onClick={() => {
+                setTrigger(false);
+                handleSaveChanges();
+              }}
+            >
+              Save
+            </Button>
           </DialogClose>
         </DialogFooter>
       </DialogContent>

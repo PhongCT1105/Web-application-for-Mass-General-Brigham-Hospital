@@ -34,7 +34,7 @@ import {
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Medication, MedicationForm } from "@/interfaces/medicationReq.ts";
-import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
+// import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
 import axios from "axios";
@@ -45,12 +45,14 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 interface DataTableProps {
   columns: ColumnDef<Medication>[];
 }
 
 export function MedicineRequest({ columns }: DataTableProps) {
   const now = new Date();
+  const { triggerAchievement } = useAchievements();
 
   const [employees, setEmployees] = React.useState<string[]>([]);
   const [submission, setSubmission] = React.useState<Medication[]>([]);
@@ -96,6 +98,9 @@ export function MedicineRequest({ columns }: DataTableProps) {
       },
     });
     if (res.status == 200) {
+      if (form.medication.length > 4) {
+        triggerAchievement("Medication Maverick");
+      }
       console.log("success");
     }
   };
@@ -184,7 +189,15 @@ export function MedicineRequest({ columns }: DataTableProps) {
         paddingRight: "8%",
       }}
     >
-      <DataTableToolbar table={table} />
+      {/*<DataTableToolbar table={table} columnID={"name"} />*/}
+      <Input
+        placeholder={`Search items by name...`}
+        value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+        onChange={(event) =>
+          table.getColumn("name")?.setFilterValue(event.target.value)
+        }
+        className="h-8 w-[150px] lg:w-[250px]"
+      />
       <div className="rounded-md border">
         <Table>
           <TableHeader>

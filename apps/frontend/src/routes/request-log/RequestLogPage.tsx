@@ -24,22 +24,23 @@ import { SecurityFormLogTable } from "@/routes/request-log/securityLogPage.tsx";
 import { GenericForm } from "@/interfaces/genericReq.ts";
 import { MaintenanceForm } from "@/interfaces/maintenanceReq.ts";
 import { columnsMedicationFormLog } from "@/routes/service-request/medicine-request/medicineColumns.tsx";
-import { columnsSecurityFormLog } from "@/routes/service-request/securityColumns.tsx";
+import { columnsSecurityFormLog } from "@/routes/service-request/securityy-request/securityColumns.tsx";
 import { SecurityForm } from "@/interfaces/securityReq.ts";
-import { columnsSanitationFormLog } from "@/routes/service-request/SanitationColumns.tsx";
+import { columnsSanitationFormLog } from "@/routes/service-request/sanitation-request/SanitationColumns.tsx";
 import { SanitationForm } from "@/interfaces/sanitationReq.ts";
 import { ScheduleForm } from "@/interfaces/roomScheduleReq.ts";
 import { TransportRequestColumns } from "@/routes/service-request/transportResquest/transportTable.tsx";
 import { DataTable } from "@/components/table/data-table.tsx";
 import { FlowerForm } from "@/interfaces/flowerReq.ts";
 import { columnsFlowerFormLog } from "@/routes/service-request/flower-request/flowerFormColumn.tsx";
-import { columnsMaintenanceLog } from "@/routes/service-request/MaintenanceColumns.tsx";
+import { columnsMaintenanceLog } from "@/routes/service-request/maintenance-request/MaintenanceColumns.tsx";
 import bannerSecurityImage from "@/assets/security-banner.png";
 import bannerSanitationImage from "@/assets/sanitation-banner.png";
 import bannerTransportationImage from "@/assets/transportation-banner.png";
 import bannerMedicationImage from "@/assets/medication-banner.png";
 import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
 import bannerFlowerImage from "@/assets/flower-banner.png";
+import bannerRequestImage from "@/assets/request-banner.png";
 import { columnsGenericLog } from "@/routes/service-request/GenericRequestColumns.tsx";
 
 export const RequestLogPage = () => {
@@ -338,9 +339,9 @@ export const RequestLogPage = () => {
                         // h-full  ^^^^^
                       >
                         <div
-                          className="flex items-center justify-between"
+                          className="flex items-center jutify-between"
                           style={{
-                            backgroundImage: `url(${bannerFlowerImage})`,
+                            backgroundImage: `url(${bannerRequestImage})`,
                             backgroundSize: "cover",
                             backgroundPosition: "center",
                             height: "100px",

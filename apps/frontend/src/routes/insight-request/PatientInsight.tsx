@@ -34,9 +34,9 @@ function countStatus(arr: ScheduleForm[]): pieRequestData[] {
     if (status === "") status = "None";
     else if (status === "done") status = "Done";
     else if (status === "backlog") status = "Backlog";
-    else if (status === "InProgress") status = "In progress";
+    else if (status === "in progress") status = "In progress";
     else if (status === "canceled") status = "Canceled";
-    else if (status === "todo") status = "To do";
+    else if (status === "todo") status = "Todo";
     countDictionary[status] = (countDictionary[status] || 0) + 1;
   });
 
@@ -55,6 +55,7 @@ function countPriority(arr: ScheduleForm[]): polarRequestDataPriority[] {
     else if (priority === "low") priority = "Low";
     else if (priority === "medium") priority = "Medium";
     else if (priority === "high") priority = "High";
+    else if (priority === "urgent") priority = "Urgent";
     countDictionary[priority] = (countDictionary[priority] || 0) + 1;
   });
 
@@ -123,7 +124,7 @@ function PatientInsight({ props }: { props: ScheduleForm[] }) {
 
   return (
     <>
-      <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
+      <div className="w-5/6 mx-auto m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
         <div className="rounded-lg bg-gray-200">
           <LineGraph props={patientLineData} />
         </div>

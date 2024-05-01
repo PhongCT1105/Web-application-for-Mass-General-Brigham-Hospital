@@ -37,9 +37,21 @@ import "@/styles/mapBlock.modules.css";
 import { SearchBar } from "@/components/blocks/LocationSearchBar.tsx";
 import axios from "axios";
 // import {Button} from "@/components/ui/button";
+import { useAchievements } from "@/context/achievementContext.tsx";
+import { ToastProvider } from "@/components/ui/toast.tsx"; // Importing the Toast component
+
 import "@/components/blocks/SnakeAnim";
 import { Label } from "@/components/ui/label.tsx";
 import Caution from "@/assets/caution.png";
+import CONF from "@/assets/nodetype-icons/icons8-analytics-48.png";
+import DEPT from "@/assets/nodetype-icons/icons8-hierarchy-32.png";
+import EXIT from "@/assets/nodetype-icons/icons8-exit-48.png";
+import INFO from "@/assets/nodetype-icons/icons8-info-48.png";
+import LABS from "@/assets/nodetype-icons/icons8-flask-48.png";
+import TOILET from "@/assets/nodetype-icons/icons8-toilet-48.png";
+import RETL from "@/assets/nodetype-icons/icons8-shopping-basket-48.png";
+import SERV from "@/assets/nodetype-icons/icons8-palm-up-hand-48.png";
+import { Accessibility, Footprints } from "lucide-react";
 
 declare module "leaflet" {
   interface Polyline {
@@ -64,6 +76,7 @@ export interface HospitalData {
   yCoord: number;
   floor: string;
   obstacle: boolean;
+  nodeType: string;
 }
 
 export interface Node {
@@ -98,6 +111,18 @@ export interface directionObject {
   icon: Element;
 }
 
+// import { data } from "./heatmap/testData.ts";
+interface EdgesData {
+  edgeID: string;
+  count: number;
+}
+
+interface ParsedEdge {
+  start: string;
+  end: string;
+  count: number;
+}
+
 const SearchContext = createContext<changeMarker>({
   startNodeName: "",
   endNodeName: "",
@@ -116,6 +141,7 @@ const SearchContext = createContext<changeMarker>({
 // eslint-disable-next-line
 // @ts-ignore
 export const MapBlock: React.FC = () => {
+  const { triggerAchievement } = useAchievements();
   const changePathfindingStrategy = (strat: string) => {
     setPathfindingStrategy(strat);
   };
@@ -148,11 +174,17 @@ export const MapBlock: React.FC = () => {
   const [accessMode, setAccessMode] = useState(false);
   const [obstacles, setObstacles] = useState(false);
 
+  const [displayETAIcon, setETAIcon] = useState(false);
+
   const [LayerL1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerL2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF1] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
+
+  const [currentFloor, setCurrentFloor] = useState("1"); // Initialize state for current floor
+
+  // Function to handle floor change
 
   const FloorMarkers: { [key: string]: string } = useMemo(
     () =>
@@ -162,6 +194,38 @@ export const MapBlock: React.FC = () => {
         1: F1,
         2: F2,
         3: F3,
+      }) as const,
+    [],
+  );
+
+  const NodeMarkers: { [key: string]: string } = useMemo(
+    () =>
+      ({
+        BATH: TOILET,
+        CONF: CONF,
+        DEPT: DEPT,
+        EXIT: EXIT,
+        INFO: INFO,
+        LABS: LABS,
+        REST: TOILET,
+        RETL: RETL,
+        SERV: SERV,
+      }) as const,
+    [],
+  );
+
+  const NodeColors: { [key: string]: string } = useMemo(
+    () =>
+      ({
+        BATH: "#59aafd", //b
+        CONF: "#0680fc", //b
+        DEPT: "#fdf2d7", //y
+        EXIT: "#ef4444", //r
+        INFO: "#0056de", //b
+        LABS: "#acd5fe", //b
+        REST: "#59aafd", //b
+        RETL: "#e7a50a", //y
+        SERV: "#fad788", //y
       }) as const,
     [],
   );
@@ -275,6 +339,18 @@ export const MapBlock: React.FC = () => {
     [],
   );
 
+  const Heatmap: { [key: string]: L.LayerGroup } = useMemo(
+    () =>
+      ({
+        L1: new L.LayerGroup(),
+        L2: new L.LayerGroup(),
+        1: new L.LayerGroup(),
+        2: new L.LayerGroup(),
+        3: new L.LayerGroup(),
+      }) as const,
+    [],
+  );
+
   const loadData = async () => {
     const { data: nodeData } = await axios.get(`/api/mapreq/nodes`);
 
@@ -288,6 +364,7 @@ export const MapBlock: React.FC = () => {
         yCoord: nodeData[i].ycoord,
         floor: nodeData[i].floor,
         obstacle: nodeData[i].obstacle,
+        nodeType: nodeData[i].nodeType,
       });
     }
     setHospitalData(newHospitalData);
@@ -313,6 +390,7 @@ export const MapBlock: React.FC = () => {
         map.off();
         map.remove();
       }
+      setCurrentFloor(floor);
 
       const bounds: LatLngBoundsExpression = [
         [0, 0],
@@ -326,16 +404,16 @@ export const MapBlock: React.FC = () => {
         zoomControl: true,
         preferCanvas: true,
         layers: [Layers[floor]],
-      }).setView([1750, 2700], -2);
-      L.control
-        .layers(baseLayers, undefined, {
-          collapsed: false,
-          position: "bottomright",
-        })
-        .addTo(map);
-      map.on("baselayerchange", function () {
-        map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
-      });
+      }).setView([1700, 2500], -2);
+      // L.control
+      //   .layers(baseLayers, undefined, {
+      //     collapsed: false,
+      //     position: "bottomright",
+      //   })
+      //   .addTo(map);
+      // map.on("baselayerchange", function () {
+      //   map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
+      // });
       map.setMaxBounds(bounds);
       Paths[floor].snakeIn();
 
@@ -398,7 +476,7 @@ export const MapBlock: React.FC = () => {
       //   map.setView([0, 0], -3);
       // }
     },
-    [Layers, Paths, baseLayers],
+    [Layers, Paths],
   );
 
   const addMarker = useCallback(
@@ -439,6 +517,7 @@ export const MapBlock: React.FC = () => {
 
   useEffect(() => {
     console.log("useEffect is running");
+
     if (!isDataLoaded) {
       loadData().then(() => {
         setIsDataLoaded(true);
@@ -460,16 +539,16 @@ export const MapBlock: React.FC = () => {
           layers: [LayerF1],
         });
         mapRef.current = map;
-        map.setView([1750, 2700], -2);
-        L.control
-          .layers(baseLayers, undefined, {
-            collapsed: false,
-            position: "bottomright",
-          })
-          .addTo(map);
-        map.on("baselayerchange", function () {
-          map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
-        });
+        map.setView([1700, 2500], -2);
+        // L.control
+        //   .layers(baseLayers, undefined, {
+        //     collapsed: false,
+        //     position: "bottomright",
+        //   })
+        //   .addTo(map);
+        // map.on("baselayerchange", function () {
+        //   map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
+        // });
         map.setMaxBounds(bounds);
       }
 
@@ -557,26 +636,65 @@ export const MapBlock: React.FC = () => {
             });
             marker.addTo(ObstacleMarkers[node.floor]);
           } else {
-            const marker = L.circleMarker(coords, {
-              radius: 4,
-              color: "#3B3B3B",
-              fillColor: "#3B3B3B",
-              fillOpacity: 0.8,
-            }).bindPopup(node.name);
-            // Event listener for clicking on markers
-            marker.on("click", function () {
-              setStartEndLocation(
-                node.nodeID,
-                node.name,
-                node.xCoord,
-                node.yCoord,
-                node.floor,
-              );
-            });
-            marker.addTo(Markers[node.floor]);
-          }
+            let marker;
+            console.log("This node is of type: " + node.nodeType);
+            const url = NodeMarkers[node.nodeType];
+            const color = NodeColors[node.nodeType];
+            console.log("Here is the url:" + url);
+            console.log(NodeMarkers);
 
-          //marker.options.attribution = node.nodeID;
+            if (node.nodeType != ("STAI" || "ELEV" || "HALL") && url) {
+              const size = 7;
+              const customIcon = new Icon({
+                iconUrl: url,
+                iconSize: [size * 2, size * 2],
+                iconAnchor: [size, size],
+              });
+
+              marker = L.marker(coords, { icon: customIcon }).bindPopup(
+                node.name,
+              );
+
+              const circleMarker = L.circleMarker(coords, {
+                radius: size,
+                color: color,
+                fillColor: color,
+                fillOpacity: 1,
+              });
+
+              // Event listener for clicking on markers
+              marker.on("click", function () {
+                setStartEndLocation(
+                  node.nodeID,
+                  node.name,
+                  node.xCoord,
+                  node.yCoord,
+                  node.floor,
+                );
+              });
+              circleMarker.addTo(Markers[node.floor]);
+              marker.addTo(Markers[node.floor]);
+            } else {
+              marker = L.circleMarker(coords, {
+                radius: 3,
+                color: "#6d6d6d",
+                fillColor: "#6d6d6d",
+                fillOpacity: 0.8,
+              }).bindPopup(node.name);
+
+              // Event listener for clicking on markers
+              marker.on("click", function () {
+                setStartEndLocation(
+                  node.nodeID,
+                  node.name,
+                  node.xCoord,
+                  node.yCoord,
+                  node.floor,
+                );
+              });
+              marker.addTo(Markers[node.floor]);
+            }
+          }
         });
       };
 
@@ -584,12 +702,15 @@ export const MapBlock: React.FC = () => {
 
       Object.keys(Layers).forEach((key) => {
         Paths[key].addTo(Layers[key]);
-        Markers[key].addTo(Layers[key]);
+
         SpecialMarkers[key].addTo(Layers[key]);
         StartMarker[key].addTo(Layers[key]);
         EndMarker[key].addTo(Layers[key]);
         PathMarkers[key].addTo(Layers[key]);
         ObstacleMarkers[key].addTo(Layers[key]);
+        Heatmap[key].addTo(Layers[key]);
+        Markers[key].addTo(Layers[key]);
+
         L.imageOverlay(FloorImages[key], bounds).addTo(Layers[key]);
       });
     }
@@ -610,6 +731,9 @@ export const MapBlock: React.FC = () => {
     addMarker,
     PathMarkers,
     ObstacleMarkers,
+    NodeMarkers,
+    NodeColors,
+    Heatmap,
   ]); // Dependency array
 
   function drawPath(start: string, end: string) {
@@ -731,6 +855,7 @@ export const MapBlock: React.FC = () => {
     }
     changeFloor(searchPath[0].floor);
   }
+
   function findTotalPathDistance(nodeArray: Node[]) {
     let prevNode: Node = nodeArray[0];
     let dist: number = 0;
@@ -739,16 +864,21 @@ export const MapBlock: React.FC = () => {
     nodeArray.forEach((node) => {
       const xDiff = Math.abs(prevNode.xcoord - node.xcoord);
       const yDiff = Math.abs(prevNode.ycoord - node.ycoord);
-      dist = Math.sqrt(xDiff * xDiff + yDiff + yDiff);
+      dist += Math.sqrt(xDiff * xDiff + yDiff * yDiff);
       prevNode = node;
       if (node.longName.includes("ELEV")) {
         elevatorCount++;
       }
     });
 
-    const distanceInFeet = dist * 20; // turning coords roughly into feet
-    const timeInMinutes = distanceInFeet / 265; // 282 ft per minute as average walking speed
+    const distanceInFeet = dist; // turning coords roughly into feet
+    let divisor = 265;
 
+    if (accessMode) divisor = 240; // 282 ft per minute as average walking speed
+
+    const timeInMinutes = distanceInFeet / divisor; // 282 ft per minute as average walking speed
+
+    setETAIcon(accessMode);
     setDistance(distanceInFeet); // assuming coords are in feet
     setTime(timeInMinutes + elevatorCount); // 282 ft per minute, assuming 1 extra min for each elevator
     setArrivalTime(new Date());
@@ -915,6 +1045,7 @@ export const MapBlock: React.FC = () => {
       EndMarker[key].clearLayers();
       Paths[key].clearLayers();
       PathMarkers[key].clearLayers();
+      Heatmap[key].clearLayers();
       Markers[key].addTo(Layers[key]);
       ObstacleMarkers[key].addTo(Layers[key]);
     });
@@ -955,6 +1086,14 @@ export const MapBlock: React.FC = () => {
     }
 
     path().then(() => {
+      triggerAchievement("Pathfinding Pioneer");
+      if (test.strategy === "BFS" && !test.accessibility && !test.obstacles) {
+        if (test.start === "CCONF001L1" || test.end === "CCONF001L1") {
+          if (test.start === "CLABS005L1" || test.end === "CLABS005L1") {
+            triggerAchievement("Inaugural Explorer");
+          }
+        }
+      }
       handleClear();
       clearMarkers();
       addPathPolylines(nodeArray);
@@ -991,103 +1130,340 @@ export const MapBlock: React.FC = () => {
     });
   }
 
+  //********* HEATMAP **********//
+
+  function parseEdges(edgesData: EdgesData[]) {
+    //const edges = edgesData;
+    const parsedEdges: ParsedEdge[] = [];
+    console.log(edgesData);
+
+    edgesData.forEach((edge) => {
+      if (edge.edgeID) {
+        const splitEdgeId = edge.edgeID.split("_");
+        if (splitEdgeId.length === 2) {
+          const [startNode, endNode] = splitEdgeId;
+          const count = edge.count;
+          parsedEdges.push({ start: startNode, end: endNode, count: count });
+        } else {
+          console.error(`Invalid edgeId format: ${edge.edgeID}`);
+        }
+      } else {
+        console.error("Invalid or missing edgeId:", edge);
+      }
+    });
+
+    return parsedEdges;
+  }
+
+  function getCountColor(count: number): string {
+    // Interpolate between colors based on the count
+
+    const red = Math.max(0, Math.min(255, Math.round(255 - count * 50)));
+    const green = Math.max(0, Math.min(255, Math.round(count * 50)));
+    const blue = 0; // You can adjust this if needed
+
+    // Construct the RGB color string
+    return `rgb(${red}, ${green}, ${blue})`;
+  }
+
+  function drawHeatPath(start: string, end: string, count: number) {
+    const startHospital = hospitalData.find((h) => h.nodeID === start);
+    const endHospital = hospitalData.find((h) => h.nodeID === end);
+
+    if (!startHospital || !endHospital) {
+      console.error("Start or end location not found in hospital data.");
+      return;
+    }
+
+    const floor = startHospital.floor;
+
+    const startCoords: [number, number] = [
+      3400 - startHospital.yCoord,
+      startHospital.xCoord,
+    ];
+    const endCoords: [number, number] = [
+      3400 - endHospital.yCoord,
+      endHospital.xCoord,
+    ];
+
+    const color: string = getCountColor(count);
+
+    const draw = L.polyline([startCoords, endCoords], {
+      color: color,
+      weight: 7,
+      opacity: 0.7,
+    });
+
+    draw.addTo(Heatmap[floor]);
+  }
+
+  const handleHeatmap = (heatmap: boolean) => {
+    ///setHeatmap(heatmap);
+    console.log(heatmap);
+
+    async function fetchData() {
+      try {
+        const { data: EdgesData } = await axios.get(`/api/search/heatmap`);
+        console.log(EdgesData);
+        //setHeatmapEdges(EdgesData);
+
+        if (heatmap) {
+          const parsedEdges: ParsedEdge[] = parseEdges(EdgesData);
+
+          parsedEdges.forEach((edge) => {
+            drawHeatPath(edge.start, edge.end, edge.count);
+          });
+
+          Object.keys(Layers).forEach((key) => {
+            Layers[key].removeLayer(Markers[key]);
+            Heatmap[key].addTo(Layers[key]);
+            Markers[key].addTo(Layers[key]);
+          });
+        } else {
+          Object.keys(SpecialMarkers).forEach((key) => {
+            Heatmap[key].clearLayers();
+          });
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    }
+
+    fetchData().then();
+
+    //console.log("Changes obstacles handling to " + obstacles);
+  };
+
+  //*********ENDHEATMAP********//
+
   return (
-    <SearchContext.Provider
-      value={{
-        startNodeName,
-        endNodeName,
-        startNodeID,
-        endNodeID,
-        setStartNodeName,
-        setEndNodeName,
-        setStartNodeID,
-        setEndNodeID,
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          height: "100%",
-          zIndex: 1,
-          overflow: "hidden",
+    <ToastProvider>
+      <SearchContext.Provider
+        value={{
+          startNodeName,
+          endNodeName,
+          startNodeID,
+          endNodeID,
+          setStartNodeName,
+          setEndNodeName,
+          setStartNodeID,
+          setEndNodeID,
         }}
       >
-        <div>
-          <SearchBar
-            locations={hospitalData
-              .filter((hospital) => !hospital.name.includes("Hall"))
-              .map((hospital) => ({
-                nodeID: hospital.nodeID,
-                longName: hospital.name,
-              }))
-              .sort((a, b) => a.longName.localeCompare(b.longName))}
-            onSearch={handleSearch}
-            onClear={handleClear}
-            //onChange={changeMarker}
-            changePathfindingStrategy={changePathfindingStrategy}
-            //currentFloor={currentFloor}
-            textDirections={textDirections}
-            changeAccessibility={changeAccessibilty}
-            handleObstacle={handleObstacle}
-          />
-        </div>
         <div
-          id="map-container"
           style={{
-            flex: 2.5,
-            backgroundColor: "gray-300",
-            position: "relative",
-            zIndex: -1,
+            display: "flex",
+            height: "100%",
+            zIndex: 1,
+            overflow: "hidden",
           }}
         >
-          {havePath && (
+          <div>
+            <SearchBar
+              locations={hospitalData
+                .filter((hospital) => !hospital.name.includes("Hall"))
+                .map((hospital) => ({
+                  nodeID: hospital.nodeID,
+                  longName: hospital.name,
+                }))
+                .sort((a, b) => a.longName.localeCompare(b.longName))}
+              onSearch={handleSearch}
+              onClear={handleClear}
+              //onChange={changeMarker}
+              changePathfindingStrategy={changePathfindingStrategy}
+              //currentFloor={currentFloor}
+              textDirections={textDirections}
+              changeAccessibility={changeAccessibilty}
+              handleObstacle={handleObstacle}
+              handleHeatmap={handleHeatmap}
+            />
+          </div>
+          <div
+            id="map-container"
+            style={{
+              flex: 2.5,
+              backgroundColor: "gray-300",
+              position: "relative",
+              zIndex: -1,
+            }}
+          >
             <div
-              className={
-                "w-full bottom-2 h-auto flex align-middle justify-center"
-              }
+              style={{
+                position: "absolute",
+                top: "75%", // Position at the vertical center of the page
+                left: "90%",
+                transform: "translate(0%, -100%)", // Center horizontally and vertically
+                display: "flex",
+                flexDirection: "column-reverse",
+                justifyContent: "center",
+                alignItems: "center",
+                zIndex: 1000,
+                color: "black",
+              }}
             >
               <div
-                style={{ zIndex: 1000 }}
-                className={
-                  "absolute bottom-3 rounded-full bg-white py-3 w-auto px-8 shadow-sm shadow-black flex flex-row gap-4 justify-center items-center"
-                }
+                className={`w-[80px] h-[80px] relative ${currentFloor === "L2" ? "mt-8" : ""}`}
+                style={{ marginBottom: "-15px" }}
               >
-                <div className={"flex flex-col"}>
-                  <Label className={"text-xl text-gray-800"}>
-                    <b>{time < 1 ? "<1" : time.toFixed(0)}</b> min
-                  </Label>
-                  <Label className={"text-m text-gray-500"}>
-                    ({distance.toFixed(2)} ft)
-                  </Label>
-                </div>
-                <Label className={"text-2xl text-gray-800"}>
-                  ETA • {arrivalTime.getHours()}:
-                  {arrivalTime.getMinutes() + time < 10 ? "0" : ""}
-                  {(arrivalTime.getMinutes() + time).toFixed(0)}{" "}
-                </Label>
+                <button
+                  onClick={() => {
+                    changeFloor("L2");
+                  }} // Call changeFloor with the floor name
+                >
+                  <div
+                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
+                  >
+                    <div
+                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                    >
+                      L2
+                    </div>
+                  </div>
+                </button>
+              </div>
+              {/* Repeat similar structure for other floors */}
+              {/* L1 */}
+              <div
+                className={`w-[80px] h-[80px] relative ${currentFloor === "L1" ? "mt-8" : ""}`}
+                style={{ marginBottom: "-15px" }}
+              >
+                <button
+                  onClick={() => {
+                    changeFloor("L1");
+                  }}
+                >
+                  <div
+                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
+                  >
+                    <div
+                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                    >
+                      L1
+                    </div>
+                  </div>
+                </button>
+              </div>
+              {/* F1 */}
+              <div
+                className={`w-[80px] h-[80px] relative ${currentFloor === "1" ? "mt-8" : ""}`}
+                style={{ marginBottom: "-15px" }}
+              >
+                <button
+                  onClick={() => {
+                    changeFloor("1");
+                  }}
+                >
+                  <div
+                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
+                  >
+                    <div
+                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                    >
+                      F1
+                    </div>
+                  </div>
+                </button>
+              </div>
+              {/* Repeat similar structure for other floors */}
+              {/* F2 */}
+              <div
+                className={`w-[80px] h-[80px] relative ${currentFloor === "2" ? "mt-8" : ""}`}
+                style={{ marginBottom: "-15px" }}
+              >
+                <button
+                  onClick={() => {
+                    changeFloor("2");
+                  }}
+                >
+                  <div
+                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
+                  >
+                    <div
+                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                    >
+                      F2
+                    </div>
+                  </div>
+                </button>
+              </div>
+              {/* F3 */}
+              <div
+                className={`w-[80px] h-[80px] relative ${currentFloor === "3" ? "mt-8" : ""}`}
+                style={{ marginBottom: "-15px" }}
+              >
+                <button
+                  onClick={() => {
+                    changeFloor("3");
+                  }}
+                >
+                  <div
+                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
+                  >
+                    <div
+                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
+                    >
+                      F3
+                    </div>
+                  </div>
+                </button>
               </div>
             </div>
-          )}
-          {/*<div*/}
-          {/*  style={{*/}
-          {/*    position: "absolute",*/}
-          {/*    top: "67%", // Position at the vertical center of the page*/}
-          {/*    left: "50%",*/}
-          {/*    transform: "translate(0%, -100%)", // Center horizontally and vertically*/}
-          {/*    display: "flex",*/}
-          {/*    flexDirection: "column-reverse",*/}
-          {/*    justifyContent: "center",*/}
-          {/*    alignItems: "center",*/}
-          {/*    width: "87%",*/}
-          {/*    zIndex: 1000,*/}
-          {/*    color: "black",*/}
-          {/*  }}*/}
-          {/*>*/}
-
-          {/*</div>*/}
+            {havePath && (
+              <div
+                className={
+                  "w-full bottom-2 h-auto flex align-middle justify-center"
+                }
+              >
+                <div
+                  style={{ zIndex: 1000 }}
+                  className={
+                    "absolute bottom-3 rounded-full bg-white py-3 w-auto px-8 shadow-sm shadow-black flex flex-row gap-4 justify-center items-center"
+                  }
+                >
+                  {displayETAIcon ? (
+                    <>
+                      <Accessibility />
+                    </>
+                  ) : (
+                    <>
+                      <Footprints />
+                    </>
+                  )}
+                  <div className={"flex flex-col"}>
+                    <Label className={"text-xl text-gray-800"}>
+                      <b>{time < 1 ? "<1" : time.toFixed(0)}</b> min
+                    </Label>
+                    <Label className={"text-m text-gray-500"}>
+                      ({distance.toFixed(2)} ft)
+                    </Label>
+                  </div>
+                  <Label className={"text-2xl text-gray-800"}>
+                    ETA • {arrivalTime.getHours()}:
+                    {arrivalTime.getMinutes() + time < 10 ? "0" : ""}
+                    {(arrivalTime.getMinutes() + time).toFixed(0)}{" "}
+                  </Label>
+                </div>
+              </div>
+            )}
+            {/*<div*/}
+            {/*  style={{*/}
+            {/*    position: "absolute",*/}
+            {/*    top: "67%", // Position at the vertical center of the page*/}
+            {/*    left: "50%",*/}
+            {/*    transform: "translate(0%, -100%)", // Center horizontally and vertically*/}
+            {/*    display: "flex",*/}
+            {/*    flexDirection: "column-reverse",*/}
+            {/*    justifyContent: "center",*/}
+            {/*    alignItems: "center",*/}
+            {/*    width: "87%",*/}
+            {/*    zIndex: 1000,*/}
+            {/*    color: "black",*/}
+            {/*  }}*/}
+            {/*>*/}
+          </div>
         </div>
-      </div>
-    </SearchContext.Provider>
+      </SearchContext.Provider>
+    </ToastProvider>
   );
 };
 
