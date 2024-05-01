@@ -405,94 +405,98 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         </CardContent>
       </Card>
       {textDirections.length === 0 ? (
-        <Card
+        <div
           className={
-            " m-2 w-full h-full border-none bg-transparent shadow-none"
+            " my-2 w-full h-full border-none bg-transparent shadow-none"
           }
         >
           {/*<CardHeader>*/}
           {/*  <div >Text Directions:</div>*/}
           {/*</CardHeader>*/}
-          <CardContent
+          <div
             // style={{ maxHeight: "40vh", overflowY: "auto" }}
-            className={"overflow-y-auto max-h-[34vh]"}
+            className={" h-full "}
           >
-            <div className={"flex flex-col gap-2"}>
-              <div className={"flex flex-row gap-4"}>
-                <img
-                  src={EXIT}
-                  alt={"Exit"}
-                  className={"w-8 h-8 p-1 rounded-full"}
-                  style={{ backgroundColor: "#ef4444" }}
-                />
-                <p>Exit</p>
+            <div className={"flex-row flex justify-between m-2"}>
+              <div className={"flex flex-col gap-4"}>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={EXIT}
+                    alt={"Exit"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#ef4444" }}
+                  />
+                  <p>Exit</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={CONF}
+                    alt={"Conference"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#0680fc" }}
+                  />
+                  <p>Conference Room</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={DEPT}
+                    alt={"Department"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#fdf2d7" }}
+                  />
+                  <p>Department Room</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={INFO}
+                    alt={"Information"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#0056de" }}
+                  />
+                  <p>Information Stall</p>
+                </div>
               </div>
-              <div className={"flex flex-row gap-4"}>
-                <img
-                  src={CONF}
-                  alt={"Conference"}
-                  className={"w-8 h-8 p-1 rounded-full"}
-                  style={{ backgroundColor: "#0680fc" }}
-                />
-                <p>Conference Room</p>
-              </div>
-              <div className={"flex flex-row gap-4"}>
-                <img
-                  src={DEPT}
-                  alt={"Department"}
-                  className={"w-8 h-8 p-1 rounded-full"}
-                  style={{ backgroundColor: "#fdf2d7" }}
-                />
-                <p>Department Room</p>
-              </div>
-              <div className={"flex flex-row gap-4"}>
-                <img
-                  src={INFO}
-                  alt={"Information"}
-                  className={"w-8 h-8 p-1 rounded-full"}
-                  style={{ backgroundColor: "#0056de" }}
-                />
-                <p>Information Stall</p>
-              </div>
-              <div className={"flex flex-row gap-4"}>
-                <img
-                  src={LABS}
-                  alt={"Laboratory"}
-                  className={"w-8 h-8 p-1 rounded-full"}
-                  style={{ backgroundColor: "#acd5fe" }}
-                />
-                <p>Laboratory</p>
-              </div>
-              <div className={"flex flex-row gap-4"}>
-                <img
-                  src={TOILET}
-                  alt={"Bathroom"}
-                  className={"w-8 h-8 p-1 rounded-full"}
-                  style={{ backgroundColor: "#59aafd" }}
-                />
-                <p>Bathroom</p>
-              </div>
-              <div className={"flex flex-row gap-4"}>
-                <img
-                  src={RETL}
-                  alt={"Retail"}
-                  className={"w-8 h-8 p-1 rounded-full"}
-                  style={{ backgroundColor: "#e7a50a" }}
-                />
-                <p>Retail Location</p>
-              </div>
-              <div className={"flex flex-row gap-4"}>
-                <img
-                  src={SERV}
-                  alt={"Service"}
-                  className={"w-8 h-8 p-1 rounded-full"}
-                  style={{ backgroundColor: "#fad788" }}
-                />
-                <p>Service Station</p>
+              <div className={"flex flex-col gap-4 "}>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={LABS}
+                    alt={"Laboratory"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#acd5fe" }}
+                  />
+                  <p>Laboratory</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={TOILET}
+                    alt={"Bathroom"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#59aafd" }}
+                  />
+                  <p>Bathroom</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={RETL}
+                    alt={"Retail"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#e7a50a" }}
+                  />
+                  <p>Retail Location</p>
+                </div>
+                <div className={"flex flex-row gap-1"}>
+                  <img
+                    src={SERV}
+                    alt={"Service"}
+                    className={"w-7 h-7 p-[2px] rounded-full"}
+                    style={{ backgroundColor: "#fad788" }}
+                  />
+                  <p>Service Station</p>
+                </div>
               </div>
             </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       ) : (
         <Card
           className={
