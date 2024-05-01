@@ -3,6 +3,10 @@ import { FlowerForm } from "@/interfaces/flowerReq.ts";
 import { pieRequestData } from "@/components/Graph/GraphInterface/pieRequestData.tsx";
 import { polarRequestDataPriority } from "@/components/Graph/GraphInterface/polarRequestDataPriority";
 import PolarAreaChart from "@/components/Graph/PolarAreaGraphPriority";
+import LineGraph from "@/components/Graph/LineGraph";
+import { lineRequestData } from "@/components/Graph/GraphInterface/lineRequestData.tsx";
+import FlowerBarChart from "./FlowerBarChart";
+import { IntervalData } from "./IntervalData";
 
 function countPriority(arr: FlowerForm[]): polarRequestDataPriority[] {
   const countDictionary: Record<string, number> = {};
@@ -43,71 +47,111 @@ function countStatus(arr: FlowerForm[]): pieRequestData[] {
   return chartdata;
 }
 
-// function convertDateStringToMonth(dateString: string): string {
-//   const date = new Date(dateString);
-//   const monthIndex = date.getMonth();
-//   const months = [
-//     "January",
-//     "February",
-//     "March",
-//     "April",
-//     "May",
-//     "June",
-//     "July",
-//     "August",
-//     "September",
-//     "October",
-//     "November",
-//     "December",
-//   ];
-//   return months[monthIndex];
-// }
-//
-// function countMonth(arr: FlowerForm[]): lineRequestData[] {
-//   const monthOrder = [
-//     "January",
-//     "February",
-//     "March",
-//     "April",
-//     "May",
-//     "June",
-//     "July",
-//     "August",
-//     "September",
-//     "October",
-//     "November",
-//     "December",
-//   ];
-//
-//   const countDictionary: Record<string, number> = {};
-//
-//   arr.forEach((obj) => {
-//     const dateString = obj.dateSubmitted.toString(); // Convert Date to string
-//     const month = convertDateStringToMonth(dateString);
-//     countDictionary[month] = (countDictionary[month] || 0) + 1;
-//   });
-//
-//   // Sort the months based on the defined order
-//   const sortedMonths = monthOrder.filter(
-//     (month) => countDictionary[month] !== undefined,
-//   );
-//
-//   // Create line data in the sorted order
-//   const linedata: lineRequestData[] = sortedMonths.map((month) => ({
-//     month,
-//     request: countDictionary[month] || 0,
-//   }));
-//
-//   return linedata;
-// }
+function convertDateStringToMonth(dateString: string): string {
+  const date = new Date(dateString);
+  const monthIndex = date.getMonth();
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+  return months[monthIndex];
+}
+
+function countMonth(arr: FlowerForm[]): lineRequestData[] {
+  const monthOrder = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  const countDictionary: Record<string, number> = {};
+
+  arr.forEach((obj) => {
+    const dateString = obj.dateSubmitted.toString(); // Convert Date to string
+    const month = convertDateStringToMonth(dateString);
+    countDictionary[month] = (countDictionary[month] || 0) + 1;
+  });
+
+  // Sort the months based on the defined order
+  const sortedMonths = monthOrder.filter(
+    (month) => countDictionary[month] !== undefined,
+  );
+
+  // Create line data in the sorted order
+  const linedata: lineRequestData[] = sortedMonths.map((month) => ({
+    month,
+    request: countDictionary[month] || 0,
+  }));
+
+  return linedata;
+}
+
+function countByInterval(
+  arr: FlowerForm[],
+  numIntervals: number,
+): IntervalData[] {
+  // Step 1: Find the minimum and maximum values
+  let minValue = Infinity;
+  let maxValue = -Infinity;
+
+  arr.forEach((obj) => {
+    if (obj.total < minValue) minValue = obj.total;
+    if (obj.total > maxValue) maxValue = obj.total;
+  });
+
+  // Step 2: Calculate the interval size
+  const intervalSize = (maxValue - minValue) / numIntervals;
+
+  // Step 3: Group the data by intervals
+  const intervalData: IntervalData[] = [];
+
+  for (let i = 0; i < numIntervals; i++) {
+    const intervalMin = minValue + i * intervalSize;
+    const intervalMax = minValue + (i + 1) * intervalSize;
+    const intervalLabel = `${intervalMin.toFixed(2)}-${intervalMax.toFixed(2)}`;
+    const total = arr.filter(
+      (obj) => obj.total >= intervalMin && obj.total < intervalMax,
+    ).length;
+    intervalData.push({ interval: intervalLabel, request: total });
+  }
+  return intervalData;
+}
 
 function FlowerInsight({ props }: { props: FlowerForm[] }) {
   console.log(props);
   const flowerPieData = countStatus(props);
   const flowerPolarData = countPriority(props);
+  const flowerLineData = countMonth(props);
+  const flowerChartData = countByInterval(props, 5);
+  console.log(flowerChartData);
   return (
     <>
       <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
+        <div className="rounded-lg bg-gray-200 scale-0.25">
+          <LineGraph props={flowerLineData} />
+        </div>
+        <div className="rounded-lg bg-gray-200">
+          <FlowerBarChart props={flowerChartData} />
+        </div>
         <div className="rounded-lg bg-gray-200 scale-0.25">
           <PieGraph props={flowerPieData} />
         </div>

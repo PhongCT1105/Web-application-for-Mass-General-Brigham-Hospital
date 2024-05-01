@@ -39,7 +39,7 @@ function countMedicationStatus(arr: MedicationForm[]): pieRequestData[] {
       else if (normalizedStatus === "in progress")
         normalizedStatus = "In progress";
       else if (normalizedStatus === "canceled") normalizedStatus = "Canceled";
-      else if (normalizedStatus === "todo") normalizedStatus = "To do";
+      else if (normalizedStatus === "todo") normalizedStatus = "Todo";
       countDictionary[normalizedStatus] =
         (countDictionary[normalizedStatus] || 0) + 1;
     }

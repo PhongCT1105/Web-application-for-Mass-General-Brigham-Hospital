@@ -1,6 +1,5 @@
 import { Bar } from "react-chartjs-2";
 import ChartJS, { AnimationSpec } from "chart.js/auto";
-import { barRequestData } from "@/components/Graph/GraphInterface/barRequestData.tsx";
 import {
   ChartType,
   CategoryScale,
@@ -10,6 +9,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import { IntervalData } from "./IntervalData";
 
 ChartJS.register(
   CategoryScale,
@@ -20,17 +20,12 @@ ChartJS.register(
   Legend,
 );
 
-function BarGraph({ props }: { props: barRequestData[] }) {
-  // Sort the employee names alphabetically
-  const sortedEmployeeNames = props
-    .map((data) => data.employeeName)
-    .sort((a, b) => a.localeCompare(b)); // Sort alphabetically
-
+function BarGraph({ props }: { props: IntervalData[] }) {
   const barChartData = {
-    labels: sortedEmployeeNames,
+    labels: props.map((map) => map.interval),
     datasets: [
       {
-        label: "Employee",
+        label: "Interval",
         data: props.map((map) => map.request),
         backgroundColor: [
           "rgba(255, 99, 13, 0.2)",
@@ -76,7 +71,7 @@ function BarGraph({ props }: { props: barRequestData[] }) {
     plugins: {
       title: {
         display: true,
-        text: "Total Request by Employee",
+        text: "The intervals of the money for each flower request",
       },
     },
   };
