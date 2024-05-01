@@ -7,10 +7,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAchievements } from "@/context/achievementContext.tsx";
 import { useTheme } from "@/components/darkMode.tsx";
 
 export function ModeToggle() {
+  const { triggerAchievement } = useAchievements();
   const { setTheme } = useTheme();
+
+  function handleDarkModeAchievement() {
+    triggerAchievement("Dark Mode Achievement");
+  }
 
   return (
     <DropdownMenu>
@@ -25,7 +31,12 @@ export function ModeToggle() {
         <DropdownMenuItem onClick={() => setTheme("light")}>
           Light
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setTheme("dark")}>
+        <DropdownMenuItem
+          onClick={() => {
+            setTheme("dark");
+            handleDarkModeAchievement();
+          }}
+        >
           Dark
         </DropdownMenuItem>
         <DropdownMenuItem onClick={() => setTheme("system")}>

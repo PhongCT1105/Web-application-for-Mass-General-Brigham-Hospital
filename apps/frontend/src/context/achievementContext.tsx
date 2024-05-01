@@ -20,6 +20,11 @@ import Dismiss from "@/assets/dismiss.png";
 import Pill from "@/assets/pills.png";
 import Beginning from "@/assets/beginning.png";
 import Henry from "@/assets/nervouscat.png";
+import Shettler from "@/assets/Ukulele.png";
+import June from "@/assets/explodinghead.png";
+import Glasses from "@/assets/lensmakers.png";
+import Skull from "@/assets/skull.png";
+import Awesome from "@/assets/awesome.png";
 
 // Define the shape of the context value
 interface AchievementContextType {
@@ -46,9 +51,14 @@ const achievementsWithImages: Record<string, string> = {
   "Selective Visionary": Dismiss,
   "Mina Achievement": Mina,
   "Henry Achievement": Henry,
+  "Shettler Achievement": Shettler,
+  "June Achievement": June,
   "Bathroom Whisperer": Bathroom,
   "Medication Maverick": Pill,
   "Inaugural Explorer": Beginning,
+  "Dark Mode Achievement": Glasses,
+  "Error Achievement": Skull,
+  "Awesome Achievement": Awesome,
 };
 
 // Create the context with explicit typing
@@ -64,7 +74,7 @@ export const AchievementProvider: React.FC<AchievementProviderProps> = ({
   children,
 }) => {
   const { toast } = useToast();
-  const totalAchievements = 12; // total # of achievements - 1!
+  const totalAchievements = 17; // total # of achievements - 1!
   // State to manage achievements
   const [achievements, setAchievements] = useState<string[]>([]);
 
