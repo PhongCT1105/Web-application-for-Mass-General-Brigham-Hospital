@@ -124,7 +124,7 @@ function PatientInsight({ props }: { props: ScheduleForm[] }) {
 
   return (
     <>
-      <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
+      <div className="w-5/6 mx-auto m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
         <div className="rounded-lg bg-gray-200">
           <LineGraph props={patientLineData} />
         </div>
