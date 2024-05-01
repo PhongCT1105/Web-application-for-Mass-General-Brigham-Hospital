@@ -3,7 +3,7 @@ import {
   // CircleUser,
   // CreditCard,
   EditIcon,
-  LogIn,
+  // LogIn,
   LogOut,
   // LogOut,
   // FolderArchive,
@@ -520,11 +520,11 @@ export function Header() {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <Button
-                      className={"p-2"}
+                      className={"p-2 text-l text-gray-200 bg-blue-900"}
                       variant="outline"
                       onClick={handleLogin}
                     >
-                      <LogIn />
+                      Login
                     </Button>
                   </TooltipTrigger>
                   <TooltipContent>
