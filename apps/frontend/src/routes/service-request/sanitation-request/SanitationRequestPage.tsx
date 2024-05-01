@@ -20,7 +20,8 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip.tsx";
+} from "@/components/ui/tooltip";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -49,6 +50,7 @@ interface LocationWID {
 }
 
 export function Sanitation() {
+  const { triggerAchievement } = useAchievements();
   const now = new Date();
 
   const { toast } = useToast();
@@ -257,6 +259,14 @@ export function Sanitation() {
       console.log(form);
       handleFormClear();
       submit().then();
+      if (
+        locationLong.includes("Bathroom") ||
+        locationLong.includes("Restroom")
+      ) {
+        if (form.severity === "Low") {
+          triggerAchievement("Bathroom Whisperer");
+        }
+      }
       setButtonState("ghost");
     }
   };

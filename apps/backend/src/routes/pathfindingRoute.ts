@@ -172,28 +172,27 @@ router.post("/", async (req: Request, res: Response) => {
         // console.log("edgeId: " + edgeID);
 
         if (edgeID) {
-          const count = await PrismaClient.heatMap.count();
-          if (count == 400) {
-            const firstEntry = await PrismaClient.heatMap.findFirst();
+          await PrismaClient.heatMap.create({
+            data: edgeID,
+          });
+        }
 
+        const count = await PrismaClient.heatMap.count();
+        if (count > 400) {
+          const excess = count - 400;
+
+          for (let j = 0; j <= excess; j++) {
+            const firstEntry = await PrismaClient.heatMap.findFirst({
+              orderBy: { edgeID: "asc" },
+            });
             if (!firstEntry) {
               console.log("No entries found in EdgeListMap");
               return;
             }
-
-            // Delete the first entry
             await PrismaClient.heatMap.delete({
               where: {
                 id: firstEntry.id,
               },
-            });
-
-            await PrismaClient.heatMap.create({
-              data: edgeID,
-            });
-          } else {
-            await PrismaClient.heatMap.create({
-              data: edgeID,
             });
           }
         }

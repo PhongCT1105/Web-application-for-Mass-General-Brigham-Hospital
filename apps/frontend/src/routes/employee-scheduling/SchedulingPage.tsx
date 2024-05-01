@@ -1,9 +1,14 @@
-import { BigCalendar, CustomCalendarEvent } from "./components/BigCalendar";
+import {
+  BigCalendar,
+  CustomCalendarEvent,
+  downloadAsPDF,
+} from "./components/BigCalendar";
 import { requests } from "@/routes/employee-scheduling/data/requests.ts";
-// import { Events } from "@/routes/employee-scheduling/data/events.ts";
 import { Separator } from "@/components/ui/separator.tsx";
 import { fetchSavedSchedule } from "@/routes/employee-scheduling/utils/api.ts";
 import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button.tsx";
+import { Download } from "lucide-react";
 
 export const SchedulingPage = () => {
   const [savedData, setSavedData] = useState<CustomCalendarEvent[]>([]);
@@ -40,6 +45,10 @@ export const SchedulingPage = () => {
             By Mina Boktor & Phong Cao
           </p>
         </div>
+        <Button className={"mr-4"} variant={"outline"} onClick={downloadAsPDF}>
+          <Download className={"h-4 w-4 mr-2"} />
+          Download
+        </Button>
       </div>
       <Separator className="my-4" />
       {dataFetched && (

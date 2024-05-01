@@ -21,6 +21,8 @@ const downloadAsPDF = () => {
     pdf.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
     pdf.save("Report.pdf");
   });
+
+  // triggerAchievement("")
 };
 
 interface PopupContentProps {
