@@ -31,6 +31,7 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import MaintenanceInsight from "./insight-request/MaintenanceInsight";
 import SanitationInsight from "@/routes/insight-request/SanitationInsight.tsx";
+import { GenericForm } from "@/interfaces/genericReq.ts";
 
 function InsightRoute() {
   const [flowerLog, setFlowerLog] = useState<FlowerForm[]>([]);
@@ -39,6 +40,9 @@ function InsightRoute() {
   const [tranportLog, setTransportLog] = useState<ScheduleForm[]>([]);
   const [sanitationLog, setSanitationLog] = useState<SanitationForm[]>([]);
   const [maintenanceLog, setMaintenanceLog] = useState<MaintenanceForm[]>([]);
+  const [genericLog, setGenericLog] = useState<GenericForm[]>(
+    [] as GenericForm[],
+  );
 
   useEffect(() => {
     async function fetchData() {
@@ -56,6 +60,14 @@ function InsightRoute() {
           }),
         );
         setMedicineLog(cleanedData);
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "ME" + item.id.toString(),
+          name: item.employee,
+          location: item.location,
+          severity: item.medication[0].priority,
+          status: item.medication[0].status,
+        }));
+        setGenericLog((prevState) => [...prevState, ...genericData]);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -83,6 +95,16 @@ function InsightRoute() {
           status: item.status,
         }));
         setFlowerLog(cleanedData);
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "F" + item.reqID.toString(),
+          name: item.sender,
+          location: item.location,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -112,6 +134,16 @@ function InsightRoute() {
         );
 
         setSecurityLog(cleanedData);
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "SE" + item.reqID.toString(),
+          name: item.employee,
+          location: item.location,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -138,6 +170,15 @@ function InsightRoute() {
             comments: item.comments,
           }),
         );
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "SA" + item.reqId.toString(),
+          name: item.name,
+          location: item.location,
+          severity: item.severity,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
         setSanitationLog(cleanedData);
         console.log("successfully got data from get request");
       } catch (error) {
@@ -169,6 +210,15 @@ function InsightRoute() {
           }),
         );
         setTransportLog(cleanedData);
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "T" + item.reqID.toString(),
+          name: item.employeeName,
+          location: item.locationFrom,
+          severity: item.priority,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -195,6 +245,16 @@ function InsightRoute() {
           }),
         );
         setMaintenanceLog(cleanedData);
+        const genericData: GenericForm[] = cleanedData.map((item) => ({
+          reqId: "MA" + item.reqId.toString(),
+          name: item.name,
+          location: item.location,
+          severity: item.severity,
+          status: item.status,
+        }));
+
+        setGenericLog((prevState) => [...prevState, ...genericData]);
+
         console.log("successfully got data from get request");
       } catch (error) {
         console.error("Error fetching data:", error);
@@ -202,6 +262,7 @@ function InsightRoute() {
     }
     fetchData().then(() => console.log("maintenanceLog"));
   }, []);
+
   return (
     <div className={" scrollbar-hide"}>
       <div className="hidden md:block">
@@ -257,7 +318,7 @@ function InsightRoute() {
                           </div>
                         </div>
                         <Separator className="my-4" />
-                        <OverallInsight />
+                        <OverallInsight props={genericLog} />
                       </TabsContent>
                       <TabsContent
                         value="Flower Insight"

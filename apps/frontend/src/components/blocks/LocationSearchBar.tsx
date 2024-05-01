@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
 import CONF from "@/assets/nodetype-icons/icons8-analytics-48.png";
 import DEPT from "@/assets/nodetype-icons/icons8-hierarchy-32.png";
@@ -74,6 +75,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [obstacles, setObstacles] = useState(false);
   const [heatmap, setHeatmap] = useState(false);
 
+  const { triggerAchievement } = useAchievements();
+
   // Filter locations based on the current floor
   const filteredLocations: string[] = locations
     .filter((location) => {
@@ -116,6 +119,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setTabValue(pathAlgo.toLowerCase());
     // handleSearch();
     onSearch(locations[randStart].nodeID, locations[randEnd].nodeID);
+    triggerAchievement("Chance Trailblazer");
   };
 
   useEffect(() => {
@@ -129,9 +133,12 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setTabValue(tabVal);
   }, [tabVal]);
 
-  const handleClear = () => {
+  const handleReset = () => {
     setStartPoint("");
     setEndPoint("");
+    setAccessMode(false); // Reset accessMode state to false
+    setObstacles(false);
+    setHeatmap(false);
     onClear(); // Clear the line on the map
   };
 
@@ -389,7 +396,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
             </Button>
             <Button
               variant={"destructive"}
-              onClick={handleClear}
+              onClick={handleReset}
               className="w-full"
             >
               Reset

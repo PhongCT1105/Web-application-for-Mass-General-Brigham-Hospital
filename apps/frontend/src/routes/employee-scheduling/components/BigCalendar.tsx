@@ -24,6 +24,8 @@ import { toast } from "@/components/ui/use-toast.ts";
 import { CalendarToastDescription } from "@/routes/employee-scheduling/components/toastDescription.tsx";
 import { EventRequests } from "@/routes/employee-scheduling/data/requests.ts";
 import { CustomEventComponent } from "@/routes/employee-scheduling/components/CustomEventComponent.tsx";
+import jsPDF from "jspdf";
+import html2canvas from "html2canvas";
 
 export interface CustomCalendarEvent extends Event {
   id?: number;
@@ -39,6 +41,23 @@ interface CalendarProps {
   employeeSchedule: CustomCalendarEvent[];
   draggableCardData: EventRequests[];
 }
+
+// eslint-disable-next-line react-refresh/only-export-components
+export const downloadAsPDF = () => {
+  const input = document.getElementById("scheduling"); // Replace 'pdf-content' with the ID of the container element
+  if (!input) return;
+  const padding = 10;
+
+  html2canvas(input).then((canvas) => {
+    const imgData = canvas.toDataURL("image/png");
+    const pdf = new jsPDF();
+    const imgWidth = 210 - padding * 2; // A4 width in mm
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    pdf.addImage(imgData, "PNG", padding, padding, imgWidth, imgHeight);
+    pdf.save("Schedule.pdf");
+  });
+};
+
 export const BigCalendar = ({
   employeeSchedule,
   draggableCardData,
@@ -280,7 +299,7 @@ export const BigCalendar = ({
         </div>
       </div>
       <div className={"col-span-6 row-span-5 mr-1"}>
-        <div>
+        <div id={"scheduling"}>
           <DnDCalendar
             popup
             resizable

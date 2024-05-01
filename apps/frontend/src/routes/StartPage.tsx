@@ -11,13 +11,16 @@ import {
 import "react-bootstrap";
 import { useState } from "react";
 import { Footer } from "@/components/blocks/Footer.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 // import sidePic from "@/assets/BWH-HaleBuilding-770x950-Copyright_AntonGrassl-Esto_1-1.jpg";
 // import {Button} from "@/components/ui/button.tsx";
 
 export default function StartPage() {
+  const { triggerAchievement } = useAchievements();
   const [showPopup, setShowPopup] = useState(true);
   const toggleShowInfoPopup = () => {
     setShowPopup(!showPopup);
+    triggerAchievement("Selective Visionary");
   };
   return (
     <>
