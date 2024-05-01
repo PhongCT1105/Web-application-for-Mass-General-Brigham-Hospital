@@ -58,7 +58,7 @@ function OverallInsight({ props }: { props: GenericForm[] }) {
   console.log(overallRadardata);
   return (
     <>
-      <div className="rounded-lg bg-gray-200 outline-double outline-3 outline-offset-2 rounded-lg">
+      <div className="w-5/6 mx-auto rounded-lg bg-gray-200 outline-double outline-3 outline-offset-2 rounded-lg">
         <RadarChart props={overallRadardata} />
       </div>
     </>

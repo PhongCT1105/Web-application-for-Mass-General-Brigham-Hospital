@@ -35,6 +35,10 @@ import { GenericForm } from "@/interfaces/genericReq.ts";
 import bannerFlowerImage from "@/assets/flower-banner.png";
 import bannerMedicationImage from "@/assets/medication-banner.png";
 import bannerRequestImage from "@/assets/request-banner.png";
+import bannerSanitationImage from "@/assets/sanitation-banner.png";
+import bannerSecurityImage from "@/assets/security-banner.png";
+import bannerTransportImage from "@/assets/transportation-banner.png";
+import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
 
 function InsightRoute() {
   const [flowerLog, setFlowerLog] = useState<FlowerForm[]>([]);
@@ -419,9 +423,9 @@ function InsightRoute() {
                         <div
                           className="flex items-center justify-between"
                           style={{
-                            backgroundImage: `url(${bannerMedicationImage})`,
+                            backgroundImage: `url(${bannerTransportImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center 80%",
+                            backgroundPosition: "center 37%",
                             height: "100px",
                             borderRadius: "10px",
                             width: "83.5%",
@@ -453,9 +457,9 @@ function InsightRoute() {
                         <div
                           className="flex items-center justify-between"
                           style={{
-                            backgroundImage: `url(${bannerMedicationImage})`,
+                            backgroundImage: `url(${bannerSanitationImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center 80%",
+                            backgroundPosition: "center 65%",
                             height: "100px",
                             borderRadius: "10px",
                             width: "83.5%",
@@ -487,9 +491,9 @@ function InsightRoute() {
                         <div
                           className="flex items-center justify-between"
                           style={{
-                            backgroundImage: `url(${bannerMedicationImage})`,
+                            backgroundImage: `url(${bannerSecurityImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center 80%",
+                            backgroundPosition: "center",
                             height: "100px",
                             borderRadius: "10px",
                             width: "83.5%",
@@ -522,9 +526,9 @@ function InsightRoute() {
                         <div
                           className="flex items-center justify-between"
                           style={{
-                            backgroundImage: `url(${bannerMedicationImage})`,
+                            backgroundImage: `url(${bannerMaintenanceImage})`,
                             backgroundSize: "cover",
-                            backgroundPosition: "center 80%",
+                            backgroundPosition: "center 35%",
                             height: "100px",
                             borderRadius: "10px",
                             width: "83.5%",
