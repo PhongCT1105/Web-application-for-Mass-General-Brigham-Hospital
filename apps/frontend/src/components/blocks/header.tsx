@@ -260,6 +260,16 @@ export function Header() {
                   >
                     Scheduling
                   </a>
+                  <a
+                    href="/Dashboard"
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                      location.pathname === "/dashboard"
+                        ? "text-yellow-500"
+                        : "text-gray-300"
+                    }`}
+                  >
+                    Dashboard
+                  </a>
                 </>
               ) : (
                 <>
@@ -285,16 +295,6 @@ export function Header() {
                   </a>
                 </>
               )}
-              <a
-                href="/Dashboard"
-                className={`transition-colors hover:text-yellow-500 text-gray-300 ${
-                  location.pathname === "/dashboard"
-                    ? "text-yellow-500"
-                    : "text-gray-300"
-                }`}
-              >
-                Dashboard
-              </a>
               <a
                 href="/about-us"
                 className={`transition-colors hover:text-yellow-500 text-gray-300 ${
