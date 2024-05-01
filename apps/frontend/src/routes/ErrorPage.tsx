@@ -1,12 +1,17 @@
 import React from "react";
 import "leaflet/dist/leaflet.css";
 import { useAchievements } from "@/context/achievementContext.tsx";
+import { Button } from "@/components/ui/button.tsx";
 
 const ErrorPage: React.FC = () => {
   const { triggerAchievement } = useAchievements();
 
   function handleErrorAchievement() {
     triggerAchievement("Error Achievement");
+  }
+
+  function handleAwesomeAchievement() {
+    triggerAchievement("Awesome Achievement");
   }
 
   handleErrorAchievement();
@@ -27,6 +32,14 @@ const ErrorPage: React.FC = () => {
       <p className="text-lg" style={{ color: "hsl(var(--background))" }}>
         Team Awesome was here
       </p>
+      <Button
+        variant={"ghost"}
+        className="text-lg"
+        style={{ color: "hsl(var(--background))" }}
+        onClick={handleAwesomeAchievement}
+      >
+        Team Awesome was here
+      </Button>
     </div>
   );
 };
