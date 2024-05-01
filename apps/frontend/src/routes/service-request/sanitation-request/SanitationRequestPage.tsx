@@ -290,9 +290,11 @@ export function Sanitation() {
         <div className=" justify-center items-center">
           <Card className="border-none p-4">
             <CardContent>
-              <div className="flex justify-center">
-                <div className="w-2/3">
-                  <h1 className="text-2xl font-bold my-2">Employee Name</h1>
+              <div className="space-y-6">
+                <div className="w-1/4">
+                  <h1 className="text-2xl font-bold my-2 pb-2">
+                    Employee Name
+                  </h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline" className="">
@@ -312,218 +314,220 @@ export function Sanitation() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                <div className="justify-center items-center w-2/3">
-                  <h1 className="text-2xl font-bold my-2 pb-2">Location</h1>
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <Button variant="outline">
-                        {locationLong ? locationLong : "Select Location"}
-                      </Button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                      {locations.map((location, index) => (
-                        <DropdownMenuRadioItem
-                          key={index}
-                          value={location}
-                          // this needs to be nodeID
-                          onClick={() => {
-                            const locWithID = locationWithID.find(
-                              (loc) => loc.longName == location,
-                            );
-                            if (locWithID) {
-                              handleLocationChange(locWithID.nodeID);
-                              setLocationLong(locWithID.longName);
-                            }
-                          }}
-                        >
-                          {location}
-                        </DropdownMenuRadioItem>
-                      ))}
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold my-2 whitespace-nowrap pb-2">
-                    Time of Issue
-                  </h1>
-                  <Input
-                    type="time"
-                    placeholder="Time of Issue"
-                    id="time"
-                    onChange={handleFormChange}
-                    value={form.time}
-                    className="w-3/4"
-                  />
-                </div>
-              </div>
 
-              <div className="w-full overflow-x-auto py-2 justify-center">
-                <h1 className="text-2xl font-bold my-2 mr-6 justify-center">
-                  Type of Issue
-                </h1>
-                <RadioGroup
-                  defaultValue="comfortable"
-                  className="flex flex-col"
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem
-                      id="typeOfIssue"
-                      onClick={() => handleIssueChange("Spill")}
-                      value="Spill"
-                      checked={selectedTypeOfIssue === "Spill"}
-                    />
-                    <Label htmlFor="Spill" className=" ">
-                      Spill
-                    </Label>
-
-                    <RadioGroupItem
-                      id="typeOfIssue"
-                      onClick={() => handleIssueChange("BodilyFluid")}
-                      value="BodilyFluid"
-                      checked={selectedTypeOfIssue === "BodilyFluid"}
-                    />
-                    <Label htmlFor="BodilyFluid" className=" ">
-                      Bodily Fluid
-                    </Label>
-
-                    <RadioGroupItem
-                      id="typeOfIssue"
-                      onClick={() => handleIssueChange("FoulOdor")}
-                      value="FoulOdor"
-                      checked={selectedTypeOfIssue === "FoulOdor"}
-                    />
-                    <Label htmlFor="FoulOdor" className=" ">
-                      Foul Odor
-                    </Label>
-
-                    <RadioGroupItem
-                      id="typeOfIssue"
-                      onClick={() => handleIssueChange("Garbage")}
-                      value="Garbage"
-                      checked={selectedTypeOfIssue === "Garbage"}
-                    />
-                    <Label htmlFor="Garbage" className=" ">
-                      Garbage Accumulation
-                    </Label>
-                    <RadioGroupItem
-                      id="typeOfIssue"
-                      onClick={() => handleIssueChange("Other")}
-                      value="Other"
-                      checked={selectedTypeOfIssue === "Other"}
-                    />
-                    <Label htmlFor="Other" className=" ">
-                      Other{" "}
-                    </Label>
+                <div className="flex">
+                  <div className="w-1/3 py-2">
+                    <h1 className="text-2xl font-bold pb-2">Priority Level</h1>
+                    <RadioGroup defaultValue="comfortable">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="severity"
+                          onClick={() => handleSeverityChange("Low")}
+                          value="Low"
+                          checked={selectedSeverity === "Low"}
+                        />
+                        <Label htmlFor="r1" className=" ">
+                          Low: Routine cleaning or maintenance.
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="severity"
+                          onClick={() => handleSeverityChange("Medium")}
+                          value="Medium"
+                          checked={selectedSeverity === "Medium"}
+                        />
+                        <Label htmlFor="r1" className=" ">
+                          Medium: Timely attention to prevent risks.
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="severity"
+                          onClick={() => handleSeverityChange("High")}
+                          value="High"
+                          checked={selectedSeverity === "High"}
+                        />
+                        <Label htmlFor="r3" className=" ">
+                          High: Urgent for safety and functionality.
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="severity"
+                          onClick={() => handleSeverityChange("Emergency")}
+                          value="Emergency"
+                          checked={selectedSeverity === "Emergency"}
+                        />
+                        <Label htmlFor="r4" className=" ">
+                          Emergency: Immediate action to prevent harm.
+                        </Label>
+                      </div>
+                    </RadioGroup>
                   </div>
-                </RadioGroup>
+
+                  <div className="w-1/6 ml-12">
+                    <h1 className="text-2xl font-bold my-2 pb-2">
+                      Type of Issue
+                    </h1>
+                    <RadioGroup defaultValue="comfortable">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="typeOfIssue"
+                          onClick={() => handleIssueChange("Spill")}
+                          value="Spill"
+                          checked={selectedTypeOfIssue === "Spill"}
+                        />
+                        <Label htmlFor="Spill" className="">
+                          Spill
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="typeOfIssue"
+                          onClick={() => handleIssueChange("BodilyFluid")}
+                          value="BodilyFluid"
+                          checked={selectedTypeOfIssue === "BodilyFluid"}
+                        />
+                        <Label htmlFor="BodilyFluid" className=" ">
+                          Bodily Fluid
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="typeOfIssue"
+                          onClick={() => handleIssueChange("FoulOdor")}
+                          value="FoulOdor"
+                          checked={selectedTypeOfIssue === "FoulOdor"}
+                        />
+                        <Label htmlFor="FoulOdor" className=" ">
+                          Foul Odor
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="typeOfIssue"
+                          onClick={() => handleIssueChange("Garbage")}
+                          value="Garbage"
+                          checked={selectedTypeOfIssue === "Garbage"}
+                        />
+                        <Label htmlFor="Garbage" className=" ">
+                          Garbage Accumulation
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="typeOfIssue"
+                          onClick={() => handleIssueChange("Other")}
+                          value="Other"
+                          checked={selectedTypeOfIssue === "Other"}
+                        />
+                        <Label htmlFor="Other" className=" ">
+                          Other{" "}
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  <div className="w-1/4 pl-20">
+                    <h1 className="text-2xl font-bold my-2 pb-2">Status</h1>
+                    <RadioGroup defaultValue="comfortable">
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="status"
+                          onClick={() => handleStatusChange("Unassigned")}
+                          value="Unassigned"
+                          checked={selectedStatus === "Unassigned"}
+                        />
+                        <Label htmlFor="r1" className=" ">
+                          Unassigned
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="status"
+                          onClick={() => handleStatusChange("Assigned")}
+                          value="Assigned"
+                          checked={selectedStatus === "Assigned"}
+                        />
+                        <Label htmlFor="r1" className="">
+                          Assigned
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="status"
+                          onClick={() => handleStatusChange("InProgress")}
+                          value="InProgress"
+                          checked={selectedStatus === "InProgress"}
+                        />
+                        <Label htmlFor="r3" className="">
+                          In Progress
+                        </Label>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <RadioGroupItem
+                          id="status"
+                          onClick={() => handleStatusChange("Closed")}
+                          value="Closed"
+                          checked={selectedStatus === "Closed"}
+                        />
+                        <Label htmlFor="r4" className="">
+                          Closed
+                        </Label>
+                      </div>
+                    </RadioGroup>
+                  </div>
+
+                  <div className="w-1/4 ">
+                    <h1 className="text-2xl font-bold my-2 pb-2">Location</h1>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                          {locationLong ? locationLong : "Select Location"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                        {locations.map((location, index) => (
+                          <DropdownMenuRadioItem
+                            key={index}
+                            value={location}
+                            // this needs to be nodeID
+                            onClick={() => {
+                              const locWithID = locationWithID.find(
+                                (loc) => loc.longName == location,
+                              );
+                              if (locWithID) {
+                                handleLocationChange(locWithID.nodeID);
+                                setLocationLong(locWithID.longName);
+                              }
+                            }}
+                          >
+                            {location}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  </div>
+
+                  <div>
+                    <h1 className="text-2xl font-bold my-2 whitespace-nowrap pb-2">
+                      Time of Issue
+                    </h1>
+                    <Input
+                      type="time"
+                      placeholder="Time of Issue"
+                      id="time"
+                      onChange={handleFormChange}
+                      value={form.time}
+                      className="w-3/4"
+                    />
+                  </div>
+                </div>
               </div>
 
-              <div className="flex justify-center">
-                <div className="w-1/4 pl-12 py-4">
-                  <h1 className="text-2xl font-bold pb-2 pl-12">Status</h1>
-                  <RadioGroup defaultValue="comfortable">
-                    <div className="flex items-center space-x-2 pl-12">
-                      <RadioGroupItem
-                        id="status"
-                        onClick={() => handleStatusChange("Unassigned")}
-                        value="Unassigned"
-                        checked={selectedStatus === "Unassigned"}
-                      />
-                      <Label htmlFor="r1" className=" ">
-                        Unassigned
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2 pl-12">
-                      <RadioGroupItem
-                        id="status"
-                        onClick={() => handleStatusChange("Assigned")}
-                        value="Assigned"
-                        checked={selectedStatus === "Assigned"}
-                      />
-                      <Label htmlFor="r1" className="">
-                        Assigned
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2 pl-12">
-                      <RadioGroupItem
-                        id="status"
-                        onClick={() => handleStatusChange("InProgress")}
-                        value="InProgress"
-                        checked={selectedStatus === "InProgress"}
-                      />
-                      <Label htmlFor="r3" className="">
-                        In Progress
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2 pl-12">
-                      <RadioGroupItem
-                        id="status"
-                        onClick={() => handleStatusChange("Closed")}
-                        value="Closed"
-                        checked={selectedStatus === "Closed"}
-                      />
-                      <Label htmlFor="r4" className="">
-                        Closed
-                      </Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-
-                <div className="w-1/3">
-                  <h1 className="text-2xl font-bold pb-2 py-4">
-                    Severity Level
-                  </h1>
-                  <RadioGroup defaultValue="comfortable">
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        id="severity"
-                        onClick={() => handleSeverityChange("Low")}
-                        value="Low"
-                        checked={selectedSeverity === "Low"}
-                      />
-                      <Label htmlFor="r1" className=" ">
-                        Low: Routine cleaning or maintenance.
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        id="severity"
-                        onClick={() => handleSeverityChange("Medium")}
-                        value="Medium"
-                        checked={selectedSeverity === "Medium"}
-                      />
-                      <Label htmlFor="r1" className=" ">
-                        Medium: Timely attention to prevent risks.
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        id="severity"
-                        onClick={() => handleSeverityChange("High")}
-                        value="High"
-                        checked={selectedSeverity === "High"}
-                      />
-                      <Label htmlFor="r3" className=" ">
-                        High: Urgent for safety and functionality.
-                      </Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem
-                        id="severity"
-                        onClick={() => handleSeverityChange("Emergency")}
-                        value="Emergency"
-                        checked={selectedSeverity === "Emergency"}
-                      />
-                      <Label htmlFor="r4" className=" ">
-                        Emergency: Immediate action to prevent harm.
-                      </Label>
-                    </div>
-                  </RadioGroup>
-                </div>
-              </div>
-
-              <div className="justify-center items-center flex">
-                <div className="w-1/2 ">
+              <div className="flex space-x-10">
+                <div className="w-1/2">
                   <h1 className="text-2xl font-bold my-2 pb-2">
                     Description of Issue
                   </h1>
@@ -534,9 +538,7 @@ export function Sanitation() {
                     value={form.description}
                   />
                 </div>
-              </div>
-              <div className="justify-center items-center flex">
-                <div className="w-1/2 justify-center">
+                <div className="w-1/2">
                   <h1 className="text-2xl font-bold my-2 pb-2">
                     Additional Comments (optional)
                   </h1>
@@ -550,7 +552,7 @@ export function Sanitation() {
               </div>
             </CardContent>
 
-            <CardFooter className="flex justify-between mr-80 ml-80">
+            <CardFooter className="flex justify-between">
               <TooltipProvider>
                 {buttonState === "ghost" && (
                   <Tooltip>

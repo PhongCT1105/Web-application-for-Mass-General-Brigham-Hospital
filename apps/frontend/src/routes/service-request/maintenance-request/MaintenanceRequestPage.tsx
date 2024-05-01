@@ -305,8 +305,9 @@ export function Maintenance() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
+
                 <div className="flex">
-                  <div className="w-1/3  ">
+                  <div className="w-1/3">
                     <h1 className="text-2xl font-bold my-2 pb-2">
                       Severity Level
                     </h1>
@@ -475,7 +476,7 @@ export function Maintenance() {
                     <h1 className="text-2xl font-bold my-2 pb-2">Location</h1>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline" className="">
+                        <Button variant="outline">
                           {locationLong ? locationLong : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
@@ -503,7 +504,7 @@ export function Maintenance() {
                 </div>
 
                 <div className="flex">
-                  <div className="w-1/2 ">
+                  <div className="w-1/2">
                     <h1 className="text-2xl font-bold my-2 pb-2">
                       Description of Issue
                     </h1>

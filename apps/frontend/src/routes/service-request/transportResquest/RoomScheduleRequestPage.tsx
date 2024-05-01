@@ -507,11 +507,11 @@ export const ScheduleContent = () => {
 
             <CardFooter className="flex justify-between">
               <Button
-                variant={"destructive"}
-                className="mr-20"
-                onClick={clearForm}
+                variant={buttonState}
+                className="p-5 border"
+                onClick={handleSubmit}
               >
-                Clear
+                Submit
               </Button>
               {/*<Button className="p-5" onClick={handleSubmit}>*/}
               {/*  Submit*/}
@@ -520,12 +520,8 @@ export const ScheduleContent = () => {
                 {buttonState === "ghost" && (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button
-                        variant={buttonState}
-                        className="p-5 border"
-                        onClick={handleSubmit}
-                      >
-                        Submit
+                      <Button variant={"destructive"} onClick={clearForm}>
+                        Clear
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
