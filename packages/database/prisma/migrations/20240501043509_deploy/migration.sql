@@ -17,6 +17,7 @@ CREATE TABLE "Nodes" (
     "nodeType" TEXT NOT NULL,
     "longName" TEXT NOT NULL,
     "shortName" TEXT NOT NULL,
+    "obstacle" BOOLEAN NOT NULL DEFAULT false,
 
     CONSTRAINT "Nodes_pkey" PRIMARY KEY ("nodeID")
 );
@@ -82,13 +83,13 @@ CREATE TABLE "sanitationRequest" (
 -- CreateTable
 CREATE TABLE "securityRequest" (
     "reqID" SERIAL NOT NULL,
-    "ename" TEXT NOT NULL,
     "location" TEXT NOT NULL,
     "employee" TEXT NOT NULL,
     "situation" TEXT NOT NULL,
     "call" BOOLEAN NOT NULL,
     "status" TEXT NOT NULL,
     "priority" TEXT NOT NULL,
+    "dateSubmitted" TEXT,
 
     CONSTRAINT "securityRequest_pkey" PRIMARY KEY ("reqID")
 );
@@ -106,6 +107,7 @@ CREATE TABLE "internalTransportRequest" (
     "time" TEXT NOT NULL,
     "note" TEXT NOT NULL,
     "status" TEXT NOT NULL,
+    "dateSubmitted" TEXT,
 
     CONSTRAINT "internalTransportRequest_pkey" PRIMARY KEY ("reqID")
 );
@@ -153,8 +155,33 @@ CREATE TABLE "maintenanceRequest" (
     "typeOfIssue" TEXT NOT NULL,
     "status" TEXT NOT NULL,
     "description" TEXT NOT NULL,
+    "dateSubmitted" TEXT,
 
     CONSTRAINT "maintenanceRequest_pkey" PRIMARY KEY ("reqId")
+);
+
+-- CreateTable
+CREATE TABLE "heatMap" (
+    "id" SERIAL NOT NULL,
+    "edgeID" TEXT NOT NULL,
+
+    CONSTRAINT "heatMap_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "scheduleEvent" (
+    "id" SERIAL NOT NULL,
+    "color" TEXT NOT NULL,
+    "start" TIMESTAMP(3) NOT NULL,
+    "end" TIMESTAMP(3) NOT NULL,
+    "employee" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
+    "priority" TEXT NOT NULL,
+    "shift" INTEGER NOT NULL,
+    "weekday" INTEGER NOT NULL,
+
+    CONSTRAINT "scheduleEvent_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
