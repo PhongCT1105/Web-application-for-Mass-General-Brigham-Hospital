@@ -134,143 +134,153 @@ export function Header() {
           >
             <div className={"flex w-full items-center gap-4 pr-4 text-nowrap"}>
               {!isLoading && isAuthenticated ? (
-                <>
-                  <a
-                    href=""
-                    className="flex items-center gap-2 text-lg font-semibold md:text-base"
-                  >
-                    <img
-                      src={Logo}
-                      alt={"brigham logo"}
-                      className="min-w-[30px]"
-                    />
-                  </a>
-                  <a
-                    href="/home"
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${
-                      location.pathname === "/home"
-                        ? "text-yellow-500 "
-                        : "text-gray-300"
-                    }`}
-                  >
-                    Navigation
-                  </a>
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button
-                        className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${
-                          location.pathname === "/map-editor/map" ||
-                          location.pathname === "/map-editor/table"
-                            ? "text-yellow-500"
-                            : "text-gray-300"
-                        }`}
+                  <>
+                      <a
+                          href=""
+                          className="flex items-center gap-2 text-lg font-semibold md:text-base"
                       >
-                        Map Editor
-                        <ChevronDown className={" h-auto translate-y-1"} />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent style={{ zIndex: 1000 }}>
-                      <DropdownMenuLabel>Editor View</DropdownMenuLabel>
-                      <DropdownMenuSeparator />
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            (window.location.href = "/map-editor/table")
-                          }
-                        >
-                          <EditIcon className="mr-2 h-4 w-4" />
-                          <span>Table View</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            (window.location.href = "/map-editor/map")
-                          }
-                        >
-                          <MapIcon className="mr-2 h-4 w-4" />
-                          <span>Map View</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
-
-                  <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
-                      <button
-                        className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${
-                          location.pathname === "/service-requests" ||
-                          location.pathname === "/request-log-Page" ||
-                          location.pathname === "/insight"
-                            ? "text-yellow-500"
-                            : "text-gray-300"
-                        }`}
+                          <img
+                              src={Logo}
+                              alt={"brigham logo"}
+                              className="min-w-[30px]"
+                          />
+                      </a>
+                      <a
+                          href="/home"
+                          className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                              location.pathname === "/home"
+                                  ? "text-yellow-500 "
+                                  : "text-gray-300"
+                          }`}
                       >
-                        {location.pathname === "/insight" ? (
-                          <>Insight</>
-                        ) : location.pathname === "/request-log-Page" ? (
-                          <>Request Log</>
-                        ) : (
-                          <>Service Requests</>
-                        )}
-                        <ChevronDown className={" h-auto translate-y-1"} />
-                      </button>
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent style={{ zIndex: 1000 }}>
-                      <DropdownMenuGroup>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            (window.location.href = "/service-requests")
-                          }
-                        >
-                          <span>Service Requests</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => (window.location.href = "/insight")}
-                        >
-                          <span>Insight</span>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() =>
-                            (window.location.href = "/request-log-Page")
-                          }
-                        >
-                          <span>Request Logs</span>
-                        </DropdownMenuItem>
-                      </DropdownMenuGroup>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                          Navigation
+                      </a>
 
-                  <a
-                    href="/csv-table"
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${
-                      location.pathname === "/csv-table"
-                        ? "text-yellow-500"
-                        : "text-gray-300"
-                    }`}
-                  >
-                    CSV Table
-                  </a>
-                  <a
-                    href="/scheduling"
-                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${
-                      location.pathname === "/scheduling"
-                        ? "text-yellow-500"
-                        : "text-gray-300"
-                    }`}
-                  >
-                    Scheduling
-                  </a>
-                </>
+                      <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                              <button
+                                  className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${
+                                      location.pathname === "/map-editor/map" ||
+                                      location.pathname === "/map-editor/table"
+                                          ? "text-yellow-500"
+                                          : "text-gray-300"
+                                  }`}
+                              >
+                                  Map Editor
+                                  <ChevronDown className={" h-auto translate-y-1"}/>
+                              </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent style={{zIndex: 1000}}>
+                              <DropdownMenuLabel>Editor View</DropdownMenuLabel>
+                              <DropdownMenuSeparator/>
+                              <DropdownMenuGroup>
+                                  <DropdownMenuItem
+                                      onClick={() =>
+                                          (window.location.href = "/map-editor/table")
+                                      }
+                                  >
+                                      <EditIcon className="mr-2 h-4 w-4"/>
+                                      <span>Table View</span>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                      onClick={() =>
+                                          (window.location.href = "/map-editor/map")
+                                      }
+                                  >
+                                      <MapIcon className="mr-2 h-4 w-4"/>
+                                      <span>Map View</span>
+                                  </DropdownMenuItem>
+                              </DropdownMenuGroup>
+                          </DropdownMenuContent>
+                      </DropdownMenu>
+
+                      <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                              <button
+                                  className={`transition-colors hover:text-yellow-500 text-gray-300 flex ${
+                                      location.pathname === "/service-requests" ||
+                                      location.pathname === "/request-log-Page" ||
+                                      location.pathname === "/insight"
+                                          ? "text-yellow-500"
+                                          : "text-gray-300"
+                                  }`}
+                              >
+                                  {location.pathname === "/insight" ? (
+                                      <>Insight</>
+                                  ) : location.pathname === "/request-log-Page" ? (
+                                      <>Request Log</>
+                                  ) : (
+                                      <>Service Requests</>
+                                  )}
+                                  <ChevronDown className={" h-auto translate-y-1"}/>
+                              </button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent style={{zIndex: 1000}}>
+                              <DropdownMenuGroup>
+                                  <DropdownMenuItem
+                                      onClick={() =>
+                                          (window.location.href = "/service-requests")
+                                      }
+                                  >
+                                      <span>Service Requests</span>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                      onClick={() => (window.location.href = "/insight")}
+                                  >
+                                      <span>Insight</span>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                      onClick={() =>
+                                          (window.location.href = "/request-log-Page")
+                                      }
+                                  >
+                                      <span>Request Logs</span>
+                                  </DropdownMenuItem>
+                              </DropdownMenuGroup>
+                          </DropdownMenuContent>
+                      </DropdownMenu>
+
+                      <a
+                          href="/csv-table"
+                          className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                              location.pathname === "/csv-table"
+                                  ? "text-yellow-500"
+                                  : "text-gray-300"
+                          }`}
+                      >
+                          CSV Table
+                      </a>
+                      <a
+                          href="/scheduling"
+                          className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                              location.pathname === "/scheduling"
+                                  ? "text-yellow-500"
+                                  : "text-gray-300"
+                          }`}
+                      >
+                          Scheduling
+                      </a>
+                      <a
+                          href="/Dashboard"
+                          className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                              location.pathname === "/dashboard"
+                                  ? "text-yellow-500"
+                                  : "text-gray-300"
+                          }`}
+                      >
+                          Dashboard
+                      </a>
+                  </>
               ) : (
-                <>
-                  <a
-                    href=""
-                    className="flex items-center gap-2 text-lg font-semibold md:text-base"
-                  >
-                    <img
-                      src={WordLogo}
-                      alt={"brigham logo"}
-                      className="min-w-[300px] pt-[25px]"
+                  <>
+                      <a
+                          href=""
+                          className="flex items-center gap-2 text-lg font-semibold md:text-base"
+                      >
+                          <img
+                              src={WordLogo}
+                              alt={"brigham logo"}
+                              className="min-w-[300px] pt-[25px]"
                     />
                   </a>
                   <a
@@ -285,16 +295,6 @@ export function Header() {
                   </a>
                 </>
               )}
-              <a
-                href="/Dashboard"
-                className={`transition-colors hover:text-yellow-500 text-gray-300 ${
-                  location.pathname === "/dashboard"
-                    ? "text-yellow-500"
-                    : "text-gray-300"
-                }`}
-              >
-                Dashboard
-              </a>
               <a
                 href="/about-us"
                 className={`transition-colors hover:text-yellow-500 text-gray-300 ${
