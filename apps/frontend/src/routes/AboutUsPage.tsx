@@ -37,6 +37,14 @@ const AboutMePage = () => {
     triggerAchievement("Henry Achievement");
   }
 
+  function handleShettlerAchievement() {
+    triggerAchievement("Shettler Achievement");
+  }
+
+  function handleJuneAchievement() {
+    triggerAchievement("June Achievement");
+  }
+
   return (
     <div>
       <div className="about-the-team w-5/6 pt-2 pb-5 gap-5 m-auto">
@@ -121,6 +129,7 @@ const AboutMePage = () => {
               quote={
                 '"Do you remember that old lake? The one by Santa Fe?" -Dean Summerwind'
               }
+              onClick={handleJuneAchievement}
             />
           </div>
           <div className={"flex flex-row pt-10 pb-5 justify-between"}>
@@ -183,6 +192,7 @@ const AboutMePage = () => {
                 quote={
                   '"You have never been given sufficient evidence that worms can\'t fly" - Sun Tzu'
                 }
+                onClick={handleShettlerAchievement}
               />
               <AboutBlock
                 Name={"Owen Lacey"}

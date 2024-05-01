@@ -20,6 +20,8 @@ import Dismiss from "@/assets/dismiss.png";
 import Pill from "@/assets/pills.png";
 import Beginning from "@/assets/beginning.png";
 import Henry from "@/assets/nervouscat.png";
+import Shettler from "@/assets/Ukulele.png";
+import June from "@/assets/explodinghead.png";
 
 // Define the shape of the context value
 interface AchievementContextType {
@@ -46,6 +48,8 @@ const achievementsWithImages: Record<string, string> = {
   "Selective Visionary": Dismiss,
   "Mina Achievement": Mina,
   "Henry Achievement": Henry,
+  "Shettler Achievement": Shettler,
+  "June Achievement": June,
   "Bathroom Whisperer": Bathroom,
   "Medication Maverick": Pill,
   "Inaugural Explorer": Beginning,
