@@ -1,7 +1,15 @@
 import React from "react";
 import "leaflet/dist/leaflet.css";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
 const ErrorPage: React.FC = () => {
+  const { triggerAchievement } = useAchievements();
+
+  function handleErrorAchievement() {
+    triggerAchievement("Error Achievement");
+  }
+
+  handleErrorAchievement();
   return (
     <div
       className="dark flex flex-col h-screen justify-center items-center"

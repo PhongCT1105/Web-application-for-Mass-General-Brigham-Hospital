@@ -23,6 +23,7 @@ import Henry from "@/assets/nervouscat.png";
 import Shettler from "@/assets/Ukulele.png";
 import June from "@/assets/explodinghead.png";
 import Glasses from "@/assets/lensmakers.png";
+import Skull from "@/assets/skull.png";
 
 // Define the shape of the context value
 interface AchievementContextType {
@@ -55,6 +56,7 @@ const achievementsWithImages: Record<string, string> = {
   "Medication Maverick": Pill,
   "Inaugural Explorer": Beginning,
   "Dark Mode Achievement": Glasses,
+  "Error Achievement": Skull,
 };
 
 // Create the context with explicit typing
