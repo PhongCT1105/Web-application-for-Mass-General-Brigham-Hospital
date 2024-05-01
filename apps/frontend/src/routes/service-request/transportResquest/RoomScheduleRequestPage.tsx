@@ -506,39 +506,30 @@ export const ScheduleContent = () => {
             </CardContent>
 
             <CardFooter className="flex justify-between">
-              <Button
-                variant={buttonState}
-                className="p-5 border"
-                onClick={handleSubmit}
-              >
-                Submit
-              </Button>
               {/*<Button className="p-5" onClick={handleSubmit}>*/}
               {/*  Submit*/}
               {/*</Button>*/}
               <TooltipProvider>
-                {buttonState === "ghost" && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant={"destructive"} onClick={clearForm}>
-                        Clear
-                      </Button>
-                    </TooltipTrigger>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      disabled={buttonState === "ghost"}
+                      className="p-5 "
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </TooltipTrigger>
+                  {buttonState === "ghost" && (
                     <TooltipContent>
                       <p>Please fill out all fields</p>
                     </TooltipContent>
-                  </Tooltip>
-                )}
-                {buttonState !== "ghost" && (
-                  <Button
-                    variant={buttonState}
-                    className="p-5"
-                    onClick={handleSubmit}
-                  >
-                    Submit
-                  </Button>
-                )}
+                  )}
+                </Tooltip>
               </TooltipProvider>
+              <Button variant={"destructive"} onClick={clearForm}>
+                Clear
+              </Button>
             </CardFooter>
           </Card>
         </div>
