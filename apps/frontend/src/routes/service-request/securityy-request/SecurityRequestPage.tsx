@@ -251,6 +251,7 @@ export const SecurityForm = () => {
       //console.log(securityRequest);
       console.log(requestList);
       clearReq();
+      setButtonState("ghost");
     }
   }
 
@@ -447,35 +448,27 @@ export const SecurityForm = () => {
                 </div>
               </div>
             </CardContent>
-
-            <CardFooter className="flex justify-between">
-              <TooltipProvider>
-                {buttonState === "ghost" && (
+            <CardFooter className="felx flex-row-reverse">
+              <div className={"ml-2"}>
+                <TooltipProvider>
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <Button
-                        variant={buttonState}
-                        className="p-5 border"
+                        disabled={buttonState === "ghost"}
+                        className="p-5 "
                         onClick={submit}
                       >
                         Submit
                       </Button>
                     </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Please fill out all fields</p>
-                    </TooltipContent>
+                    {buttonState === "ghost" && (
+                      <TooltipContent>
+                        <p>Please fill out all fields</p>
+                      </TooltipContent>
+                    )}
                   </Tooltip>
-                )}
-                {buttonState !== "ghost" && (
-                  <Button
-                    variant={buttonState}
-                    className="p-5 border ml-auto"
-                    onClick={submit}
-                  >
-                    Submit
-                  </Button>
-                )}
-              </TooltipProvider>
+                </TooltipProvider>
+              </div>
               <Button variant={"destructive"} onClick={clearReq}>
                 Clear
               </Button>
