@@ -487,7 +487,7 @@ export const ScheduleContent = () => {
                   <Input
                     type="text"
                     id="reason"
-                    placeholder="Enter Reason Here"
+                    placeholder="Enter reason here."
                     onChange={handleFormChange}
                     value={form.reason}
                   />

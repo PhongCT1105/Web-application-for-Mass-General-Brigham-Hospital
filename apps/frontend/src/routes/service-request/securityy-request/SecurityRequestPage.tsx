@@ -297,7 +297,7 @@ export const SecurityForm = () => {
                 {/* Data input */}
                 <div className="flex">
                   {/* Assignment Input */}
-                  <div className="w-1/5 py-2">
+                  <div className="w-1/2 py-2">
                     <h1 className="text-2xl font-bold pb-2">Request Status:</h1>
                     <RadioGroup id={"status"} defaultValue="unassigned">
                       <div className="flex items-center space-x-2">
@@ -340,35 +340,38 @@ export const SecurityForm = () => {
                   </div>
 
                   {/* Location Input */}
-                  <div className="w-1/5 ml-12">
-                    <h1 className="text-2xl font-bold my-2">Location</h1>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
-                          {securityRequest.location
-                            ? securityRequest.location
-                            : "Select Location"}
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                        {locations.map((location, index) => (
-                          <DropdownMenuRadioItem
-                            key={index}
-                            value={location}
-                            onClick={() => handleLocation(location)}
-                          >
-                            {location}
-                          </DropdownMenuRadioItem>
-                        ))}
-                      </DropdownMenuContent>
-                    </DropdownMenu>
+                  <div className="w-1/2 ml-12 ">
+                    <h1 className="text-2xl font-bold my-2 mx-6">Location</h1>
+                    <div className="mx-6">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="outline">
+                            {securityRequest.location
+                              ? securityRequest.location
+                              : "Select Location"}
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                          {locations.map((location, index) => (
+                            <DropdownMenuRadioItem
+                              key={index}
+                              value={location}
+                              onClick={() => handleLocation(location)}
+                            >
+                              {location}
+                            </DropdownMenuRadioItem>
+                          ))}
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </div>
                   </div>
 
                   {/* Employee Input */}
 
                   {/* Priority Input */}
-                  <div className={"w-1/5 ml-12"}>
-                    <h1 className="text-2xl font-bold my-2 ">
+
+                  <div className={"w-1/4 ml-12"}>
+                    <h1 className="text-2xl font-bold my-2">
                       Request Priority:
                     </h1>
                     {/*<Label htmlFor="priority">Request Priority:</Label>*/}
@@ -436,50 +439,47 @@ export const SecurityForm = () => {
                     </h1>
                     <Textarea
                       id="situation"
-                      placeholder="Enter Your Name Here"
+                      placeholder="Type your description here."
                       onChange={handleText}
                       value={securityRequest.situation}
                     ></Textarea>
                   </div>
                 </div>
               </div>
-              <CardFooter className="flex justify-between">
-                <TooltipProvider>
-                  {buttonState === "ghost" && (
-                    <Tooltip>
-                      <TooltipTrigger asChild>
-                        <Button
-                          variant={buttonState}
-                          className="p-5 border"
-                          onClick={submit}
-                        >
-                          Submit
-                        </Button>
-                      </TooltipTrigger>
-                      <TooltipContent>
-                        <p>Please fill out all fields</p>
-                      </TooltipContent>
-                    </Tooltip>
-                  )}
-                  {buttonState !== "ghost" && (
-                    <Button
-                      variant={buttonState}
-                      className="p-5"
-                      onClick={submit}
-                    >
-                      Submit
-                    </Button>
-                  )}
-                </TooltipProvider>
-                <Button
-                  variant={"destructive"}
-                  className="mr-20"
-                  onClick={clearReq}
-                >
-                  Clear
-                </Button>
-              </CardFooter>
             </CardContent>
+
+            <CardFooter className="flex justify-between">
+              <TooltipProvider>
+                {buttonState === "ghost" && (
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={buttonState}
+                        className="p-5 border"
+                        onClick={submit}
+                      >
+                        Submit
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Please fill out all fields</p>
+                    </TooltipContent>
+                  </Tooltip>
+                )}
+                {buttonState !== "ghost" && (
+                  <Button
+                    variant={buttonState}
+                    className="p-5 border ml-auto"
+                    onClick={submit}
+                  >
+                    Submit
+                  </Button>
+                )}
+              </TooltipProvider>
+              <Button variant={"destructive"} onClick={clearReq}>
+                Clear
+              </Button>
+            </CardFooter>
           </Card>
         </div>
       </div>

@@ -359,7 +359,7 @@ export function Maintenance() {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/6 ml-12">
+                  <div className="w-1/6 ml-20 pl-13 space-x-2">
                     <h1 className="text-2xl font-bold my-2 pb-2">
                       Type of Issue
                     </h1>
@@ -422,7 +422,7 @@ export function Maintenance() {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/4 pl-20">
+                  <div className="w-1/5 pl-20 ml-20">
                     <h1 className="text-2xl font-bold my-2 pb-2">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
@@ -472,7 +472,7 @@ export function Maintenance() {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/4">
+                  <div className="w-1/4 pl-20 ml-20">
                     <h1 className="text-2xl font-bold my-2 pb-2">Location</h1>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -503,7 +503,7 @@ export function Maintenance() {
                   </div>
                 </div>
 
-                <div className="flex">
+                <div className="flex space-x-10">
                   <div className="w-1/2">
                     <h1 className="text-2xl font-bold my-2 pb-2">
                       Description of Issue
@@ -540,18 +540,14 @@ export function Maintenance() {
                 {buttonState !== "ghost" && (
                   <Button
                     variant={buttonState}
-                    className="p-5"
+                    className="p-5 border ml-auto"
                     onClick={handleSubmit}
                   >
                     Submit
                   </Button>
                 )}
               </TooltipProvider>
-              <Button
-                variant={"destructive"}
-                className="mr-20"
-                onClick={handleFormClear}
-              >
+              <Button variant={"destructive"} onClick={handleFormClear}>
                 Clear
               </Button>
             </CardFooter>
