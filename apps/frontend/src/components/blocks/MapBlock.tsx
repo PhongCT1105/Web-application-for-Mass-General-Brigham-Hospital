@@ -404,7 +404,7 @@ export const MapBlock: React.FC = () => {
         zoomControl: true,
         preferCanvas: true,
         layers: [Layers[floor]],
-      }).setView([1750, 2700], -2);
+      }).setView([1700, 2500], -2);
       // L.control
       //   .layers(baseLayers, undefined, {
       //     collapsed: false,
@@ -539,7 +539,7 @@ export const MapBlock: React.FC = () => {
           layers: [LayerF1],
         });
         mapRef.current = map;
-        map.setView([1750, 2700], -2);
+        map.setView([1700, 2500], -2);
         // L.control
         //   .layers(baseLayers, undefined, {
         //     collapsed: false,
