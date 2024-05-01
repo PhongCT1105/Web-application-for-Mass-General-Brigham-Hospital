@@ -41,7 +41,14 @@ interface Form {
   description: string;
 }
 
+interface LocationWID {
+  longName: string;
+  nodeID: string;
+}
+
 export function Maintenance() {
+  const now = new Date();
+
   const { toast } = useToast();
 
   async function submit() {
@@ -63,9 +70,11 @@ export function Maintenance() {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [submittedForms, setSubmittedForms] = useState<Form[]>([]);
   const [employees, setEmployees] = useState<string[]>([]);
-
   const [locations, setLocationsTo] = useState<string[]>([]);
   const [buttonState, setButtonState] = useState<buttonColor>("ghost");
+
+  const [locationLong, setLocationLong] = useState<string>("");
+  const [locationWithID, setLocationWID] = useState<LocationWID[]>([]);
 
   // Get locations from database
   useEffect(() => {
@@ -74,7 +83,7 @@ export function Maintenance() {
         const response = await axios.get("/api/mapreq/nodes");
         const rawData = response.data;
 
-        const extractedLocations = rawData.map(
+        const extractedLocations: LocationWID[] = rawData.map(
           (item: {
             nodeID: string;
             xcoord: number;
@@ -84,12 +93,18 @@ export function Maintenance() {
             nodeType: string;
             longName: string;
             shortName: string;
-          }) => item.longName,
+          }) => ({
+            longName: item.longName,
+            nodeID: item.nodeID,
+          }),
         );
-        // alphabetizing location list
-        extractedLocations.sort((a: string, b: string) => a.localeCompare(b));
+        // alphabetizing location list by longName
+        extractedLocations.sort((a: LocationWID, b: LocationWID) =>
+          a.longName.localeCompare(b.longName),
+        );
         // set locations to filtered alphabetized location list
-        setLocationsTo(extractedLocations);
+        setLocationsTo(extractedLocations.map((location) => location.longName));
+        setLocationWID(extractedLocations);
 
         console.log("Successfully fetched data from the API.");
       } catch (error) {
@@ -154,6 +169,7 @@ export function Maintenance() {
     setForm((prevState) => ({
       ...prevState,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
 
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
@@ -255,13 +271,19 @@ export function Maintenance() {
 
   return (
     <>
-      <div className="flex flex-col border-none rounded-md text mx-10 my-5 py-1">
-        <div className=" justify-center items-center">
+      <div
+        className="border-none rounded-md text mx-10 my-5 py-1"
+        style={{
+          paddingLeft: "6%",
+          paddingRight: "6%",
+        }}
+      >
+        <div className="justify-center items-center">
           <Card className="border-none p-4">
             <CardContent>
               <div className="space-y-6">
                 <div className="w-1/4">
-                  <h1 className="text-2xl font-bold my-2 pb-2">
+                  <h1 className="text-2xl font-bold my-2 pb-2 ">
                     Employee Name
                   </h1>
                   <DropdownMenu>
@@ -283,16 +305,6 @@ export function Maintenance() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-                {/*<div className="w-1/4">*/}
-                {/*  <h1 className="text-2xl font-bold ">Employee Name</h1>*/}
-                {/*  <Input*/}
-                {/*    type="text"*/}
-                {/*    id="name"*/}
-                {/*    placeholder="Select Your Name Here"*/}
-                {/*    onChange={handleFormChange}*/}
-                {/*    value={form.name}*/}
-                {/*  />*/}
-                {/*</div>*/}
                 <div className="flex">
                   <div className="w-1/3  ">
                     <h1 className="text-2xl font-bold my-2 pb-2">
@@ -464,7 +476,7 @@ export function Maintenance() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <Button variant="outline" className="">
-                          {form.location ? form.location : "Select Location"}
+                          {locationLong ? locationLong : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
@@ -472,7 +484,15 @@ export function Maintenance() {
                           <DropdownMenuRadioItem
                             key={index}
                             value={location}
-                            onClick={() => handleLocationChange(location)}
+                            onClick={() => {
+                              const locWithID = locationWithID.find(
+                                (loc) => loc.longName == location,
+                              );
+                              if (locWithID) {
+                                handleLocationChange(locWithID.nodeID);
+                                setLocationLong(locWithID.longName);
+                              }
+                            }}
                           >
                             {location}
                           </DropdownMenuRadioItem>

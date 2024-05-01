@@ -5,8 +5,18 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion.tsx";
+import { Button } from "@/components/ui/button.tsx";
+import { CircleHelp } from "lucide-react";
+import { useSearchParams } from "react-router-dom";
+import React, { useState } from "react";
 
 const InstructionsPage = () => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [params, setUseParams] = useSearchParams();
+  const [location, setLocation] = useState<string>(
+    params.get("location") || "",
+  );
+
   return (
     <div className={"m-auto w-4/5"}>
       <div className={"text-2xl font-bold text-center mt-12"}>
@@ -14,9 +24,15 @@ const InstructionsPage = () => {
       </div>
       <Separator className={"my-4"}></Separator>
 
-      <Accordion type={"single"} collapsible>
+      <Accordion type={"single"} collapsible defaultValue={location}>
         <AccordionItem value={"nav"}>
-          <AccordionTrigger>Navigation Page</AccordionTrigger>
+          <AccordionTrigger
+            onClick={() => {
+              setLocation("nav");
+            }}
+          >
+            Navigation Page
+          </AccordionTrigger>
           <AccordionContent>
             <p>
               The navigation page is located under the "Navigation" tab at the
@@ -28,9 +44,9 @@ const InstructionsPage = () => {
             </p>
 
             <p>
-              Click once on a node to set it as your start node, click twice on
-              a node to set it as your end node. Please click twice on "Find
-              Path" to get directions.{" "}
+              Click once on a node to set it as your start node, click on
+              another node to set it as your end node. Click on "Find Path" to
+              get directions.{" "}
             </p>
           </AccordionContent>
         </AccordionItem>
@@ -101,4 +117,28 @@ const InstructionsPage = () => {
   );
 };
 
-export default InstructionsPage;
+type Props = {
+  className?: string;
+  location: string;
+};
+
+const InstructionsLink: React.FC<Props> = (props) => {
+  return (
+    <Button
+      variant={"invisible"}
+      className={props.className}
+      title={"Need Help?"}
+      onClick={() =>
+        (window.location.href = "/instructions?location=" + props.location)
+      }
+    >
+      <CircleHelp color={"gray"} className={"hover:opacity-0"} />
+      <CircleHelp
+        color={"black"}
+        className={"absolute hover:opacity-100 opacity-0"}
+      />
+    </Button>
+  );
+};
+
+export { InstructionsPage, InstructionsLink };

@@ -1,5 +1,4 @@
 "use client";
-
 import * as React from "react";
 import {
   ColumnDef,
@@ -15,7 +14,6 @@ import {
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-
 import {
   Table,
   TableBody,
@@ -47,12 +45,14 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 interface DataTableProps {
   columns: ColumnDef<Medication>[];
 }
 
 export function MedicineRequest({ columns }: DataTableProps) {
   const now = new Date();
+  const { triggerAchievement } = useAchievements();
 
   const [employees, setEmployees] = React.useState<string[]>([]);
   const [submission, setSubmission] = React.useState<Medication[]>([]);
@@ -98,6 +98,9 @@ export function MedicineRequest({ columns }: DataTableProps) {
       },
     });
     if (res.status == 200) {
+      if (form.medication.length > 4) {
+        triggerAchievement("Medication Maverick");
+      }
       console.log("success");
     }
   };
@@ -179,7 +182,13 @@ export function MedicineRequest({ columns }: DataTableProps) {
   });
 
   return (
-    <div className="space-y-4">
+    <div
+      className="space-y-4"
+      style={{
+        paddingLeft: "8%",
+        paddingRight: "8%",
+      }}
+    >
       <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>

@@ -72,7 +72,7 @@ export function DataTable<TData, TValue>({
   });
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-4 w-5/6 mx-auto">
       {searchBar && (
         <Input
           placeholder={`Search items by ${searchBar.title}...`}

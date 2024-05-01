@@ -34,7 +34,6 @@ type rStatus = "unassigned" | "assigned" | "inprogress" | "closed";
 type rPriority = "low" | "medium" | "high" | "emergency" | "";
 
 interface securityRequest {
-  ename: string;
   location: string;
   employee: string;
   situation: string;
@@ -44,9 +43,10 @@ interface securityRequest {
 }
 
 export const SecurityForm = () => {
+  const now = new Date();
+
   const { toast } = useToast();
   const [securityRequest, setSecurityRequest] = useState<securityRequest>({
-    ename: "",
     location: "",
     situation: "",
     employee: "",
@@ -68,7 +68,6 @@ export const SecurityForm = () => {
    */
   const clearReq = () => {
     setSecurityRequest({
-      ename: "",
       location: "",
       employee: "",
       situation: "",
@@ -145,7 +144,6 @@ export const SecurityForm = () => {
 
   const checkEmpty = () => {
     return (
-      securityRequest.ename === "" ||
       securityRequest.location === "" ||
       securityRequest.situation === "" ||
       securityRequest.employee === ""
@@ -181,6 +179,7 @@ export const SecurityForm = () => {
     setSecurityRequest((prevState) => ({
       ...prevState,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
     checkEmpty() ? setButtonState("ghost") : setButtonState("default");
   };
@@ -229,7 +228,6 @@ export const SecurityForm = () => {
   async function submit() {
     console.log(securityRequest);
     if (
-      securityRequest.ename === "" ||
       securityRequest.location === "" ||
       securityRequest.situation === "" ||
       securityRequest.employee === ""
@@ -258,14 +256,20 @@ export const SecurityForm = () => {
 
   return (
     <>
-      <div className="flex flex-col overflow-hidden rounded-md text my-5 py-12">
+      <div
+        className="flex flex-col overflow-hidden rounded-md text my-5 py-1"
+        style={{
+          paddingLeft: "8%",
+          paddingRight: "8%",
+        }}
+      >
         <div className=" justify-center items-center">
           <Card className={"border-none p-4"}>
             <CardContent className={"grid gap-4"}>
               <div className="space-y-1">
                 {/* Name Input */}
                 <div className="w-1/5">
-                  <h1 className="text-2xl font-bold my-2">Employee</h1>
+                  <h1 className="text-2xl font-bold my-2">Employee Name</h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline">

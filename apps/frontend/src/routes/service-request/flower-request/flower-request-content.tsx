@@ -39,7 +39,7 @@ import fiftyPercent from "@/assets/discount-tags/fifty-percent-discount.png";
 import ten from "@/assets/discount-tags/ten-percent-discount.webp";
 import twenty from "@/assets/discount-tags/twenty-percent-discount.webp";
 import thirty from "@/assets/discount-tags/thirty-percent-discount.webp";
-import bannerFlowerImage from "@/assets/flower-banner.jpg";
+import bannerFlowerImage from "@/assets/flower-banner.png";
 
 import {
   Table,
@@ -57,6 +57,7 @@ import {
   DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.tsx";
+import { useAchievements } from "@/context/achievementContext.tsx";
 
 export interface cartItem {
   cost: number;
@@ -72,10 +73,12 @@ export interface requestForm {
   total: number;
   priority: string;
   status: string;
-  dateSubmitted: Date;
 }
 
 export const FlowerContent = () => {
+  const now = new Date();
+  const { triggerAchievement } = useAchievements();
+
   const [cartItems, setCartItems] = useState<cartItem[]>([]);
   const totalCost = cartItems.reduce((sum, item) => sum + item.cost, 0);
   const [locations, setLocations] = useState<string[]>([]);
@@ -87,7 +90,6 @@ export const FlowerContent = () => {
     total: totalCost,
     priority: "Low",
     status: "Unassigned",
-    dateSubmitted: new Date(),
   });
 
   useEffect(() => {
@@ -149,6 +151,7 @@ export const FlowerContent = () => {
       priority: prev.priority,
       status: prev.status,
       [id]: value,
+      dateSubmitted: now.toDateString(),
     }));
   };
 
@@ -162,6 +165,9 @@ export const FlowerContent = () => {
     });
     if (res.status == 200) {
       console.log("success");
+      if (form.total > 500) {
+        triggerAchievement("Big Spender");
+      }
     }
   }
 
@@ -203,6 +209,8 @@ export const FlowerContent = () => {
           backgroundPosition: "center",
           height: "100px",
           borderRadius: "10px",
+          width: "83.5%",
+          marginLeft: "8%",
         }}
       >
         <div
@@ -210,7 +218,7 @@ export const FlowerContent = () => {
           style={{
             color: "white",
             marginLeft: "20px",
-            textShadow: "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
+            textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
           }}
         >
           <h2 className="text-2xl font-semibold tracking-tight">
@@ -218,17 +226,13 @@ export const FlowerContent = () => {
           </h2>
           <p
             className="text-sm text-muted-foreground"
-            style={{
-              color: "white",
-              textShadow:
-                "-1px 0 black, 0 1px black, 1px 0 black, 0 -1px black",
-            }}
+            style={{ color: "white", fontWeight: "bold" }}
           >
             By Mina Boktor & Alexander Kraemling
           </p>
           <p
             className="text-sm text-muted-foreground"
-            style={{ color: "white" }}
+            style={{ color: "white", fontWeight: "bold" }}
           >
             Send a loved one a special gift
           </p>
@@ -440,9 +444,9 @@ export const FlowerContent = () => {
           </Popover>
         </div>
       </div>
-      <Separator className="my-4" />
+      <Separator className="my-4 w-5/6 mx-auto" />
       <div className="relative">
-        <ScrollArea>
+        <ScrollArea style={{ paddingLeft: "8%", paddingRight: "8%" }}>
           <div className="flex space-x-4 pb-4 my-3 ml-2">
             {flowerCards.map((flower) => (
               <Card
@@ -532,18 +536,30 @@ export const FlowerContent = () => {
               </Card>
             ))}
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar
+            orientation="horizontal"
+            style={{
+              paddingLeft: "8%",
+              paddingRight: "8%",
+            }}
+          />
         </ScrollArea>
       </div>
-      <div className="mt-6 space-y-1">
+      <div
+        className="mt-6 space-y-1"
+        style={{
+          paddingLeft: "8%",
+          paddingRight: "8%",
+        }}
+      >
         <h2 className="text-2xl font-semibold tracking-tight">Add-ons</h2>
         <p className="text-sm text-muted-foreground">
           Give something a little more
         </p>
       </div>
-      <Separator className="my-4" />
+      <Separator className="my-4 w-5/6 mx-auto" />
       <div className="relative">
-        <ScrollArea>
+        <ScrollArea style={{ paddingLeft: "8%", paddingRight: "8%" }}>
           <div className="flex space-x-4 my-3 pb-4 ml-2">
             {addOnCards.map((addon) => (
               <Card
@@ -632,7 +648,13 @@ export const FlowerContent = () => {
               </Card>
             ))}
           </div>
-          <ScrollBar orientation="horizontal" />
+          <ScrollBar
+            orientation="horizontal"
+            style={{
+              paddingLeft: "8%",
+              paddingRight: "8%",
+            }}
+          />
         </ScrollArea>
       </div>
     </div>

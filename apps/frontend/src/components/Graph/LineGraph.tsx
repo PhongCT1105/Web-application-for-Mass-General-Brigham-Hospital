@@ -10,6 +10,7 @@ import {
   Legend,
 } from "chart.js";
 import { AnimationSpec } from "chart.js/auto";
+import { lineRequestData } from "./GraphInterface/lineRequestData";
 
 ChartJS.register(
   CategoryScale,
@@ -21,24 +22,14 @@ ChartJS.register(
   Legend,
 );
 
-interface requestData {
-  months: string;
-  user: number;
-  staff: number;
-}
-function LineGraph({ props }: { props: requestData[] }) {
+function LineGraph({ props }: { props: lineRequestData[] }) {
   const lineChartData = {
-    labels: props.map((map) => map.months),
+    labels: props.map((map) => map.month),
     datasets: [
       {
         label: "Users",
-        data: props.map((map) => map.user),
+        data: props.map((map) => map.request),
         borderColor: "rgb(75, 192, 192)",
-      },
-      {
-        label: "Staff",
-        data: props.map((map) => map.staff),
-        borderColor: "red",
       },
     ],
   };
@@ -64,7 +55,7 @@ function LineGraph({ props }: { props: requestData[] }) {
     plugins: {
       title: {
         display: true,
-        text: "Line Graph of total users",
+        text: "Total users by month",
       },
     },
   };

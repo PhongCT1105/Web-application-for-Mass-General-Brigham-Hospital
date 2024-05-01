@@ -3,6 +3,11 @@ import { GitHubLogoIcon } from "@radix-ui/react-icons";
 import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import { Card } from "@/components/ui/card.tsx";
 import { Button } from "@/components/ui/button.tsx";
+import {
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+} from "@/components/ui/popover.tsx";
 
 interface AboutInfo {
   Name: string;
@@ -14,7 +19,8 @@ interface AboutInfo {
   Github?: string;
   Linkdin?: string;
   Imagepath: string;
-  FunFact?: string;
+  quote?: string;
+  onClick?: () => void; // Add onClick prop
 }
 
 const AboutBlock = ({
@@ -27,24 +33,40 @@ const AboutBlock = ({
   Github,
   Linkdin,
   Imagepath,
+  quote,
+  onClick, // Add onClick prop
 }: AboutInfo) => {
   return (
     <Card
-      className={"flex flex-col justify-space-between mw-700 p-5 bg-secondary"}
+      className={
+        "flex flex-col justify-space-between mw-700 p-5 bg-secondary shadow-lg"
+      }
+      onClick={onClick}
     >
-      <img
-        src={Imagepath}
-        alt={Name}
-        style={{ height: 250, width: 250, objectFit: "cover" }}
-        className={"object-fit-cover rounded-md"}
-      />
+      <Popover>
+        <PopoverTrigger>
+          <img
+            src={Imagepath}
+            alt={Name}
+            style={{ height: 250, width: 250, objectFit: "cover" }}
+            className={"object-fit-cover rounded-md"}
+          />
+        </PopoverTrigger>
+        {quote && (
+          <PopoverContent>
+            <div className={""}>Quote: {quote}</div>
+          </PopoverContent>
+        )}
+      </Popover>
       <div>
         <h4 className={"text-center font-bold"}>{Name}</h4>
         {role && <p>Role: {role}</p>}
         {devrole && <p>Software Role: {devrole}</p>}
-        <p>Class Year: {ClassYear}</p>
+        {ClassYear && <p>Class Year: {ClassYear}</p>}
         {major && <p>Major: {major}</p>}
-        <p>Email: {Email}</p>
+        <p>
+          Email: <a href={"mailto:" + Email}>{Email}</a>
+        </p>
       </div>
       <div className={"mx-auto w-1/2"}>
         <div className={"flex justify-between"}>

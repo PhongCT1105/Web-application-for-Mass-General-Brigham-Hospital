@@ -3,6 +3,8 @@ import {
   // CircleUser,
   // CreditCard,
   EditIcon,
+  LogIn,
+  LogOut,
   // LogOut,
   // FolderArchive,
   // Key,
@@ -40,6 +42,13 @@ import { useAuth0 } from "@auth0/auth0-react";
 import React, { useEffect, useRef, useState } from "react";
 import { useLocation } from "react-router-dom";
 import { searchList } from "@/components/blocks/searchList.ts";
+import AutoLogout from "./AutoLogout";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip.tsx";
 
 export function Header() {
   const location = useLocation();
@@ -64,6 +73,7 @@ export function Header() {
 
     setResults(searchResults);
   };
+
   const handleClickOutside = (e: MouseEvent) => {
     if (
       dropdownRef.current &&
@@ -105,6 +115,8 @@ export function Header() {
       },
     });
   };
+
+  AutoLogout(1000 * 60 * 5);
 
   return (
     <div className="flex w-full flex-col">
@@ -238,6 +250,16 @@ export function Header() {
                   >
                     CSV Table
                   </a>
+                  <a
+                    href="/scheduling"
+                    className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                      location.pathname === "/scheduling"
+                        ? "text-yellow-500"
+                        : "text-gray-300"
+                    }`}
+                  >
+                    Scheduling
+                  </a>
                 </>
               ) : (
                 <>
@@ -263,6 +285,16 @@ export function Header() {
                   </a>
                 </>
               )}
+              <a
+                href="/dashboard"
+                className={`transition-colors hover:text-yellow-500 text-gray-300 ${
+                  location.pathname === "/dashboard"
+                    ? "text-yellow-500"
+                    : "text-gray-300"
+                }`}
+              >
+                Dashboard
+              </a>
               <a
                 href="/about-us"
                 className={`transition-colors hover:text-yellow-500 text-gray-300 ${
@@ -465,23 +497,41 @@ export function Header() {
             </form>
 
             <ModeToggle />
+
             {!isLoading && isAuthenticated ? (
-              <Button
-                className={" w-20"}
-                variant="default"
-                onClick={handleLogout}
-              >
-                Log Out
-                {/*<LogOut className="mr-2 h-4 w-4 ml-2" />*/}
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className={"p-2"}
+                      variant="outline"
+                      onClick={handleLogout}
+                    >
+                      <LogOut />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Logout</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             ) : (
-              <Button
-                className={" w-20"}
-                variant="default"
-                onClick={handleLogin}
-              >
-                Log In
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <Button
+                      className={"p-2"}
+                      variant="outline"
+                      onClick={handleLogin}
+                    >
+                      <LogIn />
+                    </Button>
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    <p>Login</p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
             )}
 
             {/*<DropdownMenu>*/}
