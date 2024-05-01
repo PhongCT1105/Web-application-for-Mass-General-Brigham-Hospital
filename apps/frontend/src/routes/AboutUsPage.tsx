@@ -78,7 +78,7 @@ const AboutMePage = () => {
               Github={"https://github.com/tsnhim"}
               Linkdin={"https://www.linkedin.com/in/tntran03/"}
               Imagepath={Trang}
-              quote={""}
+              quote={"\"It ain't over til it's over\" - Yogi Berra"}
             />
           </div>
           <div className={"flex flex-row pt-10 pb-5 justify-between"}>
