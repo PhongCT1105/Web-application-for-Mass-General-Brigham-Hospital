@@ -25,20 +25,16 @@ import {
 } from "lucide-react";
 import { direction, useSearchContext } from "@/components/blocks/MapBlock.tsx";
 import { InstructionsLink } from "@/routes/InstructionsPage.tsx";
-// import {Label} from "@/components/ui/label.tsx";
 import { useAchievements } from "@/context/achievementContext.tsx";
 
-// interface changeMarker {
-//   start: string;
-//   end: string;
-//   setStart: React.Dispatch<React.SetStateAction<string>>;
-//   setEnd: React.Dispatch<React.SetStateAction<string>>;
-// }
-//
-// interface locationData {
-//   nodeID: string;
-//   longName: string;
-// }
+import CONF from "@/assets/nodetype-icons/icons8-analytics-48.png";
+import DEPT from "@/assets/nodetype-icons/icons8-hierarchy-32.png";
+import EXIT from "@/assets/nodetype-icons/icons8-exit-48.png";
+import INFO from "@/assets/nodetype-icons/icons8-info-48.png";
+import LABS from "@/assets/nodetype-icons/icons8-flask-48.png";
+import TOILET from "@/assets/nodetype-icons/icons8-toilet-48.png";
+import RETL from "@/assets/nodetype-icons/icons8-shopping-basket-48.png";
+import SERV from "@/assets/nodetype-icons/icons8-palm-up-hand-48.png";
 
 interface SearchBarProps {
   locations: {
@@ -121,6 +117,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     setEndPointID(locations[randEnd].nodeID);
     changePathfindingStrategy(pathAlgo);
     setTabValue(pathAlgo.toLowerCase());
+    // handleSearch();
     onSearch(locations[randStart].nodeID, locations[randEnd].nodeID);
     triggerAchievement("Chance Trailblazer");
   };
@@ -146,10 +143,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center bg-transparent p-4 w-[350px]">
+    <div className="flex flex-col items-center bg-transparent p-2 w-[350px] h-[89vh]">
       <Card className={"w-full shadow"}>
         <CardHeader>
-          <CardTitle className={"flex justify-between items-center"}>
+          <CardTitle className={"flex justify-between items-center py-0 gap-0"}>
             <div>Directions</div>
             <InstructionsLink location={"nav"}></InstructionsLink>
           </CardTitle>
@@ -407,36 +404,128 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           </div>
         </CardContent>
       </Card>
-
-      <Card
-        className={"m-4 w-full h-full  border-none bg-transparent shadow-none"}
-      >
-        {/*<CardHeader>*/}
-        {/*  <div >Text Directions:</div>*/}
-        {/*</CardHeader>*/}
-        <CardContent
-          // style={{ maxHeight: "40vh", overflowY: "auto" }}
-          className={"overflow-y-auto max-h-[40vh]"}
+      {textDirections.length === 0 ? (
+        <Card
+          className={
+            " m-2 w-full h-full border-none bg-transparent shadow-none"
+          }
         >
-          {textDirections.map((direction, index) => (
-            <div
-              key={index}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                // backgroundColor: index % 2 === 0 ? "#ADD8E6" : "#f3f4f6"
-              }}
-            >
-              <img
-                src={direction.icon}
-                alt="arrow-icon"
-                style={{ width: "24px", height: "24px", marginRight: "8px" }}
-              />
-              <span>{direction.text}</span>
+          {/*<CardHeader>*/}
+          {/*  <div >Text Directions:</div>*/}
+          {/*</CardHeader>*/}
+          <CardContent
+            // style={{ maxHeight: "40vh", overflowY: "auto" }}
+            className={"overflow-y-auto max-h-[34vh]"}
+          >
+            <div className={"flex flex-col gap-2"}>
+              <div className={"flex flex-row gap-4"}>
+                <img
+                  src={EXIT}
+                  alt={"Exit"}
+                  className={"w-8 h-8 p-1 rounded-full"}
+                  style={{ backgroundColor: "#ef4444" }}
+                />
+                <p>Exit</p>
+              </div>
+              <div className={"flex flex-row gap-4"}>
+                <img
+                  src={CONF}
+                  alt={"Conference"}
+                  className={"w-8 h-8 p-1 rounded-full"}
+                  style={{ backgroundColor: "#0680fc" }}
+                />
+                <p>Conference Room</p>
+              </div>
+              <div className={"flex flex-row gap-4"}>
+                <img
+                  src={DEPT}
+                  alt={"Department"}
+                  className={"w-8 h-8 p-1 rounded-full"}
+                  style={{ backgroundColor: "#fdf2d7" }}
+                />
+                <p>Department Room</p>
+              </div>
+              <div className={"flex flex-row gap-4"}>
+                <img
+                  src={INFO}
+                  alt={"Information"}
+                  className={"w-8 h-8 p-1 rounded-full"}
+                  style={{ backgroundColor: "#0056de" }}
+                />
+                <p>Information Stall</p>
+              </div>
+              <div className={"flex flex-row gap-4"}>
+                <img
+                  src={LABS}
+                  alt={"Laboratory"}
+                  className={"w-8 h-8 p-1 rounded-full"}
+                  style={{ backgroundColor: "#acd5fe" }}
+                />
+                <p>Laboratory</p>
+              </div>
+              <div className={"flex flex-row gap-4"}>
+                <img
+                  src={TOILET}
+                  alt={"Bathroom"}
+                  className={"w-8 h-8 p-1 rounded-full"}
+                  style={{ backgroundColor: "#59aafd" }}
+                />
+                <p>Bathroom</p>
+              </div>
+              <div className={"flex flex-row gap-4"}>
+                <img
+                  src={RETL}
+                  alt={"Retail"}
+                  className={"w-8 h-8 p-1 rounded-full"}
+                  style={{ backgroundColor: "#e7a50a" }}
+                />
+                <p>Retail Location</p>
+              </div>
+              <div className={"flex flex-row gap-4"}>
+                <img
+                  src={SERV}
+                  alt={"Service"}
+                  className={"w-8 h-8 p-1 rounded-full"}
+                  style={{ backgroundColor: "#fad788" }}
+                />
+                <p>Service Station</p>
+              </div>
             </div>
-          ))}
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
+      ) : (
+        <Card
+          className={
+            "m-2 w-full h-full  border-none bg-transparent shadow-none"
+          }
+        >
+          {/*<CardHeader>*/}
+          {/*  <div >Text Directions:</div>*/}
+          {/*</CardHeader>*/}
+          <CardContent
+            // style={{ maxHeight: "40vh", overflowY: "auto" }}
+            className={"overflow-y-auto max-h-[34vh]"}
+          >
+            {textDirections.map((direction, index) => (
+              <div
+                key={index}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  // backgroundColor: index % 2 === 0 ? "#ADD8E6" : "#f3f4f6"
+                }}
+              >
+                <img
+                  src={direction.icon}
+                  alt="arrow-icon"
+                  style={{ width: "24px", height: "24px", marginRight: "8px" }}
+                />
+                <span>{direction.text}</span>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

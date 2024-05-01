@@ -55,7 +55,7 @@ function LineGraph({ props }: { props: lineRequestData[] }) {
     plugins: {
       title: {
         display: true,
-        text: "Line Graph of total users",
+        text: "Total users by month",
       },
     },
   };

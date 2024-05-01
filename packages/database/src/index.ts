@@ -1,131 +1,119 @@
 export * from "../.prisma/client";
 
-import { PrismaClient } from "../.prisma/client";
-import fs from "fs";
-const prisma = new PrismaClient();
-
-async function readCsvFile() {
-  // CLear table
-  await prisma.edges.deleteMany();
-  await prisma.nodes.deleteMany();
-  //
-  // await prisma.employee.deleteMany();
-  //
-  // await prisma.flower.deleteMany();
-  // await prisma.flowerRequest.deleteMany();
-  //
-  // await prisma.medicationRequest.deleteMany();
-  // await prisma.medicationInfo.deleteMany();
-  //
-  // await prisma.securityRequest.deleteMany();
-  // await prisma.sanitationRequest.deleteMany();
-  // await prisma.maintenanceRequest.deleteMany();
-  // await prisma.internalTransportRequest.deleteMany();
-
-  //---------------NODE---------------
-  const nodesCSV = fs.readFileSync("./resources/allNodes.csv", "utf8");
-  const nodesData: string[] = nodesCSV.trim().split("\n").slice(1);
-  const nodes = nodesData.map((nodesData) => {
-    const [
-      nodeID,
-      xcoord,
-      ycoord,
-      floor,
-      building,
-      nodeType,
-      longName,
-      shortName,
-    ] = nodesData.split(",");
-    return {
-      nodeID,
-      xcoord: parseInt(xcoord),
-      ycoord: parseInt(ycoord),
-      floor,
-      building,
-      nodeType,
-      longName,
-      shortName,
-    };
-  });
-
-  //Insert nodes into database
-  await prisma.nodes.createMany({
-    data: nodes,
-  });
-
-  //Print out the nodes data from the database
-  /*
-    console.log("Nodes Table: ");
-    nodes.forEach(node => {
-        console.log(`${node.nodeID} | ${node.xcoord} | ${node.ycoord} | ${node.floor} | ${node.building} |  ${node.nodeType} | ${node.longName} | ${node.shortName}`);
-    });
-    */
-
-  //---------------EDGE---------------
-  const edgesCSV = fs.readFileSync("./resources/allEdges.csv", "utf8");
-  const edgesData: string[] = edgesCSV
-    .trim()
-    .replace(/\r/g, "")
-    .split("\n")
-    .slice(1);
-  const edges = edgesData.map((edge) => {
-    const [edgeID, startNode, endNode] = edge.split(",");
-    return { edgeID, startNode, endNode };
-  });
-
-  // Insert edge into database
-  await prisma.edges.createMany({
-    data: edges,
-  });
-
-  //Print out the edges data from the database
-  /*
-    console.log("Edges Table: ");
-    edges.forEach(edge => {
-        console.log(`${edge.startNodeID} | ${edge.endNodeID}`);
-    });
-    */
-
-  await prisma.user.create({
-    data: {
-      username: "admin",
-      password: "admin",
-    },
-  });
-}
-
-/*
-async function exportToCsv() {
-  //---------------NODE---------------
-  const nodes = await prisma.nodes.findMany();
-  const nodeHeader =
-    "nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName";
-  const nodeCSV = [
-    nodeHeader,
-    ...nodes.map(
-      (node) =>
-        `${node.nodeID},${node.xcoord},${node.ycoord},${node.floor},${node.building},${node.nodeType},${node.longName},${node.shortName}`,
-    ),
-  ].join("\n");
-
-  // Write the CSV data to a file
-  fs.writeFileSync("./resources/nodes.csv", nodeCSV);
-  console.log("Data is saved into './resources/nodes.csv'");
-
-  //---------------EDGE---------------
-  const edges = await prisma.edges.findMany();
-  const edgeHeader = "startNodeID,endNodeID";
-  const edgeCSV = [
-    edgeHeader,
-    ...edges.map((edge) => `${edge.startNodeID},${edge.endNodeID}`),
-  ].join("\n");
-
-  // Write the CSV data to a file
-  fs.writeFileSync("./resources/edges.csv", edgeCSV);
-  console.log("Data is saved into './resources/edges.csv'");
-}
-*/
-
-//importFlower();
-readCsvFile();
-//exportToCsv();
+//
+// import { PrismaClient } from "../.prisma/client";
+// import fs from "fs";
+// const prisma = new PrismaClient();
+//
+// async function readCsvFile() {
+//   // CLear table
+//   await prisma.edges.deleteMany();
+//   await prisma.nodes.deleteMany();
+//
+//   //---------------NODE---------------
+//   const nodesCSV = fs.readFileSync("./resources/allNodes.csv", "utf8");
+//   const nodesData: string[] = nodesCSV.trim().split("\n").slice(1);
+//   const nodes = nodesData.map((nodesData) => {
+//     const [
+//       nodeID,
+//       xcoord,
+//       ycoord,
+//       floor,
+//       building,
+//       nodeType,
+//       longName,
+//       shortName,
+//     ] = nodesData.split(",");
+//     return {
+//       nodeID,
+//       xcoord: parseInt(xcoord),
+//       ycoord: parseInt(ycoord),
+//       floor,
+//       building,
+//       nodeType,
+//       longName,
+//       shortName,
+//     };
+//   });
+//
+//   //Insert nodes into database
+//   await prisma.nodes.createMany({
+//     data: nodes,
+//   });
+//
+//   //Print out the nodes data from the database
+//   /*
+//     console.log("Nodes Table: ");
+//     nodes.forEach(node => {
+//         console.log(`${node.nodeID} | ${node.xcoord} | ${node.ycoord} | ${node.floor} | ${node.building} |  ${node.nodeType} | ${node.longName} | ${node.shortName}`);
+//     });
+//     */
+//
+//   //---------------EDGE---------------
+//   const edgesCSV = fs.readFileSync("./resources/allEdges.csv", "utf8");
+//   const edgesData: string[] = edgesCSV
+//     .trim()
+//     .replace(/\r/g, "")
+//     .split("\n")
+//     .slice(1);
+//   const edges = edgesData.map((edge) => {
+//     const [edgeID, startNode, endNode] = edge.split(",");
+//     return { edgeID, startNode, endNode };
+//   });
+//
+//   // Insert edge into database
+//   await prisma.edges.createMany({
+//     data: edges,
+//   });
+//
+//   //Print out the edges data from the database
+//   /*
+//     console.log("Edges Table: ");
+//     edges.forEach(edge => {
+//         console.log(`${edge.startNodeID} | ${edge.endNodeID}`);
+//     });
+//     */
+//
+//   await prisma.user.create({
+//     data: {
+//       username: "admin",
+//       password: "admin",
+//     },
+//   });
+// }
+//
+// /*
+// async function exportToCsv() {
+//   //---------------NODE---------------
+//   const nodes = await prisma.nodes.findMany();
+//   const nodeHeader =
+//     "nodeID,xcoord,ycoord,floor,building,nodeType,longName,shortName";
+//   const nodeCSV = [
+//     nodeHeader,
+//     ...nodes.map(
+//       (node) =>
+//         `${node.nodeID},${node.xcoord},${node.ycoord},${node.floor},${node.building},${node.nodeType},${node.longName},${node.shortName}`,
+//     ),
+//   ].join("\n");
+//
+//   // Write the CSV data to a file
+//   fs.writeFileSync("./resources/nodes.csv", nodeCSV);
+//   console.log("Data is saved into './resources/nodes.csv'");
+//
+//   //---------------EDGE---------------
+//   const edges = await prisma.edges.findMany();
+//   const edgeHeader = "startNodeID,endNodeID";
+//   const edgeCSV = [
+//     edgeHeader,
+//     ...edges.map((edge) => `${edge.startNodeID},${edge.endNodeID}`),
+//   ].join("\n");
+//
+//   // Write the CSV data to a file
+//   fs.writeFileSync("./resources/edges.csv", edgeCSV);
+//   console.log("Data is saved into './resources/edges.csv'");
+// }
+// */
+//
+// //importFlower();
+// readCsvFile();
+// //exportToCsv();

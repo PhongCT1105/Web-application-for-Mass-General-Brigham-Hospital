@@ -102,7 +102,7 @@ const Screensaver: React.FC = () => {
         url="https://youtu.be/xYhFo_Ta-bM"
         playing={isActive}
         volume={1}
-        muted={false}
+        muted={!isActive}
         width={0}
         height={0}
       />

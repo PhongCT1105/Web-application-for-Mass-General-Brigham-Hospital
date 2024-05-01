@@ -7,7 +7,7 @@ import {
   statuses,
 } from "@/interfaces/dataTypes/maintenanceData/labels.ts";
 
-const flowerData: FlowerForm[] = Array.from({ length: 100 }, () => ({
+const flowerData: FlowerForm[] = Array.from({ length: 40 }, () => ({
   reqID: faker.number.int(),
   priority: faker.helpers.arrayElement(priorities).value,
   status: faker.helpers.arrayElement(statuses).value,
@@ -22,7 +22,7 @@ const flowerData: FlowerForm[] = Array.from({ length: 100 }, () => ({
   location: faker.location.city(),
   recipient: faker.person.firstName(),
   message: faker.lorem.sentence(),
-  dateSubmitted: faker.date.recent(),
+  dateSubmitted: faker.date.anytime(),
 }));
 
 submitDataOnce("flowerSubmitted", flowerData, "/api/flowerReq");

@@ -30,10 +30,10 @@ function countPriority(arr: SecurityForm[]): polarRequestDataPriority[] {
   arr.forEach((obj) => {
     let { priority } = obj;
     if (priority === "") priority = "None";
-    else if (priority === "high") priority = "High";
     else if (priority === "low") priority = "Low";
-    else if (priority === "urgent") priority = "Urgent";
     else if (priority === "medium") priority = "Medium";
+    else if (priority === "high") priority = "High";
+    else if (priority === "urgent") priority = "Urgent";
     countDictionary[priority] = (countDictionary[priority] || 0) + 1;
   });
 
@@ -49,11 +49,11 @@ function countStatus(arr: SecurityForm[]): pieRequestData[] {
   arr.forEach((obj) => {
     let { status } = obj;
     if (status === "") status = "None";
-    else if (status === "canceled") status = "Canceled";
-    else if (status === "backlog") status = "Backlog";
-    else if (status === "in progress") status = "In progress";
-    else if (status === "todo") status = "To do";
     else if (status === "done") status = "Done";
+    else if (status === "backlog") status = "Backlog";
+    else if (status === "todo") status = "Todo";
+    else if (status === "in progress") status = "In progress";
+    else if (status === "canceled") status = "Canceled";
     countDictionary[status] = (countDictionary[status] || 0) + 1;
   });
 
@@ -123,7 +123,7 @@ function SecurityInsight({ props }: { props: SecurityForm[] }) {
   const securityLineData = countMonth(data);
   return (
     <>
-      <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
+      <div className="w-5/6 mx-auto m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
         <div className="rounded-lg bg-gray-200">
           <LineGraph props={securityLineData} />
         </div>

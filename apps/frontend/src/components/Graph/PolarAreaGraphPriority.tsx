@@ -1,12 +1,20 @@
 import { PolarArea } from "react-chartjs-2";
 import { AnimationSpec } from "chart.js/auto";
 import { polarRequestDataPriority } from "./GraphInterface/polarRequestDataPriority";
+
+const priorityOrder = ["None", "Low", "Medium", "High", "Urgent"];
+
 const PolarAreaChart = ({ props }: { props: polarRequestDataPriority[] }) => {
+  // Sort the priority labels according to the custom order
+  const sortedPriorityLabels = priorityOrder.filter((priority) =>
+    props.some((data) => data.priority === priority),
+  );
+
   const polarAreaChartData = {
-    labels: props.map((map) => map.priority),
+    labels: sortedPriorityLabels,
     datasets: [
       {
-        label: "My First Dataset",
+        label: "Priority of Service Requests",
         data: props.map((map) => map.request),
         backgroundColor: [
           "rgb(255, 99, 132)",
@@ -34,7 +42,7 @@ const PolarAreaChart = ({ props }: { props: polarRequestDataPriority[] }) => {
       },
       title: {
         display: true,
-        text: "Doughnut Chart for all service requests done",
+        text: "Priority of Service Requests",
       },
     },
   };

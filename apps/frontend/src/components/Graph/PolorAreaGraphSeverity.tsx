@@ -2,12 +2,19 @@ import { PolarArea } from "react-chartjs-2";
 import { AnimationSpec } from "chart.js/auto";
 import { polarRequestDataSeverity } from "./GraphInterface/polarRequestDataSeverity";
 
+const severityOrder = ["None", "Low", "Medium", "High", "Urgent"];
+
 const PolarAreaChart = ({ props }: { props: polarRequestDataSeverity[] }) => {
+  // Sort the severity labels according to the custom order
+  const sortedSeverityLabels = severityOrder.filter((severity) =>
+    props.some((data) => data.severity === severity),
+  );
+
   const polarAreaChartData = {
-    labels: props.map((map) => map.severity),
+    labels: sortedSeverityLabels,
     datasets: [
       {
-        label: "My First Dataset",
+        label: "Priority of Service Requests",
         data: props.map((map) => map.request),
         backgroundColor: [
           "rgb(255, 99, 132)",
@@ -22,7 +29,7 @@ const PolarAreaChart = ({ props }: { props: polarRequestDataSeverity[] }) => {
 
   const options = {
     animation: {
-      easing: "easeInBounce" as AnimationSpec<never>["easing"], // Corrected easing value
+      easing: "easeInBounce" as AnimationSpec<never>["easing"],
       loop: false,
       duration: 2500,
     },
@@ -35,7 +42,7 @@ const PolarAreaChart = ({ props }: { props: polarRequestDataSeverity[] }) => {
       },
       title: {
         display: true,
-        text: "Doughnut Chart for all service requests done",
+        text: "Priority of Service Requests",
       },
     },
   };

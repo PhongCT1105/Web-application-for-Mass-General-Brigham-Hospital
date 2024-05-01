@@ -8,7 +8,7 @@ import {
   statuses,
 } from "@/interfaces/dataTypes/securityData/labels.ts";
 
-const securityData: SecurityForm[] = Array.from({ length: 10 }, () => ({
+const securityData: SecurityForm[] = Array.from({ length: 20 }, () => ({
   reqID: faker.number.int(),
   ename: faker.helpers.arrayElement(EmployeeNames).value,
   location: faker.location.city(),
