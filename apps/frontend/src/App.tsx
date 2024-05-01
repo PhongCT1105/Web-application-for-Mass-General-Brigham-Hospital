@@ -9,7 +9,7 @@ import AboutCreditsPages from "./routes/AboutCreditsPages.tsx"; // Correct impor
 import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"; // Correct import path
 import CSVTable from "./routes/CSVPage/csvTable.tsx";
 import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
-import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
+import { Sanitation } from "@/routes/service-request/sanitation-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
 import StartPage from "@/routes/StartPage.tsx";
 import { GraphStateProvider } from "@/context/nodeContext.tsx";

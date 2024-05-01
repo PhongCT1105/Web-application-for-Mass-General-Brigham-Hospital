@@ -145,7 +145,7 @@ function FlowerInsight({ props }: { props: FlowerForm[] }) {
   console.log(flowerChartData);
   return (
     <>
-      <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg">
+      <div className="m-3 grid gap-4 grid-cols-2 outline-double outline-3 outline-offset-2 rounded-lg w-5/6 mx-auto">
         <div className="rounded-lg bg-gray-200 scale-0.25">
           <LineGraph props={flowerLineData} />
         </div>
