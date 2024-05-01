@@ -182,7 +182,7 @@ export const MapBlock: React.FC = () => {
   const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
 
-  const [currentFloor, setCurrentFloor] = useState(""); // Initialize state for current floor
+  const [currentFloor, setCurrentFloor] = useState("1"); // Initialize state for current floor
 
   // Function to handle floor change
 
