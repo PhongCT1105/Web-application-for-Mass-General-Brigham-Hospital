@@ -136,7 +136,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="flex flex-col items-center bg-transparent p-2 w-[350px]">
+    <div className="flex flex-col items-center bg-transparent p-2 w-[350px] h-[89vh]">
       <Card className={"w-full shadow"}>
         <CardHeader>
           <CardTitle className={"flex justify-between items-center py-0 gap-0"}>
@@ -489,7 +489,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       ) : (
         <Card
           className={
-            "m-4 w-full h-full  border-none bg-transparent shadow-none"
+            "m-2 w-full h-full  border-none bg-transparent shadow-none"
           }
         >
           {/*<CardHeader>*/}
