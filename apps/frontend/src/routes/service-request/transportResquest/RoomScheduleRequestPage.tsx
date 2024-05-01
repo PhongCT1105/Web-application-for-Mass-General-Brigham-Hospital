@@ -291,7 +291,7 @@ export const ScheduleContent = () => {
   return (
     <>
       <Separator className="my-4 w-5/6 mx-auto" />
-      <div className="flex border-none rounded-md text my-5 justify-center">
+      <div className="flex border-none rounded-md text my-5 justify-center ">
         <div className="w-1/2 justify-center items-center">
           <Card className=" border-none p-4">
             <CardContent>
@@ -352,12 +352,12 @@ export const ScheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="py-2 w-1/4 px-3">
+                  <div className="py-2 w-[20vw] ml-5">
                     <h1 className="text-2xl font-bold py-2">Location</h1>
                     <h2 className={"text-sm"}>From: </h2>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
+                        <Button variant="outline" className="h-auto text-wrap">
                           {form.locationFrom
                             ? form.locationFrom
                             : "Select Location"}
@@ -380,7 +380,7 @@ export const ScheduleContent = () => {
                     <h2 className={"text-sm"}>To: </h2>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
+                        <Button variant="outline" className="h-auto text-wrap">
                           {form.locationTo
                             ? form.locationTo
                             : "Select Location"}
@@ -402,7 +402,7 @@ export const ScheduleContent = () => {
                     </DropdownMenu>
                   </div>
 
-                  <div className="flex flex-col w-1/3">
+                  <div className="flex flex-col w-1/2 ml-5">
                     <div className=" py-2">
                       <h1 className="text-2xl font-bold py-2">Employee Name</h1>
                       <DropdownMenu>
@@ -545,7 +545,7 @@ export const ScheduleContent = () => {
 
         <div className="w-1/3 items-center justify-center rounded-md bg-secondary overflow-hidden">
           <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
-          <div className="w-1/3 flex items-center justify-center">
+          <div className="w-1/7 flex items-center justify-center">
             <Calendar
               className={
                 "w-full transform scale-150 md:ml-40 my-6 md:my-20 p-4"
@@ -560,7 +560,7 @@ export const ScheduleContent = () => {
             />
           </div>
 
-          <h2 className={"ml-10 flex items-center justify-center"}>
+          <h2 className={"ml-6 flex items-center justify-center"}>
             You picked {formattedDate}
           </h2>
         </div>
