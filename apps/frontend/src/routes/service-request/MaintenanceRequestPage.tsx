@@ -1,13 +1,13 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button.tsx";
+import { Button } from "@/components/ui/button";
 //import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label.tsx";
+import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group.tsx";
 import { Textarea } from "@/components/ui/textarea.tsx";
 import { useToast } from "@/components/ui/use-toast.ts";
-import { Card, CardContent, CardFooter } from "@/components/ui/card.tsx";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,7 +20,7 @@ import {
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@/components/ui/tooltip.tsx";
+} from "@/components/ui/tooltip";
 
 type rStatus = "Unassigned" | "Assigned" | "InProgress" | "Closed" | "";
 type rSeverity = "Low" | "Medium" | "High" | "Emergency" | "";
@@ -305,9 +305,8 @@ export function Maintenance() {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-
                 <div className="flex">
-                  <div className="w-1/3">
+                  <div className="w-1/3  ">
                     <h1 className="text-2xl font-bold my-2 pb-2">
                       Severity Level
                     </h1>
@@ -359,7 +358,7 @@ export function Maintenance() {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/6 ml-20 pl-13 space-x-2">
+                  <div className="w-1/6 ml-12">
                     <h1 className="text-2xl font-bold my-2 pb-2">
                       Type of Issue
                     </h1>
@@ -422,7 +421,7 @@ export function Maintenance() {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/5 pl-20 ml-20">
+                  <div className="w-1/4 pl-20">
                     <h1 className="text-2xl font-bold my-2 pb-2">Status</h1>
                     <RadioGroup defaultValue="comfortable">
                       <div className="flex items-center space-x-2">
@@ -472,11 +471,11 @@ export function Maintenance() {
                     </RadioGroup>
                   </div>
 
-                  <div className="w-1/4 pl-20 ml-20">
+                  <div className="w-1/4">
                     <h1 className="text-2xl font-bold my-2 pb-2">Location</h1>
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
-                        <Button variant="outline">
+                        <Button variant="outline" className="">
                           {locationLong ? locationLong : "Select Location"}
                         </Button>
                       </DropdownMenuTrigger>
@@ -503,8 +502,8 @@ export function Maintenance() {
                   </div>
                 </div>
 
-                <div className="flex space-x-10">
-                  <div className="w-1/2">
+                <div className="flex">
+                  <div className="w-1/2 ">
                     <h1 className="text-2xl font-bold my-2 pb-2">
                       Description of Issue
                     </h1>
@@ -540,14 +539,18 @@ export function Maintenance() {
                 {buttonState !== "ghost" && (
                   <Button
                     variant={buttonState}
-                    className="p-5 border ml-auto"
+                    className="p-5"
                     onClick={handleSubmit}
                   >
                     Submit
                   </Button>
                 )}
               </TooltipProvider>
-              <Button variant={"destructive"} onClick={handleFormClear}>
+              <Button
+                variant={"destructive"}
+                className="mr-20"
+                onClick={handleFormClear}
+              >
                 Clear
               </Button>
             </CardFooter>

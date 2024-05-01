@@ -302,7 +302,7 @@ export const ScheduleContent = () => {
                     <Input
                       type="text"
                       id="patientName"
-                      placeholder="Enter the Patient's Name Here"
+                      placeholder="Enter The Patient's Name Here"
                       onChange={handleFormChange}
                       value={form.patientName}
                     />
@@ -352,7 +352,7 @@ export const ScheduleContent = () => {
                     </RadioGroup>
                   </div>
 
-                  <div className="py-2 w-1/4 px-3">
+                  <div className="py-2 w-1/4 px-2">
                     <h1 className="text-2xl font-bold py-2">Location</h1>
                     <h2 className={"text-sm"}>From: </h2>
                     <DropdownMenu>
@@ -482,12 +482,12 @@ export const ScheduleContent = () => {
                   </div>
                 </div>
 
-                <div className="space-y-1">
+                <div>
                   <h1 className="text-2xl font-bold">Reason</h1>
                   <Input
                     type="text"
                     id="reason"
-                    placeholder="Enter reason here."
+                    placeholder="Enter Reason Here"
                     onChange={handleFormChange}
                     value={form.reason}
                   />
@@ -507,11 +507,11 @@ export const ScheduleContent = () => {
 
             <CardFooter className="flex justify-between">
               <Button
-                variant={buttonState}
-                className="p-5 border"
-                onClick={handleSubmit}
+                variant={"destructive"}
+                className="mr-20"
+                onClick={clearForm}
               >
-                Submit
+                Clear
               </Button>
               {/*<Button className="p-5" onClick={handleSubmit}>*/}
               {/*  Submit*/}
@@ -520,8 +520,12 @@ export const ScheduleContent = () => {
                 {buttonState === "ghost" && (
                   <Tooltip>
                     <TooltipTrigger asChild>
-                      <Button variant={"destructive"} onClick={clearForm}>
-                        Clear
+                      <Button
+                        variant={buttonState}
+                        className="p-5 border"
+                        onClick={handleSubmit}
+                      >
+                        Submit
                       </Button>
                     </TooltipTrigger>
                     <TooltipContent>
@@ -543,9 +547,9 @@ export const ScheduleContent = () => {
           </Card>
         </div>
 
-        <div className="w-1/3 items-center justify-center rounded-md bg-secondary overflow-hidden">
+        <div className="w-1/3 rounded-md items-center justify-center bg-secondary overflow-hidden">
           <h1 className="text-2xl font-bold text-center mt-10">Pick a Date</h1>
-          <div className="w-1/3 flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <Calendar
               className={
                 "w-full transform scale-150 md:ml-40 my-6 md:my-20 p-4"
@@ -565,6 +569,7 @@ export const ScheduleContent = () => {
           </h2>
         </div>
       </div>
+      <div></div>
     </>
   );
 };

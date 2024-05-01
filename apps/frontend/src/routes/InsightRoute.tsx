@@ -32,13 +32,6 @@ import axios from "axios";
 import MaintenanceInsight from "./insight-request/MaintenanceInsight";
 import SanitationInsight from "@/routes/insight-request/SanitationInsight.tsx";
 import { GenericForm } from "@/interfaces/genericReq.ts";
-import bannerFlowerImage from "@/assets/flower-banner.png";
-import bannerMedicationImage from "@/assets/medication-banner.png";
-import bannerRequestImage from "@/assets/request-banner.png";
-import bannerSanitationImage from "@/assets/sanitation-banner.png";
-import bannerSecurityImage from "@/assets/security-banner.png";
-import bannerTransportImage from "@/assets/transportation-banner.png";
-import bannerMaintenanceImage from "@/assets/maintenance-banner.png";
 
 function InsightRoute() {
   const [flowerLog, setFlowerLog] = useState<FlowerForm[]>([]);
@@ -281,13 +274,7 @@ function InsightRoute() {
                 <div className="col-span-5 lg:col-span-5 lg:border-l overflow-x-auto">
                   <div className=" pl-4 py-6 lg:pl-6">
                     <Tabs defaultValue="Overall" className="h-full space-y-6">
-                      <div
-                        className="space-between flex items-center"
-                        style={{
-                          marginLeft: "7.8%",
-                          width: "83.5%",
-                        }}
-                      >
+                      <div className="space-between flex items-center">
                         <TabsList>
                           <TabsTrigger value="Overall">
                             <BarChart4 className="mr-2 h-4 w-4" />
@@ -323,32 +310,14 @@ function InsightRoute() {
                         value="Overall"
                         className="border-none p-0 flex-col data-[state=active]:flex "
                       >
-                        <div
-                          className="flex items-center justify-between"
-                          style={{
-                            backgroundImage: `url(${bannerRequestImage})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                            height: "100px",
-                            borderRadius: "10px",
-                            width: "83.5%",
-                            marginLeft: "8%",
-                          }}
-                        >
+                        <div className="flex items-center justify-between">
                           <div className="space-y-1">
-                            <h2
-                              className="text-2xl font-semibold tracking-tight"
-                              style={{
-                                color: "white",
-                                marginLeft: "20px",
-                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                              }}
-                            >
+                            <h2 className="text-2xl font-semibold tracking-tight">
                               Overall Insight
                             </h2>
                           </div>
                         </div>
-                        <Separator className="my-4 w-5/6 mx-auto" />
+                        <Separator className="my-4" />
                         <OverallInsight props={genericLog} />
                       </TabsContent>
                       <TabsContent
@@ -356,96 +325,42 @@ function InsightRoute() {
                         className="border-none p-0 flex-col data-[state=active]:flex "
                         // h-full  ^^^^^
                       >
-                        <div
-                          className="flex items-center justify-between"
-                          style={{
-                            backgroundImage: `url(${bannerFlowerImage})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                            height: "100px",
-                            borderRadius: "10px",
-                            width: "83.5%",
-                            marginLeft: "8%",
-                          }}
-                        >
+                        <div className="flex items-center justify-between">
                           <div className="space-y-1">
-                            <h2
-                              className="text-2xl font-semibold tracking-tight"
-                              style={{
-                                color: "white",
-                                marginLeft: "20px",
-                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                              }}
-                            >
+                            <h2 className="text-2xl font-semibold tracking-tight">
                               Flower Insight
                             </h2>
                           </div>
                         </div>
-                        <Separator className="my-4 w-5/6 mx-auto" />
+                        <Separator className="my-4" />
                         <FlowerInsight props={flowerLog} />
                       </TabsContent>
                       <TabsContent
                         value="Medication Insight"
                         className=" flex-col border-none p-0 data-[state=active]:flex"
                       >
-                        <div
-                          className="flex items-center justify-between"
-                          style={{
-                            backgroundImage: `url(${bannerMedicationImage})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center 80%",
-                            height: "100px",
-                            borderRadius: "10px",
-                            width: "83.5%",
-                            marginLeft: "8%",
-                          }}
-                        >
+                        <div className="flex items-center justify-between">
                           <div className="space-y-1">
-                            <h2
-                              className="text-2xl font-semibold tracking-tight"
-                              style={{
-                                color: "white",
-                                marginLeft: "20px",
-                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                              }}
-                            >
+                            <h2 className="text-2xl font-semibold tracking-tight">
                               Medication Insight
                             </h2>
                           </div>
                         </div>
-                        <Separator className="my-4 w-5/6 mx-auto" />
+                        <Separator className="my-4" />
                         <MedicationInsight props={medicineLog} />
                       </TabsContent>
                       <TabsContent
                         value="Patient Transport Insight"
                         className="w-full flex-col border-none p-0 data-[state=active]:flex"
                       >
-                        <div
-                          className="flex items-center justify-between"
-                          style={{
-                            backgroundImage: `url(${bannerTransportImage})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center 37%",
-                            height: "100px",
-                            borderRadius: "10px",
-                            width: "83.5%",
-                            marginLeft: "8%",
-                          }}
-                        >
+                        <div className="flex items-center justify-between">
                           <div className="space-y-1">
-                            <h2
-                              className="text-2xl font-semibold tracking-tight"
-                              style={{
-                                color: "white",
-                                marginLeft: "20px",
-                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                              }}
-                            >
+                            <h2 className="text-2xl font-semibold tracking-tight">
                               Patient Transport Insight
                             </h2>
                           </div>
                         </div>
-                        <Separator className="my-4 w-5/6 mx-auto" />
+                        <Separator className="my-4" />
                         <PatientInsight props={tranportLog} />
                       </TabsContent>
                       <TabsContent
@@ -454,32 +369,14 @@ function InsightRoute() {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div
-                          className="flex items-center justify-between"
-                          style={{
-                            backgroundImage: `url(${bannerSanitationImage})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center 65%",
-                            height: "100px",
-                            borderRadius: "10px",
-                            width: "83.5%",
-                            marginLeft: "8%",
-                          }}
-                        >
+                        <div className="flex items-center justify-between">
                           <div className="space-y-1">
-                            <h2
-                              className="text-2xl font-semibold tracking-tight"
-                              style={{
-                                color: "white",
-                                marginLeft: "20px",
-                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                              }}
-                            >
+                            <h2 className="text-2xl font-semibold tracking-tight">
                               Sanitation Insight
                             </h2>
                           </div>
                         </div>
-                        <Separator className="my-4 w-5/6 mx-auto" />
+                        <Separator className="my-4" />
                         <SanitationInsight props={sanitationLog} />
                       </TabsContent>
                       <TabsContent
@@ -488,33 +385,15 @@ function InsightRoute() {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div
-                          className="flex items-center justify-between"
-                          style={{
-                            backgroundImage: `url(${bannerSecurityImage})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center",
-                            height: "100px",
-                            borderRadius: "10px",
-                            width: "83.5%",
-                            marginLeft: "8%",
-                          }}
-                        >
+                        <div className="flex items-center justify-between">
                           <div className="space-y-1">
-                            <h2
-                              className="text-2xl font-semibold tracking-tight"
-                              style={{
-                                color: "white",
-                                marginLeft: "20px",
-                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                              }}
-                            >
+                            <h2 className="text-2xl font-semibold tracking-tight">
                               Security Insight
                             </h2>
                           </div>
                         </div>
 
-                        <Separator className="my-4 w-5/6 mx-auto" />
+                        <Separator className="my-4" />
                         <SecurityInsight props={securityLog} />
                       </TabsContent>
                       <TabsContent
@@ -523,33 +402,15 @@ function InsightRoute() {
                           " w-full flex-col border-none p-0 data-[state=active]:flex"
                         }
                       >
-                        <div
-                          className="flex items-center justify-between"
-                          style={{
-                            backgroundImage: `url(${bannerMaintenanceImage})`,
-                            backgroundSize: "cover",
-                            backgroundPosition: "center 35%",
-                            height: "100px",
-                            borderRadius: "10px",
-                            width: "83.5%",
-                            marginLeft: "8%",
-                          }}
-                        >
+                        <div className="flex items-center justify-between">
                           <div className="space-y-1">
-                            <h2
-                              className="text-2xl font-semibold tracking-tight"
-                              style={{
-                                color: "white",
-                                marginLeft: "20px",
-                                textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)",
-                              }}
-                            >
+                            <h2 className="text-2xl font-semibold tracking-tight">
                               Maintenance Insight
                             </h2>
                           </div>
                         </div>
 
-                        <Separator className="my-4 w-5/6 mx-auto" />
+                        <Separator className="my-4" />
                         <MaintenanceInsight props={maintenanceLog} />
                       </TabsContent>
                     </Tabs>

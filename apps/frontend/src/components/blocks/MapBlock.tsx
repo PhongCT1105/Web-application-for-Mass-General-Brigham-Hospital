@@ -182,10 +182,6 @@ export const MapBlock: React.FC = () => {
   const [LayerF2] = useState<L.FeatureGroup>(new L.FeatureGroup());
   const [LayerF3] = useState<L.FeatureGroup>(new L.FeatureGroup());
 
-  const [currentFloor, setCurrentFloor] = useState(""); // Initialize state for current floor
-
-  // Function to handle floor change
-
   const FloorMarkers: { [key: string]: string } = useMemo(
     () =>
       ({
@@ -390,7 +386,6 @@ export const MapBlock: React.FC = () => {
         map.off();
         map.remove();
       }
-      setCurrentFloor(floor);
 
       const bounds: LatLngBoundsExpression = [
         [0, 0],
@@ -405,15 +400,15 @@ export const MapBlock: React.FC = () => {
         preferCanvas: true,
         layers: [Layers[floor]],
       }).setView([1750, 2700], -2);
-      // L.control
-      //   .layers(baseLayers, undefined, {
-      //     collapsed: false,
-      //     position: "bottomright",
-      //   })
-      //   .addTo(map);
-      // map.on("baselayerchange", function () {
-      //   map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
-      // });
+      L.control
+        .layers(baseLayers, undefined, {
+          collapsed: false,
+          position: "bottomright",
+        })
+        .addTo(map);
+      map.on("baselayerchange", function () {
+        map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
+      });
       map.setMaxBounds(bounds);
       Paths[floor].snakeIn();
 
@@ -476,7 +471,7 @@ export const MapBlock: React.FC = () => {
       //   map.setView([0, 0], -3);
       // }
     },
-    [Layers, Paths],
+    [Layers, Paths, baseLayers],
   );
 
   const addMarker = useCallback(
@@ -540,15 +535,15 @@ export const MapBlock: React.FC = () => {
         });
         mapRef.current = map;
         map.setView([1750, 2700], -2);
-        // L.control
-        //   .layers(baseLayers, undefined, {
-        //     collapsed: false,
-        //     position: "bottomright",
-        //   })
-        //   .addTo(map);
-        // map.on("baselayerchange", function () {
-        //   map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
-        // });
+        L.control
+          .layers(baseLayers, undefined, {
+            collapsed: false,
+            position: "bottomright",
+          })
+          .addTo(map);
+        map.on("baselayerchange", function () {
+          map!.setView([1750, 2700], -2); // Change to your desired zoom level and center
+        });
         map.setMaxBounds(bounds);
       }
 
@@ -855,7 +850,6 @@ export const MapBlock: React.FC = () => {
     }
     changeFloor(searchPath[0].floor);
   }
-
   function findTotalPathDistance(nodeArray: Node[]) {
     let prevNode: Node = nodeArray[0];
     let dist: number = 0;
@@ -1200,7 +1194,6 @@ export const MapBlock: React.FC = () => {
   const handleHeatmap = (heatmap: boolean) => {
     ///setHeatmap(heatmap);
     console.log(heatmap);
-
     async function fetchData() {
       try {
         const { data: EdgesData } = await axios.get(`/api/search/heatmap`);
@@ -1228,7 +1221,6 @@ export const MapBlock: React.FC = () => {
         console.error("Error fetching data:", error);
       }
     }
-
     fetchData().then();
 
     //console.log("Changes obstacles handling to " + obstacles);
@@ -1287,127 +1279,6 @@ export const MapBlock: React.FC = () => {
               zIndex: -1,
             }}
           >
-            <div
-              style={{
-                position: "absolute",
-                top: "75%", // Position at the vertical center of the page
-                left: "90%",
-                transform: "translate(0%, -100%)", // Center horizontally and vertically
-                display: "flex",
-                flexDirection: "column-reverse",
-                justifyContent: "center",
-                alignItems: "center",
-                zIndex: 1000,
-                color: "black",
-              }}
-            >
-              <div
-                className={`w-[80px] h-[80px] relative ${currentFloor === "L2" ? "mt-8" : ""}`}
-                style={{ marginBottom: "-15px" }}
-              >
-                <button
-                  onClick={() => {
-                    changeFloor("L2");
-                  }} // Call changeFloor with the floor name
-                >
-                  <div
-                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L2" ? "bg-yellow-500 " : "bg-blue-300 "}`}
-                  >
-                    <div
-                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                    >
-                      L2
-                    </div>
-                  </div>
-                </button>
-              </div>
-              {/* Repeat similar structure for other floors */}
-              {/* L1 */}
-              <div
-                className={`w-[80px] h-[80px] relative ${currentFloor === "L1" ? "mt-8" : ""}`}
-                style={{ marginBottom: "-15px" }}
-              >
-                <button
-                  onClick={() => {
-                    changeFloor("L1");
-                  }}
-                >
-                  <div
-                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "L1" ? "bg-yellow-500 " : "bg-blue-400 "}`}
-                  >
-                    <div
-                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                    >
-                      L1
-                    </div>
-                  </div>
-                </button>
-              </div>
-              {/* F1 */}
-              <div
-                className={`w-[80px] h-[80px] relative ${currentFloor === "1" ? "mt-8" : ""}`}
-                style={{ marginBottom: "-15px" }}
-              >
-                <button
-                  onClick={() => {
-                    changeFloor("1");
-                  }}
-                >
-                  <div
-                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "1" ? "bg-yellow-500 " : "bg-blue-500 "}`}
-                  >
-                    <div
-                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                    >
-                      F1
-                    </div>
-                  </div>
-                </button>
-              </div>
-              {/* Repeat similar structure for other floors */}
-              {/* F2 */}
-              <div
-                className={`w-[80px] h-[80px] relative ${currentFloor === "2" ? "mt-8" : ""}`}
-                style={{ marginBottom: "-15px" }}
-              >
-                <button
-                  onClick={() => {
-                    changeFloor("2");
-                  }}
-                >
-                  <div
-                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "2" ? "bg-yellow-500 " : "bg-blue-700 "}`}
-                  >
-                    <div
-                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                    >
-                      F2
-                    </div>
-                  </div>
-                </button>
-              </div>
-              {/* F3 */}
-              <div
-                className={`w-[80px] h-[80px] relative ${currentFloor === "3" ? "mt-8" : ""}`}
-                style={{ marginBottom: "-15px" }}
-              >
-                <button
-                  onClick={() => {
-                    changeFloor("3");
-                  }}
-                >
-                  <div
-                    className={`absolute rounded-[20px] w-[80px] h-[80px] transform rotate-45  ${currentFloor === "3" ? "bg-yellow-500 " : "bg-blue-800 "}`}
-                  >
-                    <div
-                      className={`-rotate-45 text-[36px] text-bold text-center w-full h-full flex justify-center items-center`}
-                    >
-                      F3
-                    </div>
-                  </div>
-                </button>
-              </div>
-            </div>
             {havePath && (
               <div
                 className={
@@ -1460,6 +1331,8 @@ export const MapBlock: React.FC = () => {
             {/*    color: "black",*/}
             {/*  }}*/}
             {/*>*/}
+
+            {/*</div>*/}
           </div>
         </div>
       </SearchContext.Provider>
