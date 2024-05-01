@@ -9,7 +9,7 @@ import AboutCreditsPages from "./routes/AboutCreditsPages.tsx"; // Correct impor
 import ServiceRequestPage from "./routes/service-request/ServiceRequestPage.tsx"; // Correct import path
 import CSVTable from "./routes/CSVPage/csvTable.tsx";
 import RequestLogPage from "@/routes/request-log/RequestLogPage.tsx"; // Correct import path
-import { Sanitation } from "@/routes/service-request/sanitation-request/SanitationRequestPage.tsx";
+import { Sanitation } from "@/routes/service-request/SanitationRequestPage.tsx";
 import MapEditingPage from "@/routes/MapEditingPage.tsx";
 import StartPage from "@/routes/StartPage.tsx";
 import { GraphStateProvider } from "@/context/nodeContext.tsx";
@@ -24,14 +24,13 @@ import "./fakeDataLoader.ts";
 import { SchedulingPage } from "@/routes/employee-scheduling/SchedulingPage.tsx";
 import ScreenSaver from "@/components/blocks/ScreenSaver.tsx";
 import DashBoard from "./routes/Dashboard/DashBoard.tsx";
-import ErrorPage from "./routes/ErrorPage.tsx";
 // import { HeaderHome } from "@/components/blocks/headerHome.tsx";
 
 function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      errorElement: <ErrorPage />,
+      errorElement: <h1>ERROR</h1>,
       element: <Root />,
       children: [
         {
@@ -40,37 +39,37 @@ function App() {
         },
         {
           path: "/home",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <HomePage />,
         },
         {
           path: "/login",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <LoginPage />,
         },
         {
           path: "/request-log-Page",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <RequestLogPage />,
         },
         {
           path: "/about-us",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <AboutCreditsPages />,
         },
         {
           path: "/dashboard",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <DashBoard />,
         },
         {
           path: "/insight",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <ProtectedPage Page={InsightRoute} />,
         },
         {
           path: "/service-requests",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <ProtectedPage Page={ServiceRequestPage} />,
         },
         {
@@ -83,22 +82,22 @@ function App() {
         },
         {
           path: "/map-editor/map",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <MapEditingPage />,
         },
         {
           path: "/map-editor/table",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <MapEditorTablePage />,
         },
         {
           path: "/instructions",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <InstructionsPage />,
         },
         {
           path: "/scheduling",
-          errorElement: <ErrorPage />,
+          errorElement: <h1>ERROR</h1>,
           element: <SchedulingPage />,
         },
       ],

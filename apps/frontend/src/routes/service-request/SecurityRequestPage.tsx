@@ -265,13 +265,11 @@ export const SecurityForm = () => {
       >
         <div className=" justify-center items-center">
           <Card className={"border-none p-4"}>
-            <CardContent>
-              <div className="space-y-6">
+            <CardContent className={"grid gap-4"}>
+              <div className="space-y-1">
                 {/* Name Input */}
-                <div className="w-1/4">
-                  <h1 className="text-2xl font-bold my-2 pb-2">
-                    Employee Name
-                  </h1>
+                <div className="w-1/5">
+                  <h1 className="text-2xl font-bold my-2">Employee Name</h1>
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
                       <Button variant="outline">
@@ -293,129 +291,135 @@ export const SecurityForm = () => {
                     </DropdownMenuContent>
                   </DropdownMenu>
                 </div>
-
                 {/* Data input */}
                 <div className="flex">
                   {/* Assignment Input */}
-                  <div className="w-1/2 py-2">
-                    <h1 className="text-2xl font-bold pb-2">Request Status:</h1>
-                    <RadioGroup id={"status"} defaultValue="unassigned">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="unassigned"
-                          id="unassigned"
-                          checked={curStatus === "unassigned"}
-                          onClick={() => handleStatus("unassigned")}
-                        />
-                        <Label htmlFor="unassigned">Unassigned</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="assigned"
-                          id="assigned"
-                          checked={curStatus === "assigned"}
-                          onClick={() => handleStatus("assigned")}
-                        />
-                        <Label htmlFor="assigned">Assigned</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="inprogress"
-                          id="inprogress"
-                          checked={curStatus === "inprogress"}
-                          onClick={() => handleStatus("inprogress")}
-                        />
-                        <Label htmlFor="inprogress">In Progress</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="closed"
-                          id="closed"
-                          checked={curStatus === "closed"}
-                          onClick={() => handleStatus("closed")}
-                        />
-                        <Label htmlFor="closed">Closed</Label>
-                      </div>
-                    </RadioGroup>
+                  <div className="w-1/5">
+                    <div className={"grid gap-4"}>
+                      <h1 className="text-2xl font-bold ">Request Status:</h1>
+                      <RadioGroup
+                        id={"status"}
+                        defaultValue="unassigned"
+                        className={"gap-4"}
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="unassigned"
+                            id="unassigned"
+                            checked={curStatus === "unassigned"}
+                            onClick={() => handleStatus("unassigned")}
+                          />
+                          <Label htmlFor="unassigned">Unassigned</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="assigned"
+                            id="assigned"
+                            checked={curStatus === "assigned"}
+                            onClick={() => handleStatus("assigned")}
+                          />
+                          <Label htmlFor="assigned">Assigned</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="inprogress"
+                            id="inprogress"
+                            checked={curStatus === "inprogress"}
+                            onClick={() => handleStatus("inprogress")}
+                          />
+                          <Label htmlFor="inprogress">In Progress</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="closed"
+                            id="closed"
+                            checked={curStatus === "closed"}
+                            onClick={() => handleStatus("closed")}
+                          />
+                          <Label htmlFor="closed">Closed</Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
                   </div>
 
                   {/* Location Input */}
-                  <div className="w-1/2 ml-12 ">
-                    <h1 className="text-2xl font-bold my-2 mx-6">Location</h1>
-                    <div className="mx-6">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="outline">
-                            {securityRequest.location
-                              ? securityRequest.location
-                              : "Select Location"}
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
-                          {locations.map((location, index) => (
-                            <DropdownMenuRadioItem
-                              key={index}
-                              value={location}
-                              onClick={() => handleLocation(location)}
-                            >
-                              {location}
-                            </DropdownMenuRadioItem>
-                          ))}
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
+                  <div className="w-1/5">
+                    <h1 className="text-2xl font-bold my-2">Location</h1>
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline">
+                          {securityRequest.location
+                            ? securityRequest.location
+                            : "Select Location"}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent className="md:max-h-40 lg:max-h-56 overflow-y-auto">
+                        {locations.map((location, index) => (
+                          <DropdownMenuRadioItem
+                            key={index}
+                            value={location}
+                            onClick={() => handleLocation(location)}
+                          >
+                            {location}
+                          </DropdownMenuRadioItem>
+                        ))}
+                      </DropdownMenuContent>
+                    </DropdownMenu>
                   </div>
 
                   {/* Employee Input */}
 
                   {/* Priority Input */}
-
-                  <div className={"w-1/4 ml-12"}>
-                    <h1 className="text-2xl font-bold my-2">
-                      Request Priority:
-                    </h1>
-                    {/*<Label htmlFor="priority">Request Priority:</Label>*/}
-                    <RadioGroup id={"priority"} defaultValue="low">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="low"
-                          id="low"
-                          checked={curPriority === "low"}
-                          onClick={() => handlePriority("low")}
-                        />
-                        <Label htmlFor="low">Low</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="medium"
-                          id="medium"
-                          checked={curPriority === "medium"}
-                          onClick={() => handlePriority("medium")}
-                        />
-                        <Label htmlFor="medium">Medium</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="high"
-                          id="high"
-                          checked={curPriority === "high"}
-                          onClick={() => handlePriority("high")}
-                        />
-                        <Label htmlFor="high">High</Label>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="emergency"
-                          id="emergency"
-                          checked={curPriority === "emergency"}
-                          onClick={() => handlePriority("emergency")}
-                        />
-                        <Label htmlFor="emergency">Emergency</Label>
-                      </div>
-                    </RadioGroup>
-                    <Separator className="my-2 w-4/5" />
+                  <div className={"w-1/5 ml-12"}>
+                    <div className={"grid gap-4"}>
+                      <h1 className="text-2xl font-bold ">Request Priority:</h1>
+                      {/*<Label htmlFor="priority">Request Priority:</Label>*/}
+                      <RadioGroup
+                        className={"gap-4"}
+                        id={"priority"}
+                        defaultValue="low"
+                      >
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="low"
+                            id="low"
+                            checked={curPriority === "low"}
+                            onClick={() => handlePriority("low")}
+                          />
+                          <Label htmlFor="low">Low</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="medium"
+                            id="medium"
+                            checked={curPriority === "medium"}
+                            onClick={() => handlePriority("medium")}
+                          />
+                          <Label htmlFor="medium">Medium</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="high"
+                            id="high"
+                            checked={curPriority === "high"}
+                            onClick={() => handlePriority("high")}
+                          />
+                          <Label htmlFor="high">High</Label>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="emergency"
+                            id="emergency"
+                            checked={curPriority === "emergency"}
+                            onClick={() => handlePriority("emergency")}
+                          />
+                          <Label htmlFor="emergency">Emergency</Label>
+                        </div>
+                      </RadioGroup>
+                    </div>
+                    <Separator />
                     {/* Call 911? Input  (this will be a checkbox)*/}
-                    <div className={"flex items-center space-x-2"}>
+                    <div className={"flex items-center space-x-2 mt-6"}>
                       <Checkbox
                         id="call"
                         onCheckedChange={handleCall}
@@ -430,56 +434,57 @@ export const SecurityForm = () => {
                       </Label>
                     </div>
                   </div>
-                </div>
-                {/* Problem input*/}
-                <div className="flex space-x-10">
-                  <div className="w-1/2">
-                    <h1 className="text-2xl font-bold my-2 pb-2 ">
-                      Description of Issue
+                  {/* Problem input*/}
+                  <div className={"w-1/5 ml-12"}>
+                    <h1 className="text-2xl font-bold ">
+                      Describe the Problem:
                     </h1>
                     <Textarea
                       id="situation"
-                      placeholder="Type your description here."
+                      placeholder="Enter Your Name Here"
                       onChange={handleText}
                       value={securityRequest.situation}
                     ></Textarea>
                   </div>
                 </div>
               </div>
+              <CardFooter className="flex justify-between">
+                <TooltipProvider>
+                  {buttonState === "ghost" && (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Button
+                          variant={buttonState}
+                          className="p-5 border"
+                          onClick={submit}
+                        >
+                          Submit
+                        </Button>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Please fill out all fields</p>
+                      </TooltipContent>
+                    </Tooltip>
+                  )}
+                  {buttonState !== "ghost" && (
+                    <Button
+                      variant={buttonState}
+                      className="p-5"
+                      onClick={submit}
+                    >
+                      Submit
+                    </Button>
+                  )}
+                </TooltipProvider>
+                <Button
+                  variant={"destructive"}
+                  className="mr-20"
+                  onClick={clearReq}
+                >
+                  Clear
+                </Button>
+              </CardFooter>
             </CardContent>
-
-            <CardFooter className="flex justify-between">
-              <TooltipProvider>
-                {buttonState === "ghost" && (
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button
-                        variant={buttonState}
-                        className="p-5 border"
-                        onClick={submit}
-                      >
-                        Submit
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Please fill out all fields</p>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
-                {buttonState !== "ghost" && (
-                  <Button
-                    variant={buttonState}
-                    className="p-5 border ml-auto"
-                    onClick={submit}
-                  >
-                    Submit
-                  </Button>
-                )}
-              </TooltipProvider>
-              <Button variant={"destructive"} onClick={clearReq}>
-                Clear
-              </Button>
-            </CardFooter>
           </Card>
         </div>
       </div>

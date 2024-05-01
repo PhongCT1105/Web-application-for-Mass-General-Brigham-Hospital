@@ -34,7 +34,7 @@ import {
 import { Label } from "@/components/ui/label.tsx";
 import { Input } from "@/components/ui/input.tsx";
 import { Medication, MedicationForm } from "@/interfaces/medicationReq.ts";
-// import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
+import { DataTableToolbar } from "@/components/table/data-table-toolbar.tsx";
 import { DataTablePagination } from "@/components/table/data-table-pagination.tsx";
 import { useMedicineData } from "@/routes/service-request/ServiceRequestPage.tsx";
 import axios from "axios";
@@ -189,15 +189,7 @@ export function MedicineRequest({ columns }: DataTableProps) {
         paddingRight: "8%",
       }}
     >
-      {/*<DataTableToolbar table={table} columnID={"name"} />*/}
-      <Input
-        placeholder={`Search items by name...`}
-        value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-        onChange={(event) =>
-          table.getColumn("name")?.setFilterValue(event.target.value)
-        }
-        className="h-8 w-[150px] lg:w-[250px]"
-      />
+      <DataTableToolbar table={table} />
       <div className="rounded-md border">
         <Table>
           <TableHeader>
