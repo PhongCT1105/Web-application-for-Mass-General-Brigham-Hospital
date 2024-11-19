@@ -1,7 +1,7 @@
 
-# Brigham & Women’s Hospital Application
+# Brigham & Women’s Hospital Application 
 
-![Hospital Logo](https://via.placeholder.com/800x200?text=Brigham+%26+Women’s+Hospital)
+![image](https://github.com/user-attachments/assets/0e5da779-a08d-468f-bbab-6c27f03ebd56)
 
 ---
 
