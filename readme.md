@@ -1,7 +1,7 @@
 
 # Brigham & Women’s Hospital Application 
 
-![image](https://github.com/user-attachments/assets/0e5da779-a08d-468f-bbab-6c27f03ebd56)
+<img src="https://github.com/user-attachments/assets/0e5da779-a08d-468f-bbab-6c27f03ebd56" width="200" />
 
 ---
 
