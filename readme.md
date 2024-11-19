@@ -1,5 +1,5 @@
 
-# Brigham & Women’s Hospital Application  <img src="https://github.com/user-attachments/assets/0e5da779-a08d-468f-bbab-6c27f03ebd56" width="200" />
+# Brigham & Women’s Hospital Application  <img src="https://github.com/user-attachments/assets/0e5da779-a08d-468f-bbab-6c27f03ebd56" width="20" />
 
 ---
 
